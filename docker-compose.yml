@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+  PostgreSQL:
+    image: postgres
+    container_name: PostgreSQL
+    ports:
+      - 3306:3306 # TODO: change
+    volumes:
+      - DB:/var/lib/mysql # TODO: change
+    networks:
+      - ft_transcendence
+    restart: on-failure
+
+  Server:
+    image: node
+    container_name: Server
+    ports:
+      - 3306:3306 # TODO: change
+    networks:
+      - ft_transcendence
+    restart: on-failure
+
+volumes:
+  DB:
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: /home/sakllam/data/mysql
+
+networks:
+  ft_transcendence:
+      driver: bridge
