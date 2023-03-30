@@ -7,7 +7,9 @@ else
     mkdir -p /var/www/html;
     cd /var/www/html;
     npm i -y -g create-single-spa@4.1.3;
-    # npx create-single-spa --moduleType root-config
-    # npm create vite ft_tarnscendence --template react-ts;
+    npx create-single-spa ft_tarnscendence -- -- --framework react --template root-config
+    cd ft_tarnscendence
+    npm install
+    npx sb@latest add angular
 fi
 exec bash

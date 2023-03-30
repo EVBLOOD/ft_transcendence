@@ -1,5 +1,6 @@
 #!bin/bash
-if ['-d /var/www/html/auth']
+# if ['-d /var/www/html/auth']
+if test -d /var/www/html/auth;
 then
     echo "folder already exists";
 else
@@ -7,6 +8,5 @@ else
     mkdir -p /var/www/html/auth;
     cd /var/www/html/auth;
     npm i -y -g @nestjs/cli;
-    nest new .;
+    # nest new .;
 fi
-exec bash

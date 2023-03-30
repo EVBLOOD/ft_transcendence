@@ -7,6 +7,6 @@ else
     mkdir -p /var/www/html/chat;
     cd /var/www/html/chat;
     npm i -y -g create-vite@4.2.0;
-    npm create vite . --template react-ts;
+    npm create vite . -- --template react-ts;
 fi
 exec bash
