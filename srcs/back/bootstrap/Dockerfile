@@ -1,5 +1,5 @@
 #NestFactory
-FROM node:19-alpine3.16
+FROM node:16.17.0-bullseye-slim
 
 COPY script.sh .
 

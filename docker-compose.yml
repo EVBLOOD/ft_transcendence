@@ -21,45 +21,50 @@ services:
       - ft_transcendence
     restart: on-failure
 
-  back_chat:
-    build: ./srcs/back/chat
-    image: back_chat
-    container_name: back_chat
-    networks:
-      - ft_transcendence
-    restart: on-failure
+  # back_chat:
+  #   build: ./srcs/back/chat
+  #   image: back_chat
+  #   container_name: back_chat
+  #   networks:
+  #     - ft_transcendence
+  #   restart: on-failure
 
-  back_game:
-    build: ./srcs/back/game
-    image: back_game
-    container_name: back_game
-    networks:
-      - ft_transcendence
-    restart: on-failure
+  # back_game:
+  #   build: ./srcs/back/game
+  #   image: back_game
+  #   container_name: back_game
+  #   networks:
+  #     - ft_transcendence
+  #   restart: on-failure
   
-  back_profile:
-    build: ./srcs/back/profile
-    image: back_profile
-    container_name: back_profile
-    networks:
-      - ft_transcendence
-    restart: on-failure
+  # back_profile:
+  #   build: ./srcs/back/profile
+  #   image: back_profile
+  #   container_name: back_profile
+  #   networks:
+  #     - ft_transcendence
+  #   restart: on-failure
 
-  back_bootstrap:
-    build: ./srcs/back/bootstrap
-    image: back_bootstrap
-    container_name: back_bootstrap
-    networks:
-      - ft_transcendence
-    restart: on-failure
+  # back_bootstrap:
+  #   build: ./srcs/back/bootstrap
+  #   image: back_bootstrap
+  #   container_name: back_bootstrap
+  #   networks:
+  #     - ft_transcendence
+  #   restart: on-failure
 
-networks:
-  ft_transcendence:
-    driver: bridge
   # front_auth:
   #   build: ./srcs/front/auth
   #   image: front_auth
   #   container_name: front_auth
+  #   networks:
+  #     - ft_transcendence
+  #   restart: on-failure
+
+  # front_game:
+  #   build: ./srcs/front/game
+  #   image: front_game
+  #   container_name: front_game
   #   networks:
   #     - ft_transcendence
   #   restart: on-failure
@@ -72,14 +77,6 @@ networks:
   #     - ft_transcendence
   #   restart: on-failure
 
-  # front_game:
-  #   build: ./srcs/front/game
-  #   image: front_game
-  #   container_name: front_game
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
-  
   # front_profile:
   #   build: ./srcs/front/profile
   #   image: front_profile
@@ -87,6 +84,12 @@ networks:
   #   networks:
   #     - ft_transcendence
   #   restart: on-failure
+
+networks:
+  ft_transcendence:
+    driver: bridge
+
+  
 
   # front_bootstrap:
   #   build: ./srcs/front/bootstrap

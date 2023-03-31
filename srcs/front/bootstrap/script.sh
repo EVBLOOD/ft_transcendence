@@ -1,5 +1,5 @@
 #!bin/bash
-if ['-d /var/www/html/ft_tarnscendence']
+if test -d /var/www/html/ft_tarnscendence;
 then
     echo "folder already exists";
 else
@@ -13,3 +13,5 @@ else
     npx sb@latest add angular
 fi
 exec bash
+
+# CMD [ "tail", "-f", "/script.sh" ]
