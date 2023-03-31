@@ -1,12 +1,13 @@
 #!bin/bash
-if ['-d /var/www/html/game']
+if test -d  /var/www/html/game;
 then
     echo "folder already exists";
+    cd /var/www/html/game;
 else
     echo "folder doesn't exists! start setting up..";
     mkdir -p /var/www/html/game;
     cd /var/www/html/game;
     npm i -y -g @nestjs/cli;
-    nest new .;
+    nest new .  --package-manager npm;
 fi
-exec bash
+exec npm run start:dev

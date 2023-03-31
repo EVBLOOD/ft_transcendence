@@ -1,13 +1,7 @@
 version: '3.7'
 
 services:
-  back_auth:
-    build: ./srcs/back/auth
-    image: back_auth
-    container_name: back_auth
-    # networks:
-    #   - ft_transcendence
-    restart: on-failure
+
   # PostgreSQL:
   #   image: postgres
   #   container_name: PostgreSQL
@@ -19,39 +13,49 @@ services:
   #     - ft_transcendence
   #   restart: on-failure
 
+  back_auth:
+    build: ./srcs/back/auth
+    image: back_auth
+    container_name: back_auth
+    networks:
+      - ft_transcendence
+    restart: on-failure
 
-  # back_chat:
-  #   build: ./srcs/back/chat
-  #   image: back_chat
-  #   container_name: back_chat
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
+  back_chat:
+    build: ./srcs/back/chat
+    image: back_chat
+    container_name: back_chat
+    networks:
+      - ft_transcendence
+    restart: on-failure
 
-  # back_game:
-  #   build: ./srcs/back/game
-  #   image: back_game
-  #   container_name: back_game
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
+  back_game:
+    build: ./srcs/back/game
+    image: back_game
+    container_name: back_game
+    networks:
+      - ft_transcendence
+    restart: on-failure
   
-  # back_profile:
-  #   build: ./srcs/back/profile
-  #   image: back_profile
-  #   container_name: back_profile
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
+  back_profile:
+    build: ./srcs/back/profile
+    image: back_profile
+    container_name: back_profile
+    networks:
+      - ft_transcendence
+    restart: on-failure
 
-  # back_bootstrap:
-  #   build: ./srcs/back/bootstrap
-  #   image: back_bootstrap
-  #   container_name: back_bootstrap
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
-  
+  back_bootstrap:
+    build: ./srcs/back/bootstrap
+    image: back_bootstrap
+    container_name: back_bootstrap
+    networks:
+      - ft_transcendence
+    restart: on-failure
+
+networks:
+  ft_transcendence:
+    driver: bridge
   # front_auth:
   #   build: ./srcs/front/auth
   #   image: front_auth
@@ -100,7 +104,3 @@ services:
 #       type: 'none'
 #       o: bind
 #       device: /home/sakllam/data/mysql
-
-# networks:
-#   ft_transcendence:
-#       driver: bridge

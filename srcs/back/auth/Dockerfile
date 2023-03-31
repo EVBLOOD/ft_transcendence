@@ -1,7 +1,7 @@
-FROM node
+FROM node:19-alpine3.16
 
 COPY script.sh .
 
 CMD ["sh", "script.sh"]
 
-CMD [ "tail", "-f", "/script.sh" ]
+# CMD [ "tail", "-f", "/script.sh" ]

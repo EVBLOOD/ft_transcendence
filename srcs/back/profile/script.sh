@@ -1,12 +1,13 @@
 #!bin/bash
-if ['-d /var/www/html profile']
+if test -d /var/www/html/profile;
 then
     echo "folder already exists";
+    cd /var/www/html/profile;
 else
     echo "folder doesn't exists! start setting up..";
     mkdir -p /var/www/html profile;
     cd /var/www/html profile;
     npm i -y -g @nestjs/cli;
-    nest new .;
+    nest new .  --package-manager npm;
 fi
-exec bash
+exec npm run start:dev
