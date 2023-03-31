@@ -4,4 +4,4 @@ COPY script.sh .
 
 CMD ["sh", "script.sh"]
 
-CMD [ "bash" ]
+CMD [ "tail", "-f", "/script.sh" ]
