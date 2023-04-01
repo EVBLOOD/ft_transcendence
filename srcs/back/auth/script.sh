@@ -5,6 +5,8 @@ then
     cd /var/www/html/auth;
 else
     echo "folder doesn't exists! start setting up..";
+    apt update -y && apt upgrade -y;
+    apt install -y git;
     mkdir -p /var/www/html/auth;
     cd /var/www/html/auth;
     npm i -y -g @nestjs/cli;

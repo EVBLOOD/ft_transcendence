@@ -13,13 +13,13 @@ services:
   #     - ft_transcendence
   #   restart: on-failure
 
-  back_auth:
-    build: ./srcs/back/auth
-    image: back_auth
-    container_name: back_auth
-    networks:
-      - ft_transcendence
-    restart: on-failure
+  # back_auth:
+  #   build: ./srcs/back/auth
+  #   image: back_auth
+  #   container_name: back_auth
+  #   networks:
+  #     - ft_transcendence
+  #   restart: on-failure
 
   # back_chat:
   #   build: ./srcs/back/chat
@@ -85,19 +85,20 @@ services:
   #     - ft_transcendence
   #   restart: on-failure
 
+  front_bootstrap:
+    build: ./srcs/front/bootstrap
+    image: back_bootstrap
+    container_name: front_bootstrap
+    networks:
+      - ft_transcendence
+    restart: on-failure
+
 networks:
   ft_transcendence:
     driver: bridge
 
   
 
-  # front_bootstrap:
-  #   build: ./srcs/front/bootstrap
-  #   image: back_bootstrap
-  #   container_name: front_bootstrap
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
   
   # volumes:  to not forget
 

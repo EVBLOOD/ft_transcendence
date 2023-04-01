@@ -6,6 +6,8 @@ then
     npm install;
 else
     echo "folder doesn't exists! start setting up..";
+    apt update -y && apt upgrade -y;
+    apt install -y git;
     mkdir -p /var/www/html/profile;
     cd /var/www/html/profile;
     npm i -y -g create-vite@4.2.0;

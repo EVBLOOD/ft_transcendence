@@ -5,6 +5,8 @@ then
     cd /var/www/html/game;
 else
     echo "folder doesn't exists! start setting up..";
+    apt update -y && apt upgrade -y;
+    apt install -y git;
     mkdir -p /var/www/html/;
     cd /var/www/html/;
     npm i -y -g @angular/cli;
