@@ -2,6 +2,7 @@
 if test -d /var/www/html/ft_tarnscendence;
 then
     echo "folder already exists";
+    cd /var/www/html/ft_tarnscendence;
 else
     echo "folder doesn't exists! start setting up..";
     apt update -y && apt upgrade -y;
@@ -17,6 +18,6 @@ else
     npm i -y -g sb@latest;
     npx sb@latest add angular;
 fi
-exec bash
+exec npm start
 
 # CMD [ "tail", "-f", "/script.sh" ]
