@@ -13,77 +13,95 @@ services:
   #     - ft_transcendence
   #   restart: on-failure
 
-  # back_auth:
-  #   build: ./srcs/back/auth
-  #   image: back_auth
-  #   container_name: back_auth
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
+  back_auth:
+    build: ./srcs/back/auth
+    image: back_auth
+    container_name: back_auth
+    networks:
+      - ft_transcendence
+    restart: on-failure
+    volumes:
+      - vol_back_auth
 
-  # back_chat:
-  #   build: ./srcs/back/chat
-  #   image: back_chat
-  #   container_name: back_chat
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
+  back_chat:
+    build: ./srcs/back/chat
+    image: back_chat
+    container_name: back_chat
+    networks:
+      - ft_transcendence
+    restart: on-failure
+    volumes:
+      - vol_back_chat
 
-  # back_game:
-  #   build: ./srcs/back/game
-  #   image: back_game
-  #   container_name: back_game
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
+  back_game:
+    build: ./srcs/back/game
+    image: back_game
+    container_name: back_game
+    networks:
+      - ft_transcendence
+    restart: on-failure
+    volumes:
+      - vol_back_game
   
-  # back_profile:
-  #   build: ./srcs/back/profile
-  #   image: back_profile
-  #   container_name: back_profile
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
+  back_profile:
+    build: ./srcs/back/profile
+    image: back_profile
+    container_name: back_profile
+    networks:
+      - ft_transcendence
+    restart: on-failure
+    volumes:
+      - vol_back_profile
 
-  # back_bootstrap:
-  #   build: ./srcs/back/bootstrap
-  #   image: back_bootstrap
-  #   container_name: back_bootstrap
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
+  back_bootstrap:
+    build: ./srcs/back/bootstrap
+    image: back_bootstrap
+    container_name: back_bootstrap
+    networks:
+      - ft_transcendence
+    restart: on-failure
+    volumes:
+      - vol_back_bootstrap
 
-  # front_auth:
-  #   build: ./srcs/front/auth
-  #   image: front_auth
-  #   container_name: front_auth
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
+  front_auth:
+    build: ./srcs/front/auth
+    image: front_auth
+    container_name: front_auth
+    networks:
+      - ft_transcendence
+    restart: on-failure
+    volumes:
+      - vol_front_auth
 
-  # front_game:
-  #   build: ./srcs/front/game
-  #   image: front_game
-  #   container_name: front_game
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
+  front_game:
+    build: ./srcs/front/game
+    image: front_game
+    container_name: front_game
+    networks:
+      - ft_transcendence
+    restart: on-failure
+    volumes:
+      - vol_front_game
 
-  # front_chat:
-  #   build: ./srcs/front/chat
-  #   image: front_chat
-  #   container_name: front_chat
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
+  front_chat:
+    build: ./srcs/front/chat
+    image: front_chat
+    container_name: front_chat
+    networks:
+      - ft_transcendence
+    restart: on-failure
+    volumes:
+      - vol_front_chat
 
-  # front_profile:
-  #   build: ./srcs/front/profile
-  #   image: front_profile
-  #   container_name: front_profile
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
+  front_profile:
+    build: ./srcs/front/profile
+    image: front_profile
+    container_name: front_profile
+    networks:
+      - ft_transcendence
+    restart: on-failure
+    volumes:
+      - vol_front_profile
 
   front_bootstrap:
     build: ./srcs/front/bootstrap
@@ -92,19 +110,64 @@ services:
     networks:
       - ft_transcendence
     restart: on-failure
+    volumes:
+      - vol_front_bootstrap
 
 networks:
   ft_transcendence:
     driver: bridge
 
-  
+volumes:
+  vol_back_auth:
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: ./Data/back/auth
+  vol_back_bootstrap:
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: ./Data/back/bootstrap
+  vol_back_chat:
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: ./Data/back/chat
+  vol_back_game:
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: ./Data/back/game
+  vol_back_profile:
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: ./Data/back/profile
+  vol_front_auth:
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: ./Data/front/auth
+  vol_front_bootstrap:
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: ./Data/front/bootstrap
+  vol_front_chat:
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: ./Data/front/chat
+  vol_front_game:
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: ./Data/front/game
+  vol_front_profile:
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: ./Data/front/profile
 
   
   # volumes:  to not forget
-
-# volumes:
-#   DB:
-#     driver_opts:
-#       type: 'none'
-#       o: bind
-#       device: /home/sakllam/data/mysql
