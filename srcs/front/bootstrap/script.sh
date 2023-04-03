@@ -1,8 +1,8 @@
 #!bin/bash
-if test -d /var/www/html/ft_tarnscendence;
+if test -d /var/www/html/ft_transcendence;
 then
     echo "folder already exists";
-    cd /var/www/html/ft_tarnscendence;
+    cd /var/www/html/ft_transcendence;
 else
     echo "folder doesn't exists! start setting up..";
     apt update -y && apt upgrade -y;
@@ -12,8 +12,8 @@ else
     mkdir -p /var/www/html;
     cd /var/www/html;
     npm i -y -g create-single-spa;
-    npx create-single-spa ft_tarnscendence --moduleType util-module --framework react --package-manager npm  --typescript --orgName my-org --projectName ft_tarnscendence;
-    cd ft_tarnscendence;
+    npx create-single-spa ft_transcendence --moduleType util-module --framework react --package-manager npm  --typescript --orgName my-org --projectName ft_transcendence;
+    cd ft_transcendence;
     npm install;
     npm i -y -g sb@latest;
     npx sb@latest add angular;
