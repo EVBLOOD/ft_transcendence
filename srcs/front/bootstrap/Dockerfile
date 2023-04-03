@@ -1,4 +1,4 @@
-FROM node:16.17.0-bullseye-slim
+FROM new_node_base
 
 COPY script.sh .
 
