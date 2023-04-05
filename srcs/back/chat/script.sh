@@ -10,9 +10,7 @@ else
     echo "folder doesn't exists! start setting up..";
     mkdir -p /var/www/html/chat;
     cd /var/www/html/chat;
-    # 
     nest new .  --package-manager npm;
-    # 
     npm install --save @nestjs/cli
 fi
 

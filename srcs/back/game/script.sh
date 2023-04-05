@@ -1,8 +1,5 @@
 #!bin/bash
-# apt update -y && apt upgrade -y;
-# apt install -y git;
-# npm i -y -g @nestjs/cli;
-if test -d  /var/www/html/game;
+if test -d /var/www/html/game;
 then
     echo "folder already exists";
     cd /var/www/html/game;
