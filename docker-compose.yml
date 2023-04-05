@@ -17,35 +17,35 @@ services:
     volumes:
       - vol_back_auth:/var/www/html/
 
-  # back_chat:
-  #   build: ./srcs/back/chat
-  #   image: back_chat
-  #   container_name: back_chat
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
-  #   volumes:
-  #     - vol_back_chat:/var/www/html/
+  back_chat:
+    build: ./srcs/back/chat
+    image: back_chat
+    container_name: back_chat
+    networks:
+      - ft_transcendence
+    restart: on-failure
+    volumes:
+      - vol_back_chat:/var/www/html/
   
-  # back_game:
-  #   build: ./srcs/back/game
-  #   image: back_game
-  #   container_name: back_game
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
-  #   volumes:
-  #     - vol_back_game:/var/www/html/
+  back_game:
+    build: ./srcs/back/game
+    image: back_game
+    container_name: back_game
+    networks:
+      - ft_transcendence
+    restart: on-failure
+    volumes:
+      - vol_back_game:/var/www/html/
   
-  # back_profile:
-  #   build: ./srcs/back/profile
-  #   image: back_profile
-  #   container_name: back_profile
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
-  #   volumes:
-  #     - vol_back_profile:/var/www/html/
+  back_profile:
+    build: ./srcs/back/profile
+    image: back_profile
+    container_name: back_profile
+    networks:
+      - ft_transcendence
+    restart: on-failure
+    volumes:
+      - vol_back_profile:/var/www/html/
 
   back_bootstrap:
     build: ./srcs/back/bootstrap
@@ -57,55 +57,55 @@ services:
     volumes:
       - vol_back_bootstrap:/var/www/html/
 
-  # front_auth:
-  #   build: ./srcs/front/auth
-  #   image: front_auth
-  #   container_name: front_auth
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
-  #   volumes:
-  #     - vol_front_auth:/var/www/html/
+  front_auth:
+    build: ./srcs/front/auth
+    image: front_auth
+    container_name: front_auth
+    networks:
+      - ft_transcendence
+    restart: on-failure
+    volumes:
+      - vol_front_auth:/var/www/html/
 
-  # front_game:
-  #   build: ./srcs/front/game
-  #   image: front_game
-  #   container_name: front_game
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
-  #   volumes:
-  #     - vol_front_game:/var/www/html/
+  front_game:
+    build: ./srcs/front/game
+    image: front_game
+    container_name: front_game
+    networks:
+      - ft_transcendence
+    restart: on-failure
+    volumes:
+      - vol_front_game:/var/www/html/
 
-  # front_chat:
-  #   build: ./srcs/front/chat
-  #   image: front_chat
-  #   container_name: front_chat
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
-  #   volumes:
-  #     - vol_front_chat:/var/www/html/
+  front_chat:
+    build: ./srcs/front/chat
+    image: front_chat
+    container_name: front_chat
+    networks:
+      - ft_transcendence
+    restart: on-failure
+    volumes:
+      - vol_front_chat:/var/www/html/
 
-  # front_profile:
-  #   build: ./srcs/front/profile
-  #   image: front_profile
-  #   container_name: front_profile
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
-  #   volumes:
-  #     - vol_front_profile:/var/www/html/
+  front_profile:
+    build: ./srcs/front/profile
+    image: front_profile
+    container_name: front_profile
+    networks:
+      - ft_transcendence
+    restart: on-failure
+    volumes:
+      - vol_front_profile:/var/www/html/
 
-  # front_bootstrap:
-  #   build: ./srcs/front/bootstrap
-  #   image: front_bootstrap
-  #   container_name: front_bootstrap
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
-  #   volumes:
-  #     - vol_front_bootstrap:/var/www/html/
+  front_bootstrap:
+    build: ./srcs/front/bootstrap
+    image: front_bootstrap
+    container_name: front_bootstrap
+    networks:
+      - ft_transcendence
+    restart: on-failure
+    volumes:
+      - vol_front_bootstrap:/var/www/html/
 
 networks:
   ft_transcendence:
