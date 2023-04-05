@@ -16,6 +16,7 @@ else
     npm install;
     npx sb@latest add angular;
 fi
+
 npm install;
 echo "--------------------- Starting --------------------------------";
 exec npm start

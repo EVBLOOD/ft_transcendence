@@ -15,6 +15,7 @@ else
     cd /var/www/html/auth;
     npm install --save-dev @angular-devkit/build-angular;
 fi
+
 npm install;
 echo "--------------------- Starting --------------------------------";
-exec ng serve
+exec ng serve --open

@@ -13,6 +13,7 @@ else
     nest new .  --package-manager npm;
     npm install --save @nestjs/cli
 fi
+
 npm install;
 echo "--------------------- Starting --------------------------------";
 exec npm run start:dev

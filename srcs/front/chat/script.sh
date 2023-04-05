@@ -12,6 +12,7 @@ else
     cd /var/www/html/chat;
     npm create vite . -- --template react-ts;
 fi
+
 npm install;
 echo "--------------------- Starting --------------------------------";
 exec npm run dev
