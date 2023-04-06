@@ -41,11 +41,16 @@ This should allow you to link your microservices of NestJS while every service i
 Source: Conversation with Bing, 4/6/2023(1) Containerized development with NestJS and Docker. https://blog.logrocket.com/containerized-development-nestjs-docker/ Accessed 4/6/2023.
 (2) NestJS: Microservices with Docker - Stack Overflow. https://stackoverflow.com/questions/62188374/nestjs-microservices-with-docker Accessed 4/6/2023.
 (3) GitHub - alibghz/nestjs-microservices-docker: microservices developed .... https://github.com/alibghz/nestjs-microservices-docker Accessed 4/6/2023.
-
+------------------------------------------------------------------------------
 perp:
 https://www.architect.io/blog/2020-09-08/creating-microservices-nestjs/
 https://docs.nestjs.com/microservices/basics
 
+TO_SEARCH : 
+{
+open-source universal RPC framework,
+
+}
 
 To link microservices of NestJS while every service is in different Docker containers, you need to follow some steps. First, create a new NestJS project for each microservice using the Nest CLI[3]. Then, install the required libraries for each service, including the Config Library and the Microservices Library[2][3]. These libraries make it easier to parse and manage application variables and access other NestJS microservices[2].
 Next, create a Dockerfile for each service so that it can be built into an image, run by other team members, and deployed to production[2][3]. The Dockerfile should include the necessary dependencies and commands to run the service[2]. Once you have created the Dockerfile, you can build the image and run the container for each service.
