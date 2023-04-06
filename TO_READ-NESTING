@@ -1,4 +1,4 @@
-bing :
+bing : this would be rated as : 0 / 10
 https://blog.logrocket.com/containerized-development-nestjs-docker/
 https://stackoverflow.com/questions/62188374/nestjs-microservices-with-docker
 https://github.com/alibghz/nestjs-microservices-docker
@@ -10,7 +10,7 @@ To link microservices of NestJS while every service is in different Docker conta
 
 3. In each Docker container, install the NestJS library using `npm install @nestjs/common`.
 
-4. In each microservice, create a new file called `main.ts`. This file will be used to bootstrap your application.
+4. In each microservice, create a new file called `main.ts`. This file will be used to bootstrap your application. //mynote:  #there is already always one!
 
 5. In your main.ts file, import the NestJS library and register your application using the following code:
 
@@ -24,7 +24,7 @@ async function bootstrap() {
 }
 bootstrap();
 ```
-
+//mynote: #there is already such code in every Nestjs Project.
 6. In your Docker container for each microservice, add a new script to your package.json file that will start your application using NestJS:
 
 ```json
@@ -32,6 +32,7 @@ bootstrap();
   "start": "node ./main.js"
 }
 ```
+// mynote: there is always one containing => "start": "nest start"
 
 7. Finally, start all of your Docker containers using Docker Compose.
 
