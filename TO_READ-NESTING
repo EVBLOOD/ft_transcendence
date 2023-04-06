@@ -1,0 +1,109 @@
+bing :
+https://blog.logrocket.com/containerized-development-nestjs-docker/
+https://stackoverflow.com/questions/62188374/nestjs-microservices-with-docker
+https://github.com/alibghz/nestjs-microservices-docker
+To link microservices of NestJS while every service is in different Docker containers, you can follow these steps:
+
+1. Create a new NestJS application using the CLI command `nest new app-name`.
+
+2. Create a new Docker container for each microservice that you want to use.
+
+3. In each Docker container, install the NestJS library using `npm install @nestjs/common`.
+
+4. In each microservice, create a new file called `main.ts`. This file will be used to bootstrap your application.
+
+5. In your main.ts file, import the NestJS library and register your application using the following code:
+
+```javascript
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  await app.listen(3000);
+}
+bootstrap();
+```
+
+6. In your Docker container for each microservice, add a new script to your package.json file that will start your application using NestJS:
+
+```json
+"scripts": {
+  "start": "node ./main.js"
+}
+```
+
+7. Finally, start all of your Docker containers using Docker Compose.
+
+This should allow you to link your microservices of NestJS while every service is in different Docker containers.
+
+Source: Conversation with Bing, 4/6/2023(1) Containerized development with NestJS and Docker. https://blog.logrocket.com/containerized-development-nestjs-docker/ Accessed 4/6/2023.
+(2) NestJS: Microservices with Docker - Stack Overflow. https://stackoverflow.com/questions/62188374/nestjs-microservices-with-docker Accessed 4/6/2023.
+(3) GitHub - alibghz/nestjs-microservices-docker: microservices developed .... https://github.com/alibghz/nestjs-microservices-docker Accessed 4/6/2023.
+
+perp:
+https://www.architect.io/blog/2020-09-08/creating-microservices-nestjs/
+https://docs.nestjs.com/microservices/basics
+
+
+To link microservices of NestJS while every service is in different Docker containers, you need to follow some steps. First, create a new NestJS project for each microservice using the Nest CLI[3]. Then, install the required libraries for each service, including the Config Library and the Microservices Library[2][3]. These libraries make it easier to parse and manage application variables and access other NestJS microservices[2].
+Next, create a Dockerfile for each service so that it can be built into an image, run by other team members, and deployed to production[2][3]. The Dockerfile should include the necessary dependencies and commands to run the service[2]. Once you have created the Dockerfile, you can build the image and run the container for each service.
+To link the microservices, you need to specify the transport layer that they will use to communicate with each other. NestJS supports several built-in transport layer implementations, called transporters, which are responsible for transmitting messages between different microservice instances[1]. One of these transporters is gRPC, which is a high-performance, open-source universal RPC framework[5].
+To use gRPC as the transport layer, you need to specify it in the options when creating the microservice[5]. You also need to define the URL, protoPath, and package for each microservice[5]. Once you have defined the options, you can start the microservice and it will listen for incoming requests.
+Finally, you can create a client service that will access the microservices. The client service should also be created using the Nest CLI and should include the same libraries as the microservices[2]. To access the microservices, you need to specify the transport layer and the URL for each microservice[5]. Once you have defined the options, you can start the client service and it will be able to communicate with the microservices.
+In summary, to link microservices of NestJS while every service is in different Docker containers, you need to create a new NestJS project for each microservice, install the required libraries, create a Dockerfile for each service, specify the transport layer, and create a client service that will access the microservices. By following these steps, you can create a scalable and portable architecture for your application.
+
+----------------------------
+Linking microservices of NestJS while every service is in different Docker containers can be achieved by using the built-in transport layer implementations, called transporters, provided by NestJS. In this tutorial, we will go through the steps required to link microservices of NestJS while every service is in different Docker containers.
+Step 1: Create a NestJS microservice
+The first step is to create a NestJS microservice using the Nest CLI. You can create a new NestJS microservice by running the following command:
+$ nest new microservice
+
+Step 2: Configure the microservice
+Next, you need to configure the microservice to use a transporter that can transmit messages between different microservice instances. NestJS supports several built-in transport layer implementations, including TCP, Redis, and NATS. In this tutorial, we will use the TCP transporter.
+To configure the microservice to use the TCP transporter, you need to add the following code to the main.ts file:
+import { NestFactory } from '@nestjs/core';
+import { Transport } from '@nestjs/microservices';
+import { AppModule } from './app.module';
+
+async function bootstrap() {
+  const app = await NestFactory.createMicroservice(AppModule, {
+    transport: Transport.TCP,
+    options: {
+      host: '0.0.0.0',
+      port: 3000,
+    },
+  });
+  await app.listen();
+}
+bootstrap();
+
+This code creates a new NestJS microservice using the createMicroservice() method of the NestFactory class. The transport option is set to Transport.TCP to use the TCP transporter. The options object specifies the host and port to listen on.
+Step 3: Create a Docker container for the microservice
+Next, you need to create a Docker container for the microservice. You can create a new Docker container by creating a new Dockerfile in the root directory of the microservice with the following content:
+FROM node:14-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+CMD ["npm", "run", "start:prod"]
+
+This Dockerfile uses the official Node.js 14 Alpine image as the base image, sets the working directory to /app, copies the package.json and package-lock.json files to the working directory, installs the dependencies, copies the source code to the working directory, and starts the microservice using the start:prod script defined in the package.json file.
+You can build the Docker container by running the following command:
+$ docker build -t microservice .
+
+This command builds a new Docker image with the tag microservice using the Dockerfile in the current directory.
+Step 4: Create another NestJS microservice
+Next, you need to create another NestJS microservice that will communicate with the first microservice. You can create a new NestJS microservice by running the following command:
+$ nest new client
+
+Step 5: Configure the second microservice
+Next, you need to configure the second microservice to use the TCP transporter to communicate with the first microservice. You can do this by adding the following code to the main.ts file:
+```typescript
+import { NestFactory } from '@nestjs/core';
+import { Transport } from '@nestjs/microservices';
+import { AppModule } from './app.module';
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.connectMicroservice({
+    transport: Transport.TCP
