@@ -162,7 +162,3 @@ volumes:
       type: 'none'
       o: bind
       device: /Users/sakllam/Desktop/.folders/ft_transcendence/Data/front/profile
-
-
-  
-  # # volumes:  to not forget

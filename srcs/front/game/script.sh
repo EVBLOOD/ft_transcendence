@@ -1,8 +1,4 @@
 #!bin/bash
-# apt install -y git;
-# apt update -y && apt upgrade -y;
-# npm install -g npm@latest;
-# npm i -y -g @angular/cli;
 if test -d /var/www/html/game;
 then
     echo "folder already exists";

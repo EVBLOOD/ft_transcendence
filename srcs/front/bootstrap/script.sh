@@ -1,8 +1,5 @@
 #!bin/bash
-# apt update -y && apt upgrade -y;
-# apt install -y git;
-# npm i -y -g create-single-spa;
-# npm i -y -g sb@latest;
+
 if test -d /var/www/html/ft_transcendence;
 then
     echo "folder already exists";
@@ -20,5 +17,3 @@ fi
 npm install;
 echo "--------------------- Starting --------------------------------";
 exec npm start
-
-# CMD [ "tail", "-f", "/script.sh" ]

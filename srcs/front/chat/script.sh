@@ -1,7 +1,4 @@
 #!bin/bash
-# apt update -y && apt upgrade -y;
-# apt install -y git;
-# npm i -y -g create-vite@4.2.0;
 if test -d /var/www/html/chat;
 then
     echo "folder already exists";

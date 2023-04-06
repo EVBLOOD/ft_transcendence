@@ -1,7 +1,4 @@
 #!bin/bash
-# apt update -y && apt upgrade -y;
-# apt install -y git;
-# npm i -y -g @nestjs/cli;
 if test -d /var/www/html/auth;
 then
     echo "folder already exists";
