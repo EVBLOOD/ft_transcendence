@@ -1,4 +1,5 @@
 #!bin/bash
+#npm cache clean --force;
 
 if test -d /var/www/html/ft_transcendence;
 then
@@ -14,6 +15,7 @@ else
     npx sb@latest add angular;
 fi
 
+echo "--------------------- Init --------------------------------";
 npm install;
 echo "--------------------- Starting --------------------------------";
-exec npm start
+exec npm start;

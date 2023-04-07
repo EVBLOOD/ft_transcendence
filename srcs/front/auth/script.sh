@@ -1,4 +1,5 @@
 #!bin/bash
+#npm cache clean --force;
 if test -d /var/www/html/auth;
 then
     echo "folder already exists";
@@ -9,8 +10,10 @@ else
     cd /var/www/html/;
     ng new auth  --routing --style=scss;
     cd /var/www/html/auth;
+    npm install --save-dev @angular-devkit/build-angular;
 fi
-npm install --save-dev @angular-devkit/build-angular;
+
+echo "--------------------- Init --------------------------------";
 npm install;
 echo "--------------------- Starting --------------------------------";
-exec ng serve --open
+exec ng serve --open;

@@ -1,4 +1,5 @@
 #!bin/bash
+#npm cache clean --force;
 if test -d /var/www/html/profile;
 then
     echo "folder already exists";
@@ -10,6 +11,7 @@ else
     npm create vite . -- --template react-ts;
 fi
 
+echo "--------------------- Init --------------------------------";
 npm install;
 echo "--------------------- Starting --------------------------------";
-exec npm run dev
+exec npm run dev;

@@ -1,4 +1,6 @@
 #!bin/bash
+#npm cache clean --force
+# npm install
 if test -d /var/www/html/game;
 then
     echo "folder already exists";
@@ -9,8 +11,10 @@ else
     cd /var/www/html/;
     ng new game --routing --style=scss;
     cd game;
+    npm install --save-dev @angular-devkit/build-angular;
 fi
-npm install --save-dev @angular-devkit/build-angular
+
+echo "--------------------- Init --------------------------------";
 npm install;
 echo "--------------------- Starting --------------------------------";
-exec ng serve --open
+exec ng serve --open;

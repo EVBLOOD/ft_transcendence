@@ -1,4 +1,5 @@
 #!bin/bash
+#npm cache clean --force;
 if test -d /var/www/html/ft_transcendence;
 then
     echo "folder already exists";
@@ -9,9 +10,10 @@ else
     cd /var/www/html;
     nest new ft_transcendence  --package-manager npm;
     cd /var/www/html/ft_transcendence;
-    npm install --save @nestjs/cli
+    npm install --save @nestjs/cli;
 fi
 
+echo "--------------------- Init --------------------------------";
 npm install;
 echo "--------------------- Starting --------------------------------";
-exec npm run start:dev
+exec npm run start:dev;
