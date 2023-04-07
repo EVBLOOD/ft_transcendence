@@ -9,9 +9,8 @@ else
     cd /var/www/html/;
     ng new auth  --routing --style=scss;
     cd /var/www/html/auth;
-    npm install --save-dev @angular-devkit/build-angular;
 fi
-
+npm install --save-dev @angular-devkit/build-angular;
 npm install;
 echo "--------------------- Starting --------------------------------";
 exec ng serve --open

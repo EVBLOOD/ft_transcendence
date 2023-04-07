@@ -9,9 +9,8 @@ else
     cd /var/www/html/;
     ng new game --routing --style=scss;
     cd game;
-    npm install --save-dev @angular-devkit/build-angular
 fi
-
+npm install --save-dev @angular-devkit/build-angular
 npm install;
 echo "--------------------- Starting --------------------------------";
 exec ng serve --open
