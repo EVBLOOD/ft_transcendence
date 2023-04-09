@@ -1,5 +1,6 @@
 #!bin/bash
-#npm cache clean --force;
+rm -rf /var/www/html/profile/node_modules;
+npm cache clean --force;
 if test -d /var/www/html/profile;
 then
     echo "folder already exists";

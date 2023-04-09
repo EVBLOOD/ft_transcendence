@@ -1,5 +1,6 @@
 #!bin/bash
-#npm cache clean --force;
+rm -rf /var/www/html/chat/node_modules;
+npm cache clean --force;
 if test -d /var/www/html/chat;
 then
     echo "folder already exists";

@@ -1,6 +1,6 @@
 #!bin/bash
-#npm cache clean --force;
-
+rm -rf /var/www/html/ft_transcendence/node_modules;
+npm cache clean --force;
 if test -d /var/www/html/ft_transcendence;
 then
     echo "folder already exists";

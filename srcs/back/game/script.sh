@@ -1,5 +1,6 @@
 #!bin/bash
-#npm cache clean --force;
+rm -rf /var/www/html/game/node_modules;
+npm cache clean --force;
 if test -d /var/www/html/game;
 then
     echo "folder already exists";
