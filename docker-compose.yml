@@ -116,49 +116,49 @@ volumes:
     driver_opts:
       type: 'none'
       o: bind
-      device: /Users/sakllam/Desktop/.folders/ft_transcendence/Data/back/auth
+      device: /home/sakllam/Desktop/ft_transcendence/Data/back/auth
   vol_back_bootstrap:
     driver_opts:
       type: 'none'
       o: bind
-      device: /Users/sakllam/Desktop/.folders/ft_transcendence/Data/back/ft_transcendence
+      device: /home/sakllam/Desktop/ft_transcendence/Data/back/ft_transcendence
   vol_back_chat:
     driver_opts:
       type: 'none'
       o: bind
-      device: /Users/sakllam/Desktop/.folders/ft_transcendence/Data/back/chat
+      device: /home/sakllam/Desktop/ft_transcendence/Data/back/chat
   vol_back_game:
     driver_opts:
       type: 'none'
       o: bind
-      device: /Users/sakllam/Desktop/.folders/ft_transcendence/Data/back/game
+      device: /home/sakllam/Desktop/ft_transcendence/Data/back/game
   vol_back_profile:
     driver_opts:
       type: 'none'
       o: bind
-      device: /Users/sakllam/Desktop/.folders/ft_transcendence/Data/back/profile
+      device: /home/sakllam/Desktop/ft_transcendence/Data/back/profile
   vol_front_auth:
     driver_opts:
       type: 'none'
       o: bind
-      device: /Users/sakllam/Desktop/.folders/ft_transcendence/Data/front/auth
+      device: /home/sakllam/Desktop/ft_transcendence/Data/front/auth
   vol_front_bootstrap:
     driver_opts:
       type: 'none'
       o: bind
-      device: /Users/sakllam/Desktop/.folders/ft_transcendence/Data/front/ft_transcendence
+      device: /home/sakllam/Desktop/ft_transcendence/Data/front/ft_transcendence
   vol_front_chat:
     driver_opts:
       type: 'none'
       o: bind
-      device: /Users/sakllam/Desktop/.folders/ft_transcendence/Data/front/chat
+      device: /home/sakllam/Desktop/ft_transcendence/Data/front/chat
   vol_front_game:
     driver_opts:
       type: 'none'
       o: bind
-      device: /Users/sakllam/Desktop/.folders/ft_transcendence/Data/front/game
+      device: /home/sakllam/Desktop/ft_transcendence/Data/front/game
   vol_front_profile:
     driver_opts:
       type: 'none'
       o: bind
-      device: /Users/sakllam/Desktop/.folders/ft_transcendence/Data/front/profile
+      device: /home/sakllam/Desktop/ft_transcendence/Data/front/profile

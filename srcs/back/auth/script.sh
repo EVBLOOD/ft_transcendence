@@ -11,7 +11,6 @@ else
     nest new . --package-manager npm;
     npm install --save @nestjs/cli;
 fi
-
 echo "--------------------- Init --------------------------------";
 npm install;
 echo "--------------------- Starting --------------------------------";
