@@ -9,8 +9,8 @@ else
     echo "folder doesn't exists! start setting up..";
     mkdir -p /var/www/html/;
     cd /var/www/html/;
-    ng new auth  --routing --style=scss;
-    cd /var/www/html/auth;
+    ng new auth --routing --style=scss;
+    cd auth;
     npm install --save-dev @angular-devkit/build-angular;
 fi
 
