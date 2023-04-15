@@ -37,6 +37,8 @@ services:
     restart: on-failure
     volumes:
       - vol_dataBase:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=evblood123
 
 networks:
   ft_transcendence:
