@@ -9,25 +9,25 @@ services:
     image: new_node_base
     container_name: new_node_base
 
-  back:
-    build: ./srcs/back
-    image: back
-    container_name: back
-    networks:
-      - ft_transcendence
-    restart: on-failure
-    volumes:
-      - vol_back:/var/www/html/
+  # back:
+  #   build: ./srcs/back
+  #   image: back
+  #   container_name: back
+  #   networks:
+  #     - ft_transcendence
+  #   restart: on-failure
+  #   volumes:
+  #     - vol_back:/var/www/html/
 
-  front:
-    build: ./srcs/front
-    image: front
-    container_name: front
-    networks:
-      - ft_transcendence
-    restart: on-failure
-    volumes:
-      - vol_front:/var/www/html/
+  # front:
+  #   build: ./srcs/front
+  #   image: front
+  #   container_name: front
+  #   networks:
+  #     - ft_transcendence
+  #   restart: on-failure
+  #   volumes:
+  #     - vol_front:/var/www/html/
     
   dataBase:
     image: postgres
