@@ -28,6 +28,15 @@ services:
     restart: on-failure
     volumes:
       - vol_front:/var/www/html/
+    
+  dataBase:
+    image: postgres
+    container_name: dataBase
+    networks:
+      - ft_transcendence
+    restart: on-failure
+    volumes:
+      - vol_dataBase:/var/lib/postgresql/data
 
 networks:
   ft_transcendence:
@@ -36,11 +45,13 @@ networks:
 volumes:
   vol_back:
     driver_opts:
-      type: 'none'
       o: bind
       device: /Users/sakllam/Desktop/.folders/ft_transcendence/Data/back
   vol_front:
     driver_opts:
-      type: 'none'
       o: bind
       device: /Users/sakllam/Desktop/.folders/ft_transcendence/Data/front
+  vol_dataBase:
+    driver_opts:
+      o: bind
+      device: /Users/sakllam/Desktop/.folders/ft_transcendence/Data/base
