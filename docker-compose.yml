@@ -11,6 +11,8 @@ services:
 
   back:
     build: ./srcs/back
+    user: "1000:1000"
+    command: "sh script.sh"
     image: back
     container_name: back
     networks:
@@ -21,6 +23,8 @@ services:
 
   front:
     build: ./srcs/front
+    user: "1000:1000"
+    command: "sh script.sh"
     image: front
     container_name: front
     networks:
@@ -39,6 +43,7 @@ services:
       - vol_dataBase:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=evblood123
+      - POSTGRES_DB=ft_transcendence
 
 networks:
   ft_transcendence:
@@ -48,12 +53,15 @@ volumes:
   vol_back:
     driver_opts:
       o: bind
-      device: /Users/sakllam/Desktop/.folders/ft_transcendence/Data/back
+      type: 'none'
+      device: /home/sakllam/Desktop/ft_transcendence/Data/back
   vol_front:
     driver_opts:
+      type: 'none'
       o: bind
-      device: /Users/sakllam/Desktop/.folders/ft_transcendence/Data/front
+      device: /home/sakllam/Desktop/ft_transcendence/Data/front
   vol_dataBase:
     driver_opts:
+      type: 'none'
       o: bind
-      device: /Users/sakllam/Desktop/.folders/ft_transcendence/Data/base
+      device: /home/sakllam/Desktop/ft_transcendence/Data/base

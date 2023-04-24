@@ -11,7 +11,8 @@ else
     cd /var/www/html;
     nest new back  --package-manager npm;
     cd /var/www/html/back;
-    npm install --save @nestjs/cli;
+    npm install --save @nestjs/cli @nestjs/typeorm typeorm pg @nestjs/mapped-types;
+    # nest g resource user; -> generate stuff
 fi
 
 echo "--------------------- Init --------------------------------";
