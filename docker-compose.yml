@@ -31,14 +31,27 @@ services:
     volumes:
       - vol_front:/var/www/html/
     
+  # database:
+  #   image: postgres
+  #   container_name: database
+  #   networks:
+  #     - ft_transcendence
+  #   restart: on-failure
+  #   volumes:
+  #     - vol_database:/var/lib/postgresql/data
+  #   environment:
+  #     - POSTGRES_PASSWORD=evblood123
+  #     - POSTGRES_DB=ft_transcendence
+
+
   database:
     image: postgres
     container_name: database
     networks:
       - ft_transcendence
     restart: on-failure
-    volumes:
-      - vol_database:/var/lib/postgresql/data
+    # volumes:
+    #   - vol_database:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=evblood123
       - POSTGRES_DB=ft_transcendence
