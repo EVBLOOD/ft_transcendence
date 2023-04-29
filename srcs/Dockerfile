@@ -1,4 +1,4 @@
-FROM node:16.17.0-bullseye-slim
+FROM node:18-bullseye-slim
 
 RUN apt update -y && apt upgrade -y && apt install -y git;
 RUN npm install -g npm@latest &&  npm i -g @angular/cli &&  \

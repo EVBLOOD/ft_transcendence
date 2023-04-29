@@ -1,7 +1,5 @@
 version: '3.7'
 
-
-# don't forget to add a database and it's volume
 services:
 
   my_base:
@@ -11,8 +9,8 @@ services:
 
   back:
     build: ./srcs/back
-    user: "1000:1000"
-    command: "sh script.sh"
+    # user: "1000:1000"
+    # command: "sh script.sh"
     image: back
     container_name: back
     networks:
@@ -23,8 +21,8 @@ services:
 
   front:
     build: ./srcs/front
-    user: "1000:1000"
-    command: "sh script.sh"
+    # user: "1000:1000"
+    # command: "sh script.sh"
     image: front
     container_name: front
     networks:
@@ -33,14 +31,14 @@ services:
     volumes:
       - vol_front:/var/www/html/
     
-  dataBase:
+  database:
     image: postgres
-    container_name: dataBase
+    container_name: database
     networks:
       - ft_transcendence
     restart: on-failure
     volumes:
-      - vol_dataBase:/var/lib/postgresql/data
+      - vol_database:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=evblood123
       - POSTGRES_DB=ft_transcendence
@@ -54,14 +52,14 @@ volumes:
     driver_opts:
       o: bind
       type: 'none'
-      device: /home/sakllam/Desktop/ft_transcendence/Data/back
+      device: /Users/sakllam/Desktop/.folders/ft_transcendence/Data/back
   vol_front:
     driver_opts:
       type: 'none'
       o: bind
-      device: /home/sakllam/Desktop/ft_transcendence/Data/front
-  vol_dataBase:
+      device: /Users/sakllam/Desktop/.folders/ft_transcendence/Data/front
+  vol_database:
     driver_opts:
       type: 'none'
       o: bind
-      device: /home/sakllam/Desktop/ft_transcendence/Data/base
+      device: /Users/sakllam/Desktop/.folders/ft_transcendence/Data/base
