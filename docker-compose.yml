@@ -18,7 +18,15 @@ services:
     restart: on-failure
     volumes:
       - vol_back:/var/www/html/
-
+  
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - ft_transcendence
+  
   front:
     build: ./srcs/front
     # user: "1000:1000"

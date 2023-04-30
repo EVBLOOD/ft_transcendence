@@ -7,13 +7,11 @@ import { Repository } from 'typeorm';
 export class AuthService {
     constructor(@InjectRepository(User) private readonly UserRepo : Repository<User>) {}
 
-    async validating(username: string, name: string) : Promise<User> | undefined
+    async validating(username: string, name: string, email : string, avatar : string) : Promise<User> | undefined
     {
-        const user = await this.UserRepo.findOne({ where: {username: username} });
-        console.log("__wild stuff__");
+        const user = await this.UserRepo.findOne({ where: {email: email} });
         if (user)
             return user;
-        console.log("wild stuff");
-        return (await this.UserRepo.save({username: username, name: name }));
+        return (await this.UserRepo.save( { username: username, name: name, avatar: avatar, email: email, two_factor_authentication_state: false }));
     }
 }

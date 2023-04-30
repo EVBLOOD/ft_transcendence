@@ -15,9 +15,9 @@ export class AuthStrategy extends PassportStrategy(Strategy, '42') {
         });
     }
     async validate(accessToken: string, refreshToken: string, profile: any, done: Function): Promise<any> {
-        console.log(accessToken);
-        console.log(refreshToken);
-        console.log(profile);
-        return done(null, this.Auth_Service.validating(profile.username, profile.displayName));
+        // console.log(accessToken);
+        // console.log(refreshToken);
+        // console.log(profile);
+        return (await done(null, await this.Auth_Service.validating(profile.username, profile.displayName, profile._json.email, profile._json.image.link)));
     }
 }
