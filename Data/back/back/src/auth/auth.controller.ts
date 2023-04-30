@@ -14,11 +14,11 @@ export class AuthController {
   {
     return {msg: "lol"};
   }
-  @Get('callback')
   @UseGuards(MyAuthGuard)
-  async callback(@Session() session : Record<string, any>) {
-    if (session.user)
-      console.log(session);
+  @Get('callback')
+  async callback() {
+    // if (session.user)
+      // console.log(session);
     // The user will be redirected back to your application after authentication
     return {msg: "3la slama"};
   }

@@ -65,14 +65,14 @@ volumes:
     driver_opts:
       o: bind
       type: 'none'
-      device: /Users/sakllam/Desktop/.folders/ft_transcendence/Data/back
+      device: ${PWD}/Data/back
   vol_front:
     driver_opts:
       type: 'none'
       o: bind
-      device: /Users/sakllam/Desktop/.folders/ft_transcendence/Data/front
+      device: ${PWD}/Data/front
   vol_database:
     driver_opts:
       type: 'none'
       o: bind
-      device: /Users/sakllam/Desktop/.folders/ft_transcendence/Data/base
+      device: ${PWD}/Data/base
