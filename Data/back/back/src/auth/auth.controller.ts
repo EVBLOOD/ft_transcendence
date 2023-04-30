@@ -1,7 +1,8 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Controller, Get, Request, Session, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { MyAuthGuard } from './auth.guard';
+import { User } from 'src/user/entities/user.entity';
+import { IsauthGuard } from './isauth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -15,8 +16,16 @@ export class AuthController {
   }
   @Get('callback')
   @UseGuards(MyAuthGuard)
-  async callback() {
+  async callback(@Session() session : Record<string, any>) {
+    if (session.user)
+      console.log(session);
     // The user will be redirected back to your application after authentication
     return {msg: "3la slama"};
+  }
+  @UseGuards(IsauthGuard)
+  @Get('test')
+  testing(@Request() req) : string
+  {
+    return req.user;
   }
 }
