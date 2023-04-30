@@ -1,3 +1,4 @@
+import { User } from 'src/user/entities/user.entity';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 const DataConf : PostgresConnectionOptions = {
@@ -7,7 +8,7 @@ const DataConf : PostgresConnectionOptions = {
     username: 'postgres',
     password: 'evblood123',
     database: 'ft_transcendence',
-    entities: [],
+    entities: [User],
     synchronize: true,
 }
 export default DataConf;
