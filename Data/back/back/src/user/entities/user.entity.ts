@@ -1,6 +1,5 @@
 import { Contains, IsBoolean, IsEmail, Matches, NotContains } from "class-validator";
-import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn, PrimaryGeneratedColumn, Unique } from "typeorm";
-import { Friendship } from "src/friendship/entities/friendship.entity";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, PrimaryColumn, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 @Entity({name: "Users"})
 export class User {

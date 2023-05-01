@@ -12,23 +12,23 @@ export class FriendshipController {
     return this.friendshipService.create(createFriendshipDto);
   }
 
-  @Get()
-  findAll() {
-    return this.friendshipService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.friendshipService.findAll();
+  // }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.friendshipService.findOne(+id);
+    return this.friendshipService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFriendshipDto: UpdateFriendshipDto) {
-    return this.friendshipService.update(+id, updateFriendshipDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateFriendshipDto: UpdateFriendshipDto) {
+  //   return this.friendshipService.update(+id, updateFriendshipDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.friendshipService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.friendshipService.remove(+id);
+  // }
 }
