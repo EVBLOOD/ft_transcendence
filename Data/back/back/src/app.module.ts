@@ -7,8 +7,9 @@ import { AuthModule } from './auth/auth.module';
 import  DataConf  from '../data'
 import { ConfigModule } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
+import { FriendshipModule } from './friendship/friendship.module';
 @Module({
-  imports: [TypeOrmModule.forRoot(DataConf), UserModule, AuthModule, ConfigModule.forRoot(), PassportModule.register({session: true})],
+  imports: [TypeOrmModule.forRoot(DataConf), UserModule, AuthModule, ConfigModule.forRoot(), PassportModule.register({session: true}), FriendshipModule],
   controllers: [AppController],
   providers: [AppService],
 })
