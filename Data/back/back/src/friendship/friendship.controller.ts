@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { FriendshipService } from './friendship.service';
 import { CreateFriendshipDto, DealingWithRequestDto, UserValidatingDto } from './dto/create-friendship.dto';
 import { UpdateFriendshipDto } from './dto/update-friendship.dto';
@@ -11,14 +11,14 @@ export class FriendshipController {
   // async ccreate(@Body() createFriendshipDto: CreateFriendshipDto) {
   //   return await this.friendshipService.create(createFriendshipDto);
   // }
-  @Get('suggestions')
-  async suggestions(@Query(":id") id: UserValidatingDto)
+  @Get('suggestions/:id')
+  async suggestions(@Param(":id") id: UserValidatingDto)
   {
     return await this.friendshipService.suggested(id);
   }
 
-  @Get('friendList')
-  async friendList(@Query(":id") id: UserValidatingDto)
+  @Get('friendList/:id')
+  async friendList(@Param(":id") id: UserValidatingDto)
   {
     return await this.friendshipService.friendList(id);
   }
@@ -41,14 +41,14 @@ export class FriendshipController {
     return await this.friendshipService.blocking(body);
   }
 
-  @Get('blocklist')
-  async blocklist(@Query(':id') id : UserValidatingDto)
+  @Get('blocklist/:id')
+  async blocklist(@Param(':id') id : UserValidatingDto)
   {
     return await this.blocklist(id);
   }
 
-  @Get('requestsList')
-  async requestsList(@Query(':id') id: UserValidatingDto)
+  @Get('requestsList/:id')
+  async requestsList(@Param(':id') id: UserValidatingDto)
   {
     return await this.friendshipService.requestsList(id);
   }
