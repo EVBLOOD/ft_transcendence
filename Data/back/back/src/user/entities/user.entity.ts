@@ -1,11 +1,11 @@
-import { Contains, IsBoolean, IsEmail, Matches, NotContains } from "class-validator";
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, PrimaryColumn, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { IsBoolean, IsEmail, Matches } from "class-validator";
+import { Column, Entity, PrimaryColumn, } from "typeorm";
 
 @Entity({name: "Users"})
 export class User {
 
     @PrimaryColumn()
-    @Matches(/^[A-Za-z-]+$/, {message: 'The value must contain only alphabets and the "-" character',} )
+    @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
     username: string;
 
     @Column()

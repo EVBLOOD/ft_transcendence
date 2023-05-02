@@ -1,13 +1,14 @@
-import { IsBoolean, IsDate, IsEnum, IsNotEmpty, Matches } from "class-validator";
+import { IsAlpha, IsBoolean, IsDate, IsEmpty, IsEnum, IsNotEmpty, Matches } from "class-validator";
+
 
 export class CreateFriendshipDto {
     @IsNotEmpty()
-    @Matches(/^[A-Za-z-]+$/, {message: 'The value must contain only alphabets and the "-" character',} )
+    @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
     user1_username: string;
     
     
     @IsNotEmpty()
-    @Matches( /^[A-Za-z-]+$/, {message: 'The value must contain only alphabets and the "-" character',} )
+    @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
     user2_username: string;
     
     @IsEnum({enum: ['pending', 'accepted']})
@@ -22,24 +23,24 @@ export class CreateFriendshipDto {
     @IsDate()
     updated_at: Date;
     
-    @Matches( /^[A-Za-z-]+$/, {message: 'The value must contain only alphabets and the "-" character',} )
+    @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
     blocked_by: string;
 }
 
 export class DealingWithRequestDto
 {
     @IsNotEmpty()
-    @Matches( /^[A-Za-z-]+$/, {message: 'The value must contain only alphabets and the "-" character',} )
+    @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
     Userone: string;
     
     @IsNotEmpty()
-    @Matches( /^[A-Za-z-]+$/, {message: 'The value must contain only alphabets and the "-" character',} )
+    @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
     Usertwo: string;
 }
 
 export class UserValidatingDto
 {
     @IsNotEmpty()
-    @Matches( /^[A-Za-z-]+$/, {message: 'The value must contain only alphabets and the "-" character',} )
+    @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
     Userone: string;
 }

@@ -14,12 +14,14 @@ export class AuthController {
   {
     return {msg: "lol"};
   }
+
   @UseGuards(MyAuthGuard)
   @Get('callback')
   async callback(@Req() req, @Res() res) {
     // The user will be redirected back to your application after authentication
     res.redirect('/auth/test');
   }
+
   @UseGuards(IsauthGuard)
   @Get('test')
   testing(@Request() req) : string

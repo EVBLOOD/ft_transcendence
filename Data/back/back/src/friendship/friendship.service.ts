@@ -186,8 +186,8 @@ export class FriendshipService {
   //   return `This action returns all friendship`;
   // }
 
-  findOne(id: string) {
-    return `This action returns a #${id} friendship`;
+  async findOne(id: string) {
+    return await this.UserRepo.find({where: {username: id}});
   }
 
   // update(id: number, updateFriendshipDto: UpdateFriendshipDto) {

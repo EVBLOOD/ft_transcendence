@@ -6,11 +6,11 @@ import { IsBoolean, IsDate, IsEnum, Matches } from 'class-validator';
 export class Friendship {
 
     @PrimaryColumn()
-    @Matches(/^[A-Za-z-]+$/, {message: 'The value must contain only alphabets and the "-" character',} )
+    @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
     user1_username: string;
 
     @PrimaryColumn()
-    @Matches( /^[A-Za-z-]+$/, {message: 'The value must contain only alphabets and the "-" character',} )
+    @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
     user2_username: string;
 
     @Column({ type: 'enum', enum: ['pending', 'accepted'] })
@@ -30,7 +30,7 @@ export class Friendship {
     updated_at: Date;
 
     @Column()
-    @Matches( /^[A-Za-z-]+$/, {message: 'The value must contain only alphabets and the "-" character',} )
+    @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
     blocked_by: string;
   
     @ManyToOne(() => User)
