@@ -71,7 +71,8 @@ export class FriendshipService {
       console.log("this User doesn't exist");
       return (undefined);
     }
-    const friendship = await this.FriendShipRepo.findOneBy({blocked_by: User.Userone, blocked: true});
+    const friendship = await this.FriendShipRepo.find({where: [{user1_username: User.Userone, blocked: true, blocked_by: "Userone"},
+          {user2_username: User.Userone, blocked: true, blocked_by: "Usertwo"}]});
     return (friendship);
   }
 
@@ -89,14 +90,14 @@ export class FriendshipService {
     {
       if (friendship.length == 0)
       {
-        console.log("for some reason friendship.length == 0");
+        console.log("for some reason friendship.length == 0 | or > 1");
         return undefined;
       }
       console.log("Not found adding and blocking");
       return await this.FriendShipRepo.save( {user2_username: UserBlocking.username,
         user1_username: UserReceiving.username,
         blocked: true,
-        blocked_by: "Someone", // this one is tricky!
+        blocked_by: "Userone", // this one is tricky!
         updated_at: Date.now(),
         created_at: Date.now(),
         status: "pending"} );
@@ -122,6 +123,24 @@ export class FriendshipService {
         console.log("for some reason friendship.length == 0 | or > 1");
         return undefined;
       }
+    return await this.FriendShipRepo.remove(friendship[0]);
+  }
+
+  async unblock(UsersCencerned: DealingWithRequestDto)
+  {
+    // first one want to unblock two
+    const {UserSending: UserBlocking, UserReceiving} = await this.UsersChecker(UsersCencerned);
+    if (UserBlocking == null || UserReceiving == null)
+      return undefined;
+    const friendship = await this.FriendShipRepo.find({where:
+        [{user1_username: UsersCencerned.Userone, user2_username: UsersCencerned.Usertwo, blocked_by: "Userone"},
+        {user2_username: UsersCencerned.Userone, user1_username: UsersCencerned.Usertwo,blocked: true, blocked_by: "Usertwo"}]
+        });
+    if (friendship.length > 1 || friendship.length == 0)
+    {
+      console.log("for some reason friendship.length == 0 | or > 1");
+      return undefined;
+    }
     return await this.FriendShipRepo.remove(friendship[0]);
   }
 
