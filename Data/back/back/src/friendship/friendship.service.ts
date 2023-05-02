@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CreateFriendshipDto, DealingWithRequestDto, UserValidatingDto } from './dto/create-friendship.dto';
-import { UpdateFriendshipDto } from './dto/update-friendship.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/entities/user.entity';
-import { Repository } from 'typeorm';
+import { Any, Not, Repository } from 'typeorm';
 import { Friendship } from './entities/friendship.entity';
 
 @Injectable()
@@ -133,7 +132,7 @@ export class FriendshipService {
     if (UserBlocking == null || UserReceiving == null)
       return undefined;
     const friendship = await this.FriendShipRepo.find({where:
-        [{user1_username: UsersCencerned.Userone, user2_username: UsersCencerned.Usertwo, blocked_by: "Userone"},
+        [{user1_username: UsersCencerned.Userone, user2_username: UsersCencerned.Usertwo, blocked: true, blocked_by: "Userone"},
         {user2_username: UsersCencerned.Userone, user1_username: UsersCencerned.Usertwo,blocked: true, blocked_by: "Usertwo"}]
         });
     if (friendship.length > 1 || friendship.length == 0)
@@ -144,7 +143,7 @@ export class FriendshipService {
     return await this.FriendShipRepo.remove(friendship[0]);
   }
 
-  async suggested(User: UserValidatingDto) // TODO: tomorow
+  async friendList(User: UserValidatingDto)
   {
     console.log(`Suggestions to ${User.Userone}`);
     if (await this.UserRepo.findOneBy({username: User.Userone}) == null)
@@ -152,13 +151,37 @@ export class FriendshipService {
       console.log("this User doesn't exist");
       return (undefined);
     }
-  //   const result = await this.FriendShipRepo
-  // .createQueryBuilder("Friendship")
-  // .leftJoinAndSelect("Friendship.username", "user")
-  // .where("user.id = :id", { id: 1 })
-  // .getMany();
-    // this.FriendShipRepo.createQueryBuilder('User').innerJoin('Friendship')
+    const findList = await this.FriendShipRepo.find({where: [
+      {user1_username: User.Userone, blocked: false},
+      {user2_username: User.Userone, blocked: false}
+    ],
+    })
+    if (findList == null)
+      return findList;
+    let lastone: Array<User>;
+    findList.forEach(element => {
+      if (element.user1_username == User.Userone)
+        lastone.push(element.user2);
+      else
+        lastone.push(element.user1);
+    });
+    return lastone;
   }
+
+  async suggested(User: UserValidatingDto)
+  {
+    const frindList = await this.friendList(User);
+    if (frindList == undefined)
+      return undefined;
+    else if (frindList == null)
+      return {};
+    let lastone: Array<string>;
+    frindList.forEach(element => {
+      lastone.push(element.user);
+    });
+    return await this.UserRepo.find({where: {username: Any(lastone)}});
+  }
+
   // findAll() {
   //   return `This action returns all friendship`;
   // }
