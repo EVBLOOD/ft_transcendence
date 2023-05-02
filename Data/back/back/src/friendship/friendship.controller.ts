@@ -37,13 +37,13 @@ export class FriendshipController {
   }
 
   @Get('blocklist/:id')
-  async blocklist(@Param(':id') id : UserValidatingDto)
+  async blocklist(@Param("id") id : UserValidatingDto)
   {
     return await this.blocklist(id);
   }
 
   @Get('requestsList/:id')
-  async requestsList(@Param(':id') id: UserValidatingDto)
+  async requestsList(@Param("id") id: UserValidatingDto)
   {
     return await this.friendshipService.requestsList(id);
   }
