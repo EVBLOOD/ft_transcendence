@@ -1,24 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { FriendshipService } from './friendship.service';
-import { CreateFriendshipDto, DealingWithRequestDto, UserValidatingDto } from './dto/create-friendship.dto';
-import { UpdateFriendshipDto } from './dto/update-friendship.dto';
+import { DealingWithRequestDto, UserValidatingDto } from './dto/create-friendship.dto';
 
 @Controller('friendship')
 export class FriendshipController {
   constructor(private readonly friendshipService: FriendshipService) {}
 
-  // @Post('sendRequest')
-  // async ccreate(@Body() createFriendshipDto: CreateFriendshipDto) {
-  //   return await this.friendshipService.create(createFriendshipDto);
-  // }
   @Get('suggestions/:id')
-  async suggestions(@Param(":id") id: UserValidatingDto)
+  async suggestions(@Param("id") id: UserValidatingDto)
   {
     return await this.friendshipService.suggested(id);
   }
 
   @Get('friendList/:id')
-  async friendList(@Param(":id") id: UserValidatingDto)
+  async friendList(@Param("id") id: UserValidatingDto)
   {
     return await this.friendshipService.friendList(id);
   }
@@ -70,13 +65,4 @@ export class FriendshipController {
     return await this.friendshipService.findOne(id);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateFriendshipDto: UpdateFriendshipDto) {
-  //   return this.friendshipService.update(+id, updateFriendshipDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.friendshipService.remove(+id);
-  // }
 }
