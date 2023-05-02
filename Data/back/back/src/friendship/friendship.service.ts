@@ -22,9 +22,9 @@ export class FriendshipService {
     return {UserSending, UserReceiving};
   }
 
-  async create(createFriendshipDto: CreateFriendshipDto) {
-    console.log(`This action adds a new request sent from ${createFriendshipDto.user1_username}, to ${createFriendshipDto.user2_username}`);
-    const stuff : DealingWithRequestDto = {Userone: createFriendshipDto.user1_username, Usertwo: createFriendshipDto.user2_username};
+  async create(createFriendshipDto: DealingWithRequestDto) {
+    console.log(`This action adds a new request sent from ${createFriendshipDto.Userone}, to ${createFriendshipDto.Usertwo}`);
+    const stuff : DealingWithRequestDto = {Userone: createFriendshipDto.Userone, Usertwo: createFriendshipDto.Usertwo};
     const {UserSending, UserReceiving} = await this.UsersChecker(stuff);
     if (UserSending == null || UserReceiving == null)
       return undefined;

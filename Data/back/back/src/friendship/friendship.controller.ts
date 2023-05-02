@@ -1,25 +1,73 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { FriendshipService } from './friendship.service';
-import { CreateFriendshipDto } from './dto/create-friendship.dto';
+import { CreateFriendshipDto, DealingWithRequestDto, UserValidatingDto } from './dto/create-friendship.dto';
 import { UpdateFriendshipDto } from './dto/update-friendship.dto';
 
 @Controller('friendship')
 export class FriendshipController {
   constructor(private readonly friendshipService: FriendshipService) {}
 
-  @Post()
-  create(@Body() createFriendshipDto: CreateFriendshipDto) {
-    return this.friendshipService.create(createFriendshipDto);
+  // @Post('sendRequest')
+  // async ccreate(@Body() createFriendshipDto: CreateFriendshipDto) {
+  //   return await this.friendshipService.create(createFriendshipDto);
+  // }
+  @Get('suggestions')
+  async suggestions(@Query(":id") id: UserValidatingDto)
+  {
+    return await this.friendshipService.suggested(id);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.friendshipService.findAll();
-  // }
+  @Get('friendList')
+  async friendList(@Query(":id") id: UserValidatingDto)
+  {
+    return await this.friendshipService.friendList(id);
+  }
+
+  @Post('unblock')
+  async unblock(@Body() body : DealingWithRequestDto)
+  {
+    return await this.friendshipService.unblock(body);
+  }
+
+  @Post('unfriend')
+  async unfriend(@Body() body: DealingWithRequestDto)
+  {
+    return await this.friendshipService.remove(body);
+  }
+
+  @Post('blocking')
+  async blocking(@Body() body: DealingWithRequestDto)
+  {
+    return await this.friendshipService.blocking(body);
+  }
+
+  @Get('blocklist')
+  async blocklist(@Query(':id') id : UserValidatingDto)
+  {
+    return await this.blocklist(id);
+  }
+
+  @Get('requestsList')
+  async requestsList(@Query(':id') id: UserValidatingDto)
+  {
+    return await this.friendshipService.requestsList(id);
+  }
+
+  @Post('accept')
+  async accepting(@Body() body : DealingWithRequestDto)
+  {
+    return await this.friendshipService.accepting(body)
+  }
+
+  @Post('send')
+  async send(@Body() body : DealingWithRequestDto)
+  {
+    return await this.friendshipService.create(body);
+  }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.friendshipService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    return await this.friendshipService.findOne(id);
   }
 
   // @Patch(':id')
