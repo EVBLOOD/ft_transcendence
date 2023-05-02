@@ -17,8 +17,8 @@ export class FriendshipService {
 
   async UsersChecker(dealingWithRequestDto: DealingWithRequestDto)
   {
-    const UserSending : User = await this.UserRepo.findOneBy({username: dealingWithRequestDto.Userone});
-    const UserReceiving : User = await this.UserRepo.findOneBy({username: dealingWithRequestDto.Usertwo});
+    const UserSending : User = await this.UserRepo.findOneBy({username: dealingWithRequestDto.Usertwo});
+    const UserReceiving : User = await this.UserRepo.findOneBy({username: dealingWithRequestDto.Userone});
     return {UserSending, UserReceiving};
   }
 
@@ -43,7 +43,7 @@ export class FriendshipService {
     const {UserSending, UserReceiving} = await this.UsersChecker(UsersCencerned);
     if (UserSending == null || UserReceiving == null)
       return undefined;
-    const friendship = await this.FriendShipRepo.findOneBy({user1_username: UsersCencerned.Userone, user2_username: UsersCencerned.Usertwo, status: 'pending', blocked: false}); // UsersCencerned.Userone is the one sent the request
+    const friendship = await this.FriendShipRepo.findOneBy({user2_username: UsersCencerned.Userone, user1_username: UsersCencerned.Usertwo, status: 'pending', blocked: false}); // UsersCencerned.Userone is the one sent the request
     if (friendship == null)
     {
       console.log("this Friendship doesn't exist, not pending, or blocked!");

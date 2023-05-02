@@ -11,74 +11,141 @@ export class FriendshipController {
   constructor(private readonly friendshipService: FriendshipService) {}
 
 
+  @Get()
+  itsMe(@Request() req : any)
+  {
+    return req.user;
+  }
+
   @Get(':id')
   @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
-  async findOne(@Request() req, @Param('id') id: string) {
-    console.log(req.user);
-    return await this.friendshipService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    return await this.friendshipService.findOne(id); // TODO: I may check next the User if is blockig you..
   }
 
-  @Post('suggestions')
-  @UsePipes(new UservalidatingPipe())
-  async suggestions(@Body() id: UserValidatingDto)
+  @Get('suggestions')
+  async suggestions(@Request() req : any)
   {
-    return await this.friendshipService.suggested(id);
+    return await this.friendshipService.suggested(req.user.username);
   }
 
-  @Post('friendList')
-  @UsePipes(new UservalidatingPipe())
-  async friendList(@Body() id: UserValidatingDto)
+  // @Post('suggestions')
+  // @UsePipes(new UservalidatingPipe())
+  // async suggestions(@Body() id: UserValidatingDto)
+  // {
+  //   return await this.friendshipService.suggested(id);
+  // }
+
+  @Get('friendList')
+  async friendList(@Request() req : any)
   {
-    return await this.friendshipService.friendList(id);
+    return await this.friendshipService.friendList(req.user.username);
   }
 
-  @Post('unblock')
+  // @Post('friendList')
+  // @UsePipes(new UservalidatingPipe())
+  // async friendList(@Body() id: UserValidatingDto)
+  // {
+  //   return await this.friendshipService.friendList(id);
+  // }
+
+
+  // @Post('unblock')
+  // @UsePipes(new UservalidatingPipe())
+  // async unblock(@Body() body : DealingWithRequestDto)
+  // {
+  //   return await this.friendshipService.unblock(body);
+  // }
+
+  @Get('unblock')
   @UsePipes(new UservalidatingPipe())
-  async unblock(@Body() body : DealingWithRequestDto)
+  async unblock(@Request() req : any, @Body() body : UserValidatingDto)
   {
-    return await this.friendshipService.unblock(body);
+    return await this.friendshipService.unblock({Userone: req.user.username, Usertwo: body.Userone});
   }
+
+  // (@Request() req : any, @Body() body : UserValidatingDto)
+  // {Userone: req.user.username, Usertwo: body.Userone}
+  // @Post('unfriend')
+  // @UsePipes(new UservalidatingPipe())
+  // async unfriend(@Body() body: DealingWithRequestDto)
+  // {
+  //   return await this.friendshipService.remove(body);
+  // }
 
   @Post('unfriend')
   @UsePipes(new UservalidatingPipe())
-  async unfriend(@Body() body: DealingWithRequestDto)
+  async unfriend(@Request() req : any, @Body() body : UserValidatingDto)
   {
-    return await this.friendshipService.remove(body);
+    return await this.friendshipService.remove({Userone: req.user.username, Usertwo: body.Userone});
   }
+
+  // @Post('blocking')
+  // @UsePipes(new UservalidatingPipe())
+  // async blocking(@Body() body: DealingWithRequestDto)
+  // {
+  //   return await this.friendshipService.blocking(body);
+  // }
 
   @Post('blocking')
   @UsePipes(new UservalidatingPipe())
-  async blocking(@Body() body: DealingWithRequestDto)
+  async blocking(@Request() req : any, @Body() body : UserValidatingDto)
   {
-    return await this.friendshipService.blocking(body);
+    return await this.friendshipService.blocking({Userone: req.user.username, Usertwo: body.Userone});
   }
 
-  @Post('blocklist')
-  @UsePipes(new UservalidatingPipe())
-  async blocklist(@Body() id : UserValidatingDto)
+  // @Post('blocklist')
+  // @UsePipes(new UservalidatingPipe())
+  // async blocklist(@Body() id : UserValidatingDto)
+  // {
+  //   console.log(id.Userone);
+  //   return await this.friendshipService.blocklist(id);
+  // }
+
+  @Get('blocklist')
+  async blocklist(@Request() req : any)
   {
-    console.log(id.Userone);
-    return await this.friendshipService.blocklist(id);
+    return await this.friendshipService.blocklist(req.user.username);
   }
 
-  @Post('requestsList')
-  @UsePipes(new UservalidatingPipe())
-  async requestsList(@Body() id: UserValidatingDto)
+  // @Post('requestsList')
+  // @UsePipes(new UservalidatingPipe())
+  // async requestsList(@Body() id: UserValidatingDto)
+  // {
+  //   return await this.friendshipService.requestsList(id);
+  // }
+
+  @Get('requestsList')
+  async requestsList(@Request() req : any)
   {
-    return await this.friendshipService.requestsList(id);
+    return await this.friendshipService.requestsList(req.user.username);
   }
+
+  // @Post('accept')
+  // @UsePipes(new UservalidatingPipe())
+  // async accepting(@Body() body : DealingWithRequestDto)
+  // {
+  //   return await this.friendshipService.accepting(body)
+  // }
 
   @Post('accept')
   @UsePipes(new UservalidatingPipe())
-  async accepting(@Body() body : DealingWithRequestDto)
+  async accepting(@Request() req : any, @Body() body : UserValidatingDto)
   {
-    return await this.friendshipService.accepting(body)
+    return await this.friendshipService.accepting({Userone: req.user.username, Usertwo: body.Userone})
   }
+
+  // @Post('send')
+  // @UsePipes(new UservalidatingPipe())
+  // async send(@Body() body : DealingWithRequestDto)
+  // {
+  //   return await this.friendshipService.create(body);
+  // }
 
   @Post('send')
   @UsePipes(new UservalidatingPipe())
-  async send(@Body() body : DealingWithRequestDto)
+  async send(@Request() req : any, @Body() body : UserValidatingDto)
   {
-    return await this.friendshipService.create(body);
+    return await this.friendshipService.create({Userone: req.user.username, Usertwo: body.Userone});
   }
 }
