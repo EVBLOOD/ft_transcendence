@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Param, UsePipes, Get, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Body, Param, UsePipes, Get, UseGuards, Request, Logger } from '@nestjs/common';
 import { FriendshipService } from './friendship.service';
 import { DealingWithRequestDto, UserValidatingDto } from './dto/create-friendship.dto';
 import { UservalidatingPipe } from './uservalidating/uservalidating.pipe';
@@ -8,12 +8,14 @@ import { IsauthGuard } from 'src/auth/isauth.guard';
 @UseGuards(IsauthGuard)
 @Controller('friendship')
 export class FriendshipController {
+  private readonly logger = new Logger(FriendshipController.name);
   constructor(private readonly friendshipService: FriendshipService) {}
 
 
   @Get()
   itsMe(@Request() req : any)
   {
+    console.log(req.user);
     return req.user;
   }
 
@@ -26,7 +28,12 @@ export class FriendshipController {
   @Get('suggestions')
   async suggestions(@Request() req : any)
   {
-    return await this.friendshipService.suggested(req.user.username);
+    const x = req.user;
+    console.log(x);
+   this.logger.debug("---------------------------------------------------------------------");
+   this.logger.debug(`this user is looking for suggestions ${x.username}`);
+   this.logger.debug("---------------------------------------------------------------------");
+    return await this.friendshipService.suggested(x.username);
   }
 
   // @Post('suggestions')
@@ -98,7 +105,7 @@ export class FriendshipController {
   // @UsePipes(new UservalidatingPipe())
   // async blocklist(@Body() id : UserValidatingDto)
   // {
-  //   console.log(id.Userone);
+  //  this.logger.debug(id.Userone);
   //   return await this.friendshipService.blocklist(id);
   // }
 

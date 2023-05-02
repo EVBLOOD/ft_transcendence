@@ -4,7 +4,7 @@ import { FriendshipController } from './friendship.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Friendship } from './entities/friendship.entity';
 import { User } from 'src/user/entities/user.entity';
-import { UservalidatingPipe } from './uservalidating/uservalidating.pipe';
+// import { UservalidatingPipe } from './uservalidating/uservalidating.pipe';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Friendship, User])],

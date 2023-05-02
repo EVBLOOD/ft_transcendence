@@ -170,15 +170,19 @@ export class FriendshipService {
 
   async suggested(User: UserValidatingDto)
   {
-    const frindList = await this.friendList(User);
+    console.log("Jrzzp eptf");
+    let frindList = await this.friendList(User);
+    console.log(`this user has as friends ${frindList}`);
     if (frindList == undefined)
-      return undefined;
+    return undefined;
     else if (frindList == null)
-      return {};
+    frindList = [];
+    console.log(`works!`);
     let lastone: Array<string>;
     frindList.forEach(element => {
       lastone.push(element.user);
     });
+    console.log(lastone);
     return await this.UserRepo.find({where: {username: Any(lastone)}});
   }
 
