@@ -11,31 +11,28 @@ export class FriendshipController {
   private readonly logger = new Logger(FriendshipController.name);
   constructor(private readonly friendshipService: FriendshipService) {}
 
-
+  
   @Get()
   itsMe(@Request() req : any)
   {
-    console.log(req.user);
+    console.log(`user is ${req.user.username as string}`);
     return req.user;
   }
-
-  @Get(':id')
+  
+  
+  @Get('find/:id')
   @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
   async findOne(@Param('id') id: string) {
     return await this.friendshipService.findOne(id); // TODO: I may check next the User if is blockig you..
   }
-
+  
   @Get('suggestions')
   async suggestions(@Request() req : any)
   {
-    const x = req.user;
-    console.log(x);
-   this.logger.debug("---------------------------------------------------------------------");
-   this.logger.debug(`this user is looking for suggestions ${x.username}`);
-   this.logger.debug("---------------------------------------------------------------------");
-    return await this.friendshipService.suggested(x.username);
+    console.log(`user is ${req.user.username as string}`);
+    return await this.friendshipService.suggested({Userone: req.user.username});
   }
-
+  
   // @Post('suggestions')
   // @UsePipes(new UservalidatingPipe())
   // async suggestions(@Body() id: UserValidatingDto)
@@ -46,7 +43,7 @@ export class FriendshipController {
   @Get('friendList')
   async friendList(@Request() req : any)
   {
-    return await this.friendshipService.friendList(req.user.username);
+    return await this.friendshipService.friendList({Userone: req.user.username});
   }
 
   // @Post('friendList')
@@ -64,7 +61,7 @@ export class FriendshipController {
   //   return await this.friendshipService.unblock(body);
   // }
 
-  @Get('unblock')
+  @Post('unblock')
   @UsePipes(new UservalidatingPipe())
   async unblock(@Request() req : any, @Body() body : UserValidatingDto)
   {
@@ -112,7 +109,7 @@ export class FriendshipController {
   @Get('blocklist')
   async blocklist(@Request() req : any)
   {
-    return await this.friendshipService.blocklist(req.user.username);
+    return await this.friendshipService.blocklist({Userone: req.user.username});
   }
 
   // @Post('requestsList')
@@ -125,7 +122,7 @@ export class FriendshipController {
   @Get('requestsList')
   async requestsList(@Request() req : any)
   {
-    return await this.friendshipService.requestsList(req.user.username);
+    return await this.friendshipService.requestsList({Userone: req.user.username});
   }
 
   // @Post('accept')
