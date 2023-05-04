@@ -8,8 +8,9 @@ import  DataConf  from '../data'
 import { ConfigModule } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { FriendshipModule } from './friendship/friendship.module';
+import { ChatModule } from './chat/chat.module';
 @Module({
-  imports: [TypeOrmModule.forRoot(DataConf), UserModule, AuthModule, ConfigModule.forRoot(), PassportModule.register({session: true}), FriendshipModule],
+  imports: [TypeOrmModule.forRoot(DataConf), UserModule, AuthModule, ConfigModule.forRoot(), PassportModule.register({session: true}), FriendshipModule, ChatModule],
   controllers: [AppController],
   providers: [AppService],
 })
