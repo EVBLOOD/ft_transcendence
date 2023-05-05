@@ -65,21 +65,21 @@ export class ChatGateway implements OnGatewayConnection {
 
   @SubscribeMessage('findAllChat')
   findAll() {
-    return this.chatService.findAll();
+    // return this.chatService.findAll();
   }
 
   @SubscribeMessage('findOneChat')
   findOne(@MessageBody() id: number) {
-    return this.chatService.findOne(id);
+    // return this.chatService.findOne(id);
   }
 
   @SubscribeMessage('updateChat')
   update(@MessageBody() updateChatDto: UpdateChatDto) {
-    return this.chatService.update(updateChatDto.id, updateChatDto);
+    // return this.chatService.update(updateChatDto.id, updateChatDto);
   }
 
   @SubscribeMessage('removeChat')
   remove(@MessageBody() id: number) {
-    return this.chatService.remove(id);
+    // return this.chatService.remove(id);
   }
 }

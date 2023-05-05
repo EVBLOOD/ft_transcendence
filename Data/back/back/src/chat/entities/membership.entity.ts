@@ -17,6 +17,8 @@ export class Members
     @Column({type: 'enum', enum: ["none", "admin", "owner"]})
     role: string;
 
+    @Column()
+    mute: Date; // should be the date and time when mute ends
 
     @ManyToOne(() => User)
     @JoinColumn({name: 'username'})
