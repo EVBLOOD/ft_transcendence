@@ -3,6 +3,7 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
 import { Friendship } from './src/friendship/entities/friendship.entity';
 import { Chat } from 'src/chat/entities/chat.entity';
 import { Messages } from 'src/chat/entities/Messages.entity';
+import { Members } from 'src/chat/entities/membership.entity';
 
 const DataConf : PostgresConnectionOptions = {
     type: 'postgres',
@@ -11,7 +12,7 @@ const DataConf : PostgresConnectionOptions = {
     username: 'postgres',
     password: 'evblood123',
     database: 'ft_transcendence',
-    entities: [User, Friendship, Chat, Messages],
+    entities: [User, Friendship, Chat, Messages, Members],
     synchronize: true,
 }
 export default DataConf;
