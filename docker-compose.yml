@@ -1,24 +1,9 @@
+# Notice : if you working with linux you should change the ${PWD} with a Valide PATH.
 version: '3.7'
 
 services:
+# Features
 
-  my_base:
-    build: ./srcs
-    image: new_node_base
-    container_name: new_node_base
-
-  back:
-    build: ./srcs/back
-    # user: "1000:1000"
-    # command: "sh script.sh"
-    image: back
-    container_name: back
-    networks:
-      - ft_transcendence
-    restart: on-failure
-    volumes:
-      - vol_back:/var/www/html/
-  
   adminer:
     image: adminer
     restart: always
@@ -26,11 +11,20 @@ services:
       - 8080:8080
     networks:
       - ft_transcendence
-  
+
+# Main Services
+  back:
+    build: ./srcs/back
+    image: back
+    container_name: back
+    networks:
+      - ft_transcendence
+    restart: on-failure
+    volumes:
+      - vol_back:/var/www/html/
+
   front:
     build: ./srcs/front
-    # user: "1000:1000"
-    # command: "sh script.sh"
     image: front
     container_name: front
     networks:
@@ -38,19 +32,6 @@ services:
     restart: on-failure
     volumes:
       - vol_front:/var/www/html/
-    
-  # database:
-  #   image: postgres
-  #   container_name: database
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
-  #   volumes:
-  #     - vol_database:/var/lib/postgresql/data
-  #   environment:
-  #     - POSTGRES_PASSWORD=evblood123
-  #     - POSTGRES_DB=ft_transcendence
-
 
   database:
     image: postgres
@@ -59,10 +40,11 @@ services:
       - ft_transcendence
     restart: on-failure
     # volumes:
-    #   - vol_database:/var/lib/postgresql/data
+    #   - vol_database:/var/lib/postgresql/data # this should be enabled before pushing, same as vol_database
     environment:
       - POSTGRES_PASSWORD=evblood123
       - POSTGRES_DB=ft_transcendence
+
 
 networks:
   ft_transcendence:
@@ -79,8 +61,8 @@ volumes:
       type: 'none'
       o: bind
       device: ${PWD}/Data/front
-  vol_database:
-    driver_opts:
-      type: 'none'
-      o: bind
-      device: ${PWD}/Data/base
+  # vol_database:
+  #   driver_opts:
+  #     type: 'none'
+  #     o: bind
+  #     device: ${PWD}/Data/base

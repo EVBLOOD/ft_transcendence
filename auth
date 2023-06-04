@@ -1,8 +1,0 @@
-for auth we gonna use passport.js with 42 stratigy and google's
-- first, install nest/passport + passport + stratigy we are going to use (passport-42 for example)
-- second, install types for your stratigy so you get types for it.
-----> to do read about exeption filter, to not catch the errors from the controler, but just get them from the server and server them proprely as http responses
-guards for auth..
-/////
-HINT:
-By default, if any error happens while creating the application your app will exit with the code 1. If you want to make it throw an error instead disable the option abortOnError (e.g., NestFactory.create(AppModule, { abortOnError: false })).
