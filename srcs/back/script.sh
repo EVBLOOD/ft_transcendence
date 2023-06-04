@@ -22,4 +22,4 @@ fi
 echo "--------------------- Init --------------------------------";
 npm install;
 echo "--------------------- Starting --------------------------------";
-exec npm run start:dev;
+exec npm run start:nodemon;
