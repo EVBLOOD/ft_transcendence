@@ -1,10 +1,3 @@
-// imports: [TypeOrmModule.forRoot(DataConf), UserModule, AuthModule, ConfigModule.forRoot(), PassportModule.register({session: true}),
-//             FriendshipModule, ChatModule, AuthenticatorModule,  JwtModule.register({
-//                 global: true,
-//                 secret: 'secret',
-//                 signOptions: { expiresIn: '60s' },
-//               }),],
-// main: 
 
 // const config = new DocumentBuilder()
 // .setTitle('transcendence')
@@ -16,3 +9,28 @@
 // const document = SwaggerModule.createDocument(app, config);
 // SwaggerModule.setup('api', app, document);
 // app.use(cookieParser());
+
+// import { Module } from '@nestjs/common';
+// import { AppController } from './app.controller';
+// import { AppService } from './app.service';
+// import { TypeOrmModule } from '@nestjs/typeorm';
+// import { UserModule } from './user/user.module';
+// import { AuthModule } from './auth/auth.module';
+// import  DataConf  from '../data'
+// import { ConfigModule } from '@nestjs/config';
+// import { PassportModule } from '@nestjs/passport';
+// import { FriendshipModule } from './friendship/friendship.module';
+// import { ChatModule } from './chat/chat.module';
+// import { AuthenticatorModule } from './authenticator/authenticator.module';
+// import { JwtModule } from '@nestjs/jwt';
+// @Module({
+//   imports: [TypeOrmModule.forRoot(DataConf), UserModule, AuthModule, ConfigModule.forRoot(), PassportModule.register({session: true}),
+//             FriendshipModule, ChatModule, AuthenticatorModule,  JwtModule.register({
+//               global: true,
+//               secret: 'secret',
+//               signOptions: { expiresIn: '60s' },
+//             }),],
+//   controllers: [AppController],
+//   providers: [AppService],
+// })
+// export class AppModule {}
