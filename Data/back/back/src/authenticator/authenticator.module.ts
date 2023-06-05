@@ -5,10 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
+import { AuthStrategy } from './fortytwo.strategy';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
   controllers: [AuthenticatorController],
-  providers: [AuthenticatorService, JwtStrategy]
+  providers: [AuthenticatorService, JwtStrategy, AuthStrategy]
 })
 export class AuthenticatorModule {}
