@@ -1,5 +1,5 @@
 import { IsBoolean, IsEmail, Matches } from "class-validator";
-import { Messages } from "src/chat/entities/Messages.entity";
+// import { Messages } from "src/chat/entities/Messages.entity";
 import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn, } from "typeorm";
 
 @Entity({name: "Users"})
@@ -24,7 +24,7 @@ export class User {
     email: string;
 
 
-    @OneToMany( () => Messages, (messages) => messages.chat_id)
-    messages: Messages;
+    // @OneToMany( () => Messages, (messages) => messages.chat_id)
+    // messages: Messages;
 }
 
