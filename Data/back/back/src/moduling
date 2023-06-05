@@ -1,0 +1,18 @@
+// imports: [TypeOrmModule.forRoot(DataConf), UserModule, AuthModule, ConfigModule.forRoot(), PassportModule.register({session: true}),
+//             FriendshipModule, ChatModule, AuthenticatorModule,  JwtModule.register({
+//                 global: true,
+//                 secret: 'secret',
+//                 signOptions: { expiresIn: '60s' },
+//               }),],
+// main: 
+
+// const config = new DocumentBuilder()
+// .setTitle('transcendence')
+// .setDescription('transcendence APIs description')
+// .setVersion('0.1')
+// .addTag('transcendence')
+// .build();
+
+// const document = SwaggerModule.createDocument(app, config);
+// SwaggerModule.setup('api', app, document);
+// app.use(cookieParser());
