@@ -21,13 +21,13 @@ export class AuthenticatorController {
     var token;
     if (!req.user)
       return "alo?";
-    if (!req.cookies || !req.cookies['access_token'])
+    if (!req.cookies || !req.cookies[process.env.TOKEN_NAME])
       token =  this.jwtService.sign({sub: req.user.username, email: req.user.email});
     else
-      token = req.cookies['access_token'];
+      token = req.cookies[process.env.TOKEN_NAME];
     const tokenUser = await this.service.GenToken(req.user.username, token);
     if (tokenUser)
-      res.cookie('access_token', tokenUser.token);
+      res.cookie(process.env.TOKEN_NAME, tokenUser.token);
     return res.redirect('/redirection');
   }
 

@@ -14,7 +14,7 @@ import { ConfigModule } from '@nestjs/config';
   imports: [TypeOrmModule.forRoot(DataConf), UserModule, PassportModule.register({session: true}),
             FriendshipModule, AuthenticatorModule,  JwtModule.register({
               global: true,
-              secret: 'secret',
+              secret: process.env.ACCESS_TOKEN_SECRET,
             }),ConfigModule.forRoot(),],
   controllers: [AppController],
   providers: [AppService],

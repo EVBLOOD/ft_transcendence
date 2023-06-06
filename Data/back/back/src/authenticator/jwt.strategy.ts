@@ -20,14 +20,14 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       let token = null;
 
       if (req && req.cookies) {
-        token = req.cookies['access_token'];
+        token = req.cookies[process.env.TOKEN_NAME];
       }
       return token || ExtractJwt.fromAuthHeaderAsBearerToken()(req);
     };
     
     super({
       ignoreExpiration: false,
-      secretOrKey: 'secret',
+      secretOrKey: process.env.ACCESS_TOKEN_SECRET,
       jwtFromRequest: extractJwtFromCookie,
     });
   }
