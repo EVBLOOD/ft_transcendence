@@ -6,10 +6,12 @@ import { User } from 'src/user/entities/user.entity';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { AuthStrategy } from './fortytwo.strategy';
+import { Token } from './entities/Token.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [TypeOrmModule.forFeature([User, Token])],
   controllers: [AuthenticatorController],
-  providers: [AuthenticatorService, JwtStrategy, AuthStrategy]
+  providers: [AuthenticatorService, JwtStrategy, AuthStrategy],
+  exports: [AuthenticatorService]
 })
 export class AuthenticatorModule {}

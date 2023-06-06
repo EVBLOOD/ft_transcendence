@@ -1,13 +1,14 @@
-import { Controller, Get, HttpStatus, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Inject, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthenticatorService } from './authenticator.service';
 import { fortytwoAuthGuard } from './auth.guard';
 import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { JwtAuthGuard } from './jwtauth.guard';
+import { escape } from 'querystring';
 
 @Controller()
 export class AuthenticatorController {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(private readonly jwtService: JwtService, private readonly service: AuthenticatorService) {}
 
   @Get('login')
   @UseGuards(fortytwoAuthGuard)
@@ -16,13 +17,17 @@ export class AuthenticatorController {
   
   @Get('auth/callback')
   @UseGuards(fortytwoAuthGuard)
-  callback(@Req() req, @Res( {passthrough: true }) res: Response) {
-    // console.log("test entering");
+  async callback(@Req() req, @Res( {passthrough: true }) res: Response) {
+    var token;
     if (!req.user)
       return "alo?";
-    const token =  this.jwtService.sign({sub: req.user.username, email: req.user.email});
-    res.cookie('access_token', token)
-
+    if (!req.cookies || !req.cookies['access_token'])
+      token =  this.jwtService.sign({sub: req.user.username, email: req.user.email});
+    else
+      token = req.cookies['access_token'];
+    const tokenUser = await this.service.GenToken(req.user.username, token);
+    if (tokenUser)
+      res.cookie('access_token', tokenUser.token);
     return res.redirect('/redirection');
   }
 
@@ -30,7 +35,7 @@ export class AuthenticatorController {
   @Get('redirection')
   redirection(@Req() req)
   {
-    console.log(req.user);
+    console.log(req.new_user);
     return {msg: 'Hello from the other side'}
   }
 }

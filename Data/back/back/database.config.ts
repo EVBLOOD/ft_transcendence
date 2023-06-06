@@ -1,3 +1,4 @@
+import { Token } from 'src/authenticator/entities/Token.entity';
 import { Friendship } from 'src/friendship/entities/friendship.entity';
 import { User } from 'src/user/entities/user.entity';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
@@ -9,7 +10,7 @@ const DataConf : PostgresConnectionOptions = {
     username: 'postgres',
     password: 'evblood123',
     database: 'ft_transcendence',
-    entities: [User, Friendship], // you can integrate the Entity you're working on here
+    entities: [User, Friendship, Token], // you can integrate the Entity you're working on here
     synchronize: true,
 }
 export default DataConf;

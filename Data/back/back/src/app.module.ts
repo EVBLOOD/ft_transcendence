@@ -15,7 +15,6 @@ import { ConfigModule } from '@nestjs/config';
             FriendshipModule, AuthenticatorModule,  JwtModule.register({
               global: true,
               secret: 'secret',
-              signOptions: { expiresIn: '60s' },
             }),ConfigModule.forRoot(),],
   controllers: [AppController],
   providers: [AppService],
