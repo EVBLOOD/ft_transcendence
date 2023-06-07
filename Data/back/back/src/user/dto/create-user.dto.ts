@@ -1,4 +1,5 @@
 import { IsBoolean, IsEmail, IsNotEmpty, Matches } from "class-validator";
+import { Socket } from "socket.io";
 
 export class CreateUserDto {
 
