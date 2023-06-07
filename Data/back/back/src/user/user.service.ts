@@ -11,6 +11,7 @@ export class UserService {
 
   async findAll() {
     const GetUsers : User[] = await this.UserRepo.find();
+    // send only the importent data.
     return GetUsers;
   }
 

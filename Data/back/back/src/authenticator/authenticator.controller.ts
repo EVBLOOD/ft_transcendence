@@ -27,7 +27,7 @@ export class AuthenticatorController {
       token = req.cookies[process.env.TOKEN_NAME];
     const tokenUser = await this.service.GenToken(req.user.username, token);
     if (tokenUser)
-      res.cookie(process.env.TOKEN_NAME, tokenUser.token);
+    res.cookie(process.env.TOKEN_NAME, tokenUser.token);
     return res.redirect('/redirection');
   }
 

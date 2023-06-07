@@ -12,10 +12,11 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [TypeOrmModule.forRoot(DataConf), UserModule, PassportModule.register({session: true}),
+            ConfigModule.forRoot( {isGlobal: true,} ),
             FriendshipModule, AuthenticatorModule,  JwtModule.register({
-              global: true,
               secret: process.env.ACCESS_TOKEN_SECRET,
-            }),ConfigModule.forRoot(),],
+              global: true,
+            }),],
   controllers: [AppController],
   providers: [AppService],
 })
