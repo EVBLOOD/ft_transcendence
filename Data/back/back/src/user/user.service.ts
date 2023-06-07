@@ -63,6 +63,14 @@ export class UserService {
     this.currentstate.set(username, colect);
   }
 
+  GetAllCurrentStates(username : string)
+  {
+    if (!this.currentstate.has(username))
+      return null;
+    let colect : {client: Socket, status: string}[] = this.currentstate.get(username);
+    return colect;
+  }
+
   GetCurrentState(username : string)
   {
     if (!this.currentstate.has(username))

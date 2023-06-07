@@ -127,7 +127,7 @@ export class CurrentStatusGateway {
 
   @SubscribeMessage('Disconnect')
   async handleTyping(client: any, payload: any) {
-       if (!client.handshake.headers.authorization)
+    if (!client.handshake.headers.authorization)
     {
       client.disconnect()
       return false;
@@ -139,7 +139,24 @@ export class CurrentStatusGateway {
         return false;
     }
     this.SaveStatus.PruneUserState(xyz.sub);
-    this.myserver.emit('status', this.SaveStatus.GetCurrentStateAll())
+    this.myserver.emit('status', this.SaveStatus.GetCurrentStateAll());
+    return 'GoodBay world!';
+  }
+  @SubscribeMessage('Call')
+  async handleCall(client: Socket)
+  {
+    if (!client.handshake.headers.authorization)
+    {
+      client.disconnect()
+      return false;
+    }
+    const xyz : any =  this.serviceJWt.decode(client.handshake.headers.authorization);
+    if (!xyz || await this.serviceToken.IsSame(xyz.sub || "", client.handshake.headers.authorization) ==  false)
+    {
+        client.disconnect()
+        return false;
+    }
+    this.myserver.emit('status', this.SaveStatus.GetAllCurrentStates(xyz.sub));
     return 'Hello world!';
   }
   async handleDisconnect(client: Socket)
