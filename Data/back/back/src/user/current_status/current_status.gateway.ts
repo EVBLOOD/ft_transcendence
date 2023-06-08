@@ -89,42 +89,6 @@ export class CurrentStatusGateway {
     return 'He is InGame';
   }
 
-  @SubscribeMessage('IsWriting')
-  async handleIsWriting(client: any, payload: any) {
-       if (!client.handshake.headers.authorization)
-    {
-      client.disconnect()
-      return false;
-    }
-    const xyz : any =  this.serviceJWt.decode(client.handshake.headers.authorization);
-    if (!xyz || await this.serviceToken.IsSame(xyz.sub || "", client.handshake.headers.authorization) ==  false)
-    {
-        client.disconnect()
-        return false;
-    }
-    this.SaveStatus.AddState(xyz.sub, client, 'IsWriting');
-    this.myserver.emit('status', this.SaveStatus.GetCurrentStateAll())
-    return 'He is IsWriting';
-  }
-
-  @SubscribeMessage('InConv')
-  async handleInConv(client: any, payload: any) {
-       if (!client.handshake.headers.authorization)
-    {
-      client.disconnect()
-      return false;
-    }
-    const xyz : any =  this.serviceJWt.decode(client.handshake.headers.authorization);
-    if (!xyz || await this.serviceToken.IsSame(xyz.sub || "", client.handshake.headers.authorization) ==  false)
-    {
-        client.disconnect()
-        return false;
-    }
-    this.SaveStatus.AddState(xyz.sub, client, 'InConv');
-    this.myserver.emit('status', this.SaveStatus.GetCurrentStateAll())
-    return 'He is InConv';
-  }
-
   @SubscribeMessage('Disconnect')
   async handleTyping(client: any, payload: any) {
     if (!client.handshake.headers.authorization)
