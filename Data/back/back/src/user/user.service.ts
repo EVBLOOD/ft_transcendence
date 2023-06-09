@@ -78,11 +78,6 @@ export class UserService {
     let colect : {client: Socket, status: string}[] = this.currentstate.get(username);
     return colect[colect.length - 1]['status'];
   }
-  GetCurrentStateAll()
-  {
-    console.log(this.currentstate);
-    return this.currentstate;
-  }
 
   RemoveState(Socket: Socket, username: string)
   {

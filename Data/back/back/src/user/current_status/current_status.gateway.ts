@@ -1,4 +1,3 @@
-import { UseGuards } from '@nestjs/common';
 import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { SocketAuthGuard } from 'src/authenticator/socket.guard';
@@ -30,11 +29,10 @@ export class CurrentStatusGateway {
         return false;
     }
     this.SaveStatus.AddState(xyz.sub, client, 'Online');
-    this.myserver.emit('status', this.SaveStatus.GetCurrentStateAll())
+    this.myserver.emit('status', this.SaveStatus.GetCurrentState(xyz.sub))
     return 'He is Online';
   }
     
-  @UseGuards(SocketAuthGuard)
   @SubscribeMessage('Online')
   async handleOnline(client: any, payload: any) {
     if (!client.handshake.headers.authorization)
@@ -49,7 +47,7 @@ export class CurrentStatusGateway {
         return false;
     }
     this.SaveStatus.AddState(xyz.sub, client, 'Online');
-    this.myserver.emit('status', this.SaveStatus.GetCurrentStateAll())
+    this.myserver.emit('status', this.SaveStatus.GetCurrentState(xyz.sub))
     return 'He is Online';
   }
 
@@ -66,8 +64,7 @@ export class CurrentStatusGateway {
         client.disconnect()
         return false;
     }
-    this.SaveStatus.RemoveState(client, xyz.sub);
-    this.myserver.emit('status', this.SaveStatus.GetCurrentStateAll())
+      client.disconnect()
     return 'Tab Disconnect';
   }
 
@@ -85,7 +82,7 @@ export class CurrentStatusGateway {
         return false;
     }
     this.SaveStatus.AddState(xyz.sub, client, 'InGame');
-    this.myserver.emit('status', this.SaveStatus.GetCurrentStateAll())
+    this.myserver.emit('status', this.SaveStatus.GetCurrentState(xyz.sub))
     return 'He is InGame';
   }
 
@@ -103,7 +100,7 @@ export class CurrentStatusGateway {
         return false;
     }
     this.SaveStatus.PruneUserState(xyz.sub);
-    this.myserver.emit('status', this.SaveStatus.GetCurrentStateAll());
+    this.myserver.emit('status', this.SaveStatus.GetCurrentState(xyz.sub));
     return 'GoodBay world!';
   }
   @SubscribeMessage('Call')
@@ -137,7 +134,7 @@ export class CurrentStatusGateway {
         return false;
     }
     this.SaveStatus.RemoveState(client, xyz.sub);
-    this.myserver.emit('status', this.SaveStatus.GetCurrentStateAll())
+    this.myserver.emit('status', this.SaveStatus.GetCurrentState(xyz.sub))
     return 'Tab Disconnect';
   }
 }
