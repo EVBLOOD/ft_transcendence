@@ -11,7 +11,7 @@ export class UserService {
 
   constructor(@InjectRepository(User) private readonly UserRepo : Repository<User>) {}
 
-  private currentstate = new Map< string, {client: Socket, status: string}[] >(); 
+  private currentstate = new Map< string, {client: string, status: string, lastupdate: string}[] >(); 
   
   async findAll() {
     const GetUsers : User[] = await this.UserRepo.find();
@@ -42,24 +42,24 @@ export class UserService {
 
   AddState(username: string, socket : Socket, type: string)
   {
-    console.log(socket.id)
-    let colect : {client: Socket, status: string}[];
+    let colect : {client: string, status: string, lastupdate: string}[];
     if (this.currentstate.has(username))
-      colect = this.currentstate.get(username);
+    colect = this.currentstate.get(username);
     else
-      colect = [];
+    colect = [];
     let i : number = 0;
     for (i; i < colect.length; i++)
     {
-      if (colect[i]['client'].id == socket.id)
+      if (colect[i]['client'] == socket.id)
       {
         colect[i].status = type;
+        colect[i].lastupdate = Date().toString();
         break;
       }
     }
     if (i != colect.length)
       return;
-    colect.push({client: socket, status: type});
+    colect.push({client: socket.id, status: type, lastupdate: Date().toString()});
     this.currentstate.set(username, colect);
   }
 
@@ -67,25 +67,32 @@ export class UserService {
   {
     if (!this.currentstate.has(username))
       return null;
-    let colect : {client: Socket, status: string}[] = this.currentstate.get(username);
+    let colect : {client: string, status: string, lastupdate: string}[] = this.currentstate.get(username);
     return colect;
   }
-
+  
   GetCurrentState(username : string)
   {
+    console.log(this.currentstate);
     if (!this.currentstate.has(username))
       return null;
-    let colect : {client: Socket, status: string}[] = this.currentstate.get(username);
-    return colect[colect.length - 1]['status'];
+    let colect : {client: string, status: string, lastupdate: string}[] = this.currentstate.get(username);
+    let col : {client: string, status: string, lastupdate: string} = colect[colect.length - 1];
+    for (let i : number = 0; i < colect.length - 1; i++)
+    {
+      if ((new Date(colect[i].lastupdate)) > (new Date(col.lastupdate)))
+        col = colect[i];
+    }
+    return col;
   }
 
   RemoveState(Socket: Socket, username: string)
   {
     if (!this.currentstate.has(username))
       return null;
-    let colect : {client: Socket, status: string}[] = this.currentstate.get(username);
-    let newholder : {client: Socket, status: string}[] = [];
-    colect.map((col) => { if (col.client.id != Socket.id) newholder.push(col); });
+    let colect : {client: string, status: string, lastupdate: string}[] = this.currentstate.get(username);
+    let newholder : {client: string, status: string, lastupdate: string}[] = [];
+    colect.map((col) => { if (col.client != Socket.id) newholder.push(col); });
     if (newholder.length == 0)
       this.currentstate.delete(username);
     else
