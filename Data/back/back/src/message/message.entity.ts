@@ -1,7 +1,7 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { IsNotEmpty } from 'class-validator';
 import { User } from 'src/user/user.entity';
 import { Chat } from 'src/chat/chat.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Message {
@@ -17,7 +17,7 @@ export class Message {
   value: string;
 
   @ManyToOne(() => Chat, (chatRoom: Chat) => chatRoom.message)
-  charRoomId: Chat;
+  chatRoomId: Chat;
 
   @ManyToOne(() => User, (user: User) => user.messages)
   userId: User;
