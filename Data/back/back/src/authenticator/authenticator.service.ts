@@ -27,45 +27,61 @@ export class AuthenticatorService {
               TwoFAenabled: false,
               TwoFAsecret: "" });
     }
+    
+    async TwoFactoRequired(username: string)
+    {
+        const user = await this.UserRepo.findOne( { where: {username: username} } );
+        if (!user || !user.TwoFAenabled)
+            return false;
+        return true;
+    }
 
     async TwoFA_SendQr(username: string)
     {
         const user = await this.UserRepo.findOne( { where: {username: username} } );
         if (!user || user.TwoFAenabled)
             return null;
-        const secret = speakeasy.generateSecret();
-        let result;
-        qrcode.ToDataUrl(secret.otpauth_url, (err, url) => {
-            if (err)
-            {
-                console.log("err");
-                result = null;
-                return ;
-            }
-            console.log("qr link pass");
-            result = {qr: url, secert: secret};
-        });
-        return secret;
+        var result : any;
+        try{
+            const secret = speakeasy.generateSecret();
+            result = await qrcode.toDataURL(secret.otpauth_url);
+            console.log(result);
+            if (result)
+                await this.UserRepo.save(
+                    { username:username,
+                      name: user.name,
+                      avatar: user.avatar,
+                      email: user.email,
+                      TwoFAenabled: false,
+                      TwoFAsecret: secret.base32 });
+        }
+        catch (err)
+        {
+            console.log(err);
+            return null;
+        }
+        return result;
     }
     
-    async TwoFA_Validate(username: string, token: number)
+    async TwoFA_Validate(username: string, token: string)
     {
         const user = await this.UserRepo.findOne( { where: {username: username} } );
         if (!user || !user.TwoFAenabled)
             return null;
-        const verify = speakeasy.totp.verify({secert: user.TwoFAsecret, encoding: 'base32', token: token});
+        const verify = speakeasy.totp.verify({secret: user.TwoFAsecret, encoding: 'base32', token: token});
         if (!verify)
             return null;
         return user;
     }
 
-    async TwoFA_Enabling(username: string, token: number, secert: any)
+    async TwoFA_Enabling(username: string, token: string)
     {
-        const verify = speakeasy.totp.verify({secert: secert.base32, encoding: 'base32', token: token});
-        if (!verify)
-            return null;
         const user = await this.UserRepo.findOne( { where: {username: username} } );
-        if (!user)
+        if (!user || user.TwoFAenabled || user.TwoFAsecret == "")
+            return null;
+        const verify = speakeasy.totp.verify({secret: user.TwoFAsecret, encoding: 'base32', token: token});
+        console.log(verify);
+        if (!verify)
             return null;
         return await this.UserRepo.save(
             { username:username,
@@ -73,7 +89,7 @@ export class AuthenticatorService {
               avatar: user.avatar,
               email: user.email,
               TwoFAenabled: true,
-              TwoFAsecret: secert.base32 });
+              TwoFAsecret: user.TwoFAsecret });
     }
     
     async validating(username: string, name: string, email : string, avatar : string) : Promise<User> | undefined
