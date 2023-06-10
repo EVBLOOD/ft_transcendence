@@ -1,20 +1,18 @@
-import { IsNotEmpty, MinLength, MaxLength } from "class-validator"
+import { IsNotEmpty, MinLength, MaxLength } from 'class-validator';
 
-export class NewMessage {
+export class Message {
+  @IsNotEmpty()
+  userId: number;
 
-	@IsNotEmpty()
-	userId: number;
+  @IsNotEmpty()
+  @MinLength(1, {
+    message: "Message can't be empty",
+  })
+  @MaxLength(500, {
+    message: 'Message too long',
+  })
+  value: string;
 
-	@IsNotEmpty()
-	@MinLength(1, {
-		message: "Message can't be empty",
-	})
-	@MaxLength(500, {
-		message: "Message too long"
-	})
-	value: string;
-
-	@IsNotEmpty()
-	charRoomId: number;
-
+  @IsNotEmpty()
+  charRoomId: number;
 }
