@@ -29,7 +29,7 @@ export class Chat {
   })
   chatRoomName: string;
 
-  @OneToMany(() => Message, (message: Message) => message.charRoomId)
+  @OneToMany(() => Message, (message: Message) => message.chatRoomId)
   @JoinColumn()
   message: Message[];
 

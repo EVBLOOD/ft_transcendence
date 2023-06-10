@@ -1,5 +1,5 @@
 import { Chat } from 'src/chat/chat.entity';
-import { Message } from 'src/message/dto/message.dto';
+import { Message } from 'src/message/message.entity';
 import {
   Column,
   Entity,
