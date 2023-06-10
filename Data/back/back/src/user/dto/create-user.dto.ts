@@ -11,13 +11,15 @@ export class CreateUserDto {
     name: string;
 
     @IsNotEmpty()
-    @IsBoolean()
-    two_factor_authentication_state: boolean;
-
-    @IsNotEmpty()
     avatar: string;
 
     @IsNotEmpty()
     @IsEmail()
     email: string;
+
+    @IsNotEmpty()
+    @IsBoolean()
+    TwoFAenabled: boolean;
+
+    TwoFAsecret: string;
 }

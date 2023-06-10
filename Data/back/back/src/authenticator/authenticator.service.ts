@@ -3,6 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Token } from './entities/Token.entity';
+import * as speakeasy from "speakeasy";
+import * as qrcode from "qrcode";
+
 
 @Injectable()
 export class AuthenticatorService {
@@ -10,12 +13,75 @@ export class AuthenticatorService {
     constructor(@InjectRepository(User) private readonly UserRepo : Repository<User>,
         @InjectRepository(Token) private readonly TokenRepo : Repository<Token>) {}
 
+    
+    async TwoFA_Disable(username: string)
+    {
+        const user = await this.UserRepo.findOne( { where: {username: username} } );
+        if (!user || !user.TwoFAenabled)
+            return null;
+        return await this.UserRepo.save(
+            { username:username,
+              name: user.name,
+              avatar: user.avatar,
+              email: user.email,
+              TwoFAenabled: false,
+              TwoFAsecret: "" });
+    }
+
+    async TwoFA_SendQr(username: string)
+    {
+        const user = await this.UserRepo.findOne( { where: {username: username} } );
+        if (!user || user.TwoFAenabled)
+            return null;
+        const secret = speakeasy.generateSecret();
+        let result;
+        qrcode.ToDataUrl(secret.otpauth_url, (err, url) => {
+            if (err)
+            {
+                console.log("err");
+                result = null;
+                return ;
+            }
+            console.log("qr link pass");
+            result = {qr: url, secert: secret};
+        });
+        return secret;
+    }
+    
+    async TwoFA_Validate(username: string, token: number)
+    {
+        const user = await this.UserRepo.findOne( { where: {username: username} } );
+        if (!user || !user.TwoFAenabled)
+            return null;
+        const verify = speakeasy.totp.verify({secert: user.TwoFAsecret, encoding: 'base32', token: token});
+        if (!verify)
+            return null;
+        return user;
+    }
+
+    async TwoFA_Enabling(username: string, token: number, secert: any)
+    {
+        const verify = speakeasy.totp.verify({secert: secert.base32, encoding: 'base32', token: token});
+        if (!verify)
+            return null;
+        const user = await this.UserRepo.findOne( { where: {username: username} } );
+        if (!user)
+            return null;
+        return await this.UserRepo.save(
+            { username:username,
+              name: user.name,
+              avatar: user.avatar,
+              email: user.email,
+              TwoFAenabled: true,
+              TwoFAsecret: secert.base32 });
+    }
+    
     async validating(username: string, name: string, email : string, avatar : string) : Promise<User> | undefined
     {
         const user = await this.UserRepo.findOne({ where: {email: email} });
         if (user)
             return user;
-        return (await this.UserRepo.save( { username: username, name: name, avatar: avatar, email: email, two_factor_authentication_state: false }));
+        return (await this.UserRepo.save( { username: username, name: name, avatar: avatar, email: email, TwoFAenabled: false, TwoFAsecret: "" }));
     }
     async GenToken(username: string, new_token: string)
     {

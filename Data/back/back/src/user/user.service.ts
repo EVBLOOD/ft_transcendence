@@ -36,7 +36,8 @@ export class UserService {
         name: updateUserDto.name,
         avatar: updateUserDto.avatar,
         email: updateUserDto.email,
-        two_factor_authentication_state: updateUserDto.two_factor_authentication_state }
+        TwoFAenabled: updateUserDto.TwoFAenabled,
+        TwoFAsecret: updateUserDto.TwoFAsecret }
       ));
   }
 

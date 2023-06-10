@@ -13,14 +13,17 @@ export class User {
     name: string;
 
     @Column()
-    @IsBoolean()
-    two_factor_authentication_state: boolean;
-
-    @Column()
     avatar: string;
 
     @Column()
     @IsEmail()
     email: string;
+
+    @Column()
+    @IsBoolean()
+    TwoFAenabled: boolean;
+
+    @Column()
+    TwoFAsecret: string;
 }
 
