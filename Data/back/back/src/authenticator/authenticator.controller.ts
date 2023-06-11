@@ -5,6 +5,7 @@ import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { JwtAuthGuard } from './jwtauth.guard';
 import { FactorConfirmDTO, validateConfirmDTO } from './dto/factor-confirm.dto';
+import { retry } from 'rxjs';
 
 @Controller()
 export class AuthenticatorController {
@@ -40,11 +41,6 @@ export class AuthenticatorController {
     console.log(req.new_user);
     return {msg: 'Hello from the other side'}
   }
-  @Post('hi')
-  hi()
-  {
-    return {}
-  }
   
   // @UseGuards(fortytwoAuthGuard)
   @Post('validate')
@@ -77,6 +73,8 @@ export class AuthenticatorController {
   {
     console.log(data.token);
     console.log(req.new_user.sub);
-    return await this.service.TwoFA_Enabling(req.new_user.sub, data.token);
+    const ret = await this.service.TwoFA_Enabling(req.new_user.sub, data.token);
+    console.log(ret);
+    return ret;
   }
 }

@@ -22,8 +22,14 @@ export class User {
     @Column()
     @IsBoolean()
     TwoFAenabled: boolean;
+    
+    @Column({ nullable: true })
+    backups: string;
 
-    @Column()
+    @Column({nullable: true})
+    salt: string;
+
+    @Column({nullable: true})
     TwoFAsecret: string;
 }
 

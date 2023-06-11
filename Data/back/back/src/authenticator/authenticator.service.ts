@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import { Token } from './entities/Token.entity';
 import * as speakeasy from "speakeasy";
 import * as qrcode from "qrcode";
+import * as crypto from "crypto";
+import * as bcrypt from "bcrypt";
 
 
 @Injectable()
@@ -63,15 +65,51 @@ export class AuthenticatorService {
         return result;
     }
     
+    async checkbackups(list: string, entered: string)
+    {
+        if (list.length == 0)
+            return null;
+            const listing : string[] = list.split(';');
+        for (let i : number = 0; i < listing.length; i++)
+        {
+            if (await bcrypt.compare(entered, listing[i]))
+            {
+                let end = "";
+                for (let j = 0; j < listing.length - 1; j++)
+                {
+                    if (i != j)
+                        end += listing[j] + ";";
+                }
+                return end;
+            }
+        }
+        return null;
+    }
+
     async TwoFA_Validate(username: string, token: string)
     {
         const user = await this.UserRepo.findOne( { where: {username: username} } );
         if (!user || !user.TwoFAenabled)
             return null;
-        const verify = speakeasy.totp.verify({secret: user.TwoFAsecret, encoding: 'base32', token: token});
-        if (!verify)
-            return null;
+        
+            const verify = speakeasy.totp.verify({secret: user.TwoFAsecret, encoding: 'base32', token: token});
+            if (!verify)
+            {
+                const ret = await this.checkbackups(user.backups, token);
+                if (ret != null)
+                    return await this.UserRepo.save(
+                        { username:username, backups: ret});
+                return null;
+            }
         return user;
+    }
+
+    async hashing(backups : number[], salt : string)
+    {
+        let ret : string = "";
+        for (let i : number = 0; i < backups.length; i++)
+            ret += await bcrypt.hash(backups[i].toString(), salt) + ";";
+        return ret;
     }
 
     async TwoFA_Enabling(username: string, token: string)
@@ -80,18 +118,29 @@ export class AuthenticatorService {
         if (!user || user.TwoFAenabled || user.TwoFAsecret == "")
             return null;
         const verify = speakeasy.totp.verify({secret: user.TwoFAsecret, encoding: 'base32', token: token});
-        console.log(verify);
         if (!verify)
-            return null;
-        return await this.UserRepo.save(
+        return null;
+        console.log('verified!');
+        const secret : string = user.TwoFAsecret;
+        // genrate backup tokens
+        let backups = [];
+        for (let i : number = 0; i < 6; i++)
+            backups.push(crypto.randomInt(100000, 999999));
+        // hash genrated tokens
+        const salt = await bcrypt.genSalt();
+        const tostore = await this.hashing(backups, salt);
+        console.log(tostore);
+        // save
+        return {user: await this.UserRepo.save(
             { username:username,
               name: user.name,
               avatar: user.avatar,
               email: user.email,
               TwoFAenabled: true,
-              TwoFAsecret: user.TwoFAsecret });
+              TwoFAsecret: user.TwoFAsecret, salt: salt, backups: tostore}), backups: backups};
     }
     
+
     async validating(username: string, name: string, email : string, avatar : string) : Promise<User> | undefined
     {
         const user = await this.UserRepo.findOne({ where: {email: email} });
