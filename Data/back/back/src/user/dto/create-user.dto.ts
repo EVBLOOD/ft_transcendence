@@ -21,5 +21,6 @@ export class CreateUserDto {
     @IsBoolean()
     TwoFAenabled: boolean;
 
+    @IsNotEmpty()
     TwoFAsecret: string;
 }
