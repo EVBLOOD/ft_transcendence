@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Param, Put, UseGuards, Post, UseInterceptors, UploadedFile, Req, } from '@nestjs/common';
+import { Controller, Get, Body, Param, Put, UseGuards, Post, UseInterceptors, UploadedFile, Req, Res, } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/authenticator/jwtauth.guard';
@@ -16,6 +16,18 @@ export class UserController {
     return await this.userService.findAll();
   }
 
+  @Get('/avatar/:path')
+  async SendAvatar(@Res() res, @Param('path') path: string) {
+    try
+    {
+      res.sendFile(path, {root: './upload/avatars'});
+    }
+    catch (err)
+    {
+      res.status(404).send("file not found");
+    }
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.userService.findOne(id);
@@ -23,7 +35,7 @@ export class UserController {
 
   @Post('updateAll') //everybody is talking about adding a function in order this to work {UpdateUserDto}
   async update(@Req() req, @Body() updateUserDto: CreateUserDto) {
-    return await this.userService.update(req.newuser.username, updateUserDto);
+    return await this.userService.update(req.new_user.sub, updateUserDto);
   }
 
 
@@ -46,8 +58,8 @@ export class UserController {
       ))
   async UploadAvatar(@Req() req, @UploadedFile() file: Express.Multer.File)
   {
-    if (file.filename != "") {
-      await this.userService.UpdateAvatar(req.newuser.username, file.path);
+    if (file?.filename && file.filename != "") {
+      await this.userService.UpdateAvatar(req.new_user.sub, file.filename);
       return "file created";
     }
     return "something went down"
