@@ -27,9 +27,6 @@ export class User {
     backups: string;
 
     @Column({nullable: true})
-    salt: string;
-
-    @Column({nullable: true})
     TwoFAsecret: string;
 }
 

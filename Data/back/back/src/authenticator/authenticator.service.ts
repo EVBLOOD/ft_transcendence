@@ -137,7 +137,7 @@ export class AuthenticatorService {
               avatar: user.avatar,
               email: user.email,
               TwoFAenabled: true,
-              TwoFAsecret: user.TwoFAsecret, salt: salt, backups: tostore}), backups: backups};
+              TwoFAsecret: user.TwoFAsecret, backups: tostore}), backups: backups};
     }
     
 
