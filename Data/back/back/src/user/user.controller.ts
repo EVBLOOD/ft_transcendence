@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Param, Put, UseGuards, Post, UseInterceptors, UploadedFile, } from '@nestjs/common';
+import { Controller, Get, Body, Param, Put, UseGuards, Post, UseInterceptors, UploadedFile, Req, } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/authenticator/jwtauth.guard';
@@ -21,9 +21,9 @@ export class UserController {
     return await this.userService.findOne(id);
   }
 
-  @Post(':id') //everybody is talking about adding a function in order this to work {UpdateUserDto}
-  async update(@Param('id') id: string, @Body() updateUserDto: CreateUserDto) {
-    return await this.userService.update(id, updateUserDto);
+  @Post('updateAll') //everybody is talking about adding a function in order this to work {UpdateUserDto}
+  async update(@Req() req, @Body() updateUserDto: CreateUserDto) {
+    return await this.userService.update(req.newuser.username, updateUserDto);
   }
 
 
@@ -34,47 +34,22 @@ export class UserController {
         (
           {
             destination: './upload/avatars',
-            filename: async (req, file, callback) => {
-              console.log('lol_');
+            filename:  (req, file, callback) => {
               if ((file.mimetype != "image/jpeg" && file.mimetype != "image/png") || (file.size > 2 * 1024 * 1024))
-                await callback(null, null);
-              console.log('lol__');
+                callback(null, null);
               const newname = Math.floor(10 + (99999 - 10) * Math.random()) + Date.now().toString() + '-' + file.originalname;
-              console.log('lol__—');
-              await callback(null, newname);
-              console.log('lol-__—');
+              callback(null, newname);
             },
           }
         )
-      }
+      },
       ))
-  async upload(@UploadedFile() file: Express.Multer.File)
+  async UploadAvatar(@Req() req, @UploadedFile() file: Express.Multer.File)
   {
-    console.log('nothing-__—');
-    console.log(file);
-    console.log('nothing  -__—');
-    if (file)
-    {
-      if (file.mimetype != "image/jpeg" && file.mimetype != "image/png")
-        return "res.status(418)";
-        // res.status(418).send("file is not a suported image!");
-      if (file.size > 2 * 1024 * 1024) // 2M
-        return "res.status(413)";
-      // res.status(413).send("file too large!");
-      return "res.status(201)"
+    if (file.filename != "") {
+      await this.userService.UpdateAvatar(req.newuser.username, file.path);
+      return "file created";
     }
-    else
-      console.log("no file to upload");
-      // {
-      //   path: file.path,
-      //   filename: file.originalname,
-      //   mimetype: file.mimetype
-      // }
-      // private localFilesService: LocalFilesService
-      // const avatar = await this.localFilesService.saveLocalFileData(fileData);
-    // now we will create the file and store it's path.
-    // console.log(file);
-    // if (file.)
-    return "res.status(413)";
+    return "something went down"
   }
 }

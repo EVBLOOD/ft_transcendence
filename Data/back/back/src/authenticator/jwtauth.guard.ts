@@ -14,7 +14,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
             return false;
         request.new_user = this.serviceJWt.decode(request.cookies[process.env.TOKEN_NAME]);
         if (request.new_user)
-            return this.serviceToken.IsSame(request.new_user.sub as string || request.user.username, request.cookies[process.env.TOKEN_NAME]);
+            return await this.serviceToken.IsSame(request.new_user.sub as string || request.user.username, request.cookies[process.env.TOKEN_NAME]);
         return false;
     }
 }

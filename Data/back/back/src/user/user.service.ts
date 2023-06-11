@@ -27,6 +27,17 @@ export class UserService {
     return GetUser;
   }
 
+  async UpdateAvatar(id: string, path: string)
+  {
+    console.log(`This action updates a #${id} user avatar`);
+    return (
+      await this.UserRepo.save(
+        { username: id,
+          avatar: path
+        })
+      );
+  }
+
   async update(id: string, updateUserDto: UpdateUserDto) {
     console.log(`This action updates a #${id} user`);
     return (
