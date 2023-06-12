@@ -4,14 +4,17 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MessageModule } from './message/message.module';
 import { UserService } from './user/user.service';
-import { UserController } from './user/user.controller';
 import { UserModule } from './user/user.module';
+import { ChatModule } from './chat/chat.module';
 import DataConf from 'database.config';
-import { MessageController } from './message/message.controller';
-import { MessageService } from './message/message.service';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(DataConf), MessageModule, UserModule],
+  imports: [
+    TypeOrmModule.forRoot(DataConf),
+    MessageModule,
+    UserModule,
+    ChatModule,
+  ],
   controllers: [AppController],
   providers: [AppService, UserService],
 })
