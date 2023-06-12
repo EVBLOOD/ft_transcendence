@@ -5,6 +5,7 @@ import { JwtAuthGuard } from 'src/authenticator/jwtauth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { CreateUserDto } from './dto/create-user.dto';
+import { existsSync } from 'fs';
 
 @UseGuards(JwtAuthGuard)
 @Controller('user')
@@ -18,14 +19,10 @@ export class UserController {
 
   @Get('/avatar/:path')
   async SendAvatar(@Res() res, @Param('path') path: string) {
-    try
-    {
-      res.sendFile(path, {root: './upload/avatars'});
-    }
-    catch (err)
-    {
-      res.status(404).send("file not found");
-    }
+      if (existsSync("./upload/avatars/" + path))
+        res.sendFile(path, {root: './upload/avatars'});
+      else
+        res.status(404).send("file not found");
   }
 
   @Get(':id')
