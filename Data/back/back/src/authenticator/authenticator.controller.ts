@@ -45,26 +45,45 @@ export class AuthenticatorController {
   @Post('validate')
   async ValidateTwoFactor(@Req() req, @Res() res,  @Body() data: validateConfirmDTO)
   {
-    if ((await this.service.TwoFA_Validate(data.username, data.token)) == null)
-      return res.status(403).send({});
-    var token;
-    if (!req.cookies || !req.cookies[process.env.TOKEN_NAME])
-    token =  this.jwtService.sign({sub: data.username, email: req.user.email});
-    else
-    token = req.cookies[process.env.TOKEN_NAME];
-    const tokenUser = await this.service.GenToken(data.username, token);
-    if (tokenUser)
-      res.cookie(process.env.TOKEN_NAME, tokenUser.token);
-    return res.redirect('/redirection');
+    try
+    {
+      if ((await this.service.TwoFA_Validate(data.username, data.token)) == null)
+        return res.status(403).send({});
+      var token;
+      if (!req.cookies || !req.cookies[process.env.TOKEN_NAME])
+        token =  this.jwtService.sign({sub: data.username, email: req.user.email});
+      else
+        token = req.cookies[process.env.TOKEN_NAME];
+      const tokenUser = await this.service.GenToken(data.username, token);
+      if (tokenUser)
+        res.cookie(process.env.TOKEN_NAME, tokenUser.token);
+      return res.redirect('/redirection');
+    }
+    catch (error)
+    {
+      throw new HttpException({
+        status: HttpStatus.FORBIDDEN,
+        error: 'FORBIDDEN',
+      }, HttpStatus.FORBIDDEN, {cause: error});
+    }
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('2factorAnable')
   async EnableTwoFactor(@Req() req)
   {
-    const replay = await this.service.TwoFA_SendQr(req.new_user.sub);
-    if (replay)
-      return replay;
+    try{
+      const replay = await this.service.TwoFA_SendQr(req.new_user.sub);
+      if (replay)
+        return replay;
+    }
+    catch (error)
+    {
+      throw new HttpException({
+        status: HttpStatus.FORBIDDEN,
+        error: 'FORBIDDEN',
+      }, HttpStatus.FORBIDDEN, {cause: error});
+    }
     throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
   }
 
@@ -73,9 +92,19 @@ export class AuthenticatorController {
   @Post('confirm')
   async ConfirmTwoFactor(@Req() req, @Body() data: FactorConfirmDTO)
   {
-    const ret = await this.service.TwoFA_Enabling(req.new_user.sub, data.token);
-    if (ret)
-      return ret;
+    try
+    {
+      const ret = await this.service.TwoFA_Enabling(req.new_user.sub, data.token);
+      if (ret)
+        return ret;
+    }
+    catch (error)
+    {
+      throw new HttpException({
+        status: HttpStatus.FORBIDDEN,
+        error: 'FORBIDDEN',
+      }, HttpStatus.FORBIDDEN, {cause: error});
+    }
     throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
   }
 }

@@ -14,22 +14,15 @@ export class UserService {
   private currentstate = new Map< string, {client: string, status: string, lastupdate: string}[] >(); 
   
   async findAll() {
-    const GetUsers : User[] = await this.UserRepo.find();
-    // send only the importent data.
-    return GetUsers;
+    return await this.UserRepo.find();
   }
 
   async findOne(id: string) {
-    console.log(`This action returns a #${id} user`);
-    const GetUser = await this.UserRepo.findOneBy({username: id});
-    if (GetUser == null)
-      console.log("User null 404");
-    return GetUser;
+    return await this.UserRepo.findOneBy({username: id});
   }
 
   async UpdateAvatar(id: string, path: string)
   {
-    console.log(`This action updates a #${id} user avatar`);
     return (
       await this.UserRepo.save(
         { username: id,
@@ -39,9 +32,7 @@ export class UserService {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
-    console.log(`This action updates a #${id} user`);
     return (
-
       await this.UserRepo.save(
       { username: id,
         name: updateUserDto.name,
@@ -56,9 +47,9 @@ export class UserService {
   {
     let colect : {client: string, status: string, lastupdate: string}[];
     if (this.currentstate.has(username))
-    colect = this.currentstate.get(username);
+      colect = this.currentstate.get(username);
     else
-    colect = [];
+      colect = [];
     let i : number = 0;
     for (i; i < colect.length; i++)
     {
@@ -79,13 +70,11 @@ export class UserService {
   {
     if (!this.currentstate.has(username))
       return null;
-    let colect : {client: string, status: string, lastupdate: string}[] = this.currentstate.get(username);
-    return colect;
+    return this.currentstate.get(username);;
   }
   
   GetCurrentState(username : string)
   {
-    console.log(this.currentstate);
     if (!this.currentstate.has(username))
       return null;
     let colect : {client: string, status: string, lastupdate: string}[] = this.currentstate.get(username);

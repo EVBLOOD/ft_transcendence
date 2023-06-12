@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Param, Put, UseGuards, Post, UseInterceptors, UploadedFile, Req, Res, } from '@nestjs/common';
+import { Controller, Get, Body, Param, Put, UseGuards, Post, UseInterceptors, UploadedFile, Req, Res, HttpException, HttpStatus, } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/authenticator/jwtauth.guard';
@@ -14,25 +14,42 @@ export class UserController {
 
   @Get()
   async findAll() {
-    return await this.userService.findAll();
+    const replay = await this.userService.findAll();
+    if (replay)
+      return replay;
+    throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN)
   }
 
   @Get('/avatar/:path')
   async SendAvatar(@Res() res, @Param('path') path: string) {
-      if (existsSync("./upload/avatars/" + path))
-        res.sendFile(path, {root: './upload/avatars'});
-      else
-        res.status(404).send("file not found");
+    if (existsSync("./upload/avatars/" + path))
+      res.sendFile(path, {root: './upload/avatars'});
+    throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return await this.userService.findOne(id);
+    const replay = await this.userService.findOne(id);
+    if (replay)
+      return replay;
+    throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND)
   }
 
-  @Post('updateAll') //everybody is talking about adding a function in order this to work {UpdateUserDto}
+  @Post('updateAll')
   async update(@Req() req, @Body() updateUserDto: CreateUserDto) {
-    return await this.userService.update(req.new_user.sub, updateUserDto);
+    try{
+      const replay = await this.userService.update(req.new_user.sub, updateUserDto);
+      if (replay)
+        return replay;
+    }
+    catch (err)
+    {
+      throw new HttpException({
+        status: HttpStatus.FORBIDDEN,
+        error: 'FORBIDDEN',
+      }, HttpStatus.FORBIDDEN, {cause: err});
+    }
+    throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND)
   }
 
 
@@ -55,10 +72,19 @@ export class UserController {
       ))
   async UploadAvatar(@Req() req, @UploadedFile() file: Express.Multer.File)
   {
-    if (file?.filename && file.filename != "") {
-      await this.userService.UpdateAvatar(req.new_user.sub, file.filename);
-      return "file created";
+    try {
+        if (file?.filename && file.filename != "") {
+          await this.userService.UpdateAvatar(req.new_user.sub, file.filename);
+          return "file created";
+        }
     }
-    return "something went down"
+    catch (error)
+    {
+      throw new HttpException({
+        status: HttpStatus.FORBIDDEN,
+        error: 'FORBIDDEN',
+      }, HttpStatus.FORBIDDEN, {cause: error});
+    }
+    throw new HttpException('NOT_ACCEPTABLE', HttpStatus.NOT_ACCEPTABLE);
   }
 }

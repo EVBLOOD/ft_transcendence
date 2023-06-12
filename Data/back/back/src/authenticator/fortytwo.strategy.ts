@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy } from "passport-42";
 import { AuthenticatorService } from "./authenticator.service";
@@ -14,6 +14,16 @@ export class AuthStrategy extends PassportStrategy(Strategy, '42') {
         });
     }
     async validate(accessToken: string, refreshToken: string, profile: any, done: Function): Promise<any> {
-        return (await done(null, await this.Auth_Service.validating(profile.username, profile.displayName, profile._json.email, profile._json.image.link)));
+        try
+        {
+            return (await done(null, await this.Auth_Service.validating(profile.username, profile.displayName, profile._json.email, profile._json.image.link)));
+        }
+        catch (error)
+        {
+            throw new HttpException({
+                status: HttpStatus.FORBIDDEN,
+                error: 'FORBIDDEN',
+              }, HttpStatus.FORBIDDEN, {cause: error});
+        }
     }
 }
