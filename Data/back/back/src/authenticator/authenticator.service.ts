@@ -45,7 +45,7 @@ export class AuthenticatorService {
             return null;
         var result : any;
         try{
-            const secret = speakeasy.generateSecret();
+            const secret = await speakeasy.generateSecret();
             result = await qrcode.toDataURL(secret.otpauth_url);
             console.log(result);
             if (result)
@@ -59,7 +59,6 @@ export class AuthenticatorService {
         }
         catch (err)
         {
-            console.log(err);
             return null;
         }
         return result;
@@ -92,7 +91,7 @@ export class AuthenticatorService {
         if (!user || !user.TwoFAenabled)
             return null;
         
-            const verify = speakeasy.totp.verify({secret: user.TwoFAsecret, encoding: 'base32', token: token});
+            const verify = await speakeasy.totp.verify({secret: user.TwoFAsecret, encoding: 'base32', token: token});
             if (!verify)
             {
                 const ret = await this.checkbackups(user.backups, token);
@@ -117,20 +116,15 @@ export class AuthenticatorService {
         const user = await this.UserRepo.findOne( { where: {username: username} } );
         if (!user || user.TwoFAenabled || user.TwoFAsecret == "")
             return null;
-        const verify = speakeasy.totp.verify({secret: user.TwoFAsecret, encoding: 'base32', token: token});
+        const verify = await speakeasy.totp.verify({secret: user.TwoFAsecret, encoding: 'base32', token: token});
         if (!verify)
-        return null;
-        console.log('verified!');
+            return null;
         const secret : string = user.TwoFAsecret;
-        // genrate backup tokens
         let backups = [];
         for (let i : number = 0; i < 6; i++)
             backups.push(crypto.randomInt(100000, 999999));
-        // hash genrated tokens
         const salt = await bcrypt.genSalt();
         const tostore = await this.hashing(backups, salt);
-        console.log(tostore);
-        // save
         return {user: await this.UserRepo.save(
             { username:username,
               name: user.name,

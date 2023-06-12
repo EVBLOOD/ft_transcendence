@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Inject, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Inject, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthenticatorService } from './authenticator.service';
 import { fortytwoAuthGuard } from './auth.guard';
 import { Response } from 'express';
@@ -20,10 +20,10 @@ export class AuthenticatorController {
   @UseGuards(fortytwoAuthGuard)
   async CallBack(@Req() req, @Res( {passthrough: true }) res: Response) {
     if (!req.user)
-      return "alo?";
+      throw new HttpException('INTERNAL_SERVER_ERROR', HttpStatus.INTERNAL_SERVER_ERROR);
     if (await this.service.TwoFactoRequired(req.user.username) == true)
       return {TwoFactor: req.user.username};
-    var token;
+    var token : string;
     if (!req.cookies || !req.cookies[process.env.TOKEN_NAME])
       token =  this.jwtService.sign({sub: req.user.username, email: req.user.email});
     else
@@ -38,8 +38,7 @@ export class AuthenticatorController {
   @Get('redirection')
   Redirection(@Req() req)
   {
-    console.log(req.new_user);
-    return {msg: 'Hello from the other side'}
+    return {msg: 'Hello from the other side', user: req.new_user}
   }
   
   // @UseGuards(fortytwoAuthGuard)
@@ -63,7 +62,10 @@ export class AuthenticatorController {
   @Get('2factorAnable')
   async EnableTwoFactor(@Req() req)
   {
-    return await this.service.TwoFA_SendQr(req.new_user.sub);
+    const replay = await this.service.TwoFA_SendQr(req.new_user.sub);
+    if (replay)
+      return replay;
+    throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
   }
 
 
@@ -71,10 +73,9 @@ export class AuthenticatorController {
   @Post('confirm')
   async ConfirmTwoFactor(@Req() req, @Body() data: FactorConfirmDTO)
   {
-    console.log(data.token);
-    console.log(req.new_user.sub);
     const ret = await this.service.TwoFA_Enabling(req.new_user.sub, data.token);
-    console.log(ret);
-    return ret;
+    if (ret)
+      return ret;
+    throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
   }
 }
