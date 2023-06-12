@@ -22,7 +22,7 @@ export class ChatGateway {
   @SubscribeMessage('sendMessage')
   async sendMessage(clisnt: Socket, payload: CreateMessage): Promise<void> {
     try {
-      const message = await this.chatService.postToChatRoom(payload);
+      const message = await this.chatService.postToChatroom(payload);
       this.server.emit('recMessage', message);
     } catch (err) {
       console.log(err);
