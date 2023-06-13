@@ -13,8 +13,8 @@ export class UserService {
 
   private currentstate = new Map< string, {client: string, status: string, lastupdate: string}[] >(); 
   
-  async findAll() {
-    return await this.UserRepo.find();
+  async findAll(skip : number, take: number) {
+    return await this.UserRepo.find({skip: skip, take: take});
   }
 
   async findOne(id: string) {
