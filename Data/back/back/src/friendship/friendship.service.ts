@@ -170,8 +170,13 @@ export class FriendshipService {
     return await this.UserRepo.find({where: {username: Not(Any(friends_UserName))}, take: take, skip: skip});  // TODO: I may check next the User if is blockig you..
   }
 
-  async findOne(id: string, username: string) {
-     // TODO: I may check next the User if is blockig you..
-    return await this.UserRepo.find({where: {username: id}});
+  async findOne(username: string, userSearching: string) {
+    if (!(await this.UserRepo.findOneBy({username: username})))
+      return (undefined);
+    const retur = await this.FriendShipRepo.find({where: [{receiver: username, sender: userSearching, blocked: true, blocked_by: "receiver"},
+      {receiver: username, sender: userSearching, blocked: true, blocked_by: "sender"}]});
+    if (retur.length == 0)
+      return await this.UserRepo.find({where: {username: userSearching}});
+    return {};
   }
 }

@@ -24,7 +24,7 @@ export class FriendshipController {
   @Get('find/:id')
   @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
   async findOne(@Req() req, @Param('id') id: string) {
-    const replay = await this.friendshipService.findOne(id, req.new_user.sub);
+    const replay = await this.friendshipService.findOne(req.new_user.sub, id);
     if (replay)
       return replay;
     throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
