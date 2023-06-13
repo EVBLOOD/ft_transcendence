@@ -13,7 +13,7 @@ import { Message } from './message.entity';
 /*
  ** return the current user object within a request
  */
-const GetUser = createParamDecorator(
+export const GetUser = createParamDecorator(
   (data: string, context: ExecutionContext) => {
     const request = context.switchToHttp().getRequest();
     if (data) {

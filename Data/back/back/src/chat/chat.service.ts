@@ -57,11 +57,17 @@ export class ChatService {
       cache: true,
     });
     if (chatRoom) return chatRoom;
-    throw new HttpException('Chat Room Not Found', HttpStatus.NOT_FOUND);
+    throw new HttpException('ChatRoom Not Found', HttpStatus.NOT_FOUND);
+  }
+
+  async createChatroom(chatroomDTO: createChatroomDTO): Promise<Chat> {
+    if (validateChatDTO(chatroomDTO) === true) {
+      // stuff
+    }
   }
 
   async postToChatroom(messageDTO: CreateMessage): Promise<Message> {
-    // TODO [importent]: check if the user is a memeber the the channel && if he's not muted
+    // TODO [importent]: check if the user is a memeber of the channel && if he's not muted
     const chatRoom = await this.GetChatRoomByID(messageDTO.charRoomId);
     const user = await this.chatHelpers.getUser(messageDTO.userId);
     return await this.messageService.create(messageDTO, chatRoom, user);

@@ -11,11 +11,11 @@ import DataConf from 'database.config';
 @Module({
   imports: [
     TypeOrmModule.forRoot(DataConf),
-    MessageModule,
     UserModule,
+    MessageModule,
     ChatModule,
   ],
   controllers: [AppController],
-  providers: [AppService, UserService],
+  providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

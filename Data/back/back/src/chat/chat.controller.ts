@@ -1,6 +1,8 @@
 import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { Chat } from './chat.entity';
+import { GetUser } from './../message/message.controller';
+import { User } from 'src/user/user.entity';
 
 @Controller('chat')
 export class ChatController {
@@ -18,4 +20,12 @@ export class ChatController {
   }
 
 
-} // end of ChatController class 
+  @Get("/user/:userID")
+  async getChatRoomsOfUser(
+    @Param("userID", ParseIntPipe) userID: number,
+    @GetUser() user: User
+  ) : Promise<Chat[]>{
+
+  }
+
+} // end of ChatController class
