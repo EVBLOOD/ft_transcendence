@@ -15,4 +15,4 @@ import { UserService } from 'src/user/user.service';
   providers: [ChatService, ChatUtils, ChatGateway, MessageService, UserService],
   controllers: [ChatController],
 })
-export class ChatModule { }
+export class ChatModule {}
