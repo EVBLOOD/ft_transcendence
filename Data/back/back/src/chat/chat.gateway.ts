@@ -18,7 +18,7 @@ export class ChatGateway {
   constructor(
     @Inject(forwardRef(() => ChatService))
     private readonly chatService: ChatService,
-  ) { }
+  ) {}
 
   @SubscribeMessage('sendMessage')
   async sendMessage(clisnt: Socket, payload: CreateMessage): Promise<void> {

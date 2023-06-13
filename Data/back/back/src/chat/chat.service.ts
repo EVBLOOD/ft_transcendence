@@ -6,16 +6,17 @@ import {
   forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, TreeRepositoryUtils } from 'typeorm';
+import { Repository } from 'typeorm';
 import { ChatGateway } from './chat.gateway';
 import { Chat } from './chat.entity';
 import { CreateMessage } from 'src/message/dto/message.dto';
 import { Message } from 'src/message/message.entity';
 import { ChatUtils } from './chat.utils';
 import { MessageService } from 'src/message/message.service';
-import { triggerAsyncId } from 'async_hooks';
 import { createChatroomDTO } from './dto/createChatroom.dto';
-import { validateChatDTO } from './chat.validators';
+import { validateChatDTO, createChatroomEntity } from './chat.validators';
+import { User } from 'src/user/user.entity';
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class ChatService {
@@ -27,6 +28,34 @@ export class ChatService {
     private readonly chatHelpers: ChatUtils,
     private readonly messageService: MessageService,
   ) {}
+
+  async getChatRoomOfUsers(userId: number) : Promise<Chat[]> {
+    const chatroom = await this.chatRoomRepo.find({
+      order: {
+        id: 'desc',
+      },
+      relations: {
+        owner: true,
+        member: true,
+      },
+      where: {
+        member: {
+          id: userId,
+        },
+      },
+      select: {
+        id: true,
+        chatRoomName: true,
+        type: true,
+        owner: {
+          id: true,
+          userName: true,
+        },
+      },
+      cache: true,
+    })
+    return chatroom;
+  }
 
   async GetChatRoomByID(id: number): Promise<Chat> {
     const chatRoom = await this.chatRoomRepo.findOne({
@@ -64,14 +93,20 @@ export class ChatService {
 
   async createChatroom(chatroomDTO: createChatroomDTO): Promise<Chat> {
     if (validateChatDTO(chatroomDTO) === true) {
-      // stuff
+      const user = await this.chatHelpers.getUser(chatroomDTO.otherUser);
+      let secondUser: User | undefined = undefined;
+      if (chatroomDTO.otherUser != undefined) {
+        secondUser = await this.chatHelpers.getUser(chatroomDTO.otherUser)
+      }
+      if (chatroomDTO.type === 'password') {
+        const passwordHash = await bcrypt.hash(chatroomDTO.password, 10);
+        chatroomDTO.password = passwordHash;
+      }
+      const chatroom = createChatroomEntity(chatroomDTO, user, secondUser);
+      const newChatroom = this.chatRoomRepo.create(chatroom);
+      return await this.chatRoomRepo.save(newChatroom);
     }
-  }
-
-  async createChatroom(chatroomDTO: createChatroomDTO): Promise<Chat> {
-    if (validateChatDTO(chatroomDTO) === true) {
-      // stuff 
-    }
+    throw new HttpException("Can't create Chatroom!", HttpStatus.BAD_REQUEST);
   }
 
   async postToChatroom(messageDTO: CreateMessage): Promise<Message> {

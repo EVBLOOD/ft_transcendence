@@ -1,19 +1,19 @@
-import  { MaxLength, IsNotEmpty } from 'class-validator';
+import { MaxLength, IsNotEmpty } from 'class-validator';
 
 export class createChatroomDTO {
-    @IsNotEmpty()
-    type!: string;
+  @IsNotEmpty()
+  type!: string;
 
-    @IsNotEmpty()
-    @MaxLength(26, {
-        message: "chat name too long",
-    })
-    chatroomName!: string;
+  @IsNotEmpty()
+  @MaxLength(26, {
+    message: 'chat name too long',
+  })
+  chatroomName!: string;
 
-    password!: string;
+  password!: string;
 
-    @IsNotEmpty()
-    user!: number;
+  @IsNotEmpty()
+  user!: number;
 
-    otherUser?: number;
+  otherUser?: number;
 }
