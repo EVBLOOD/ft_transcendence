@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Param, UsePipes, Get, UseGuards, Request, Logger } from '@nestjs/common';
+import { Controller, Post, Body, Param, UsePipes, Get, UseGuards, Request, Logger, HttpException, HttpStatus, Req, Query, ParseIntPipe, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
 import { FriendshipService } from './friendship.service';
 import { DealingWithRequestDto, UserValidatingDto } from './dto/create-friendship.dto';
 import { UservalidatingPipe } from './uservalidating/uservalidating.pipe';
@@ -16,141 +16,183 @@ export class FriendshipController {
   @Get()
   itsMe(@Request() req : any)
   {
-    console.log(`user is ${req.user.username as string}`);
-    return req.user;
+    return req.new_user.sub;
   }
   
   
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get('find/:id')
   @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
-  async findOne(@Param('id') id: string) {
-    return await this.friendshipService.findOne(id); // TODO: I may check next the User if is blockig you..
+  async findOne(@Req() req, @Param('id') id: string) {
+    const replay = await this.friendshipService.findOne(id, req.new_user.sub);
+    if (replay)
+      return replay;
+    throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
   }
   
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get('suggestions')
-  async suggestions(@Request() req : any)
+  async suggestions(@Request() req : any, @Query('skip', ParseIntPipe) skip : number, @Query('take', ParseIntPipe) take : number)
   {
-    console.log(`user is ${req.user.username as string}`);
-    return await this.friendshipService.suggested({Userone: req.user.username});
+    const replay = await this.friendshipService.suggested(req.new_user.sub, skip, take);
+    if (replay)
+      return replay;
+    throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN)
   }
   
-  // @Post('suggestions')
-  // @UsePipes(new UservalidatingPipe())
-  // async suggestions(@Body() id: UserValidatingDto)
-  // {
-  //   return await this.friendshipService.suggested(id);
-  // }
-
+  
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get('friendList')
-  async friendList(@Request() req : any)
+  async friendList(@Request() req : any, @Query('skip', ParseIntPipe) skip : number, @Query('take', ParseIntPipe) take : number)
   {
-    return await this.friendshipService.friendList({Userone: req.user.username});
+    const replay = await this.friendshipService.friendList(req.new_user.sub, skip, take);
+    if (replay)
+      return replay;
+    throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
   }
 
-  // @Post('friendList')
-  // @UsePipes(new UservalidatingPipe())
-  // async friendList(@Body() id: UserValidatingDto)
-  // {
-  //   return await this.friendshipService.friendList(id);
-  // }
-
-
-  // @Post('unblock')
-  // @UsePipes(new UservalidatingPipe())
-  // async unblock(@Body() body : DealingWithRequestDto)
-  // {
-  //   return await this.friendshipService.unblock(body);
-  // }
-
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('unblock')
   @UsePipes(new UservalidatingPipe())
-  async unblock(@Request() req : any, @Body() body : UserValidatingDto)
+  async unblock(@Request() req : any, @Body() body : UserValidatingDto, @Query('skip', ParseIntPipe) skip : number, @Query('take', ParseIntPipe) take : number)
   {
-    return await this.friendshipService.unblock({Userone: req.user.username, Usertwo: body.Userone});
+    try
+    {
+      const replay = await this.friendshipService.unblock(req.new_user.sub, body.Userone);
+      if (!replay)
+        return replay;
+    }
+    catch (err)
+    {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_GATEWAY,
+          error: 'BAD_GATEWAY',
+        },
+        HttpStatus.BAD_GATEWAY,
+        { cause: err },
+      );
+    }
+    throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN)
   }
 
-  // (@Request() req : any, @Body() body : UserValidatingDto)
-  // {Userone: req.user.username, Usertwo: body.Userone}
-  // @Post('unfriend')
-  // @UsePipes(new UservalidatingPipe())
-  // async unfriend(@Body() body: DealingWithRequestDto)
-  // {
-  //   return await this.friendshipService.remove(body);
-  // }
-
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('unfriend')
   @UsePipes(new UservalidatingPipe())
   async unfriend(@Request() req : any, @Body() body : UserValidatingDto)
   {
-    return await this.friendshipService.remove({Userone: req.user.username, Usertwo: body.Userone});
+    try
+    {
+      const replay = await this.friendshipService.remove(req.new_user.sub, body.Userone);
+      if (replay)
+        return replay;
+    }
+    catch (err)
+    {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_GATEWAY,
+          error: 'BAD_GATEWAY',
+        },
+        HttpStatus.BAD_GATEWAY,
+        { cause: err },
+      );
+    }
+      throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN)
   }
 
-  // @Post('blocking')
-  // @UsePipes(new UservalidatingPipe())
-  // async blocking(@Body() body: DealingWithRequestDto)
-  // {
-  //   return await this.friendshipService.blocking(body);
-  // }
-
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('blocking')
   @UsePipes(new UservalidatingPipe())
   async blocking(@Request() req : any, @Body() body : UserValidatingDto)
   {
-    return await this.friendshipService.blocking({Userone: req.user.username, Usertwo: body.Userone});
+    try 
+    {
+      const replay = await this.friendshipService.blocking(req.new_user.sub, body.Userone);
+      if (replay)
+        return replay;
+    }
+    catch (err)
+    {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_GATEWAY,
+          error: 'BAD_GATEWAY',
+        },
+        HttpStatus.BAD_GATEWAY,
+        { cause: err },
+      );
+    }
+    throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN)
   }
 
-  // @Post('blocklist')
-  // @UsePipes(new UservalidatingPipe())
-  // async blocklist(@Body() id : UserValidatingDto)
-  // {
-  //  this.logger.debug(id.Userone);
-  //   return await this.friendshipService.blocklist(id);
-  // }
-
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get('blocklist')
-  async blocklist(@Request() req : any)
+  async blocklist(@Request() req : any, @Query('skip', ParseIntPipe) skip : number, @Query('take', ParseIntPipe) take : number)
   {
-    return await this.friendshipService.blocklist({Userone: req.user.username});
+    const replay = await this.friendshipService.blocklist(req.new_user.sub, skip, take);
+    if (replay)
+      return replay;
+    throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN)
+
   }
 
-  // @Post('requestsList')
-  // @UsePipes(new UservalidatingPipe())
-  // async requestsList(@Body() id: UserValidatingDto)
-  // {
-  //   return await this.friendshipService.requestsList(id);
-  // }
-
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get('requestsList')
-  async requestsList(@Request() req : any)
+  async requestsList(@Request() req : any, @Query('skip', ParseIntPipe) skip : number, @Query('take', ParseIntPipe) take : number)
   {
-    return await this.friendshipService.requestsList({Userone: req.user.username});
+    const replay = await this.friendshipService.requestsList(req.new_user.sub, skip, take);
+    if (replay)
+      return replay;
+    throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN)
   }
 
-  // @Post('accept')
-  // @UsePipes(new UservalidatingPipe())
-  // async accepting(@Body() body : DealingWithRequestDto)
-  // {
-  //   return await this.friendshipService.accepting(body)
-  // }
-
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('accept')
   @UsePipes(new UservalidatingPipe())
   async accepting(@Request() req : any, @Body() body : UserValidatingDto)
   {
-    return await this.friendshipService.accepting({Userone: req.user.username, Usertwo: body.Userone})
+    try
+    {
+      const replay = await this.friendshipService.accepting(req.new_user.sub, body.Userone);
+      if (replay)
+        return replay;
+    }
+    catch (err)
+    {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_GATEWAY,
+          error: 'BAD_GATEWAY',
+        },
+        HttpStatus.BAD_GATEWAY,
+        { cause: err },
+      );
+    }
+    throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN)
   }
 
-  // @Post('send')
-  // @UsePipes(new UservalidatingPipe())
-  // async send(@Body() body : DealingWithRequestDto)
-  // {
-  //   return await this.friendshipService.create(body);
-  // }
-
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('send')
   @UsePipes(new UservalidatingPipe())
   async send(@Request() req : any, @Body() body : UserValidatingDto)
   {
-    return await this.friendshipService.create({Userone: req.user.username, Usertwo: body.Userone});
+    try {
+      const replay = await this.friendshipService.create(req.new_user.sub, body.Userone);
+      if (replay)
+        return replay;
+    }
+    catch (err)
+      {
+        throw new HttpException(
+          {
+            status: HttpStatus.BAD_GATEWAY,
+            error: 'BAD_GATEWAY',
+          },
+          HttpStatus.BAD_GATEWAY,
+          { cause: err },
+        );
+      }
+      throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN)
   }
 }

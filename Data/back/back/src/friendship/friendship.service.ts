@@ -13,192 +13,165 @@ export class FriendshipService {
               @InjectRepository(Friendship) private readonly FriendShipRepo : Repository<Friendship>) {}
 
 
-
-
-  async UsersChecker(dealingWithRequestDto: DealingWithRequestDto)
+  async UsersChecker(username1: string, username2: string)
   {
-    const UserSending : User = await this.UserRepo.findOneBy({username: dealingWithRequestDto.Usertwo});
-    const UserReceiving : User = await this.UserRepo.findOneBy({username: dealingWithRequestDto.Userone});
+    const UserSending : User = await this.UserRepo.findOneBy({username: username1});
+    const UserReceiving : User = await this.UserRepo.findOneBy({username: username2});
     return {UserSending, UserReceiving};
   }
 
-  async create(createFriendshipDto: DealingWithRequestDto) {
-    console.log(`This action adds a new request sent from ${createFriendshipDto.Userone}, to ${createFriendshipDto.Usertwo}`);
-    const stuff : DealingWithRequestDto = {Userone: createFriendshipDto.Userone, Usertwo: createFriendshipDto.Usertwo};
-    const {UserSending, UserReceiving} = await this.UsersChecker(stuff);
-    if (UserSending === null || UserReceiving === null)
+  async create(user_sending: string, user_target: string) {
+    const {UserSending, UserReceiving} = await this.UsersChecker(user_sending, user_target);
+    if (!UserSending || !UserReceiving)
       return undefined;
-    const time = new Date().toISOString();
-    return await this.FriendShipRepo.save( {user2_username: UserSending.username,
-        user1_username: UserReceiving.username,
+    return await this.FriendShipRepo.save( {sender: UserSending.username,
+        receiver: UserReceiving.username,
         blocked: false,
         blocked_by: "",
-        updated_at: time,
-        created_at: time,
+        updated_at: new Date().toISOString(),
+        created_at: new Date().toISOString(),
         status: "pending"} );
   }
 
-  async accepting(UsersCencerned: DealingWithRequestDto)
+  async accepting(user_accepting: string, userTo_accept: string)
   {
-    console.log(`This action makes the request sent from ${UsersCencerned.Userone}, to ${UsersCencerned.Usertwo} accepted`);
-    const {UserSending, UserReceiving} = await this.UsersChecker(UsersCencerned);
+    const {UserSending, UserReceiving} = await this.UsersChecker(user_accepting, userTo_accept);
     if (UserSending == null || UserReceiving == null)
       return undefined;
-    const friendship = await this.FriendShipRepo.findOneBy({user2_username: UsersCencerned.Userone, user1_username: UsersCencerned.Usertwo, status: 'pending', blocked: false}); // UsersCencerned.Userone is the one sent the request
-    if (friendship == null)
-    {
-      console.log("this Friendship doesn't exist, not pending, or blocked!");
+    const friendship = await this.FriendShipRepo.findOneBy({sender: userTo_accept, receiver: user_accepting, status: 'pending', blocked: false}); // UsersCencerned.Userone is the one sent the request
+    if (!friendship)
       return undefined;
-    }
-    const time = new Date().toISOString();
-    return await this.FriendShipRepo.save({user1_username: UserSending.username, user2_username: UserReceiving.username, updated_at: time, status: 'accepted'});
+    return await this.FriendShipRepo.save({receiver: user_accepting, sender:userTo_accept, updated_at: new Date().toISOString(), status: 'accepted'});
   }
 
-  async requestsList(User: UserValidatingDto)
+  async requestsList(username: string, skip: number, take: number)
   {
-    if (await this.UserRepo.findOneBy({username: User.Userone}) == null)
-    {
-      console.log("this User doesn't exist");
+    if (!(await this.UserRepo.findOneBy({username: username})))
       return (undefined);
-    }
-    const friendship = await this.FriendShipRepo.find({where: {user2_username: User.Userone, status: 'pending', blocked: false}});
-    console.log(friendship);
-    return (friendship);
+    return await this.FriendShipRepo.find({where: {receiver: username, status: 'pending', blocked: false}, take: take, skip: skip});
   }
 
-  async blocklist(User: UserValidatingDto)
+  async blocklist(username: string, skip: number, take: number)
   {
-    if (await this.UserRepo.findOneBy({username: User.Userone}) == null)
-    {
-      console.log("this User doesn't exist");
+    if (!(await this.UserRepo.findOneBy({username: username})))
       return (undefined);
-    }
-    const friendship = await this.FriendShipRepo.find({where: [{user1_username: User.Userone, blocked: true, blocked_by: "Userone"},
-          {user2_username: User.Userone, blocked: true, blocked_by: "Usertwo"}]});
-    return (friendship);
+    return await this.FriendShipRepo.find({where: [{receiver: username, blocked: true, blocked_by: "receiver"},
+          {sender: username, blocked: true, blocked_by: "sender"}], take: take, skip: skip});
   }
 
 
-  async blocking(UsersCencerned: DealingWithRequestDto)
+  async blocking(user_blocking: string, userTo_block: string)
   {
-    const {UserSending: UserBlocking, UserReceiving} = await this.UsersChecker(UsersCencerned);
+    const {UserSending: UserBlocking, UserReceiving} = await this.UsersChecker(user_blocking, userTo_block);
     if (UserBlocking === null || UserReceiving === null)
       return undefined;
     const friendship = await this.FriendShipRepo.find({where:
-        [{user1_username: UsersCencerned.Userone, user2_username: UsersCencerned.Usertwo},
-          {user2_username: UsersCencerned.Userone, user1_username: UsersCencerned.Usertwo}]
+        [{receiver: userTo_block, sender: user_blocking},
+          {sender: user_blocking, receiver: userTo_block}]
         });
     if (friendship.length > 1 || friendship.length === 0)
     {
-      if (friendship.length == 0)
-      {
-        console.log("for some reason friendship.length == 0 | or > 1");
+      if (friendship.length != 0)
         return undefined;
-      }
-      console.log("Not found adding and blocking");
-      const time = new Date().toISOString();
-      return await this.FriendShipRepo.save( {user2_username: UserBlocking.username,
-        user1_username: UserReceiving.username,
+      return await this.FriendShipRepo.save( {sender: user_blocking,
+        receiver: userTo_block,
         blocked: true,
-        blocked_by: "Userone", // this one is tricky!
-        updated_at: time,
-        created_at: time,
+        blocked_by: "sender",
+        updated_at: new Date().toISOString(),
+        created_at: new Date().toISOString(),
         status: "pending"} );
     }
     friendship[0].blocked = true;
-    if (friendship[0].user1_username === UsersCencerned.Userone)
-      friendship[0].blocked_by = "Userone";
+    if (friendship[0].receiver === user_blocking)
+      friendship[0].blocked_by = "receiver";
     else
-      friendship[0].blocked_by = "Usertwo";
+      friendship[0].blocked_by = "sender";
     return await this.FriendShipRepo.save(friendship[0]);
   }
   
-  async remove(UsersCencerned: DealingWithRequestDto) {
-    console.log(`Removing friendship between ${UsersCencerned.Userone} and ${UsersCencerned.Usertwo}`);
-    const {UserSending: UserBlocking, UserReceiving} = await this.UsersChecker(UsersCencerned);
+  async remove(user_willingRemoval: string, userBeingRemoved: string) {
+    const {UserSending: UserBlocking, UserReceiving} = await this.UsersChecker(user_willingRemoval, userBeingRemoved);
     if (UserBlocking == null || UserReceiving == null)
       return undefined;
     const friendship = await this.FriendShipRepo.find({where:
-        [{user1_username: UsersCencerned.Userone, user2_username: UsersCencerned.Usertwo},
-          {user2_username: UsersCencerned.Userone, user1_username: UsersCencerned.Usertwo}]
+        [{receiver: user_willingRemoval, sender: userBeingRemoved},
+          {sender: user_willingRemoval, receiver: userBeingRemoved}]
         });
-    if (friendship.length > 1 || friendship.length == 0){
-        console.log("for some reason friendship.length == 0 | or > 1");
-        return undefined;
-      }
+    if (friendship.length > 1 || friendship.length == 0)
+        return null;
     return await this.FriendShipRepo.remove(friendship[0]);
   }
 
-  async unblock(UsersCencerned: DealingWithRequestDto)
+  async unblock(user_forgeiving : string, blocked_user : string)
   {
-    // first one want to unblock two
-    const {UserSending: UserBlocking, UserReceiving} = await this.UsersChecker(UsersCencerned);
+    const {UserSending: UserBlocking, UserReceiving} = await this.UsersChecker(user_forgeiving, blocked_user);
     if (UserBlocking === null || UserReceiving === null)
       return undefined;
     const friendship = await this.FriendShipRepo.find({where:
-        [{user1_username: UsersCencerned.Userone, user2_username: UsersCencerned.Usertwo, blocked: true, blocked_by: "Userone"},
-        {user2_username: UsersCencerned.Userone, user1_username: UsersCencerned.Usertwo,blocked: true, blocked_by: "Usertwo"}]
+        [{receiver: blocked_user, sender: user_forgeiving, blocked: true, blocked_by: "sender"},
+        {sender: blocked_user, receiver: user_forgeiving ,blocked: true, blocked_by: "receiver"}]
         });
     if (friendship.length > 1 || friendship.length === 0)
-    {
-      console.log("for some reason friendship.length == 0 | or > 1");
       return undefined;
-    }
     return await this.FriendShipRepo.remove(friendship[0]);
   }
 
-  async friendList(User: UserValidatingDto)
+  async friendList(username: string, skip : number, take: number)
   {
-    if (await this.UserRepo.findOneBy({username: User.Userone}) == null)
-    {
-      console.log("this User doesn't exist");
+    if (await this.UserRepo.findOneBy({username: username}) == null)
       return (undefined);
+    let findList : any;
+    if (skip == 0 && take == 0)
+    { 
+      findList = await this.FriendShipRepo
+      .createQueryBuilder('friendship')
+      .leftJoinAndSelect('friendship.user1', 'user1')
+      .leftJoinAndSelect('friendship.user2', 'user2')
+      .where('friendship.receiver = :username', {username: username})
+      .orWhere('friendship.sender = :username', {username: username})
+      .andWhere('friendship.blocked = :blocked', {blocked: false})
+      .andWhere('friendship.status = :status', {status: 'accepted'}).getMany();
     }
-    const findList = await this.FriendShipRepo
-    .createQueryBuilder('friendship')
-    .leftJoinAndSelect('friendship.user1', 'user1')
-    .leftJoinAndSelect('friendship.user2', 'user2')
-    .where('friendship.user1_username = :username', {username: User.Userone})
-    .orWhere('friendship.user2_username = :username', {username: User.Userone})
-    .andWhere('friendship.blocked = :blocked', {blocked: false})
-    .andWhere('friendship.status = :status', {status: 'accepted'}).getMany();
+    else
+    {
+      findList = await this.FriendShipRepo
+      .createQueryBuilder('friendship')
+      .leftJoinAndSelect('friendship.user1', 'user1')
+      .leftJoinAndSelect('friendship.user2', 'user2')
+      .where('friendship.receiver = :username', {username: username})
+      .orWhere('friendship.sender = :username', {username: username})
+      .andWhere('friendship.blocked = :blocked', {blocked: false})
+      .andWhere('friendship.status = :status', {status: 'accepted'}).take(take).skip(skip).getMany();
+    }
     if (findList == null)
-      return findList;
-    let lastone: Array<User> = [];
+      return null;
+    let friends: Array<User> = [];
     findList.forEach(element => {
-      if (element.user1_username == User.Userone)
-        lastone.push(element.user2);
+      if (element.receiver == username)
+        friends.push(element.user2);
       else
-        lastone.push(element.user1);
+        friends.push(element.user1);
     });
-    return lastone;
+    return friends;
   }
 
-  async suggested(User: UserValidatingDto)
+  async suggested(username: string, skip : number, take: number)
   {
-    let frindList = await this.friendList(User);
+    let frindList = await this.friendList(username, 0 , 0);
     if (frindList == undefined)
       return undefined;
     else if (frindList == null)
       frindList = [];
-    let lastone: Array<string> = [];
-    lastone.push(User.Userone);
+    let friends_UserName: Array<string> = [];
+    friends_UserName.push(username);
     frindList.forEach(element => {
-      lastone.push(element.user);
+      friends_UserName.push(element.username);
     });
-    return await this.UserRepo.find({where: {username: Not(Any(lastone))}});
+    return await this.UserRepo.find({where: {username: Not(Any(friends_UserName))}, take: take, skip: skip});  // TODO: I may check next the User if is blockig you..
   }
 
-  // findAll() {
-  //   return `This action returns all friendship`;
-  // }
-
-  async findOne(id: string) {
+  async findOne(id: string, username: string) {
+     // TODO: I may check next the User if is blockig you..
     return await this.UserRepo.find({where: {username: id}});
   }
-
-  // update(id: number, updateFriendshipDto: UpdateFriendshipDto) {
-  //   return `This action updates a #${id} friendship`;
-  // }
-
 }

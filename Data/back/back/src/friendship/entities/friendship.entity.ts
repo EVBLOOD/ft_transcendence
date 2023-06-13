@@ -7,11 +7,11 @@ export class Friendship {
 
     @PrimaryColumn()
     @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
-    user1_username: string;
+    sender: string;
 
     @PrimaryColumn()
     @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
-    user2_username: string;
+    receiver: string;
 
     @Column({ type: 'enum', enum: ['pending', 'accepted'] })
     @IsEnum({enum: ['pending', 'accepted']})
@@ -29,15 +29,15 @@ export class Friendship {
     @IsDate()
     updated_at: Date;
 
-    @Column()
-    @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
+    @Column({ type: 'enum', enum: ['sender', 'receiver'] })
+    @IsEnum({enum: ['sender', 'receiver']})
     blocked_by: string;
   
     @ManyToOne(() => User)
-    @JoinColumn({name: 'user1_username'})
+    @JoinColumn({name: 'sender'})
     user1: User;
     
     @ManyToOne(() => User)
-    @JoinColumn({name: 'user2_username'})
+    @JoinColumn({name: 'receiver'})
     user2: User;
 }
