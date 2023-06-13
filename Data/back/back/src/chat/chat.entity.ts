@@ -11,37 +11,37 @@ import {
 @Entity()
 export class Chat {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({
     nullable: false,
     default: 'public',
   })
-  type: string; // public, private, protected
+  type!: string; // public, private, protected
 
   @Column({
     nullable: true,
   })
-  password: string;
+  password!: string;
 
   @Column({
     nullable: false,
   })
-  chatRoomName: string;
+  chatRoomName!: string;
 
   @OneToMany(() => Message, (message: Message) => message.chatRoomId)
   @JoinColumn()
-  message: Message[];
+  message!: Message[];
 
   @OneToMany(() => User, (user: User) => user.chatRoomMember)
   @JoinColumn()
-  member: User[];
+  member!: User[];
 
   @OneToMany(() => User, (user: User) => user.chatRoomOwner)
   @JoinColumn()
-  owner: User;
+  owner!: User;
 
   @OneToMany(() => User, (user: User) => user.chatRoomAdnim)
   @JoinColumn()
-  admin: User[];
+  admin!: User[];
 }

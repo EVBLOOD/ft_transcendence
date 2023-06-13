@@ -14,6 +14,8 @@ import { Message } from 'src/message/message.entity';
 import { ChatUtils } from './chat.utils';
 import { MessageService } from 'src/message/message.service';
 import { triggerAsyncId } from 'async_hooks';
+import { createChatroomDTO } from './dto/createChatroom.dto';
+import { validateChatDTO } from './chat.validators';
 
 @Injectable()
 export class ChatService {
@@ -63,6 +65,12 @@ export class ChatService {
   async createChatroom(chatroomDTO: createChatroomDTO): Promise<Chat> {
     if (validateChatDTO(chatroomDTO) === true) {
       // stuff
+    }
+  }
+
+  async createChatroom(chatroomDTO: createChatroomDTO): Promise<Chat> {
+    if (validateChatDTO(chatroomDTO) === true) {
+      // stuff 
     }
   }
 
