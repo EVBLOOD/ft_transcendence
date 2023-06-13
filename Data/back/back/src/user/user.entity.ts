@@ -11,10 +11,10 @@ import {
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column()
-  userName: string;
+  userName!: string;
 
   @OneToMany(
     () => Message,
@@ -23,17 +23,17 @@ export class User {
     },
   )
   @JoinColumn()
-  messages: Message[];
+  messages!: Message[];
 
   @OneToMany(() => Chat, (chatRoom: Chat) => chatRoom.member)
   @JoinColumn()
-  chatRoomMember: Chat[];
+  chatRoomMember!: Chat[];
 
   @OneToMany(() => Chat, (chatRoom: Chat) => chatRoom.owner)
   @JoinColumn()
-  chatRoomOwner: Chat[];
+  chatRoomOwner!: Chat[];
 
   @OneToMany(() => Chat, (chatRoom: Chat) => chatRoom.admin)
   @JoinColumn()
-  chatRoomAdnim: Chat[];
+  chatRoomAdnim!: Chat[];
 }

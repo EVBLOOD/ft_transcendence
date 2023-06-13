@@ -8,17 +8,17 @@ export class Message {
   @PrimaryGeneratedColumn({
     name: 'messageID',
   })
-  id: number;
+  id!: number;
 
   @Column({
     nullable: false,
   })
   @IsNotEmpty()
-  value: string;
+  value!: string;
 
   @ManyToOne(() => Chat, (chatRoom: Chat) => chatRoom.message)
-  chatRoomId: Chat;
+  chatRoomId!: Chat;
 
   @ManyToOne(() => User, (user: User) => user.messages)
-  userId: User;
+  userId!: User;
 }
