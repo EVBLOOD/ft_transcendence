@@ -1,6 +1,20 @@
-import { Controller, Get, Body, Param, Put, UseGuards, Post, UseInterceptors, UploadedFile, Req, Res, HttpException, HttpStatus, } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Body,
+  Param,
+  Put,
+  UseGuards,
+  Post,
+  UseInterceptors,
+  UploadedFile,
+  Req,
+  Res,
+  HttpException,
+  HttpStatus,
+  ClassSerializerInterceptor,
+} from '@nestjs/common';
 import { UserService } from './user.service';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/authenticator/jwtauth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -12,78 +26,88 @@ import { existsSync } from 'fs';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   async findAll() {
     const replay = await this.userService.findAll();
-    if (replay)
-      return replay;
-    throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN)
+    if (replay) return replay;
+    throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
   }
 
   @Get('/avatar/:path')
   async SendAvatar(@Res() res, @Param('path') path: string) {
-    if (existsSync("./upload/avatars/" + path))
-      res.sendFile(path, {root: './upload/avatars'});
+    if (existsSync('./upload/avatars/' + path))
+      res.sendFile(path, { root: './upload/avatars' });
     throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const replay = await this.userService.findOne(id);
-    if (replay)
-      return replay;
-    throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND)
+    if (replay) return replay;
+    throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('updateAll')
   async update(@Req() req, @Body() updateUserDto: CreateUserDto) {
-    try{
-      const replay = await this.userService.update(req.new_user.sub, updateUserDto);
-      if (replay)
-        return replay;
+    try {
+      const replay = await this.userService.update(
+        req.new_user.sub,
+        updateUserDto,
+      );
+      if (replay) return replay;
+    } catch (err) {
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          error: 'FORBIDDEN',
+        },
+        HttpStatus.FORBIDDEN,
+        { cause: err },
+      );
     }
-    catch (err)
-    {
-      throw new HttpException({
-        status: HttpStatus.FORBIDDEN,
-        error: 'FORBIDDEN',
-      }, HttpStatus.FORBIDDEN, {cause: err});
-    }
-    throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND)
+    throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
   }
 
-
+  @UseInterceptors(ClassSerializerInterceptor)
   @Put('upload')
-  @UseInterceptors(FileInterceptor('file', 
-      {
-        storage: diskStorage
-        (
-          {
-            destination: './upload/avatars',
-            filename:  (req, file, callback) => {
-              if ((file.mimetype != "image/jpeg" && file.mimetype != "image/png") || (file.size > 2 * 1024 * 1024))
-                callback(null, null);
-              const newname = Math.floor(10 + (99999 - 10) * Math.random()) + Date.now().toString() + '-' + file.originalname;
-              callback(null, newname);
-            },
-          }
-        )
-      },
-      ))
-  async UploadAvatar(@Req() req, @UploadedFile() file: Express.Multer.File)
-  {
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './upload/avatars',
+        filename: (req, file, callback) => {
+          if (
+            (file.mimetype != 'image/jpeg' && file.mimetype != 'image/png') ||
+            file.size > 2 * 1024 * 1024
+          )
+            callback(null, null);
+          const newname =
+            Math.floor(10 + (99999 - 10) * Math.random()) +
+            Date.now().toString() +
+            '-' +
+            file.originalname;
+          callback(null, newname);
+        },
+      }),
+    }),
+  )
+  async UploadAvatar(@Req() req, @UploadedFile() file: Express.Multer.File) {
     try {
-        if (file?.filename && file.filename != "") {
-          await this.userService.UpdateAvatar(req.new_user.sub, file.filename);
-          return "file created";
-        }
-    }
-    catch (error)
-    {
-      throw new HttpException({
-        status: HttpStatus.FORBIDDEN,
-        error: 'FORBIDDEN',
-      }, HttpStatus.FORBIDDEN, {cause: error});
+      if (file?.filename && file.filename != '') {
+        await this.userService.UpdateAvatar(req.new_user.sub, file.filename);
+        return 'file created';
+      }
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          error: 'FORBIDDEN',
+        },
+        HttpStatus.FORBIDDEN,
+        { cause: error },
+      );
     }
     throw new HttpException('NOT_ACCEPTABLE', HttpStatus.NOT_ACCEPTABLE);
   }

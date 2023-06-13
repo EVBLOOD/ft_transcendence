@@ -1,15 +1,22 @@
-import { User } from "src/user/entities/user.entity";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
+import { Exclude } from 'class-transformer';
+import { User } from 'src/user/entities/user.entity';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class Token {
-    @PrimaryColumn()
-    token: string;
+  @Exclude()
+  @PrimaryColumn()
+  token: string;
 
-    @Column()
-    expiration_date: Date;
+  @Exclude()
+  @Column()
+  expiration_date: Date;
 
-    @OneToOne(() => User)
-    @JoinColumn()
-    User: User;
+  @OneToOne(() => User)
+  @JoinColumn()
+  User: User;
+
+  constructor(partial: Partial<Token>) {
+    Object.assign(this, partial);
+  }
 }
