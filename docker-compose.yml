@@ -19,6 +19,8 @@ services:
     container_name: back
     networks:
       - ft_transcendence
+    ports:
+      - 3000:3000
     restart: on-failure
     volumes:
       - vol_back:/var/www/html/
@@ -29,6 +31,8 @@ services:
     container_name: front
     networks:
       - ft_transcendence
+    ports:
+      - 4200:4200
     restart: on-failure
     volumes:
       - vol_front:/var/www/html/
