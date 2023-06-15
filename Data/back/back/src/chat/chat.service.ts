@@ -16,7 +16,8 @@ import { MessageService } from 'src/message/message.service';
 import { createChatroomDTO } from './dto/createChatroom.dto';
 import { validateChatDTO, createChatroomEntity } from './chat.validators';
 import { User } from 'src/user/user.entity';
-import * as bcrypt from "bcrypt";
+import * as bcrypt from 'bcrypt';
+import { createMemberDTO } from './dto/createMember.dto';
 
 @Injectable()
 export class ChatService {
@@ -29,7 +30,7 @@ export class ChatService {
     private readonly messageService: MessageService,
   ) {}
 
-  async getChatRoomOfUsers(userId: number) : Promise<Chat[]> {
+  async getChatRoomOfUsers(userId: number): Promise<Chat[]> {
     const chatroom = await this.chatRoomRepo.find({
       order: {
         id: 'desc',
@@ -53,7 +54,7 @@ export class ChatService {
         },
       },
       cache: true,
-    })
+    });
     return chatroom;
   }
 
@@ -96,7 +97,7 @@ export class ChatService {
       const user = await this.chatHelpers.getUser(chatroomDTO.otherUser);
       let secondUser: User | undefined = undefined;
       if (chatroomDTO.otherUser != undefined) {
-        secondUser = await this.chatHelpers.getUser(chatroomDTO.otherUser)
+        secondUser = await this.chatHelpers.getUser(chatroomDTO.otherUser);
       }
       if (chatroomDTO.type === 'password') {
         const passwordHash = await bcrypt.hash(chatroomDTO.password, 10);
@@ -116,4 +117,111 @@ export class ChatService {
     return await this.messageService.create(messageDTO, chatRoom, user);
     // if not throw !
   }
-}
+
+  async findDMChatroom(user1: number, user2: number): Promise<Chat | null> {
+    const user1ListOfChatrooms = await this.chatRoomRepo.find({
+      relations: {
+        member: true,
+      },
+      where: {
+        type: 'DM',
+        member: {
+          id: user1,
+        },
+      },
+      select: {
+        member: {
+          id: true,
+        },
+      },
+    });
+    const user2ListOfChatrooms = await this.chatRoomRepo.find({
+      relations: {
+        member: true,
+      },
+      where: {
+        type: 'DM',
+        member: {
+          id: user2,
+        },
+      },
+      select: {
+        member: {
+          id: true,
+        },
+      },
+    });
+    if (user1ListOfChatrooms && user2ListOfChatrooms) {
+      for (const user1_Iterator of user1ListOfChatrooms) {
+        for (const user2_Iterator of user2ListOfChatrooms) {
+          if (user1_Iterator.id == user2_Iterator.id) {
+            return user1_Iterator;
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  async checkForAdminRoll(chatID: number, ID: number): Promise<boolean> {
+    return this.chatHelpers.checkForAdminRoll(chatID, ID);
+  }
+
+  async checkForOwnerRoll(chatID: number, ID: number): Promise<boolean> {
+    return this.chatHelpers.checkForOwnerRoll(chatID, ID);
+  }
+
+  async checkForMemberRoll(chatID: number, ID: number): Promise<boolean> {
+    return this.chatHelpers.checkForMemberRoll(chatID, ID);
+  }
+
+  async getChatroomPassword(id: number): Promise<string> {
+    const chatRoom = await this.chatRoomRepo.findOne({
+      where: {
+        id: id,
+      },
+      select: {
+        password: true,
+      },
+    });
+    if (chatRoom === null) {
+      throw new HttpException(
+        `Chatroom with ID ${id} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return chatRoom.password;
+  }
+
+  async addMemberToChatroom(
+    chatID: number,
+    memberDTO: createMemberDTO,
+  ): Promise<Chat> {
+    const chatroom = await this.GetChatRoomByID(chatID);
+    if (chatroom.type === 'password') {
+      const password = await this.getChatroomPassword(chatID);
+      if (
+        (memberDTO.password != undefined &&
+          (await bcrypt.compare(memberDTO.password, password)) == false) ||
+        memberDTO.password == undefined ||
+        !(memberDTO.password && memberDTO.password.trim())
+      ) {
+        throw new HttpException('Invalid Password', HttpStatus.BAD_REQUEST);
+      }
+    }
+    if (
+      (await this.chatHelpers.checkForMemberRoll(chatID, memberDTO.member)) ==
+      true
+    ) {
+      return chatroom;
+    }
+    const user = await this.chatHelpers.getUser(memberDTO.member);
+    // TODO[importent]: check if the user is not banned from the chatroom
+    // if (banned == true ) {
+    //    throw new HttpException('Can't add currently banned user', HttpStatus.BAD_FORBIDDEN);
+    // }
+    // else
+    chatroom.member.push(user);
+    return chatroom;
+  }
+} // END OF ChatService class

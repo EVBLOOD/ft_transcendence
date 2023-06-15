@@ -18,4 +18,51 @@ export class ChatUtils {
     if (user) return user;
     throw new HttpException('User Not Found', HttpStatus.NOT_FOUND);
   }
+  async checkForAdminRoll(chatID: number, ID: number): Promise<boolean> {
+    const admin = await this.chatRoomRepo.findOne({
+      relations: {
+        admin: true,
+      },
+      where: {
+        id: chatID,
+        admin: {
+          id: ID,
+        },
+      },
+    });
+    if (admin) return true;
+    return false;
+  }
+
+  async checkForMemberRoll(chatID: number, ID: number): Promise<boolean> {
+    const member = await this.chatRoomRepo.findOne({
+      relations: {
+        member: true,
+      },
+      where: {
+        id: chatID,
+        member: {
+          id: ID,
+        },
+      },
+    });
+    if (member) return true;
+    return false;
+  }
+
+  async checkForOwnerRoll(chatID: number, ID: number): Promise<boolean> {
+    const owner = await this.chatRoomRepo.findOne({
+      relations: {
+        owner: true,
+      },
+      where: {
+        id: chatID,
+        owner: {
+          id: ID,
+        },
+      },
+    });
+    if (owner) return true;
+    return false;
+  }
 } // end of ChatUtils Class

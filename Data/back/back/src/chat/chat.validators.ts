@@ -44,19 +44,22 @@ export function validateChatDTO(chatDTO: createChatroomDTO): boolean {
   return true;
 }
 
-export function createChatroomEntity(chatDTO: createChatroomDTO, user: User, secondUser: User | undefined): Chat {
-    validateChatDTO(chatDTO);
-    const chatroom = new Chat();
-    chatroom.type = chatDTO.type;
-    chatroom.chatRoomName = chatDTO.chatroomName;
-    chatroom.owner = user;
-    chatroom.member = [user];
-    chatroom.admin = [user];
-    if (chatDTO.type === 'password')
-        chatroom.password = chatDTO.password;
-    if (chatroom.type === 'DM' && secondUser !== undefined) {
-        chatroom.member.push(secondUser);
-        chatroom.admin.push(secondUser);
-    }
-    return chatroom;
+export function createChatroomEntity(
+  chatDTO: createChatroomDTO,
+  user: User,
+  secondUser: User | undefined,
+): Chat {
+  validateChatDTO(chatDTO);
+  const chatroom = new Chat();
+  chatroom.type = chatDTO.type;
+  chatroom.chatRoomName = chatDTO.chatroomName;
+  chatroom.owner = user;
+  chatroom.member = [user];
+  chatroom.admin = [user];
+  if (chatDTO.type === 'password') chatroom.password = chatDTO.password;
+  if (chatroom.type === 'DM' && secondUser !== undefined) {
+    chatroom.member.push(secondUser);
+    chatroom.admin.push(secondUser);
+  }
+  return chatroom;
 }
