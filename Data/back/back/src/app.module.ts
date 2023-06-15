@@ -11,14 +11,19 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(DataConf), UserModule, PassportModule.register({session: true}),
-            ConfigModule.forRoot( {isGlobal: true,} ),
-            FriendshipModule, AuthenticatorModule,  JwtModule.register({
-              secret: process.env.ACCESS_TOKEN_SECRET,
-              global: true,
-            }),],
+  imports: [
+    TypeOrmModule.forRoot(DataConf),
+    UserModule,
+    PassportModule.register({ session: true }),
+    ConfigModule.forRoot({ isGlobal: true }),
+    FriendshipModule,
+    AuthenticatorModule,
+    JwtModule.register({
+      secret: process.env.ACCESS_TOKEN_SECRET,
+      global: true,
+    }),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
-

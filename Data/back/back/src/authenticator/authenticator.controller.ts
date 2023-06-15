@@ -17,7 +17,6 @@ import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { JwtAuthGuard } from './jwtauth.guard';
 import { FactorConfirmDTO, validateConfirmDTO } from './dto/factor-confirm.dto';
-import { retry } from 'rxjs';
 
 @Controller()
 export class AuthenticatorController {

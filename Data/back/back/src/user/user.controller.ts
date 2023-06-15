@@ -31,7 +31,10 @@ export class UserController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get()
-  async findAll(@Query('skip', ParseIntPipe) skip : number, @Query('take', ParseIntPipe) take : number) {
+  async findAll(
+    @Query('skip', ParseIntPipe) skip: number,
+    @Query('take', ParseIntPipe) take: number,
+  ) {
     const replay = await this.userService.findAll(skip, take);
     if (replay) return replay;
     throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
