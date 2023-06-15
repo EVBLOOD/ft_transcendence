@@ -15,6 +15,7 @@ import { GetUser } from './../message/message.controller';
 import { User } from 'src/user/user.entity';
 import { createChatroomDTO } from './dto/createChatroom.dto';
 import { createMemberDTO } from './dto/createMember.dto';
+import { createAdminDTO } from './dto/createAdmin.dto';
 
 @Controller('chat')
 export class ChatController {
@@ -45,8 +46,6 @@ export class ChatController {
     return await this.chatRoomSevice.getChatRoomOfUsers(userID); // can return empty array !!
   }
 
-  // @Get('type/:type')
-  // async getChatroomType(@Param('type') type: string) : Promise<ChatRoom>
   @Get('DM/:firstUser/:secondUser')
   async findDMChatroom(
     @Param('firstUser', ParseIntPipe) user1: number,
@@ -106,6 +105,26 @@ export class ChatController {
     try {
       // TODO [importent]: check if user in not banned first
       return await this.chatRoomSevice.addMemberToChatroom(chatID, memberDTO);
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
+  }
+
+  @Put(':chatID/add/admin')
+  async addAdminToChatRoom(
+    @Param('chatID', ParseIntPipe) chatID: number,
+    @Body() adminDTO: createAdminDTO,
+    @GetUser() user: User,
+  ): Promise<Chat | null> {
+    try {
+      if (user.id !== adminDTO.roleGiver) {
+        throw new HttpException(
+          'user ID dose not match current user ID',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      return await this.chatRoomSevice.addAdminToChatroom(chatID, adminDTO);
     } catch (err) {
       console.log(err);
       return null;

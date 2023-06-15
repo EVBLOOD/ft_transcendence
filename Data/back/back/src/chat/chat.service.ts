@@ -18,6 +18,8 @@ import { validateChatDTO, createChatroomEntity } from './chat.validators';
 import { User } from 'src/user/user.entity';
 import * as bcrypt from 'bcrypt';
 import { createMemberDTO } from './dto/createMember.dto';
+import { createAdminDTO } from './dto/createAdmin.dto';
+import { promises } from 'dns';
 
 @Injectable()
 export class ChatService {
@@ -213,15 +215,47 @@ export class ChatService {
       (await this.chatHelpers.checkForMemberRoll(chatID, memberDTO.member)) ==
       true
     ) {
-      return chatroom;
+      return await this.GetChatRoomByID(chatID);
     }
     const user = await this.chatHelpers.getUser(memberDTO.member);
     // TODO[importent]: check if the user is not banned from the chatroom
     // if (banned == true ) {
-    //    throw new HttpException('Can't add currently banned user', HttpStatus.BAD_FORBIDDEN);
+    //    throw new HttpException('Can't add currently banned user', HttpStatus.FORBIDDEN);
     // }
     // else
     chatroom.member.push(user);
     return chatroom;
+  }
+
+  async addAdminToChatroom(
+    chatID: number,
+    adminDTO: createAdminDTO,
+  ): Promise<Chat> {
+    const chatroom = await this.GetChatRoomByID(chatID);
+    if (
+      (await this.chatHelpers.checkForAdminRoll(chatID, adminDTO.roleGiver)) ==
+      true
+    ) {
+      if (
+        (await this.chatHelpers.checkForAdminRoll(
+          chatID,
+          adminDTO.roleReceiver,
+        )) == true
+      ) {
+        return await this.GetChatRoomByID(chatID);
+      }
+      // TODO [importent] : check if the user is not banned b4 getting admin status
+      // if (banned == true ) {
+      //    throw new HttpException('You are banned', HttpStatus.FORBIDDEN);
+      // }
+      // else
+      const admin = await this.chatHelpers.getUser(adminDTO.roleReceiver);
+      chatroom.admin.push(admin);
+      return await this.chatRoomRepo.save(chatroom);
+    }
+    throw new HttpException(
+      "You can't assign a new admin",
+      HttpStatus.FORBIDDEN,
+    );
   }
 } // END OF ChatService class
