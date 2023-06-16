@@ -1,3 +1,4 @@
+
 .page{
     max-width: 1440px;
     margin: 0 auto;
@@ -45,6 +46,8 @@
     justify-content: center;
     gap: 7px;
     border-radius: 50px 50px 0px 0px;
+    font-size: 12px;
+    font-weight: 700;
 }
 
 .menu li:hover{
@@ -54,7 +57,7 @@
 
 
 .menu li img{
-    height: 30px;
+    height: 24px;
 }
 
 .body{
