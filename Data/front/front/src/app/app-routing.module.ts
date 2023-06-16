@@ -7,12 +7,11 @@ import { authGuard } from './login/guards/auth.guard';
 import { SaadComponent } from './saad/saad.component';
 import { twoFacGuard } from './login/guards/two-fac.guard';
 import { TwoFactoryComponent } from './login/two-factory/two-factory.component';
-import { isloggedinGuard } from './login/guards/isloggedin.guard';
 
 const routes: Routes = 
                       [
                         {path: '', component: AppComponent, canActivate: [authGuard]},
-                        {path: 'login', component: LoginComponent, canActivate: [isloggedinGuard]},
+                        {path: 'login', component: LoginComponent, canActivate: [authGuard]},
                         {path: 'twoFactor', component: TwoFactoryComponent ,canActivate: [twoFacGuard]},
                         {path: 'saad', component: SaadComponent, },
                         {path: 'profile', component: ProfileComponent, canActivate: [authGuard]}

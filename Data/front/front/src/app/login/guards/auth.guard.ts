@@ -4,18 +4,22 @@ import { AuthService } from '../auth.service';
 import { firstValueFrom } from 'rxjs';
 
 export  const authGuard: CanActivateFn = async (route, state) => {
-
-    
     const authService : AuthService = inject(AuthService);
     const switchRoute : Router = inject(Router);
     const replay = await firstValueFrom(authService.getCurrentUser());
-    console.log(replay);
-    if (replay.statusCode == 403)
+    if (replay.statusCode && replay.statusCode == 403)
     {
+        if (route.url.toString() == "login")
+            return true;
         switchRoute.navigateByUrl('login');
         return false;
     }
     if (replay.username)
-        switchRoute.navigateByUrl('twoFactor');
+    {
+        if (route.url.toString() != "twoFactor")
+            switchRoute.navigateByUrl('twoFactor');
+    }
+    if (route.url.toString() == 'login')
+        switchRoute.navigateByUrl('');  
     return true;
 };
