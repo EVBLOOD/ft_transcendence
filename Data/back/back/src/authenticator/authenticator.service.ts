@@ -90,17 +90,24 @@ export class AuthenticatorService {
         const user = await this.UserRepo.findOne( { where: {username: username} } );
         if (!user || !user.TwoFAenabled)
             return null;
-        
-            const verify = await speakeasy.totp.verify({secret: user.TwoFAsecret, encoding: 'base32', token: token});
-            if (!verify)
-            {
-                const ret = await this.checkbackups(user.backups, token);
-                if (ret != null)
-                    return await this.UserRepo.save(
-                        { username:username, backups: ret});
-                return null;
+        const tok = await this.TokenRepo.findOne( { where: {User: user} } );
+        if (!tok)
+            return null;
+       const verify = await speakeasy.totp.verify({secret: user.TwoFAsecret, encoding: 'base32', token: token});
+       if (!verify)
+       {
+           const ret = await this.checkbackups(user.backups, token);
+           if (ret != null)
+           {
+               const tok = await this.TokenRepo.findOne( { where: {User: user} } );
+               await this.TokenRepo.save({token: tok.token,loggedIn: true});
+               return await this.UserRepo.save(
+                   { username:username, backups: ret});
             }
-        return user;
+            return null;
+        }
+        await this.TokenRepo.save({token: tok.token,loggedIn: true});
+       return user;
     }
 
     async hashing(backups : number[], salt : string)
@@ -153,12 +160,16 @@ export class AuthenticatorService {
             return null;
         if (!token || token.length == 0) {
             time.setDate(time.getDate() + 7); 
-            return await this.TokenRepo.save({token: new_token, expiration_date: time.toISOString(), User: user });
+            if (user.TwoFAenabled)
+                return await this.TokenRepo.save({token: new_token, expiration_date: time.toISOString(), loggedIn: false, User: user });
+            return await this.TokenRepo.save({token: new_token, expiration_date: time.toISOString(), loggedIn: true, User: user });
         }
         if (new_token != token[0].token || time.toISOString() >= token[0].expiration_date.toISOString()) {
             time.setDate(time.getDate() + 7); 
             await this.TokenRepo.delete(token[0]);
-            return await this.TokenRepo.save({token: new_token, expiration_date: time.toISOString(), User: user });
+            if (user.TwoFAenabled)
+                return await this.TokenRepo.save({token: new_token, expiration_date: time.toISOString(), loggedIn: false, User: user });
+            return await this.TokenRepo.save({token: new_token, expiration_date: time.toISOString(), loggedIn: true, User: user });
         }
         return token[0];
     }
@@ -167,6 +178,21 @@ export class AuthenticatorService {
         const TokenUSer = await this.TokenRepo.findOne({where: {token: token}, relations: {User: true}}, );
         if (!TokenUSer)
             return false;
+        if (TokenUSer.User.TwoFAenabled && TokenUSer.loggedIn == false)
+            return false;
+        const time = new Date();
+        if (TokenUSer.token == token && time.toISOString() < TokenUSer.expiration_date.toISOString() && TokenUSer.User.username == username)
+            return true;
+        return false;
+    }
+
+    async IsSameBut(username: string, token: string)
+    {
+        const TokenUSer = await this.TokenRepo.findOne({where: {token: token}, relations: {User: true}}, );
+        if (!TokenUSer)
+            return false;
+        if (TokenUSer.User.TwoFAenabled == true && TokenUSer.loggedIn == false)
+            return {TFA: TokenUSer.User}
         const time = new Date();
         if (TokenUSer.token == token && time.toISOString() < TokenUSer.expiration_date.toISOString() && TokenUSer.User.username == username)
             return true;

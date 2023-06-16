@@ -17,6 +17,7 @@ import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { JwtAuthGuard } from './jwtauth.guard';
 import { FactorConfirmDTO, validateConfirmDTO } from './dto/factor-confirm.dto';
+import { ThisIsA } from './thisisa.guard';
 
 @Controller()
 export class AuthenticatorController {
@@ -37,8 +38,6 @@ export class AuthenticatorController {
         'INTERNAL_SERVER_ERROR',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
-    if ((await this.service.TwoFactoRequired(req.user.username)) == true)
-      return { TwoFactor: req.user.username };
     var token: string;
     if (!req.cookies || !req.cookies[process.env.TOKEN_NAME])
       token = this.jwtService.sign({
@@ -48,7 +47,7 @@ export class AuthenticatorController {
     else token = req.cookies[process.env.TOKEN_NAME];
     const tokenUser = await this.service.GenToken(req.user.username, token);
     if (tokenUser) res.cookie(process.env.TOKEN_NAME, tokenUser.token);
-    return res.redirect('/redirection');
+    return res.redirect('http://localhost:4200/');
   }
 
   @UseGuards(JwtAuthGuard)
@@ -57,7 +56,13 @@ export class AuthenticatorController {
     return { msg: 'Hello from the other side', user: req.new_user };
   }
 
-  // @UseGuards(fortytwoAuthGuard)
+  @UseGuards(ThisIsA)
+  @Get('isItLogged')
+  isItLogged(@Req() req) {
+    return req.new_user;
+  }
+
+  @UseGuards(ThisIsA)
   @Post('validate')
   async ValidateTwoFactor(
     @Req() req,
@@ -66,20 +71,13 @@ export class AuthenticatorController {
   ) {
     try {
       if (
-        (await this.service.TwoFA_Validate(data.username, data.token)) == null
+        (await this.service.TwoFA_Validate(req.new_user.sub, data.token)) ==
+        null
       )
-        return res.status(403).send({});
-      var token;
-      if (!req.cookies || !req.cookies[process.env.TOKEN_NAME])
-        token = this.jwtService.sign({
-          sub: data.username,
-          email: req.user.email,
-        });
-      else token = req.cookies[process.env.TOKEN_NAME];
-      const tokenUser = await this.service.GenToken(data.username, token);
-      if (tokenUser) res.cookie(process.env.TOKEN_NAME, tokenUser.token);
+        throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
       return res.redirect('/redirection');
     } catch (error) {
+      console.log('Hello there');
       throw new HttpException(
         {
           status: HttpStatus.FORBIDDEN,

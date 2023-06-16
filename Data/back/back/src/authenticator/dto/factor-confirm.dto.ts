@@ -9,10 +9,6 @@ export class FactorConfirmDTO {
 export class validateConfirmDTO {
 
     @IsNotEmpty()
-    @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
-    username: string;
-
-    @IsNotEmpty()
     @Matches(/^[0-9]*$/)
     token: string;
 }

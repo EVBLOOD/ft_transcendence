@@ -12,6 +12,10 @@ export class Token {
   @Column()
   expiration_date: Date;
 
+  @Column()
+  loggedIn: boolean;
+
+
   @OneToOne(() => User)
   @JoinColumn()
   User: User;

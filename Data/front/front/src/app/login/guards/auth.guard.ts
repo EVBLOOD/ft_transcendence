@@ -7,6 +7,7 @@ export  const authGuard: CanActivateFn = async (route, state) => {
     const authService : AuthService = inject(AuthService);
     const switchRoute : Router = inject(Router);
     const replay = await firstValueFrom(authService.getCurrentUser());
+    console.log(replay);
     if (replay.statusCode && replay.statusCode == 403)
     {
         if (route.url.toString() == "login")
@@ -14,8 +15,9 @@ export  const authGuard: CanActivateFn = async (route, state) => {
         switchRoute.navigateByUrl('login');
         return false;
     }
-    if (replay.username)
+    if (replay.steps)
     {
+        authService.setTwoFactorSatat(true);
         if (route.url.toString() != "twoFactor")
             switchRoute.navigateByUrl('twoFactor');
     }

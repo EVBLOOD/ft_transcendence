@@ -26,7 +26,6 @@ async function bootstrap() {
   // const document = SwaggerModule.createDocument(app, config);
   // SwaggerModule.setup('api', app, document);
   // app.use(passper)
-  // app.enableCors();
   app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalFilters(new GlobalExceptionFilter());

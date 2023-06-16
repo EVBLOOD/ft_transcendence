@@ -8,11 +8,12 @@ import { Observable } from 'rxjs';
 export class AuthService {
 
   private twofactor : boolean = false;
+
   constructor(private http: HttpClient) { 
   }
   public getCurrentUser() : Observable<any>
   {
-    return this.http.get('http://localhost:3000/redirection', {withCredentials:true})
+    return this.http.get('http://localhost:3000/isItLogged', {withCredentials: true})
   }
   public getTwoFactorSatat() : boolean
   {
@@ -24,7 +25,8 @@ export class AuthService {
     this.twofactor = param;
   }
   // public callFortyTwo()
-  // {
-  //   this.http.get('http://localhost:3000/login');
-  // }
+  public gowild(token : string)  : Observable<any>
+  {
+    return this.http.post('http://localhost:3000/validate', {token: token}, {withCredentials: true});
+  }
 }
