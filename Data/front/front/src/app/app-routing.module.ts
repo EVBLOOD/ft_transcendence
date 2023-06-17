@@ -10,8 +10,8 @@ import { TwoFactoryComponent } from './login/two-factory/two-factory.component';
 const routes: Routes = 
                       [
                         {path: '', component: AppComponent, canActivate: [authGuard]},
-                        {path: 'login', component: LoginComponent, canActivate: [authGuard]},
-                        {path: 'twoFactor', component: TwoFactoryComponent ,canActivate: [twoFacGuard]},
+                        {path: 'login', component: LoginComponent, children:
+                      [{path: 'twoFactor', component: TwoFactoryComponent ,canActivate: [twoFacGuard]},]},
                         {path: 'profile', component: ProfileComponent, canActivate: [authGuard]}
                       ];
 

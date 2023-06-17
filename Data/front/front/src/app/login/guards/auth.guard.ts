@@ -18,8 +18,8 @@ export  const authGuard: CanActivateFn = async (route, state) => {
     if (replay.steps)
     {
         authService.setTwoFactorSatat(true);
-        if (route.url.toString() != "twoFactor")
-            switchRoute.navigateByUrl('twoFactor');
+        if (route.url.toString() != "login/twoFactor")
+            switchRoute.navigateByUrl('login/twoFactor');
     }
     if (route.url.toString() == 'login')
         switchRoute.navigateByUrl('');  

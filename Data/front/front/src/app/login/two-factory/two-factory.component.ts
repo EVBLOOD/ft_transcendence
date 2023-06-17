@@ -13,6 +13,7 @@ export class TwoFactoryComponent {
   constructor(private authSer : AuthService, private router: Router) {}
   private token : string = '';
   private replay : any;
+  private errorState = 'none';
   
   letsgo()
   {
@@ -33,10 +34,14 @@ export class TwoFactoryComponent {
     console.log(this.token);
   }
 
+  getError()
+  {
+    return this.errorState;
+  }
   handleResponseLetsgo(data: any)
   {
     if (data.statusCode)
-      console.error("Make sure the tpo is valid");
+      this.errorState = 'block';
     else
     {
       this.replay.unsubscribe();
@@ -44,4 +49,14 @@ export class TwoFactoryComponent {
     }
     this.replay.unsubscribe();
   }
+  justCancel()
+  {
+    this.router.navigateByUrl('login');
+  }
 }
+
+/*
+to Improve this:
+- clear input in error case
+-  change the input design
+*/

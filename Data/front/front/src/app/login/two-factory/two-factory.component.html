@@ -1,5 +1,16 @@
-<p>two-factory is here!</p>
-
-<input (focusout)="setData($event)">
-
-<button type="submit" (click)="letsgo()">Click me!</button>
+<div class="up">
+    <div class="pop">
+        <h2 class="popTitle">2F authentication</h2>
+        <div class="groupingLI">
+            <label class="twofactLbl" for="2FaInput">write down your token</label>
+            <div class="errorMsgGroup">
+                <input id="twoFaInput" type="text" (focusout)="setData($event)" />
+                <p class="errorMsg" [style.display]="getError()">Incorrect code</p>
+            </div>
+        </div>
+        <div class="popUpBtn">
+            <button class="cancelBtn" type="submit" (click)="justCancel()">Cancel</button>
+            <button class="validationBtn" type="submit" (click)="letsgo()">Confirm</button>
+        </div>
+    </div>
+</div>
