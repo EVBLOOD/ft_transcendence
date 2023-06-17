@@ -7,4 +7,7 @@ import { Component } from '@angular/core';
 })
 export class ApplicationComponent {
 
+  logo = "PING-PONG 1337";
+  profile = "../../assets/img/profile.jpg";
+  
 }
