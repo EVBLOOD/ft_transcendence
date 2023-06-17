@@ -5,7 +5,7 @@
 
 .container {
     margin: 50px;
-    margin-top: 10%;
+    margin-top: 8%;
     height: 839px;
 }
 
@@ -16,6 +16,7 @@
     border-radius: 40px;
     padding: 90px;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 
@@ -44,7 +45,7 @@
 .btnLogin:hover {
     color: #103959;
     background: #D9ED92;
-    cursor: pointer;
+
 }
 
 .titleLog {
@@ -69,6 +70,8 @@
 
 
 .btnLogin {
+    cursor: pointer;
+    text-decoration: none;
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
@@ -88,18 +91,31 @@
     color: black;
     font-weight: 700;
     font-size: 13px;
-    // line-height: 16px;
     text-transform: uppercase;
 }
 
-// .btnLogoImg {
-// margin-right: 10px;
-// }
-
 .loginImg {
     position: absolute;
-    // bottom: 90px;
     right: 10%;
-    // height: inherit;
-    // width: inherit;
+}
+
+.pop {
+    position: absolute;
+    width: 467px;
+    height: 200px;
+    left: calc(50% - 467px/2 - 5px);
+    top: calc(50% - 200px/2);
+    background: #103959;
+    border-radius: 30px;
+}
+
+
+
+.up {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: calc(50% - 100%/2);
+    top: calc(50% - 100%/2);
+    background: rgba(17, 34, 47, 0.87);
 }
