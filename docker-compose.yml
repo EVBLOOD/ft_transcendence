@@ -23,15 +23,15 @@ services:
     volumes:
       - vol_back:/var/www/html/
 
-  # front:
-  #   build: ./srcs/front
-  #   image: front
-  #   container_name: front
-  #   networks:
-  #     - ft_transcendence
-  #   restart: on-failure
-  #   volumes:
-  #     - vol_front:/var/www/html/
+  front:
+    build: ./srcs/front
+    image: front
+    container_name: front
+    networks:
+      - ft_transcendence
+    restart: on-failure
+    volumes:
+      - vol_front:/var/www/html/
 
   database:
     image: postgres

@@ -58,6 +58,38 @@ export class MessageService {
     }
     throw new NotFoundException(`No messages found for user ${ID}`);
   }
+
+  async getMessagesByChatroomID(chatID: number): Promise<Message[]> {
+    const messages = await this.messageRepo.find({
+      where: {
+        chatRoomId: {
+          id: chatID,
+        },
+      },
+      select: {
+        userId: {
+          id: true,
+          userName: true,
+        },
+        chatRoomId: {
+          type: true,
+          id: true,
+          chatRoomName: true,
+        },
+        value: true,
+      },
+      relations: {
+        chatRoomId: true,
+        userId: true,
+      },
+      order: {
+        id: 'asc',
+      },
+      cache: true,
+    });
+    return messages;
+  }
+
   async create(
     messageDTO: CreateMessage,
     chatRoom: Chat,

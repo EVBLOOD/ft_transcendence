@@ -11,8 +11,8 @@ import { User } from 'src/user/user.entity';
 import { Message } from './message.entity';
 
 /*
- ** return the current user object within a request
- */
+  ** return the current user object within a request
+*/
 export const GetUser = createParamDecorator(
   (data: string, context: ExecutionContext) => {
     const request = context.switchToHttp().getRequest();
