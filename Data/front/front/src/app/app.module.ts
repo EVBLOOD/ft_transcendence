@@ -5,7 +5,6 @@ import { AppComponent } from './app.component';
 import { ProfileComponent } from './login/profile/profile.component';
 import { LoginComponent } from './login/login.component';
 import { HttpClientModule } from '@angular/common/http';
-import { SaadComponent } from './saad/saad.component';
 import { TwoFactoryComponent } from './login/two-factory/two-factory.component';
 
 @NgModule({
@@ -13,7 +12,6 @@ import { TwoFactoryComponent } from './login/two-factory/two-factory.component';
     AppComponent,
     LoginComponent,
     ProfileComponent,
-    SaadComponent,
     TwoFactoryComponent
   ],
   imports: [
