@@ -32,7 +32,7 @@ export class ChatService {
     private readonly messageService: MessageService,
   ) {}
 
-  async getChatRoomOfUsers(userId: number): Promise<Chat[]> {
+  async getChatRoomOfUsers(userName: string): Promise<Chat[]> {
     const chatroom = await this.chatRoomRepo.find({
       order: {
         id: 'desc',
@@ -43,7 +43,7 @@ export class ChatService {
       },
       where: {
         member: {
-          id: userId,
+          userName: userName,
         },
       },
       select: {
@@ -51,7 +51,7 @@ export class ChatService {
         chatRoomName: true,
         type: true,
         owner: {
-          id: true,
+          // userName: true,
           userName: true,
         },
       },
@@ -76,15 +76,15 @@ export class ChatService {
         chatRoomName: true,
         type: true,
         owner: {
-          id: true,
+          // id: true,
           userName: true,
         },
         member: {
-          id: true,
+          // id: true,
           userName: true,
         },
         admin: {
-          id: true,
+          // id: true,
           userName: true,
         },
       },
@@ -115,12 +115,12 @@ export class ChatService {
   async postToChatroom(messageDTO: CreateMessage): Promise<Message> {
     // TODO [importent]: check if the user is a memeber of the channel && if he's not muted
     const chatRoom = await this.GetChatRoomByID(messageDTO.charRoomId);
-    const user = await this.chatHelpers.getUser(messageDTO.userId);
+    const user = await this.chatHelpers.getUser(messageDTO.userName);
     return await this.messageService.create(messageDTO, chatRoom, user);
     // if not throw !
   }
 
-  async findDMChatroom(user1: number, user2: number): Promise<Chat | null> {
+  async findDMChatroom(user1: string, user2: string): Promise<Chat | null> {
     const user1ListOfChatrooms = await this.chatRoomRepo.find({
       relations: {
         member: true,
@@ -128,12 +128,12 @@ export class ChatService {
       where: {
         type: 'DM',
         member: {
-          id: user1,
+          userName: user1,
         },
       },
       select: {
         member: {
-          id: true,
+          userName: true,
         },
       },
     });
@@ -144,12 +144,12 @@ export class ChatService {
       where: {
         type: 'DM',
         member: {
-          id: user2,
+          userName: user2,
         },
       },
       select: {
         member: {
-          id: true,
+          userName: true,
         },
       },
     });
@@ -165,16 +165,16 @@ export class ChatService {
     return null;
   }
 
-  async checkForAdminRoll(chatID: number, ID: number): Promise<boolean> {
-    return this.chatHelpers.checkForAdminRoll(chatID, ID);
+  async checkForAdminRoll(chatID: number, userName: string): Promise<boolean> {
+    return this.chatHelpers.checkForAdminRoll(chatID, userName);
   }
 
-  async checkForOwnerRoll(chatID: number, ID: number): Promise<boolean> {
-    return this.chatHelpers.checkForOwnerRoll(chatID, ID);
+  async checkForOwnerRoll(chatID: number, userName: string): Promise<boolean> {
+    return this.chatHelpers.checkForOwnerRoll(chatID, userName);
   }
 
-  async checkForMemberRoll(chatID: number, ID: number): Promise<boolean> {
-    return this.chatHelpers.checkForMemberRoll(chatID, ID);
+  async checkForMemberRoll(chatID: number, userName: string): Promise<boolean> {
+    return this.chatHelpers.checkForMemberRoll(chatID, userName);
   }
 
   async getChatroomPassword(id: number): Promise<string> {
