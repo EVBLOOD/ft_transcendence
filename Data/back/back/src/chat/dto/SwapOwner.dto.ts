@@ -1,9 +1,8 @@
 import { IsNotEmpty } from 'class-validator';
 
-export class createAdminDTO {
+export class SwapOwnerDTO {
   @IsNotEmpty()
   roleGiver!: string;
-
   @IsNotEmpty()
-  roleReceiver!: string;
+  roleReciver!: string;
 }

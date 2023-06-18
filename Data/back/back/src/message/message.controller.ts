@@ -11,14 +11,18 @@ import { User } from 'src/user/user.entity';
 import { Message } from './message.entity';
 
 /*
-  ** return the current user object within a request
-*/
+ ** return the current user object within a request
+ */
 export const GetUser = createParamDecorator(
   (data: string, context: ExecutionContext) => {
+    console.log("data === ", data);
+    // console.log("context === ", context);
     const request = context.switchToHttp().getRequest();
     if (data) {
+      // console.log("request.user?.[data] === ", request.user?.[data]);
       return request.user?.[data];
     }
+    // console.log("request.user === ", request.user);
     return request.user;
   },
 );

@@ -13,7 +13,7 @@ export class createChatroomDTO {
   password!: string;
 
   @IsNotEmpty()
-  user!: number;
+  user!: string;
 
-  otherUser?: number;
+  otherUser?: string;
 }

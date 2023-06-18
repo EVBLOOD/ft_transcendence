@@ -10,9 +10,9 @@ export class UserService {
     private readonly userRepo: Repository<User>,
   ) {}
 
-  async findUserById(id: number): Promise<User> {
+  async findUserByUserName(userName: string): Promise<User> {
     const user = await this.userRepo.findOneBy({
-      id: id,
+      userName: userName,
     });
     return user;
   }

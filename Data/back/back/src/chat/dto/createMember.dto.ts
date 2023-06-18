@@ -2,7 +2,7 @@ import { IsNotEmpty } from 'class-validator';
 
 export class createMemberDTO {
   @IsNotEmpty()
-  member!: number;
+  member!: string;
 
   password?: string;
 }

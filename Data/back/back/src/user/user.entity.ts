@@ -5,15 +5,16 @@ import {
   Entity,
   JoinColumn,
   OneToMany,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  id!: number;
+  // @PrimaryGeneratedColumn()
+  // id!: number;
 
-  @Column()
+  @PrimaryColumn()
   userName!: string;
 
   @OneToMany(

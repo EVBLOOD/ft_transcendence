@@ -16,6 +16,7 @@ import { User } from 'src/user/user.entity';
 import { createChatroomDTO } from './dto/createChatroom.dto';
 import { createMemberDTO } from './dto/createMember.dto';
 import { createAdminDTO } from './dto/createAdmin.dto';
+import { SwapOwnerDTO } from './dto/SwapOwner.dto';
 
 @Controller('chat')
 export class ChatController {
@@ -32,50 +33,50 @@ export class ChatController {
     }
   }
 
-  @Get('/user/:userID')
+  @Get('/user/:userName')
   async getChatRoomsOfUser(
-    @Param('userID', ParseIntPipe) userID: number,
+    @Param('userName') userName: string,
     @GetUser() user: User,
   ): Promise<Chat[]> {
-    if (user.id != userID) {
+    if (user.userName !== userName) {
       throw new HttpException(
         'sent user id dosent match current userID',
         HttpStatus.BAD_REQUEST,
       );
     }
-    return await this.chatRoomSevice.getChatRoomOfUsers(userID); // can return empty array !!
+    return await this.chatRoomSevice.getChatRoomOfUsers(userName); // can return empty array !!
   }
 
   @Get('DM/:firstUser/:secondUser')
   async findDMChatroom(
-    @Param('firstUser', ParseIntPipe) user1: number,
-    @Param('secondUser', ParseIntPipe) user2: number,
+    @Param('firstUser') user1: string,
+    @Param('secondUser') user2: string,
   ): Promise<Chat | null> {
     return await this.chatRoomSevice.findDMChatroom(user1, user2);
   }
 
-  @Get(':chatID/is_admin/:id')
+  @Get(':chatID/isAdmin/:userName')
   async checkForAdminRoll(
     @Param('chatID', ParseIntPipe) chatID: number,
-    @Param('id', ParseIntPipe) ID: number,
+    @Param('userName') userName: string,
   ): Promise<boolean> {
-    return await this.chatRoomSevice.checkForAdminRoll(chatID, ID);
+    return await this.chatRoomSevice.checkForAdminRoll(chatID, userName);
   }
 
-  @Get(':chatID/is_member/:id')
+  @Get(':chatID/isMember/:userName')
   async checkForMemberRoll(
     @Param('chatID', ParseIntPipe) chatID: number,
-    @Param('id', ParseIntPipe) ID: number,
+    @Param('userName') userName: string,
   ): Promise<boolean> {
-    return await this.chatRoomSevice.checkForMemberRoll(chatID, ID);
+    return await this.chatRoomSevice.checkForMemberRoll(chatID, userName);
   }
 
-  @Get(':chatID/is_owner/:id')
+  @Get(':chatID/isOwner/:userName')
   async checkForOwnerRoll(
     @Param('chatID', ParseIntPipe) chatID: number,
-    @Param('id', ParseIntPipe) ID: number,
+    @Param('userName') userName: string,
   ): Promise<boolean> {
-    return await this.chatRoomSevice.checkForOwnerRoll(chatID, ID);
+    return await this.chatRoomSevice.checkForOwnerRoll(chatID, userName);
   }
 
   @Post('create')
@@ -84,7 +85,7 @@ export class ChatController {
     @GetUser() user: User,
   ): Promise<Chat | null> {
     try {
-      if (user.id !== chatroom.user) {
+      if (user.userName !== chatroom.user) {
         throw new HttpException(
           'user ID dose not match current user ID',
           HttpStatus.BAD_REQUEST,
@@ -118,7 +119,7 @@ export class ChatController {
     @GetUser() user: User,
   ): Promise<Chat | null> {
     try {
-      if (user.id !== adminDTO.roleGiver) {
+      if (user.userName !== adminDTO.roleGiver) {
         throw new HttpException(
           'user ID dose not match current user ID',
           HttpStatus.BAD_REQUEST,
@@ -130,4 +131,18 @@ export class ChatController {
       return null;
     }
   }
+
+  // @Put(':/chatID/changeOwner')
+  // async changeOwnerOfChatroom(
+  //   @Param('chatID') chatID: number,
+  //   @Body() swapOwnerDto: SwapOwnerDTO,
+  //   @GetUser() user: User
+  // ): Promise<Chat | undefined> {
+  //   try {
+  //     if (user.userName !== swapOwnerDto.roleGiver){
+  //       throw new HttpException("Sent User ID is not the current user", HttpStatus.BAD_REQUEST);
+  //     }
+  //     // return this.chatRoomSevice.changeOwnerOfChatroom(chatID, swapOwnerDto);
+  //   }
+  // }
 } // end of ChatController class

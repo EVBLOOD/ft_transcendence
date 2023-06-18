@@ -34,13 +34,13 @@ export class MessageService {
       where: {
         // only care bout the with the passed ID
         userId: {
-          id: ID,
+          // id: ID,
         },
       },
       select: {
         // we only care about these values
         userId: {
-          id: true,
+          // id: true,
           userName: true,
         },
         chatRoomId: {
@@ -68,7 +68,7 @@ export class MessageService {
       },
       select: {
         userId: {
-          id: true,
+          // id: true,
           userName: true,
         },
         chatRoomId: {

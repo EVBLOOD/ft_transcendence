@@ -13,12 +13,12 @@ export class ChatUtils {
     private readonly userService: UserService,
   ) {}
 
-  async getUser(id: number): Promise<User | undefined> {
-    const user = await this.userService.findUserById(id);
+  async getUser(userName: string): Promise<User | undefined> {
+    const user = await this.userService.findUserByUserName(userName);
     if (user) return user;
     throw new HttpException('User Not Found', HttpStatus.NOT_FOUND);
   }
-  async checkForAdminRoll(chatID: number, ID: number): Promise<boolean> {
+  async checkForAdminRoll(chatID: number, userName: string): Promise<boolean> {
     const admin = await this.chatRoomRepo.findOne({
       relations: {
         admin: true,
@@ -26,7 +26,7 @@ export class ChatUtils {
       where: {
         id: chatID,
         admin: {
-          id: ID,
+          userName: userName,
         },
       },
     });
@@ -34,7 +34,7 @@ export class ChatUtils {
     return false;
   }
 
-  async checkForMemberRoll(chatID: number, ID: number): Promise<boolean> {
+  async checkForMemberRoll(chatID: number, userName: string): Promise<boolean> {
     const member = await this.chatRoomRepo.findOne({
       relations: {
         member: true,
@@ -42,7 +42,7 @@ export class ChatUtils {
       where: {
         id: chatID,
         member: {
-          id: ID,
+          userName: userName,
         },
       },
     });
@@ -50,7 +50,7 @@ export class ChatUtils {
     return false;
   }
 
-  async checkForOwnerRoll(chatID: number, ID: number): Promise<boolean> {
+  async checkForOwnerRoll(chatID: number, userName: string): Promise<boolean> {
     const owner = await this.chatRoomRepo.findOne({
       relations: {
         owner: true,
@@ -58,7 +58,7 @@ export class ChatUtils {
       where: {
         id: chatID,
         owner: {
-          id: ID,
+          userName: userName,
         },
       },
     });
