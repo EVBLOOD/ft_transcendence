@@ -18,8 +18,9 @@
 }
 
 .header{
-    display: flex;
+    display: grid;
     justify-content:space-between;
+    grid-template-columns: auto auto auto;
     color: #fff;
     align-items: center;
     width: 100%;
@@ -37,9 +38,7 @@
 }
 
 .profile {
-    text-align: end;
-    width: 52px;
-    height: 52px;
+    position: relative;
 }
 
 .profile img{
@@ -64,6 +63,7 @@
 }
 
 .menu li{
+    transition: 0.4s;
     display: flex;
     flex-direction: column;
     width: 108px;
@@ -77,6 +77,7 @@
 }
 
 .menu li:hover{
+    transition: 0.4s;
     background-color: #103959;
     color: #D9ED92;
 }
@@ -103,30 +104,148 @@
     background: #D9ED92;
 }
 
-#dropdown-content{
+.dropdown-profile{
     display: block;
-    position :absolute;    
+    position: absolute;
+    z-index: 1;
+    width: 150px;
+    right: 0px;
+    top: 60px;
     padding: 3px;
     font-size: 12px;
     border-radius: 5px;
     background-color: #F2F6FA;
     color: #103959;
     list-style-type: none;
-    box-shadow: 0px 0px 3px #181818;
-
+    box-shadow: 0px 0px 1px #181818;
 }
 
-#dropdown-content li {
+.dropdown-profile li {
     padding: 10px 15px 10px 15px;
     border-radius: 2px;
 }
 
-#dropdown-content li:hover {
+.dropdown-profile li:hover {
     cursor: pointer;
     background-color: #103959;
     color: #F2F6FA;
 }
 
-#dropdown-btn:focus + #dropdown-content, #dropdown-content:hover{
-    display: block;
+.title{
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    text-transform: uppercase;
+    color: #D9ED92;
 }
+
+.button{
+    transition: 0.5s;
+    color: #103959;
+    background: #7FABCC;
+    border-radius: 8px;
+    padding: 10px 60px 10px 60px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.button:hover{
+    background-color: #D9ED92;
+}
+
+.row{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.onlinePlayers{
+    display: flex;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.onlinePlayer{
+    background-color: #184E77;
+    border-radius: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: center;
+    width: 100%;
+    font-weight: 600;
+    // height: 160px;
+}
+
+.onlinePlayer .namePlayer{
+    font-size: 14px;
+}
+
+.onlinePlayer .status{
+    font-size: 10px;
+    color: #6EDB3F;
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    align-items: center;
+}
+
+.onlinePlayer .status .circle{
+    width: 7px;
+    height: 7px;
+    background-color: #6EDB3F;
+    border-radius: 50%;
+}
+
+.onlinePlayer .buttonChallenge{
+    color: #184E77;
+    font-size: 9px;
+    background-color: #D9ED92;
+    padding: 4px 14px;
+    border-radius: 5px;
+}
+
+.onlinePlayer img{
+    height: 66px;
+    width: 66px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+@media only screen and (max-width: 800px) {
+    .body {
+        border-radius: 30px;
+    }
+
+    .menu{
+        gap: 2px;
+        order: 1;
+    }
+
+    .menu li{
+        width: 88px;
+        height: 70px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .menu img{
+        width: 25%;
+    }
+
+    .header{
+        display: grid;
+        grid-template-columns: 1fr auto
+    }
+
+    .container{
+        margin: 10px;
+    }
+
+    .profile img{
+        height: 38px;
+        width: 38px;
+    }
+
+}
+  
