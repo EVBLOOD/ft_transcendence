@@ -6,13 +6,15 @@ import { ProfileComponent } from './login/profile/profile.component';
 import { LoginComponent } from './login/login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { TwoFactoryComponent } from './login/two-factory/two-factory.component';
+import { SettingsComponent } from './login/profile/settings/settings.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     ProfileComponent,
-    TwoFactoryComponent
+    TwoFactoryComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,
