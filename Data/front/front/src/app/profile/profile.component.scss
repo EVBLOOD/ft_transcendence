@@ -30,8 +30,6 @@
     color: #D9ED92;
 }
 
-// .logo {}
-
 .profile {
     text-align: end;
     width: 52px;
@@ -133,14 +131,6 @@
     justify-content: space-between;
 }
 
-// .nameProfileStatus {
-//     display: flex;
-//     justify-content: space-between;
-
-//     // gap: 10px;
-// }
-
-
 .coverProfile {
     height: 198px;
     width: 100%;
@@ -153,7 +143,7 @@
 
 .profilePicDiv {
     // position: absolute;
-    margin-top: -80px;
+    margin-top: -100px;
     background-color: #103959;
     border-radius: 50%;
     padding: 10px;
@@ -161,6 +151,8 @@
 }
 
 .profilePicDiv img {
+    width: 202px;
+    height: 202px;
     border-radius: 50%;
 }
 
@@ -224,42 +216,6 @@
     align-items: center;
 }
 
-.cardUserStatistics {
-    background-color: #184E77;
-    display: flex;
-    width: 268px;
-    height: 130px;
-    border-radius: 20px;
-    // padding: 5px;
-    gap: 15px;
-}
-
-.cardUserStatisticsInfos {
-    align-items: center;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.cardUserStatisticsTitle {
-    font-style: normal;
-    font-weight: 500;
-    font-size: 20px;
-}
-
-.cardUserStatisticsValue {
-    font-style: normal;
-    font-weight: 700;
-    font-size: 40px;
-    color: #99D98C;
-}
-
-.cardUserStatistics img {
-    border-radius: 20px;
-
-}
-
 .userProfileTitleHistory {
     margin-top: 20px;
 
@@ -273,55 +229,4 @@
     text-transform: uppercase;
     color: #7FABCC;
     margin-bottom: 15px;
-}
-
-.userProfileHistoryRaw {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    border-bottom: 1px solid #184E77;
-    // width: 1207px;
-    height: 70px;
-}
-
-.userProfileHistoryPlayers {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-}
-
-.userProfileHistoryPlayers p {
-    font-style: normal;
-    font-weight: 600;
-    font-size: 17px;
-    color: #7FABCC;
-}
-
-.userProfileHistoryPlayers img {
-    height: 52px;
-    width: 52px;
-    border-radius: 50%;
-}
-
-.userProfileHistoryPlayers :nth-child(2) {
-    border-radius: 50%;
-    margin-left: -10px;
-}
-
-.userProfileHistoryStatus {
-    color: #99D98C;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 17px;
-}
-
-.userProfileHistoryDate {
-    font-style: normal;
-    font-weight: 600;
-    font-size: 17px;
-    color: #7FABCC;
 }

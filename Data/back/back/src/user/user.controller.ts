@@ -40,6 +40,14 @@ export class UserController {
     throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get('me')
+  async thisIsME(@Req() req) {
+    const replay = await this.userService.findOne(req.new_user.sub);
+    if (replay) return replay;
+    throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+  }
+
   @Get('/avatar/:path')
   async SendAvatar(@Res() res, @Param('path') path: string) {
     if (existsSync('./upload/avatars/' + path))

@@ -53,7 +53,8 @@ export class AuthenticatorController {
   @UseGuards(JwtAuthGuard)
   @Get('redirection')
   Redirection(@Req() req) {
-    return { msg: 'Hello from the other side', user: req.new_user };
+    console.log('trash');
+    return { user: req.new_user };
   }
 
   @UseGuards(ThisIsA)

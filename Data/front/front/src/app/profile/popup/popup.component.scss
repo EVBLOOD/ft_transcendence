@@ -1,0 +1,182 @@
+.pop {
+    padding: 25px;
+    position: absolute;
+    // width: 467px;
+    // height: 502px;
+    left: calc(50% - 467px/2 - 0.5px);
+    top: calc(50% - 502px/2);
+    background: #184E77;
+    border-radius: 30px;
+}
+
+
+
+.up {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: calc(50% - 100%/2);
+    top: calc(50% - 100%/2);
+    background: rgba(17, 34, 47, 0.87);
+}
+
+
+.popTitle {
+    // margin-top: 15px;
+    color: #99D98C;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 39px;
+    text-transform: capitalize;
+}
+
+
+.popTitleProfile {
+    color: #7FABCC;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    text-transform: capitalize;
+}
+
+
+.cancelBtn {
+    box-shadow: 0px 0px 9px rgba(0, 0, 0, 0.25);
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    color: #103959;
+    border-radius: 8px;
+    border: none;
+    height: 36px;
+    width: 92px;
+    background-color: #7FABCC;
+
+}
+
+.validationBtn {
+    box-shadow: 0px 0px 9px rgba(0, 0, 0, 0.25);
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    color: #103959;
+    border: none;
+    height: 36px;
+    width: 92px;
+    border-radius: 8px;
+    background-color: #99D98C;
+}
+
+.popUpBtn {
+    margin-top: 35px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    color: #103959;
+    border-radius: 8px;
+    display: flex;
+    gap: 5px;
+    justify-content: flex-end;
+}
+
+.popUpBtn button:hover {
+    cursor: pointer;
+}
+
+.profileImageSettingCentring {
+    display: flex;
+    justify-content: center;
+}
+
+.profileImageSettingCentring img {
+    height: 98.82px;
+    width: 97.88px;
+    border-radius: 50%;
+}
+
+.profileImageSettingCentring div {
+    background-color: #7FABCC;
+    border-radius: 50%;
+    height: 36px;
+    width: 34px;
+    margin-left: -30px;
+    align-self: flex-end;
+}
+
+.profileUserInfoSetting {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 25px;
+}
+
+.profileUserInfoSetting input {
+    padding-left: 10px;
+    background-color: #7FABCC;
+    color: #184E77;
+    border-radius: 8px;
+    height: 38px;
+    width: 197px;
+    border: none;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.profileTwoFactorSetting {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.radioSettings {
+    margin-left: 5px;
+    margin-top: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.radioSettingsChoice {
+    width: 119px;
+    height: 65px;
+    background-size: 119px 65px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.radioSettings :nth-child(1) {
+    background-image: url("/assets/greenThemeSet.svg");
+}
+
+.radioSettings :nth-child(2) {
+    background-image: url("/assets/whiteThemeSet.svg");
+}
+
+.radioSettings :nth-child(3) {
+    background-image: url("/assets/blueThemeSet.svg");
+
+}
+
+.profileGameSettings {
+    margin-top: 9px;
+}
+
+.CloseBtnPop {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.CloseBtnPop button {
+    border-style: none;
+    background-color: #184E77;
+    background-image: url('/assets/closeImg.svg');
+    height: 24.11px;
+    width: 22px;
+    background-size: 22px 24.11px;
+}
