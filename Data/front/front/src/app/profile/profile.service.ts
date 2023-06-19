@@ -12,6 +12,8 @@ export class ProfileService {
   {
     // console.log(this.http.get('http://localhost:3000/redirection', {withCredentials: true}).subscribe());
     // return this.http.get('http://localhost:3000/redirection', {withCredentials: true})
+    if (!corrent || corrent == '')
+      return this.http.get('http://localhost:3000/user/me', {withCredentials: true})
     return this.http.get('http://localhost:3000/user/' + corrent, {withCredentials: true})
     
   }

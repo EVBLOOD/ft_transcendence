@@ -1,52 +1,31 @@
-<div class="page">
-    <div class="container">
-        <div class="header">
-            <div class="logo">{{logo}}</div>
-            <ul class="menu">
-                <li><img src="/assets/icons/play.svg" />Play</li>
-                <li><img src="/assets/icons/play.svg" />Message</li>
-                <li><img src="/assets/icons/play.svg" />Leaderboard</li>
-            </ul>
-            <div class="profile">
-                <button id="dropdown-btn"><img id="dropDownProfile" src="/assets/profilePic.svg" alt="Profile"></button>
-
-            </div>
-
-        </div>
-        <div *ngIf="(profile$| async)?.statusCode" class="body">
-            404 User Not Found
-        </div>
-        <div class="body" *ngIf="!((profile$| async)?.statusCode)">
-            <img class="coverProfile" src="/assets/cover.svg" alt="cover img" />
-            <div class="insideProfile">
-                <div class="infoProfileUser">
-                    <div class="statusNameDiv">
-                        <div *ngIf="(profile$ | async)?.avatar" class="profilePicDiv">
-                            <img [src]="profileService.getUserAvatarPath((profile$ | async)?.avatar)"
-                                alt="Profile img" />
-                        </div>
-                        <div *ngIf="profile$| async">
-                            <p class="userName">{{ (profile$| async)?.username }}</p>
-                            <p class="userStatus">In Game</p>
-                        </div>
-                    </div>
-                    <div *ngIf="(profile$| async)?.username != (auth$| async)?.sub" class="userAction">
-                        <button>Block <img src="/assets/block.svg" alt="1"></button>
-                        <button>Message <img src="/assets/MessageProfile.svg" alt="2"></button>
-                        <button>Add Friend <img src="/assets/AddFriend.svg" alt="3"></button>
-                    </div>
+<div *ngIf="(profile$| async)?.statusCode" class="body">
+    404 User Not Found
+</div>
+<div class="body" *ngIf="!((profile$| async)?.statusCode)">
+    <img class="coverProfile" src="/assets/cover.svg" alt="cover img" />
+    <div class="insideProfile">
+        <div class="infoProfileUser">
+            <div class="statusNameDiv">
+                <div *ngIf="(profile$ | async)?.avatar" class="profilePicDiv">
+                    <img [src]="profileService.getUserAvatarPath((profile$ | async)?.avatar)" alt="Profile img" />
                 </div>
-                <div class="userStatisticsProfile">
-                    <app-card-user-statistics *ngFor="let item of sameDataEveryDay;" [data]=item />
-                </div>
-                <div class="userProfileTitleHistory">
-                    <h1>History</h1>
-                    <app-user-history-raw *ngFor="let item of historyRaw;" [data]="item" />
+                <div *ngIf="profile$| async">
+                    <p class="userName">{{ (profile$| async)?.username }}</p>
+                    <p class="userStatus">In Game</p>
                 </div>
             </div>
+            <div *ngIf="(profile$| async)?.username != (auth$| async)?.sub" class="userAction">
+                <button>Block <img src="/assets/block.svg" alt="1"></button>
+                <button>Message <img src="/assets/MessageProfile.svg" alt="2"></button>
+                <button>Add Friend <img src="/assets/AddFriend.svg" alt="3"></button>
+            </div>
         </div>
-        <div class="footer">
-            <p>Copyright © 2023 ft_transcendence. All Rights Reserved</p>
+        <div class="userStatisticsProfile">
+            <app-card-user-statistics *ngFor="let item of sameDataEveryDay;" [data]=item />
+        </div>
+        <div class="userProfileTitleHistory">
+            <h1>History</h1>
+            <app-user-history-raw *ngFor="let item of historyRaw;" [data]="item" />
         </div>
     </div>
 </div>

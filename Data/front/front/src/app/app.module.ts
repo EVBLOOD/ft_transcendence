@@ -11,6 +11,10 @@ import { CardUserStatisticsComponent } from './profile/card-user-statistics/card
 import { UserHistoryRawComponent } from './profile/user-history-raw/user-history-raw.component';
 import { PgbuttonComponent } from './profile/pgbutton/pgbutton.component';
 import { PopupComponent } from './profile/popup/popup.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LeaderbordComponent } from './leaderbord/leaderbord.component';
+import { GameComponent } from './game/game.component';
+import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -22,12 +26,16 @@ import { PopupComponent } from './profile/popup/popup.component';
     CardUserStatisticsComponent,
     UserHistoryRawComponent,
     PgbuttonComponent,
-    PopupComponent
+    PopupComponent,
+    LeaderbordComponent,
+    GameComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

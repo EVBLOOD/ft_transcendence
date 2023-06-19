@@ -1,1 +1,30 @@
-<router-outlet></router-outlet>
+<div class="page">
+    <div class="container">
+        <div class="header">
+            <div class="logo">PING-PONG</div>
+            <ul class="menu">
+                <li routerLink="game"><img src="/assets/icons/play.svg"> Play</li>
+                <li routerLink="chat"><img src="/assets/icons/message.svg" />Message</li>
+                <li routerLink="leaderboard"><img src="/assets/icons/leaderboard.svg" />Leaderboard</li>
+            </ul>
+            <div class="profile">
+                <a (click)="onclick()" class="dropdown-btn"><img
+                        [src]="profileService.getUserAvatarPath((profile$ | async)?.avatar)" alt="Profile"></a>
+                <ul *ngIf="dropDown" (blur)="onBlur()" @inOut class="dropdown-profile" #dropdownContent>
+                    <li routerLink="">View my profile</li>
+                    <li routerLink="settings">Settings</li>
+                    <li>Logout</li>
+                </ul>
+            </div>
+        </div>
+        <div class="body">
+            <router-outlet></router-outlet>
+        </div>
+        <div class="footer">
+            <p>Copyright © 2023 ft_transcendence. All Rights Reserved</p>
+        </div>
+    </div>
+</div>
+
+
+<!-- <router-outlet></router-outlet> -->
