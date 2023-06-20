@@ -20,7 +20,7 @@ export class MessageService {
     private readonly messageRepo: Repository<Message>,
   ) {}
 
-  async getMessageByUserId(ID: number) {
+  async getMessageByUserId(userName: string) {
     const message = await this.messageRepo.find({
       order: {
         // get messages in ascending order
@@ -34,7 +34,7 @@ export class MessageService {
       where: {
         // only care bout the with the passed ID
         userId: {
-          // id: ID,
+          userName: userName,
         },
       },
       select: {
@@ -53,10 +53,9 @@ export class MessageService {
       cache: true, // store resoltes in memory for future use
     });
     if (message.length !== 0) {
-      console.log('message ==', message);
       return message;
     }
-    throw new NotFoundException(`No messages found for user ${ID}`);
+    throw new NotFoundException(`No messages found for user ${userName}`);
   }
 
   async getMessagesByChatroomID(chatID: number): Promise<Message[]> {

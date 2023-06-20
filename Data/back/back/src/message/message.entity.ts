@@ -1,7 +1,13 @@
 import { IsNotEmpty } from 'class-validator';
 import { User } from 'src/user/user.entity';
 import { Chat } from 'src/chat/chat.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+} from 'typeorm';
 
 @Entity()
 export class Message {
@@ -17,8 +23,10 @@ export class Message {
   value!: string;
 
   @ManyToOne(() => Chat, (chatRoom: Chat) => chatRoom.message)
+  @JoinColumn()
   chatRoomId!: Chat;
 
   @ManyToOne(() => User, (user: User) => user.messages)
+  @JoinColumn()
   userId!: User;
 }

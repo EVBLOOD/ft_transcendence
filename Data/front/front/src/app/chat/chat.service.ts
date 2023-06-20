@@ -8,7 +8,8 @@ export class ChatService {
 
   constructor(private readonly httpClient: HttpClient
               ) {}
-  getChatrooms() : void {
-    // this.httpClient.get(`localhost:3000/user/${userID}`)
+  getChatrooms(username: string) {
+    return this.httpClient.get(`localhost:3000/chat/user/${username}`)
   }
 }
+

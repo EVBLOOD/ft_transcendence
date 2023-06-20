@@ -4,6 +4,8 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToMany,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -12,6 +14,31 @@ import {
 export class Chat {
   @PrimaryGeneratedColumn()
   id!: number;
+
+  @OneToMany(() => Message, (message: Message) => message.chatRoomId, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn()
+  message!: Message[];
+
+  @ManyToMany(() => User, (user: User) => user.chatRoomMember, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
+  member!: User[];
+
+  @ManyToOne(() => User, (user: User) => user.chatRoomOwner, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
+  owner!: User;
+
+  @ManyToMany(() => User, (user: User) => user.chatRoomAdnim, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
+  admin!: User[];
 
   @Column({
     nullable: false,
@@ -28,20 +55,4 @@ export class Chat {
     nullable: false,
   })
   chatRoomName!: string;
-
-  @OneToMany(() => Message, (message: Message) => message.chatRoomId)
-  @JoinColumn()
-  message!: Message[];
-
-  @OneToMany(() => User, (user: User) => user.chatRoomMember)
-  @JoinColumn()
-  member!: User[];
-
-  @OneToMany(() => User, (user: User) => user.chatRoomOwner)
-  @JoinColumn()
-  owner!: User;
-
-  @OneToMany(() => User, (user: User) => user.chatRoomAdnim)
-  @JoinColumn()
-  admin!: User[];
 }
