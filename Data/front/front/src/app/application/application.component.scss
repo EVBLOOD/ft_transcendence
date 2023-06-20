@@ -31,6 +31,9 @@
     margin: 25px 0 25px 0;
     font-size: 14px;
     color: #D9ED92;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .logo{
@@ -74,6 +77,11 @@
     border-radius: 50px 50px 0px 0px;
     font-size: 12px;
     font-weight: 700;
+}
+
+.active{ 
+    background-color: #103959;
+    color: #D9ED92;
 }
 
 .menu li:hover{
@@ -292,6 +300,63 @@
     padding-bottom: 20px;
 }
 
+
+//Game history
+
+.userProfileHistoryRaw {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 60% 20% 20%;
+    align-items: center;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #184E77;
+    height: 70px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #7FABCC;
+}
+
+.userProfileHistoryPlayers {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+}
+
+.userProfileHistoryPlayers p {
+    display: block;
+}
+
+.userProfileHistoryPlayers img {
+    height: 52px;
+    width: 52px;
+    border-radius: 50%;
+}
+
+.userProfileHistoryPlayers :nth-child(2) {
+    border-radius: 50%;
+    margin-left: -10px;
+}
+
+.userProfileHistoryStatus {
+    color: #99D98C;
+    font-style: normal;
+}
+
+.userProfileHistoryDate {
+    font-style: normal;
+    display: flex;
+    justify-content: end;
+}
+
+@media only screen and (max-width: 1200px)
+{
+    .leaderboard{
+        grid-template-columns: repeat(3, 1fr);
+        row-gap: 12px;
+    }
+}
+
 @media only screen and (max-width: 800px) {
     .body {
         border-radius: 30px;
@@ -327,9 +392,31 @@
         width: 38px;
     }
 
+    .row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
     .leaderboard{
         grid-template-columns: repeat(1, 1fr);
     }
+    
+    .leaderboard .user{
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }    
 
+    .onlinePlayers{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .userProfileHistoryRaw {
+        grid-template-columns: 45% 30% 25%;
+        font-size: 14px;
+    }
+    
+    .userProfileHistoryPlayers p {
+        display: none;
+    }
 }
   

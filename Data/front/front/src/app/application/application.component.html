@@ -3,13 +3,13 @@
         <div class="header">
             <div class="logo">PING-PONG</div>
             <ul class="menu">
-                <li><img src="/assets/icons/play.svg" />Play</li>
+                <li class="active"><img src="/assets/icons/play.svg" />Play</li>
                 <li><img src="/assets/icons/message.svg" />Message</li>
                 <li><img src="/assets/icons/play.svg" />Leaderboard</li>
             </ul>
             <div class="profile">
                 <a (click)="onclick()" class="dropdown-btn"><img src="/assets/images/profile.jpg" alt="Profile"></a>
-                <ul *ngIf="dropDown" (blur)="onBlur()" @inOut class="dropdown-profile" #dropdownContent>
+                <ul *ngIf="dropDown" @inOut class="dropdown-profile" #dropdownContent>
                     <li>View my profile</li>
                     <li>Settings</li>
                     <li>Logout</li>
@@ -60,10 +60,22 @@
                     <p class="title">History Last Matches</p>
                     <a class="button">Read more</a>
                 </div>
+                <div *ngFor="let item of history" class="userProfileHistoryRaw">
+                    <div class="userProfileHistoryPlayers">
+                        <div>
+                            <img [src]=item.img1 alt="" />
+                            <img [src]=item.img2 alt="" />
+                        </div>
+                        <p>{{item.names}}</p>
+                    </div>
+                    <div class="userProfileHistoryStatus">{{item.state}}</div>
+                    <div class="userProfileHistoryDate">{{item.date}}</div>
+                </div>
             </div>
         </div>
         <div class="footer">
-            <p>Copyright © 2023 ft_transcendence. All Rights Reserved</p>
+            <p style="color:#7FABCC;">Project by : @sakllam @kid-bouh @aabdou @orahmoun @mmounchi</p>
+            <p>Copyright © 2023 ft_transcendence. All Rights Reserved </p>
         </div>
     </div>
 </div>

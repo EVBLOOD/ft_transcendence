@@ -13,20 +13,13 @@ import { Subscription, fromEvent } from 'rxjs';
     ]) 
   ]
 })
-export class ApplicationComponent implements OnInit {
+export class ApplicationComponent {
 
   logo = "PING-PONG 1337";
 
   dropDown = false;
-  private clickSubscription: Subscription | undefined;
-  eRef: any;
-
   onclick(){
     this.dropDown = !this.dropDown
-  }
-
-  onBlur() {
-    this.dropDown = false;
   }
 
   players = [
@@ -40,37 +33,18 @@ export class ApplicationComponent implements OnInit {
 
   leaderboard = [
     { img:'/assets/images/profile.jpg', name: 'kid-bouh', rank: '/assets/icons/rank1.svg'},
-    { img:'/assets/images/profile.jpg', name: 'yamzil', rank: '/assets/icons/rank1.svg'},
-    { img:'/assets/images/profile.jpg', name: 'sakllam', rank: '/assets/icons/rank1.svg'},
-    { img:'/assets/images/profile.jpg', name: 'eagoumi', rank: '/assets/icons/rank1.svg'},
-    { img:'/assets/images/profile.jpg', name: 'imabid', rank: '/assets/icons/rank1.svg'},
+    { img:'/assets/images/profile.jpg', name: 'yamzil', rank: '/assets/icons/rank2.svg'},
+    { img:'/assets/images/profile.jpg', name: 'sakllam', rank: '/assets/icons/rank3.svg'},
+    { img:'/assets/images/profile.jpg', name: 'eagoumi', rank: '/assets/icons/rank4.svg'},
+    { img:'/assets/images/profile.jpg', name: 'imabid', rank: '/assets/icons/rank5.svg'},
   ];
 
-  @ViewChild('dropdownContent') dropdownContent!: ElementRef;
-
-  constructor(private renderer: Renderer2) {}
-  ngOnInit(): void {
-    this.clickSubscription = fromEvent(document, "click").subscribe(event => {
-      console.log("event: ", event.target);
-      if (!this.eRef.nativeElement.contains(event.target)) {
-        console.log("hello 1 ");
-      } else {
-        console.log("hello 2 ");
-      }});
-    }
-
-  ngAfterViewInit() {
-    // if (this.dropDown === true) {
-      // this.renderer.listen('document', 'click', (event: Event) => {
-      //   console.log("Hello world1", this.dropdownContent, "is", this.dropDown)
-      //   // if (this.dropdownContent) {
-      //     if (this.dropdownContent === undefined && this.dropDown) {
-      //     //   if (this.dropdownContent !== undefined) {
-      //     //     console.log("Hello", this.dropdownContent)
-      //         this.dropDown = !this.dropDown;
-      //     //   }
-      //     } 
-      // });
-  }
+  history = [
+    { img1:'/assets/images/profile.jpg', img2:'/assets/images/profile.jpg', names: 'kid-bouh vs yamzil', state: 'Win 🏆', date: 'Today'},
+    { img1:'/assets/images/profile.jpg', img2:'/assets/images/profile.jpg', names: 'kid-bouh vs agoumiiiiii', state: 'Win 🏆', date: 'Today'},
+    { img1:'/assets/images/profile.jpg', img2:'/assets/images/profile.jpg', names: 'kid-bouh vs simo', state: 'Lose 😥', date: 'Yesterday'},
+    { img1:'/assets/images/profile.jpg', img2:'/assets/images/profile.jpg', names: 'kid-bouh vs test', state: 'Lose 😥', date: 'Yesterday'},
+    { img1:'/assets/images/profile.jpg', img2:'/assets/images/profile.jpg', names: 'kid-bouh vs sel-mars', state: 'Win 🏆', date: 'Yesterday'},
+  ];
 
 }
