@@ -1,8 +1,6 @@
 import {
   Controller,
   Get,
-  HttpException,
-  HttpStatus,
   Param,
   Body,
   ParseIntPipe,
@@ -11,12 +9,9 @@ import {
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { Chat } from './chat.entity';
-import { GetUser } from './../message/message.controller';
-import { User } from 'src/user/user.entity';
 import { createChatroomDTO } from './dto/createChatroom.dto';
 import { createMemberDTO } from './dto/createMember.dto';
 import { createAdminDTO } from './dto/createAdmin.dto';
-import { SwapOwnerDTO } from './dto/SwapOwner.dto';
 
 @Controller('chat')
 export class ChatController {
@@ -27,7 +22,7 @@ export class ChatController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<Chat | undefined> {
     try {
-      return await this.chatRoomSevice.GetChatRoomByID(id);
+      return this.chatRoomSevice.GetChatRoomByID(id);
     } catch (err) {
       console.log(err);
     }
@@ -36,14 +31,7 @@ export class ChatController {
   @Get('/user/:userName')
   async getChatRoomsOfUser(
     @Param('userName') userName: string,
-    @GetUser() user: User,
   ): Promise<Chat[]> {
-    if (user.userName !== userName) {
-      throw new HttpException(
-        'sent user id dosent match current userID',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
     return await this.chatRoomSevice.getChatRoomOfUsers(userName); // can return empty array !!
   }
 
@@ -82,16 +70,9 @@ export class ChatController {
   @Post('create')
   async createChatRoom(
     @Body() chatroom: createChatroomDTO,
-    @GetUser() user: User,
   ): Promise<Chat | null> {
     try {
-      if (user.userName !== chatroom.user) {
-        throw new HttpException(
-          'user ID dose not match current user ID',
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-      return await this.chatRoomSevice.createChatroom(chatroom);
+      return this.chatRoomSevice.createChatroom(chatroom);
     } catch (err) {
       console.log(err);
     }
@@ -116,15 +97,8 @@ export class ChatController {
   async addAdminToChatRoom(
     @Param('chatID', ParseIntPipe) chatID: number,
     @Body() adminDTO: createAdminDTO,
-    @GetUser() user: User,
   ): Promise<Chat | null> {
     try {
-      if (user.userName !== adminDTO.roleGiver) {
-        throw new HttpException(
-          'user ID dose not match current user ID',
-          HttpStatus.BAD_REQUEST,
-        );
-      }
       return await this.chatRoomSevice.addAdminToChatroom(chatID, adminDTO);
     } catch (err) {
       console.log(err);

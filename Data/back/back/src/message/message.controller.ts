@@ -10,34 +10,17 @@ import { MessageService } from './message.service';
 import { User } from 'src/user/user.entity';
 import { Message } from './message.entity';
 
-/*
- ** return the current user object within a request
- */
-export const GetUser = createParamDecorator(
-  (data: string, context: ExecutionContext) => {
-    console.log("data === ", data);
-    // console.log("context === ", context);
-    const request = context.switchToHttp().getRequest();
-    if (data) {
-      // console.log("request.user?.[data] === ", request.user?.[data]);
-      return request.user?.[data];
-    }
-    // console.log("request.user === ", request.user);
-    return request.user;
-  },
-);
-
 @Controller('message')
 export class MessageController {
   constructor(private readonly messageService: MessageService) {}
 
-  @Get('user/:id')
+  @Get('user/:userName')
   async getMessageById(
-    @Param('id', ParseIntPipe) id: number,
-    @GetUser() user: User,
+    @Param('userName') userName: string,
+    // @GetUser() user: User,
   ): Promise<Message[] | undefined> {
     try {
-      return this.messageService.getMessageByUserId(id);
+      return this.messageService.getMessageByUserId(userName);
     } catch (err) {
       console.log(err);
     }

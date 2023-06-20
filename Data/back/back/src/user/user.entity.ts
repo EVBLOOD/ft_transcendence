@@ -1,19 +1,16 @@
 import { Chat } from 'src/chat/chat.entity';
 import { Message } from 'src/message/message.entity';
 import {
-  Column,
   Entity,
   JoinColumn,
+  JoinTable,
   OneToMany,
   PrimaryColumn,
-  PrimaryGeneratedColumn,
+  ManyToMany,
 } from 'typeorm';
 
 @Entity()
 export class User {
-  // @PrimaryGeneratedColumn()
-  // id!: number;
-
   @PrimaryColumn()
   userName!: string;
 
@@ -26,15 +23,15 @@ export class User {
   @JoinColumn()
   messages!: Message[];
 
-  @OneToMany(() => Chat, (chatRoom: Chat) => chatRoom.member)
-  @JoinColumn()
+  @ManyToMany(() => Chat, (chatRoom: Chat) => chatRoom.member)
+  @JoinTable()
   chatRoomMember!: Chat[];
 
   @OneToMany(() => Chat, (chatRoom: Chat) => chatRoom.owner)
   @JoinColumn()
   chatRoomOwner!: Chat[];
 
-  @OneToMany(() => Chat, (chatRoom: Chat) => chatRoom.admin)
-  @JoinColumn()
+  @ManyToMany(() => Chat, (chatRoom: Chat) => chatRoom.admin)
+  @JoinTable()
   chatRoomAdnim!: Chat[];
 }

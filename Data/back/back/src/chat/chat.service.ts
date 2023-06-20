@@ -65,12 +65,6 @@ export class ChatService {
       where: {
         id: id,
       },
-      relations: {
-        message: true,
-        owner: true,
-        admin: true,
-        member: true,
-      },
       select: {
         id: true,
         chatRoomName: true,
@@ -88,6 +82,12 @@ export class ChatService {
           userName: true,
         },
       },
+      relations: {
+        message: true,
+        owner: true,
+        admin: true,
+        member: true,
+      },
       cache: true,
     });
     if (chatRoom) return chatRoom;
@@ -96,9 +96,9 @@ export class ChatService {
 
   async createChatroom(chatroomDTO: createChatroomDTO): Promise<Chat> {
     if (validateChatDTO(chatroomDTO) === true) {
-      const user = await this.chatHelpers.getUser(chatroomDTO.otherUser);
+      const user = await this.chatHelpers.getUser(chatroomDTO.user);
       let secondUser: User | undefined = undefined;
-      if (chatroomDTO.otherUser != undefined) {
+      if (chatroomDTO.otherUser !== undefined) {
         secondUser = await this.chatHelpers.getUser(chatroomDTO.otherUser);
       }
       if (chatroomDTO.type === 'password') {

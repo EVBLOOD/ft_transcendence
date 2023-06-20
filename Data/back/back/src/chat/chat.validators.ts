@@ -47,14 +47,14 @@ export function validateChatDTO(chatDTO: createChatroomDTO): boolean {
 export function createChatroomEntity(
   chatDTO: createChatroomDTO,
   user: User,
-  secondUser: User | undefined,
+  secondUser?: User | undefined,
 ): Chat {
   validateChatDTO(chatDTO);
   const chatroom = new Chat();
-  chatroom.type = chatDTO.type;
   chatroom.chatRoomName = chatDTO.chatroomName;
-  chatroom.owner = user;
+  chatroom.type = chatDTO.type;
   chatroom.member = [user];
+  chatroom.owner = user;
   chatroom.admin = [user];
   if (chatDTO.type === 'password') chatroom.password = chatDTO.password;
   if (chatroom.type === 'DM' && secondUser !== undefined) {

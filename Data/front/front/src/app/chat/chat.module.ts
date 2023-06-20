@@ -4,7 +4,6 @@ import { ChatComponent } from './chat.component';
 import { HttpClientModule } from '@angular/common/http';
 
 
-
 @NgModule({
   declarations: [
     ChatComponent,
