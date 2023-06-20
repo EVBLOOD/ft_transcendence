@@ -67,6 +67,7 @@ export class UserController {
   @Post('updateAll')
   async update(@Req() req, @Body() updateUserDto: CreateUserDto) {
     try {
+      console.log('lololo');
       const replay = await this.userService.update(
         req.new_user.sub,
         updateUserDto,

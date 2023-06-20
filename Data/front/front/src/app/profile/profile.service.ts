@@ -26,4 +26,15 @@ export class ProfileService {
       return 'http://localhost:3000/avatar/' + link;
     return link;
   }
+
+  setUserAvatar(path: string)
+  {
+
+  }
+
+  updateUserInfos(object: any)
+  {
+    console.log(object)
+    return this.http.post('http://localhost:3000/user/updateAll', object, {withCredentials: true});
+  }
 }

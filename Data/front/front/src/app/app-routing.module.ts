@@ -20,7 +20,6 @@ const routes: Routes =
                         {path: 'login', component: LoginComponent, children:
                       [{path: 'twoFactor', component: TwoFactoryComponent ,canActivate: [twoFacGuard]},]},
                         {path: 'profile/:username', component: ProfileComponent, canActivate: [authGuard]},
-                        {path: 'settings', component: SettingsComponent, canActivate: [authGuard]},
                       ];
 
 @NgModule({

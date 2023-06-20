@@ -1,28 +1,40 @@
-<app-popup [data]=data>
+<app-popup (ChildrenEvent)="ChildEvent">
+    <div (click)="ChildEvent.emit()" class="CloseBtnPop">
+        <button></button>
+    </div>
+    <h2 class="popTitle">{{data.title}}</h2>
+    <label *ngIf="data.subtitle" class="popTitleProfile">{{data.subtitle}}</label>
     <div class="groupingLI">
         <div class="profileImageSettingCentring">
-            <img class="profileImageSetting" src="/assets/img/profile.jpeg" alt="" />
+            <img class="profileImageSetting" [src]="serviceUser.getUserAvatarPath((profile$ | async)?.avatar)" alt="" />
             <div class="profileImageStatus"></div>
         </div>
         <div class="profileUserInfoSetting">
-            <input type="text" />
-            <input type="text" />
+            <input type="text" [formControl]="userName" />
+            <input type="text" [formControl]="fullName" />
         </div>
         <div class="profileTwoFactorSetting">
             <h2 class="popTitleProfile">Two-factor authentication</h2>
-            <button class="validationBtn">Enable</button>
+            <button *ngIf="!this.twoFactor" class="validationBtn" (click)="activetwofactor()">Enable</button>
+            <button *ngIf="this.twoFactor" class="cancelBtn" (click)="canceltwofactor()">Disable</button>
         </div>
         <div class="profileGameSettings">
             <h2 class="popTitleProfile">Game theme</h2>
             <div class="radioSettings">
-                <div class="radioSettingsChoice"></div>
-                <div class="radioSettingsChoice"></div>
-                <div class="radioSettingsChoice"></div>
+                <div [ngClass]="this.getname(1)" class="radioSettingsChoice" (click)="chooseGame(1)">
+                    <img src="/assets/whiteThemeSet.svg" alt="">
+                </div>
+                <div [ngClass]="this.getname(2)" class="radioSettingsChoice" (click)="chooseGame(2)">
+                    <img src="/assets/greenThemeSet.svg" alt="">
+                </div>
+                <div [ngClass]="this.getname(3)" class="radioSettingsChoice" (click)="chooseGame(3)">
+                    <img src="/assets/blueThemeSet.svg" alt="">
+                </div>
             </div>
         </div>
     </div>
     <div class="popUpBtn">
-        <button class="cancelBtn" type="submit" (click)="close()">Cancel</button>
-        <button class="validationBtn" type="submit" (click)="close()">{{data.action}}</button>
+        <button class="cancelBtn" type="submit" (click)="ChildEvent.emit()">Cancel</button>
+        <button class="validationBtn" type="submit" (click)="validateInput()">{{data.action}}</button>
     </div>
 </app-popup>

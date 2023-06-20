@@ -15,6 +15,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LeaderbordComponent } from './leaderbord/leaderbord.component';
 import { GameComponent } from './game/game.component';
 import { ChatComponent } from './chat/chat.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { TemplateComponent } from './template/template.component';
 
 @NgModule({
   declarations: [
@@ -29,13 +31,15 @@ import { ChatComponent } from './chat/chat.component';
     PopupComponent,
     LeaderbordComponent,
     GameComponent,
-    ChatComponent
+    ChatComponent,
+    TemplateComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

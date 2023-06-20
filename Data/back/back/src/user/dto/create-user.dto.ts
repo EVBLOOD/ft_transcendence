@@ -1,26 +1,23 @@
-import { IsBoolean, IsEmail, IsNotEmpty, Matches } from "class-validator";
-
+import { IsBoolean, IsEmail, IsNotEmpty, Matches } from 'class-validator';
 
 export class CreateUserDto {
+  @IsNotEmpty()
+  @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
+  username: string;
 
-    @IsNotEmpty()
-    @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
-    username: string;
+  @IsNotEmpty()
+  name: string;
 
-    @IsNotEmpty()
-    name: string;
+  @IsNotEmpty()
+  avatar: string;
 
-    @IsNotEmpty()
-    avatar: string;
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
 
-    @IsNotEmpty()
-    @IsEmail()
-    email: string;
+  @IsNotEmpty()
+  @IsBoolean()
+  TwoFAenabled: boolean;
 
-    @IsNotEmpty()
-    @IsBoolean()
-    TwoFAenabled: boolean;
-
-    @IsNotEmpty()
-    TwoFAsecret: string;
+  //   TwoFAsecret: string;
 }

@@ -1,7 +1,4 @@
-import { Component, ContentChild, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { Location } from '@angular/common'
-import { Subject } from 'rxjs';
-import { SettingsComponent } from '../settings/settings.component';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 @Component({
   selector: 'app-popup',
   templateUrl: './popup.component.html',
@@ -9,14 +6,11 @@ import { SettingsComponent } from '../settings/settings.component';
 })
 export class PopupComponent implements OnInit{
   @Input() data: any;
+  @Output() ChildrenEvent = new EventEmitter();
   parentButtonClick = new EventEmitter<void>();
-  constructor(private location: Location) { }
+  constructor() { }
   ngOnInit(): void
   {}
-  public close()
-  {
-    this.location.back();
-  }
   
   notifyChild() {
     this.parentButtonClick.emit();

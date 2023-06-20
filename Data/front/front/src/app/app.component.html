@@ -7,12 +7,12 @@
                 <li routerLink="chat"><img src="/assets/icons/message.svg" />Message</li>
                 <li routerLink="leaderboard"><img src="/assets/icons/leaderboard.svg" />Leaderboard</li>
             </ul>
-            <div class="profile">
-                <a (click)="onclick()" class="dropdown-btn"><img
+            <div #dropDownContent_ class="profile">
+                <a (click)="onclick()" class="dropdown-btn"><img #dropDownContent__
                         [src]="profileService.getUserAvatarPath((profile$ | async)?.avatar)" alt="Profile"></a>
-                <ul *ngIf="dropDown" (blur)="onBlur()" @inOut class="dropdown-profile" #dropdownContent>
+                <ul #dropDownContent *ngIf="dropDown" @inOut class="dropdown-profile">
                     <li routerLink="">View my profile</li>
-                    <li routerLink="settings">Settings</li>
+                    <li (click)="desplaySettings()">Settings</li>
                     <li>Logout</li>
                 </ul>
             </div>
@@ -24,6 +24,7 @@
             <p>Copyright © 2023 ft_transcendence. All Rights Reserved</p>
         </div>
     </div>
+    <app-settings *ngIf="activeSettings" (ChildEvent)="desplaySettings()" />
 </div>
 
 

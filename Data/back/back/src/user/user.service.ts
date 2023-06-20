@@ -8,102 +8,92 @@ import { escape } from 'querystring';
 
 @Injectable()
 export class UserService {
+  constructor(
+    @InjectRepository(User) private readonly UserRepo: Repository<User>,
+  ) {}
 
-  constructor(@InjectRepository(User) private readonly UserRepo : Repository<User>) {}
+  private currentstate = new Map<
+    string,
+    { client: string; status: string; lastupdate: string }[]
+  >();
 
-  private currentstate = new Map< string, {client: string, status: string, lastupdate: string}[] >(); 
-  
-  async findAll(skip : number, take: number) {
-    return await this.UserRepo.find({skip: skip, take: take});
+  async findAll(skip: number, take: number) {
+    return await this.UserRepo.find({ skip: skip, take: take });
   }
 
   async findOne(id: string) {
-    return await this.UserRepo.findOneBy({username: id});
+    return await this.UserRepo.findOneBy({ username: id });
   }
 
-  async UpdateAvatar(id: string, path: string)
-  {
-    return (
-      await this.UserRepo.save(
-        { username: id,
-          avatar: path
-        })
-      );
+  async UpdateAvatar(id: string, path: string) {
+    return await this.UserRepo.save({ username: id, avatar: path });
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
-    return (
-      await this.UserRepo.save(
-      { username: id,
-        name: updateUserDto.name,
-        avatar: updateUserDto.avatar,
-        email: updateUserDto.email,
-        TwoFAenabled: updateUserDto.TwoFAenabled,
-        TwoFAsecret: updateUserDto.TwoFAsecret }
-      ));
+    return await this.UserRepo.save({
+      username: id,
+      name: updateUserDto.name,
+      avatar: updateUserDto.avatar,
+      email: updateUserDto.email,
+      TwoFAenabled: updateUserDto.TwoFAenabled,
+    });
   }
 
-  AddState(username: string, socket : Socket, type: string)
-  {
-    let colect : {client: string, status: string, lastupdate: string}[];
+  AddState(username: string, socket: Socket, type: string) {
+    let colect: { client: string; status: string; lastupdate: string }[];
     if (this.currentstate.has(username))
       colect = this.currentstate.get(username);
-    else
-      colect = [];
-    let i : number = 0;
-    for (i; i < colect.length; i++)
-    {
-      if (colect[i]['client'] == socket.id)
-      {
+    else colect = [];
+    let i: number = 0;
+    for (i; i < colect.length; i++) {
+      if (colect[i]['client'] == socket.id) {
         colect[i].status = type;
         colect[i].lastupdate = Date().toString();
         break;
       }
     }
-    if (i != colect.length)
-      return;
-    colect.push({client: socket.id, status: type, lastupdate: Date().toString()});
+    if (i != colect.length) return;
+    colect.push({
+      client: socket.id,
+      status: type,
+      lastupdate: Date().toString(),
+    });
     this.currentstate.set(username, colect);
   }
 
-  GetAllCurrentStates(username : string)
-  {
-    if (!this.currentstate.has(username))
-      return null;
-    return this.currentstate.get(username);;
+  GetAllCurrentStates(username: string) {
+    if (!this.currentstate.has(username)) return null;
+    return this.currentstate.get(username);
   }
-  
-  GetCurrentState(username : string)
-  {
-    if (!this.currentstate.has(username))
-      return null;
-    let colect : {client: string, status: string, lastupdate: string}[] = this.currentstate.get(username);
-    let col : {client: string, status: string, lastupdate: string} = colect[colect.length - 1];
-    for (let i : number = 0; i < colect.length - 1; i++)
-    {
-      if ((new Date(colect[i].lastupdate)) > (new Date(col.lastupdate)))
+
+  GetCurrentState(username: string) {
+    if (!this.currentstate.has(username)) return null;
+    let colect: { client: string; status: string; lastupdate: string }[] =
+      this.currentstate.get(username);
+    let col: { client: string; status: string; lastupdate: string } =
+      colect[colect.length - 1];
+    for (let i: number = 0; i < colect.length - 1; i++) {
+      if (new Date(colect[i].lastupdate) > new Date(col.lastupdate))
         col = colect[i];
     }
     return col;
   }
 
-  RemoveState(Socket: Socket, username: string)
-  {
-    if (!this.currentstate.has(username))
-      return null;
-    let colect : {client: string, status: string, lastupdate: string}[] = this.currentstate.get(username);
-    let newholder : {client: string, status: string, lastupdate: string}[] = [];
-    colect.map((col) => { if (col.client != Socket.id) newholder.push(col); });
-    if (newholder.length == 0)
-      this.currentstate.delete(username);
-    else
-      this.currentstate.set(username, newholder);
+  RemoveState(Socket: Socket, username: string) {
+    if (!this.currentstate.has(username)) return null;
+    let colect: { client: string; status: string; lastupdate: string }[] =
+      this.currentstate.get(username);
+    let newholder: { client: string; status: string; lastupdate: string }[] =
+      [];
+    colect.map((col) => {
+      if (col.client != Socket.id) newholder.push(col);
+    });
+    if (newholder.length == 0) this.currentstate.delete(username);
+    else this.currentstate.set(username, newholder);
   }
-  
-  PruneUserState(username : string)
-  {
-    if (!this.currentstate.has(username))
-      return null;
+
+  PruneUserState(username: string) {
+    if (!this.currentstate.has(username)) return null;
     this.currentstate.delete(username);
   }
 }
