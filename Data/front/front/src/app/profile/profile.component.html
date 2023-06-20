@@ -14,7 +14,7 @@
                     <p class="userStatus">In Game</p>
                 </div>
             </div>
-            <div *ngIf="(profile$| async)?.username != (auth$| async)?.sub" class="userAction">
+            <div *ngIf="(profile$| async)?.id != (auth$| async)?.sub" class="userAction">
                 <button>Block <img src="/assets/block.svg" alt="1"></button>
                 <button>Message <img src="/assets/MessageProfile.svg" alt="2"></button>
                 <button>Add Friend <img src="/assets/AddFriend.svg" alt="3"></button>

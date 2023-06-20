@@ -43,7 +43,7 @@ export class UserController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('me')
   async thisIsME(@Req() req) {
-    const replay = await this.userService.findOne(req.new_user.sub);
+    const replay = await this.userService.findOne(req.new_user.user_name);
     if (replay) return replay;
     throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
   }

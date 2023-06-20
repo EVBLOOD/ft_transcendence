@@ -1,10 +1,13 @@
 import { Exclude } from 'class-transformer';
-import { IsBoolean, IsEmail, Matches } from 'class-validator';
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { IsBoolean, IsEmail, Matches, isNumber } from 'class-validator';
+import { Column, Entity, PrimaryColumn, Unique } from 'typeorm';
 
 @Entity({ name: 'Users' })
 export class User {
   @PrimaryColumn()
+  id: number;
+
+  @Column({ unique: true })
   @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
   username: string;
 
@@ -13,10 +16,6 @@ export class User {
 
   @Column()
   avatar: string;
-
-  @Column()
-  @IsEmail()
-  email: string;
 
   @Column()
   @IsBoolean()

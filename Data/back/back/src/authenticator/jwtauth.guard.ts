@@ -31,12 +31,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     }
     if (request.new_user) {
       const replay = await this.serviceToken.IsSameBut(
-        (request.new_user.sub as string) || '',
+        (request.new_user.sub as number) || -1,
         request.cookies[process.env.TOKEN_NAME],
       );
       if (replay === true) return true;
-      else if (replay)
-        return false;
+      else if (replay) return false;
     }
     response.clearCookie(process.env.TOKEN_NAME);
     return false;

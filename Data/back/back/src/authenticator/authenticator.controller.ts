@@ -41,11 +41,11 @@ export class AuthenticatorController {
     var token: string;
     if (!req.cookies || !req.cookies[process.env.TOKEN_NAME])
       token = this.jwtService.sign({
-        sub: req.user.username,
-        email: req.user.email,
+        sub: req.user.id,
+        user_name: req.user.username,
       });
     else token = req.cookies[process.env.TOKEN_NAME];
-    const tokenUser = await this.service.GenToken(req.user.username, token);
+    const tokenUser = await this.service.GenToken(req.user.id, token);
     if (tokenUser) res.cookie(process.env.TOKEN_NAME, tokenUser.token);
     return res.redirect('http://localhost:4200/');
   }

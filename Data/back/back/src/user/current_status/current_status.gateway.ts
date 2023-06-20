@@ -157,6 +157,7 @@ export class CurrentStatusGateway {
     );
     return 'GoodBay world!';
   }
+
   @SubscribeMessage('Call')
   async handleCall(client: Socket) {
     if (!client.handshake.headers.authorization) {
@@ -184,6 +185,7 @@ export class CurrentStatusGateway {
     );
     return 'Hello world!';
   }
+
   async handleDisconnect(client: Socket) {
     if (!client.handshake.headers.authorization) {
       client.disconnect();

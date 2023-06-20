@@ -2,7 +2,8 @@ import { IsBoolean, IsEmail, IsNotEmpty, Matches } from 'class-validator';
 
 export class CreateUserDto {
   @IsNotEmpty()
-  @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
+  // @Matches(/^[a-z]+(-[a-z]+)?$/)
+  // @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
   username: string;
 
   @IsNotEmpty()
@@ -18,6 +19,15 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsBoolean()
   TwoFAenabled: boolean;
+}
 
-  //   TwoFAsecret: string;
+export class UpdateUserDto {
+  @IsNotEmpty()
+  @Matches(/^[a-z]+(-[a-z]+)?$/)
+  username: string;
+  @IsNotEmpty()
+  name: string;
+
+  @IsNotEmpty()
+  avatar: string;
 }

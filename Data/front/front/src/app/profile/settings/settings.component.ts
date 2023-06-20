@@ -76,12 +76,16 @@ export class SettingsComponent implements OnInit, OnDestroy{
       {
         this.ChildEvent.emit();
         console.log('success')
+    this.ChildEvent.emit();
+
     }
     this.replay.unsubscribe();
   }
   async validateInput()
   {
-      this.update = this.serviceUser.updateUserInfos({username: this.userName, name: this.fullName, TwoFAenabled: this.twoFactor, email: this.submet_this.email, avatar: this.submet_this.avatar}).subscribe(
+      this.update = this.serviceUser.updateUserInfos({username: this.userName,
+        name: this.fullName, TwoFAenabled: this.twoFactor, email: this.submet_this.email,
+        avatar: this.submet_this.avatar}).subscribe(
       {next: (data) => {this.handleResponse(data)},}
     );
   }

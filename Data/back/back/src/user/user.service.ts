@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
@@ -13,7 +13,7 @@ export class UserService {
   ) {}
 
   private currentstate = new Map<
-    string,
+    number,
     { client: string; status: string; lastupdate: string }[]
   >();
 
@@ -21,28 +21,33 @@ export class UserService {
     return await this.UserRepo.find({ skip: skip, take: take });
   }
 
-  async findOne(id: string) {
-    return await this.UserRepo.findOneBy({ username: id });
+  async findOne(username: string) {
+    return await this.UserRepo.findOneBy({ username: username });
   }
 
-  async UpdateAvatar(id: string, path: string) {
-    return await this.UserRepo.save({ username: id, avatar: path });
+  async UpdateAvatar(id: number, path: string) {
+    return await this.UserRepo.save({ id: id, avatar: path });
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
+  async updateSimpleInfo(id: number, updateUserDto: UpdateUserDto) {
     return await this.UserRepo.save({
-      username: id,
+      id: id,
+      username: updateUserDto.username,
       name: updateUserDto.name,
       avatar: updateUserDto.avatar,
-      email: updateUserDto.email,
-      TwoFAenabled: updateUserDto.TwoFAenabled,
     });
   }
 
-  AddState(username: string, socket: Socket, type: string) {
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    return await this.UserRepo.save({
+      id: id,
+      name: updateUserDto.name,
+    });
+  }
+
+  AddState(id: number, socket: Socket, type: string) {
     let colect: { client: string; status: string; lastupdate: string }[];
-    if (this.currentstate.has(username))
-      colect = this.currentstate.get(username);
+    if (this.currentstate.has(id)) colect = this.currentstate.get(id);
     else colect = [];
     let i: number = 0;
     for (i; i < colect.length; i++) {
@@ -58,18 +63,18 @@ export class UserService {
       status: type,
       lastupdate: Date().toString(),
     });
-    this.currentstate.set(username, colect);
+    this.currentstate.set(id, colect);
   }
 
-  GetAllCurrentStates(username: string) {
-    if (!this.currentstate.has(username)) return null;
-    return this.currentstate.get(username);
+  GetAllCurrentStates(id: number) {
+    if (!this.currentstate.has(id)) return null;
+    return this.currentstate.get(id);
   }
 
-  GetCurrentState(username: string) {
-    if (!this.currentstate.has(username)) return null;
+  GetCurrentState(id: number) {
+    if (!this.currentstate.has(id)) return null;
     let colect: { client: string; status: string; lastupdate: string }[] =
-      this.currentstate.get(username);
+      this.currentstate.get(id);
     let col: { client: string; status: string; lastupdate: string } =
       colect[colect.length - 1];
     for (let i: number = 0; i < colect.length - 1; i++) {
@@ -79,21 +84,21 @@ export class UserService {
     return col;
   }
 
-  RemoveState(Socket: Socket, username: string) {
-    if (!this.currentstate.has(username)) return null;
+  RemoveState(Socket: Socket, id: number) {
+    if (!this.currentstate.has(id)) return null;
     let colect: { client: string; status: string; lastupdate: string }[] =
-      this.currentstate.get(username);
+      this.currentstate.get(id);
     let newholder: { client: string; status: string; lastupdate: string }[] =
       [];
     colect.map((col) => {
       if (col.client != Socket.id) newholder.push(col);
     });
-    if (newholder.length == 0) this.currentstate.delete(username);
-    else this.currentstate.set(username, newholder);
+    if (newholder.length == 0) this.currentstate.delete(id);
+    else this.currentstate.set(id, newholder);
   }
 
-  PruneUserState(username: string) {
-    if (!this.currentstate.has(username)) return null;
-    this.currentstate.delete(username);
+  PruneUserState(id: number) {
+    if (!this.currentstate.has(id)) return null;
+    this.currentstate.delete(id);
   }
 }
