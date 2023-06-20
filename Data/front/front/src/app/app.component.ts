@@ -8,7 +8,7 @@
 // export class AppComponent {
 // }
 import { animate, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { Observable, Subscription, fromEvent } from 'rxjs';
 import { ProfileService } from './profile/profile.service';
 import { ActivatedRoute } from '@angular/router';
@@ -24,9 +24,11 @@ import { ActivatedRoute } from '@angular/router';
     ]) 
   ]
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   logo = "PING-PONG 1337";
   public profile$ !: Observable<any>;
+  private replay : any;
+  notLogged : boolean = true;
   dropDown = false;
   activeSettings = false;
 
@@ -46,6 +48,16 @@ export class AppComponent implements OnInit {
   }
   ngOnInit(): void {
     this.profile$ = this.profileService.getUserData('');
+    this.replay = this.profile$.subscribe({next: (data) => {
+      if (data.statusCode)
+        this.notLogged = true;
+      else
+        this.notLogged = false;
+
+  },});
+  }
+  ngOnDestroy(): void {
+    this.replay.unsubscribe()
   }
 
   @HostListener('document:click', ['$event'])

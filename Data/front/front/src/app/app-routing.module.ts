@@ -6,7 +6,6 @@ import { ProfileComponent } from './profile/profile.component';
 import { authGuard } from './login/guards/auth.guard';
 import { twoFacGuard } from './login/guards/two-fac.guard';
 import { TwoFactoryComponent } from './login/two-factory/two-factory.component';
-import { SettingsComponent } from './profile/settings/settings.component';
 import { GameComponent } from './game/game.component';
 import { ChatComponent } from './chat/chat.component';
 import { LeaderbordComponent } from './leaderbord/leaderbord.component';
@@ -18,7 +17,7 @@ const routes: Routes =
                         {path: 'chat', component: ChatComponent,  canActivate: [authGuard]},
                         {path: 'leaderboard', component: LeaderbordComponent,  canActivate: [authGuard]},
                         {path: 'login', component: LoginComponent, children:
-                      [{path: 'twoFactor', component: TwoFactoryComponent ,canActivate: [twoFacGuard]},]},
+                        [{path: 'twoFactor', component: TwoFactoryComponent ,canActivate: [twoFacGuard]},]},
                         {path: 'profile/:username', component: ProfileComponent, canActivate: [authGuard]},
                       ];
 

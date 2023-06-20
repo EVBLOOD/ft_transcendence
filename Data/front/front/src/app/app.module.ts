@@ -16,7 +16,6 @@ import { LeaderbordComponent } from './leaderbord/leaderbord.component';
 import { GameComponent } from './game/game.component';
 import { ChatComponent } from './chat/chat.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { TemplateComponent } from './template/template.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +31,6 @@ import { TemplateComponent } from './template/template.component';
     LeaderbordComponent,
     GameComponent,
     ChatComponent,
-    TemplateComponent
   ],
   imports: [
     BrowserModule,
