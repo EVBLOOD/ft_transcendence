@@ -1,0 +1,135 @@
+.chat{
+    display: grid;
+    grid-template-columns: 25% 50% 25%;
+    height: 100%;
+}
+
+.grid1{
+    border-right: 1px solid #184E77;
+    padding: 20px;
+    display: grid;
+    gap: 10px;
+    overflow-y: auto;
+}
+
+.grid1 .toggle{
+    color: #D8D8D8;
+    background-color: #184E77;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    padding: 3px;
+    gap: 6px;
+}
+
+.grid1 .toggle .button{
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    flex-basis: 50%;
+    border-radius: 10px;
+    display: flex;
+    gap: 4px;
+    height: 38px;
+    justify-content: center;
+    align-items: center;
+}
+
+.button:hover{
+    background-color: #99D98C;
+    color: #184E77;
+}
+
+.grid1 .toggle img{
+    height: 18px;
+    width: 18px;
+}
+
+.search {
+    color: #D8D8D8;
+    width: 100%;
+    height: 32px;
+    background: #184E77;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+    border: none;
+    outline: none;
+}
+
+::placeholder {
+    color: #7FABCC;
+}
+
+:-ms-input-placeholder {
+    color: #7FABCC;
+}
+
+::-ms-input-placeholder {
+    color: #7FABCC;
+}
+
+.friend-profile {
+    position: relative;
+    width: 50px;
+    height: 50px;  
+}
+
+.friend-profile img{
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+}
+
+.statusOnline{
+    position: absolute;
+    background-color: #6EDB3F;
+    border: 3px solid #103959;
+    width: 12px;
+    height: 12px;  
+    border-radius: 50%;
+    bottom: 0;
+    right: 0;  
+}
+
+.nb-messages{
+    height: 16px;
+    width: 16px;
+    font-size: 11px;
+    background-color: #FF5E5E;
+    display: flex;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    padding: 2px;
+}
+
+.friend{
+    display: grid;
+    grid-template-columns: min-content auto min-content;
+    gap: 6px;
+    align-items: center;
+    font-size: 15px;
+    padding: 7px;
+    cursor: pointer;
+}
+
+.friend:hover{
+    background-color: #184E77;
+    border-radius: 10px;
+}
+
+.friendsonline{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+}
+
+.grid2{
+    border-right: 1px solid #184E77;
+    padding: 20px;
+}
+
+.grid3{
+    padding: 20px;
+}

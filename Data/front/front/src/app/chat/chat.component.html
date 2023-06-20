@@ -1,0 +1,27 @@
+<div class="chat">
+    <div class="grid1">
+        <div class="toggle">
+            <a class="button">
+                <img src="/assets/icons/direct.svg" >
+                <p>Direct</p>
+            </a>
+            <a class="button">
+                <img src="/assets/icons/channels.svg" >
+                <p>Channels</p>
+            </a>
+        </div>
+        <input class="search" type="text" placeholder="Search"/>
+        <div class="friendsonline">
+            <div *ngFor="let item of friends" class="friend">
+                <div class="friend-profile">
+                    <img src="{{item.avatar}}" >
+                    <div *ngIf="item.status" class="statusOnline"></div>
+                </div>
+                <p class="name-friend">{{item.name}}</p>
+                <div *ngIf="item.notifs" class="nb-messages">{{item.notifs}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="grid2">grid 2</div>
+    <div class="grid3">grid 3</div>
+</div>
