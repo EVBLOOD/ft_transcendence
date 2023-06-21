@@ -6,12 +6,14 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Delete,
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { Chat } from './chat.entity';
 import { createChatroomDTO } from './dto/createChatroom.dto';
 import { createMemberDTO } from './dto/createMember.dto';
 import { createAdminDTO } from './dto/createAdmin.dto';
+import { SwapOwnerDTO } from './dto/SwapOwner.dto';
 
 @Controller('chat')
 export class ChatController {
@@ -28,11 +30,11 @@ export class ChatController {
     }
   }
 
-  @Get('/user/:userName')
+  @Get('user/:userName')
   async getChatRoomsOfUser(
     @Param('userName') userName: string,
   ): Promise<Chat[]> {
-    return await this.chatRoomSevice.getChatRoomOfUsers(userName); // can return empty array !!
+    return this.chatRoomSevice.getChatRoomOfUsers(userName); // can return empty array !!
   }
 
   @Get('DM/:firstUser/:secondUser')
@@ -40,7 +42,7 @@ export class ChatController {
     @Param('firstUser') user1: string,
     @Param('secondUser') user2: string,
   ): Promise<Chat | null> {
-    return await this.chatRoomSevice.findDMChatroom(user1, user2);
+    return this.chatRoomSevice.findDMChatroom(user1, user2);
   }
 
   @Get(':chatID/isAdmin/:userName')
@@ -48,7 +50,7 @@ export class ChatController {
     @Param('chatID', ParseIntPipe) chatID: number,
     @Param('userName') userName: string,
   ): Promise<boolean> {
-    return await this.chatRoomSevice.checkForAdminRoll(chatID, userName);
+    return this.chatRoomSevice.checkForAdminRoll(chatID, userName);
   }
 
   @Get(':chatID/isMember/:userName')
@@ -56,7 +58,7 @@ export class ChatController {
     @Param('chatID', ParseIntPipe) chatID: number,
     @Param('userName') userName: string,
   ): Promise<boolean> {
-    return await this.chatRoomSevice.checkForMemberRoll(chatID, userName);
+    return this.chatRoomSevice.checkForMemberRoll(chatID, userName);
   }
 
   @Get(':chatID/isOwner/:userName')
@@ -64,19 +66,19 @@ export class ChatController {
     @Param('chatID', ParseIntPipe) chatID: number,
     @Param('userName') userName: string,
   ): Promise<boolean> {
-    return await this.chatRoomSevice.checkForOwnerRoll(chatID, userName);
+    return this.chatRoomSevice.checkForOwnerRoll(chatID, userName);
   }
 
   @Post('create')
   async createChatRoom(
     @Body() chatroom: createChatroomDTO,
-  ): Promise<Chat | null> {
-    try {
+  ): Promise<Chat> {
+    // try {
       return this.chatRoomSevice.createChatroom(chatroom);
-    } catch (err) {
-      console.log(err);
-    }
-    return null;
+    // } catch (err) {
+    //   console.log(err);
+    // }
+    // return null;
   }
 
   @Put(':chatID/add/member')
@@ -86,7 +88,7 @@ export class ChatController {
   ): Promise<Chat | null> {
     try {
       // TODO [importent]: check if user in not banned first
-      return await this.chatRoomSevice.addMemberToChatroom(chatID, memberDTO);
+      return this.chatRoomSevice.addMemberToChatroom(chatID, memberDTO);
     } catch (err) {
       console.log(err);
       return null;
@@ -99,24 +101,68 @@ export class ChatController {
     @Body() adminDTO: createAdminDTO,
   ): Promise<Chat | null> {
     try {
-      return await this.chatRoomSevice.addAdminToChatroom(chatID, adminDTO);
+      return this.chatRoomSevice.addAdminToChatroom(chatID, adminDTO);
     } catch (err) {
       console.log(err);
       return null;
     }
   }
 
-  // @Put(':/chatID/changeOwner')
-  // async changeOwnerOfChatroom(
-  //   @Param('chatID') chatID: number,
-  //   @Body() swapOwnerDto: SwapOwnerDTO,
-  //   @GetUser() user: User
-  // ): Promise<Chat | undefined> {
-  //   try {
-  //     if (user.userName !== swapOwnerDto.roleGiver){
-  //       throw new HttpException("Sent User ID is not the current user", HttpStatus.BAD_REQUEST);
-  //     }
-  //     // return this.chatRoomSevice.changeOwnerOfChatroom(chatID, swapOwnerDto);
-  //   }
-  // }
+  @Put(':/chatID/changeOwner')
+  async changeOwnerOfChatroom(
+    @Param('chatID') chatID: number,
+    @Body() swapOwnerDto: SwapOwnerDTO,
+  ): Promise<Chat | undefined> {
+    try {
+      return this.chatRoomSevice.changeOwnerOfChatroom(chatID, swapOwnerDto);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  @Delete('delete/:chatroomID/admin/:adminUserName/user/:userToKick')
+  async kickUserFromChatroom(
+    @Param('chatroomID') chatroomID: number,
+    @Param('adminUserName') adminUserName: string,
+    @Param('userToKick') userToKick: string,
+  ) {
+    try {
+      return this.chatRoomSevice.kickUserFromChatroom(
+        chatroomID,
+        adminUserName,
+        userToKick,
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  @Delete('delete/:chatroomID/admin/:adminUserName/admin/:userToKick')
+  async removeAdminFromChatroom(
+    @Param('chatroomID') chatroomID: number,
+    @Param('adminUserName') adminUserName: string,
+    @Param('userToKick') userToKick: string,
+  ) {
+    try {
+      return this.chatRoomSevice.removeAdminFromChatroom(
+        chatroomID,
+        adminUserName,
+        userToKick,
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  @Delete('leave/:chatroomID/user/:userName')
+  async leaveChat(
+    @Param('chatroomID') chatroomID: number,
+    @Param('userName') userName: string,
+  ): Promise<Chat | undefined | string> {
+    try {
+      return this.chatRoomSevice.leaveChat(chatroomID, userName);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 } // end of ChatController class

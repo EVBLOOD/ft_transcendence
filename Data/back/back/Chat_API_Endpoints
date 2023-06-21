@@ -1,0 +1,30 @@
+prifix /chat
+
+GET methods: 
+	[:ID] // GET CHAT ROOM BY IS ID
+	[user/:userName] // GET ALL CHATROOM ASSOCIATED WITH A GIVEN USER
+	[DM/:userName1/:userName2] // GET THE MUTUAL CHATROOM FOR THE TWO GIVEN USERS
+	[:chatID/isAdmin/:userName] // CHECK IF THE USER HAS ADMIN ROLE IN THE GIVEM CHATROOM
+	[:chatID/isMember/:userName] // CHECK IF THE USER IS PART OF THE CHATROOM
+	[:chatID/isOwner/:userName] // CHECK FOR OWNER ROLE
+
+POST methods:
+	[create] // CREATE A CHATROOM, TAKES IN CHATROOM DTO OBJECT IN THE BODY OF A REQUEST
+	example:	
+	{
+		"type": // private | "public | DM
+		"chatroomName":
+		"password": // only necessary in a private chatroom
+		"userName": //user that wants to create the channel (owner) 
+		"otherUser": // optional only necessary when creating a DM 	
+	}
+
+PUT methods:
+	[:chatID/add/member] // ADDS A MEMBER TO THE CHATROOM (TAKE A CREATE ADMIN DTO IN THE BODY OF THE REQUEST)
+	example:
+	{
+		"member": // new members name
+		"password": // must pass a password if the chatroom is of type private
+	}
+	[:chatID/add/admin] // GIVES ADMIN ROLE TO A USRE IN THE CHATROOM (MUST BE A MEMBER FIRST) ALSO TAKES IN A CREATE ADMIN IN THE BODY 
+	[:chat ]

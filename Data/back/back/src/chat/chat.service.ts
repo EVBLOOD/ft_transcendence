@@ -14,12 +14,20 @@ import { Message } from 'src/message/message.entity';
 import { ChatUtils } from './chat.utils';
 import { MessageService } from 'src/message/message.service';
 import { createChatroomDTO } from './dto/createChatroom.dto';
-import { validateChatDTO, createChatroomEntity } from './chat.validators';
+import {
+  validateChatDTO,
+  createChatroomEntity,
+  deleteUser,
+  removeAdminStatus,
+} from './chat.validators';
 import { User } from 'src/user/user.entity';
 import * as bcrypt from 'bcrypt';
 import { createMemberDTO } from './dto/createMember.dto';
 import { createAdminDTO } from './dto/createAdmin.dto';
 import { promises } from 'dns';
+import { SwapOwnerDTO } from './dto/SwapOwner.dto';
+import { LargeNumberLike } from 'crypto';
+import { constrainedMemory } from 'process';
 
 @Injectable()
 export class ChatService {
@@ -249,6 +257,7 @@ export class ChatService {
       //    throw new HttpException('You are banned', HttpStatus.FORBIDDEN);
       // }
       // else
+      // console.log("here");
       const admin = await this.chatHelpers.getUser(adminDTO.roleReceiver);
       chatroom.admin.push(admin);
       return await this.chatRoomRepo.save(chatroom);
@@ -257,5 +266,107 @@ export class ChatService {
       "You can't assign a new admin",
       HttpStatus.FORBIDDEN,
     );
+  }
+  async changeOwnerOfChatroom(
+    chatID: number,
+    swapDTO: SwapOwnerDTO,
+  ): Promise<Chat | undefined> {
+    const chatroom = await this.GetChatRoomByID(chatID);
+    if (
+      (await this.chatHelpers.checkForAdminRoll(chatID, swapDTO.roleReciver)) ==
+        true &&
+      (await this.chatHelpers.checkForOwnerRoll(chatID, swapDTO.roleReciver)) ==
+        true
+    ) {
+      // TODO [importent]: check if the user is not banned in the chatroom
+      const newOwner = await this.chatHelpers.getUser(swapDTO.roleReciver);
+      chatroom.owner = newOwner;
+      const newChat = chatroom;
+      this.chatRoomRepo.save(newChat);
+      return newChat;
+    } else {
+      throw new HttpException(
+        "Can't change channel ownership",
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async kickUserFromChatroom(
+    chatID: number,
+    adminUserName: string,
+    userUserName: string,
+  ): Promise<Chat | undefined> {
+    const chatroom = await this.GetChatRoomByID(chatID);
+    if ((await this.checkForAdminRoll(chatID, adminUserName)) == true) {
+      const newChat = deleteUser(chatroom, userUserName);
+      return await this.chatRoomRepo.save(newChat);
+    }
+    throw new HttpException(
+      'you need administrator permission to kick users',
+      HttpStatus.BAD_REQUEST,
+    );
+  }
+
+  async deleteChat(chatID: number): Promise<void> {
+    await this.chatRoomRepo
+      .createQueryBuilder('chatroom')
+      .delete()
+      .from(Chat)
+      .where('id = :id', { id: chatID })
+      .execute();
+  }
+
+  async removeAdminFromChatroom(
+    chatID: number,
+    adminUserName: string,
+    userUserName: string,
+  ): Promise<Chat | undefined> {
+    const chatroom = await this.GetChatRoomByID(chatID);
+    if (
+      (await this.chatHelpers.checkForAdminRoll(chatID, adminUserName)) &&
+      (await this.chatHelpers.isMoreThenOneAdminInChatroom(chatID)) &&
+      (await this.chatHelpers.checkForOwnerRoll(chatID, userUserName)) == false
+    ) {
+      const newChatroom = removeAdminStatus(chatroom, userUserName);
+      return this.chatRoomRepo.save(newChatroom);
+    } else {
+      throw new HttpException(
+        'you need administrator permission to remove admins',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async leaveChat(chatID: number, user: string): Promise<Chat | string> {
+    const chatroom = await this.GetChatRoomByID(chatID);
+    if ((await this.chatHelpers.onlyOneUserInChatroom(chatID)) == true) {
+      this.deleteChat(chatID);
+      console.log(
+        `Deleted chatroom with ID: ${chatroom.id}, Title: ${chatroom.chatRoomName}`,
+      );
+      return 'Chatroom has been deleted';
+    }
+    if ((await this.chatHelpers.checkForOwnerRoll(chatID, user)) == true) {
+      if (
+        (await this.chatHelpers.isMoreThenOneAdminInChatroom(chatID)) == true
+      ) {
+        chatroom.owner = chatroom.admin[1];
+      } else if (
+        (await this.chatHelpers.isMoreThenOneMemberInChatroom(chatID)) == true
+      ) {
+        for (const member of chatroom.member) {
+          if (member.userName != chatroom.owner.userName) {
+            chatroom.owner = member;
+            chatroom.admin.push(member);
+            break;
+          }
+        }
+      } else {
+        this.deleteChat(chatID);
+      }
+    }
+    const newChat = deleteUser(chatroom, user);
+    return await this.chatRoomRepo.save(newChat);
   }
 } // END OF ChatService class

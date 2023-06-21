@@ -27,10 +27,7 @@ export function validateChatType(chatRoomType: string): boolean {
 
 export function validateChatPassword(ChatroomPassword: string): boolean {
   if (!(ChatroomPassword && ChatroomPassword.trim())) {
-    throw new HttpException(
-      'Password type chatroom cannot have no password',
-      HttpStatus.BAD_REQUEST,
-    );
+    throw new HttpException('Must set a password', HttpStatus.BAD_REQUEST);
   }
   return true;
 }
@@ -62,4 +59,21 @@ export function createChatroomEntity(
     chatroom.admin.push(secondUser);
   }
   return chatroom;
+}
+
+export function deleteUser(chatRoom: Chat, user: string): Chat {
+  chatRoom.member = chatRoom.member.filter((u: User) => {
+    return u.userName !== user;
+  });
+  chatRoom.admin = chatRoom.admin.filter((u: User) => {
+    return u.userName !== user;
+  });
+  return chatRoom;
+}
+
+export function removeAdminStatus(chat: Chat, user: string): Chat {
+  chat.admin = chat.admin.filter((u: User) => {
+    return u.userName !== user;
+  });
+  return chat;
 }

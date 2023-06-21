@@ -20,6 +20,7 @@ export class UserService {
     const user = await this.userRepo.findOneBy({
       userName: userName,
     });
+    console.log(user);
     return user;
   }
   async getListOfUsers(): Promise<User[] | undefined> {
