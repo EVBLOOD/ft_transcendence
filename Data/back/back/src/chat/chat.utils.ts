@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
-import { Repository } from 'typeorm';
+import { Admin, Repository, ReturnDocument } from 'typeorm';
 import { Chat } from './chat.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/user.entity';
@@ -16,9 +16,9 @@ export class ChatUtils {
   async getUser(userName: string): Promise<User | undefined> {
     const user = await this.userService.findUserByUserName(userName);
     if (user) return user;
-    throw new HttpException('User Not Found', HttpStatus.NOT_FOUND);
+    throw new HttpException(`User ${userName} Not Found`, HttpStatus.NOT_FOUND);
   }
-  async checkForAdminRoll(chatID: number, userName: string): Promise<boolean> {
+  async checkForAdminRoll(chatID: number, Name: string): Promise<boolean> {
     const admin = await this.chatRoomRepo.findOne({
       relations: {
         admin: true,
@@ -26,7 +26,7 @@ export class ChatUtils {
       where: {
         id: chatID,
         admin: {
-          userName: userName,
+          userName: Name,
         },
       },
     });
@@ -34,7 +34,7 @@ export class ChatUtils {
     return false;
   }
 
-  async checkForMemberRoll(chatID: number, userName: string): Promise<boolean> {
+  async checkForMemberRoll(chatID: number, Name: string): Promise<boolean> {
     const member = await this.chatRoomRepo.findOne({
       relations: {
         member: true,
@@ -42,7 +42,7 @@ export class ChatUtils {
       where: {
         id: chatID,
         member: {
-          userName: userName,
+          userName: Name,
         },
       },
     });
@@ -50,7 +50,7 @@ export class ChatUtils {
     return false;
   }
 
-  async checkForOwnerRoll(chatID: number, userName: string): Promise<boolean> {
+  async checkForOwnerRoll(chatID: number, Name: string): Promise<boolean> {
     const owner = await this.chatRoomRepo.findOne({
       relations: {
         owner: true,
@@ -58,11 +58,53 @@ export class ChatUtils {
       where: {
         id: chatID,
         owner: {
-          userName: userName,
+          userName: Name,
         },
       },
     });
     if (owner) return true;
     return false;
+  }
+  async isMoreThenOneAdminInChatroom(chatID: number): Promise<boolean> {
+    const chatroom = await this.chatRoomRepo.findOne({
+      where: {
+        id: chatID,
+      },
+      relations: {
+        admin: true,
+      },
+    });
+    if (chatroom) {
+      if (chatroom.admin.length > 1) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  async isMoreThenOneMemberInChatroom(chatID: number): Promise<boolean> {
+    const chatroom = await this.chatRoomRepo.findOne({
+      where: {
+        id: chatID,
+      },
+      relations: {
+        member: true,
+      },
+    });
+    if (chatroom) {
+      if (chatroom.member.length > 1) {
+        return true;
+      }
+    }
+    return false;
+  }
+  async onlyOneUserInChatroom(chatID: number): Promise<boolean> {
+    if (
+      (await this.isMoreThenOneAdminInChatroom(chatID)) == true ||
+      (await this.isMoreThenOneMemberInChatroom(chatID)) == true
+    ) {
+      return false;
+    }
+    return true;
   }
 } // end of ChatUtils Class
