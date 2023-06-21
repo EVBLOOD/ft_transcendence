@@ -15,6 +15,7 @@ export class SettingsComponent implements OnInit, OnDestroy{
   userName  = new FormControl('');
   twoFactor : boolean = false;
   GameTheme : number = 1;
+  file : any;
 
   public profile$ !: Observable<any>;
   private update : any = null;
@@ -71,9 +72,24 @@ export class SettingsComponent implements OnInit, OnDestroy{
       this.router.navigateByUrl('');
     this.replay.unsubscribe();
   }
+  funct(file : any)
+  { 
+    this.file = file.target.files[0];
+    console.log(this.file);
+  }
+  handleResponseone(data : any)
+  {
+    if (data.statusCode)
+    console.log('error msg')
+    else
+    console.log('fail')
+  }
   async validateInput()
   {
-      this.update = this.serviceUser.updateUserInfos({username: this.userName.value,
+    if (this.file)
+    this.update = this.serviceUser.setUserAvatar(this.file).subscribe({next: (data) => {this.handleResponseone(data)}})
+
+    this.update = this.serviceUser.updateUserInfos({username: this.userName.value,
         name: this.fullName.value,
         avatar: this.submet_this.avatar,
         twofactor: this.twoFactor}).subscribe(

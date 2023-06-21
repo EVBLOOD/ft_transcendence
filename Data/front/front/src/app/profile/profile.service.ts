@@ -25,9 +25,12 @@ export class ProfileService {
     return link;
   }
 
-  setUserAvatar(path: string)
+  setUserAvatar(file: any)
   {
 
+    const fileform = new FormData();
+    fileform.append('file', file);
+    return this.http.put('http://localhost:3000/user/upload', fileform , {withCredentials: true} )
   }
 
   updateUserInfos(object: any)

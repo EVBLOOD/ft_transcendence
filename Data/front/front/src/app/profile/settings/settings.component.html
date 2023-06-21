@@ -8,7 +8,7 @@
         <div class="profileImageSettingCentring">
             <img class="profileImageSetting" [src]="serviceUser.getUserAvatarPath((profile$ | async)?.avatar)" alt="" />
             <div class="profileImageStatus"><input accept="image/*" class="profileImageChange" type="file"
-                    onchange="console.log(event.target.files)"></div>
+                    (change)="funct($event)"></div>
         </div>
         <div class="profileUserInfoSetting">
             <input type="text" [formControl]="userName" />
