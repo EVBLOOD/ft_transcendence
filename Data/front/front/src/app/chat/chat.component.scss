@@ -11,7 +11,7 @@
 }
 
 .grid1 .toggle{
-    color: #D8D8D8;
+    color: #EEEEEE;
     background-color: #184E77;
     border-radius: 10px;
     display: flex;
@@ -43,18 +43,18 @@
     width: 18px;
 }
 
-.search {
+.textbox {
     color: #D8D8D8;
-    width: 100%;
     height: 32px;
     background: #184E77;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
     border-radius: 8px;
     border: none;
     outline: none;
+    padding-left: 10px;
 }
 
-::placeholder {
+.textbox::placeholder {
     color: #7FABCC;
 }
 
@@ -69,7 +69,7 @@
 .friend-profile {
     position: relative;
     width: 50px;
-    height: 50px;  
+    height: 50px;
 }
 
 .friend-profile img{
@@ -117,21 +117,185 @@
 }
 
 .friendsonline{
-    // display: grid;
+    display: grid;
     // overflow-y: auto;
     // gap: 4px;
 
-    overflow-y:scroll; 
+    overflow-y:auto; 
     position:relative;
-    height: 750px;
+    height: 760px;
     // max-height: fit-content;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 50px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 50px;
+    background: #1A759F;
 }
 
 .grid2{
     border-right: 1px solid #184E77;
-    padding: 20px;
+    display: grid;
+    grid-template-rows: min-content auto min-content;
+}
+
+.header-chat{
+    display: flex;
+    border-bottom: 1px solid #184E77;
+    padding: 25px;
+    display: flex;
+    gap: 7px;
+}
+
+.header-chat img{
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+}
+
+.header-chat .name-status{
+    font-size: 19px;
+    align-content: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.header-chat .status{
+    font-size: 13px;
+    font-weight: 600;
+    color: #6EDB3F;
+}
+.conversation {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: scroll;
+    height: 650px;
+    flex-direction: column-reverse;
+}
+
+.conversation img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.receiver{
+    display: flex;
+    gap: 8px;
+}
+
+.sender{
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 8px;
+}
+
+.receiver .infos {
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.receiver .time{
+    color: #A5A5A5;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.receiver .msg {
+    font-size: 13px;
+    background-color: #1A759F;
+    padding: 16px 13px;
+    border-radius: 0px 20px 20px 20px;
+}
+
+.sender .infos {
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 5px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.sender .time{
+    color: #A5A5A5;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.sender .msg {
+    font-size: 13px;
+    background-color: #1A759F;
+    padding: 16px 13px;
+    border-radius: 20px 0px 20px 20px;
+}
+
+.sendMessage{
+    display: flex;
+    gap: 5px;
+    padding: 25px;
+}
+
+.message{
+    width: 100%;
+    height: 38px;
+}
+
+.buttonSend{
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #103959;
+    cursor: pointer;
+    border-radius: 8px;
+    background: #99D98C;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.25);
+    transition: 0.3;
+}
+
+.buttonSend:hover{
+    opacity: 70%; 
 }
 
 .grid3{
+    display: flex;
+    flex-direction: column;
     padding: 20px;
+}
+
+.profile{
+    width: 166px;
+    height: 166px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.buttonsProfile a {
+    
+}
+
+.buttonsProfile img{
+    background-color: #1E6091;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
 }
