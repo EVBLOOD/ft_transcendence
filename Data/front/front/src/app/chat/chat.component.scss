@@ -1,7 +1,6 @@
 .chat{
     display: grid;
     grid-template-columns: 25% 50% 25%;
-    height: 100%;
 }
 
 .grid1{
@@ -9,7 +8,6 @@
     padding: 20px;
     display: grid;
     gap: 10px;
-    overflow-y: auto;
 }
 
 .grid1 .toggle{
@@ -119,10 +117,14 @@
 }
 
 .friendsonline{
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    // display: grid;
+    // overflow-y: auto;
+    // gap: 4px;
 
+    overflow-y:scroll; 
+    position:relative;
+    height: 750px;
+    // max-height: fit-content;
 }
 
 .grid2{

@@ -22,6 +22,10 @@ export class ChatComponent {
       {name: 'karim idbouhouch', avatar: '/assets/images/profile.jpg', status:false},
       {name: 'karim idbouhouch', avatar: '/assets/images/profile.jpg', status:false},
       {name: 'karim idbouhouch', avatar: '/assets/images/profile.jpg', status:false, notifs:'5'},
+      {name: 'karim idbouhouch', avatar: '/assets/images/profile.jpg', status:false},
+      {name: 'karim idbouhouch', avatar: '/assets/images/profile.jpg', status:false},
+      {name: 'karim idbouhouch', avatar: '/assets/images/profile.jpg', status:false},
+      {name: 'karim idbouhouch', avatar: '/assets/images/profile.jpg', status:false, notifs:'5'},
 
     ]
 }
