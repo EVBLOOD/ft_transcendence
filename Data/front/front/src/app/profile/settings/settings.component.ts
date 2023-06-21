@@ -10,7 +10,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit, OnDestroy{
-  @Output() ChildEvent = new EventEmitter();
   private replay : any;
   fullName  = new FormControl('');
   userName  = new FormControl('');
@@ -19,13 +18,11 @@ export class SettingsComponent implements OnInit, OnDestroy{
 
   public profile$ !: Observable<any>;
   private update : any = null;
-  private submet_this : any = {avatar: '', email: ''};
+  private submet_this : any = {avatar: ''};
 
 
   public data = {title: "Settings", subtitle: "profile", action: "Update"}
-  constructor(public serviceUser : ProfileService,private router: Router) {
-  
-  }
+  constructor(public serviceUser : ProfileService, private router: Router) {}
   ngOnInit() {
     this.profile$ = this.serviceUser.getUserData('');
     this.replay = this.profile$.subscribe({next: (data) => {
@@ -36,11 +33,11 @@ export class SettingsComponent implements OnInit, OnDestroy{
       this.twoFactor = data.TwoFAenabled;
       this.GameTheme = 1; // to add
       this.submet_this.avatar = data.avatar;
-      this.submet_this.email = data.email;
     },});
   }
   ngOnDestroy(): void {
-    this.replay.unsubscribe();
+    if (this.replay)
+      this.replay.unsubscribe();
     if (this.update)
       this.update.unsubscribe()
   }
@@ -52,7 +49,6 @@ export class SettingsComponent implements OnInit, OnDestroy{
   }
   
   activetwofactor(){
-    this.ChildEvent.emit();
     console.log("open new popUp or here");
   }
 
@@ -69,24 +65,24 @@ export class SettingsComponent implements OnInit, OnDestroy{
   }
   handleResponse(data : any)
   {
-    console.log(data);
     if (data.statusCode)
       console.log('error msg')
-      else
-      {
-        this.ChildEvent.emit();
-        console.log('success')
-    this.ChildEvent.emit();
-
-    }
+    else
+      this.router.navigateByUrl('');
     this.replay.unsubscribe();
   }
   async validateInput()
   {
-      this.update = this.serviceUser.updateUserInfos({username: this.userName,
-        name: this.fullName, TwoFAenabled: this.twoFactor, email: this.submet_this.email,
-        avatar: this.submet_this.avatar}).subscribe(
+      this.update = this.serviceUser.updateUserInfos({username: this.userName.value,
+        name: this.fullName.value,
+        avatar: this.submet_this.avatar,
+        twofactor: this.twoFactor}).subscribe(
       {next: (data) => {this.handleResponse(data)},}
     );
+  }
+
+  close()
+  {
+    this.router.navigateByUrl('')
   }
 }

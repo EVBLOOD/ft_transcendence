@@ -25,9 +25,13 @@ export class UpdateUserDto {
   @IsNotEmpty()
   @Matches(/^[a-z]+(-[a-z]+)?$/)
   username: string;
+
   @IsNotEmpty()
   name: string;
 
   @IsNotEmpty()
   avatar: string;
+
+  @IsNotEmpty()
+  twofactor: boolean;
 }

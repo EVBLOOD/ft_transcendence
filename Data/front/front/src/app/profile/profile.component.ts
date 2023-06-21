@@ -1,25 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ProfileService } from './profile.service';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { AuthService } from '../login/auth.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
+
   public profile$ !: Observable<any>;
   public auth$ !: Observable<any>;
   public username : string;
   constructor(public profileService : ProfileService, private authService: AuthService, private route: ActivatedRoute) {
     this.username = this.route.snapshot.params["username"];
-    console.log(this.username)
-    // this.username = this.route.snapshot.params.username;
   }
   ngOnInit(): void {
-    this.profile$ = this.profileService.getUserData(this.username);
+    this.profile$ = this.profileService.getUserData(this.username).pipe( tap( res => console.log('HTTP response:', res)));
     this.auth$ = this.authService.getCurrentUser();
   }
   sameDataEveryDay = [

@@ -10,8 +10,6 @@ export class ProfileService {
 
   getUserData(corrent : string)
   {
-    // console.log(this.http.get('http://localhost:3000/redirection', {withCredentials: true}).subscribe());
-    // return this.http.get('http://localhost:3000/redirection', {withCredentials: true})
     if (!corrent || corrent == '')
       return this.http.get('http://localhost:3000/user/me', {withCredentials: true})
     return this.http.get('http://localhost:3000/user/' + corrent, {withCredentials: true})
@@ -34,7 +32,6 @@ export class ProfileService {
 
   updateUserInfos(object: any)
   {
-    console.log(object)
     return this.http.post('http://localhost:3000/user/updateAll', object, {withCredentials: true});
   }
 }

@@ -1,5 +1,5 @@
-<app-popup (ChildrenEvent)="ChildEvent">
-    <div (click)="ChildEvent.emit()" class="CloseBtnPop">
+<app-popup>
+    <div (click)="close()" class="CloseBtnPop">
         <button></button>
     </div>
     <h2 class="popTitle">{{data.title}}</h2>
@@ -7,7 +7,8 @@
     <div class="groupingLI">
         <div class="profileImageSettingCentring">
             <img class="profileImageSetting" [src]="serviceUser.getUserAvatarPath((profile$ | async)?.avatar)" alt="" />
-            <div class="profileImageStatus"></div>
+            <div class="profileImageStatus"><input accept="image/*" class="profileImageChange" type="file"
+                    onchange="console.log(event.target.files)"></div>
         </div>
         <div class="profileUserInfoSetting">
             <input type="text" [formControl]="userName" />
@@ -34,7 +35,7 @@
         </div>
     </div>
     <div class="popUpBtn">
-        <button class="cancelBtn" type="submit" (click)="ChildEvent.emit()">Cancel</button>
+        <button class="cancelBtn" type="submit" (click)="close()">Cancel</button>
         <button class="validationBtn" type="submit" (click)="validateInput()">{{data.action}}</button>
     </div>
 </app-popup>

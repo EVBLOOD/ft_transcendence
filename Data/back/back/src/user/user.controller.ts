@@ -21,7 +21,7 @@ import { UserService } from './user.service';
 import { JwtAuthGuard } from 'src/authenticator/jwtauth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto, UpdateUserDto } from './dto/create-user.dto';
 import { existsSync } from 'fs';
 
 @UseGuards(JwtAuthGuard)
@@ -43,7 +43,7 @@ export class UserController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('me')
   async thisIsME(@Req() req) {
-    const replay = await this.userService.findOne(req.new_user.user_name);
+    const replay = await this.userService.findMe(req.new_user.id);
     if (replay) return replay;
     throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
   }
@@ -65,10 +65,9 @@ export class UserController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Post('updateAll')
-  async update(@Req() req, @Body() updateUserDto: CreateUserDto) {
+  async update(@Req() req, @Body() updateUserDto: UpdateUserDto) {
     try {
-      console.log('lololo');
-      const replay = await this.userService.update(
+      const replay = await this.userService.updateSimpleInfo(
         req.new_user.sub,
         updateUserDto,
       );

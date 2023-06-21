@@ -14,20 +14,19 @@
                         [src]="profileService.getUserAvatarPath((profile$ | async)?.avatar)" alt="Profile"></a>
                 <ul #dropDownContent *ngIf="dropDown" @inOut class="dropdown-profile">
                     <li routerLink="">View my profile</li>
-                    <li (click)="desplaySettings()">Settings</li>
+                    <li routerLink="settings">Settings</li>
                     <li>Logout</li>
                 </ul>
             </div>
         </div>
         <div class="body">
-            <router-outlet></router-outlet>
+            <router-outlet *ngIf="getcurrentPath() != '/settings'"></router-outlet>
+            <app-profile *ngIf="getcurrentPath() == '/settings'" />
         </div>
         <div class="footer">
             <p>Copyright © 2023 ft_transcendence. All Rights Reserved</p>
         </div>
     </div>
-    <app-settings *ngIf="activeSettings" (ChildEvent)="desplaySettings()" />
+    <router-outlet *ngIf="getcurrentPath() == '/settings'"></router-outlet>
+
 </div>
-
-
-<!-- <router-outlet></router-outlet> -->

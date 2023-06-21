@@ -1,20 +1,12 @@
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-root',
-//   templateUrl: './app.component.html',
-//   styleUrls: ['./app.component.scss']
-// })
-// export class AppComponent {
-// }
 import { animate, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
-import { Observable, Subscription, fromEvent } from 'rxjs';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
+import { Observable, Subscription, distinctUntilChanged, fromEvent } from 'rxjs';
 import { ProfileService } from './profile/profile.service';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
+  // changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   animations: [
@@ -30,19 +22,17 @@ export class AppComponent implements OnInit, OnDestroy {
   private replay : any;
   notLogged : boolean = true;
   dropDown = false;
-  activeSettings = false;
 
   
   @ViewChild('dropDownContent') dropDownContent !:ElementRef;
   @ViewChild('dropDownContent_') dropDownContent_ !:ElementRef;
   @ViewChild('dropDownContent__') dropDownContent__ !:ElementRef;
   
-  constructor(public profileService : ProfileService) {}
-  desplaySettings()
+  constructor(public profileService : ProfileService, private route: Router) {}
+  getcurrentPath()
   {
-    this.activeSettings = !this.activeSettings;
+    return this.route.url;
   }
-
   onclick(){
     this.dropDown = !this.dropDown
   }

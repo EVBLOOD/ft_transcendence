@@ -24,7 +24,9 @@ export class UserService {
   async findOne(username: string) {
     return await this.UserRepo.findOneBy({ username: username });
   }
-
+  async findMe(id: number) {
+    return await this.UserRepo.findOneBy({ id: id });
+  }
   async UpdateAvatar(id: number, path: string) {
     return await this.UserRepo.save({ id: id, avatar: path });
   }
@@ -35,6 +37,7 @@ export class UserService {
       username: updateUserDto.username,
       name: updateUserDto.name,
       avatar: updateUserDto.avatar,
+      TwoFAenabled: updateUserDto.twofactor,
     });
   }
 
