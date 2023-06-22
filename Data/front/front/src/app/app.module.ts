@@ -17,6 +17,7 @@ import { GameComponent } from './game/game.component';
 import { ChatComponent } from './chat/chat.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { ActivatetwoComponent } from './profile/settings/activatetwo/activatetwo.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { RouterModule } from '@angular/router';
     LeaderbordComponent,
     GameComponent,
     ChatComponent,
+    ActivatetwoComponent,
   ],
   imports: [
     BrowserModule,

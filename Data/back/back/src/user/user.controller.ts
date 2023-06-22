@@ -98,7 +98,7 @@ export class UserController {
         filename: (req, file, callback) => {
           if (
             (file.mimetype != 'image/jpeg' && file.mimetype != 'image/png') ||
-            file.size > 2 * 1024 * 1024
+            file.size > 1 * 1024 * 1024
           )
             callback(null, null);
           const newname =
@@ -111,13 +111,20 @@ export class UserController {
       }),
     }),
   )
-  async UploadAvatar(@Req() req, @UploadedFile() file: Express.Multer.File) {
+  async UploadAvatar(
+    @Res() res,
+    @Req() req,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
     try {
       if (file?.filename && file.filename != '') {
         await this.userService.UpdateAvatar(req.new_user.sub, file.filename);
-        return 'file created';
+        throw new HttpException('ACCEPTABLE', HttpStatus.ACCEPTED);
+        return;
       }
     } catch (error) {
+      if (error.status == 202)
+        throw new HttpException('ACCEPTABLE', HttpStatus.ACCEPTED);
       throw new HttpException(
         {
           status: HttpStatus.FORBIDDEN,

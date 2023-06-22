@@ -37,4 +37,19 @@ export class ProfileService {
   {
     return this.http.post('http://localhost:3000/user/updateAll', object, {withCredentials: true});
   }
+
+  getQrCode()
+  {
+    return this.http.get('http://localhost:3000/2factorAnable', {withCredentials: true})
+  }
+
+  confirmQrCode(token: any)
+  {
+    return this.http.post('http://localhost:3000/confirm', {token: token}, {withCredentials: true})
+  }
+
+  logout()
+  {
+    return this.http.get('http://localhost:3000/logout', {withCredentials: true});
+  }
 }

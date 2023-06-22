@@ -29,4 +29,8 @@ export class AuthService {
   {
     return this.http.post('http://localhost:3000/validate', {token: token}, {withCredentials: true});
   }
+  logout()
+  {
+    return this.http.get('http://localhost:3000/logout', {withCredentials: true});
+  }
 }

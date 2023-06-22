@@ -96,7 +96,7 @@ export class AuthenticatorController {
   async EnableTwoFactor(@Req() req) {
     try {
       const replay = await this.service.TwoFA_SendQr(req.new_user.sub);
-      if (replay) return replay;
+      if (replay) return { Qr: replay };
     } catch (error) {
       throw new HttpException(
         {
@@ -131,5 +131,14 @@ export class AuthenticatorController {
       );
     }
     throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+  }
+
+  @UseGuards(ThisIsA)
+  @Get('logout')
+  logout(@Res() response) {
+    response.clearCookie(process.env.TOKEN_NAME);
+    response.send({});
+
+    return {};
   }
 }

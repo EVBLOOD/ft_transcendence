@@ -1,0 +1,23 @@
+<app-popup [data]="502">
+    <div (click)="close()" class="CloseBtnPop">
+        <button></button>
+    </div>
+    <h2 class="popTitle">{{data.title}}</h2>
+    <label *ngIf="data.subtitle" class="popTitleProfile">{{data.subtitle}}</label>
+    <div class="groupingLI">
+        <div class="profileImageSettingCentring">
+            <div>
+                <img class="profileImageSetting" [src]="(qrcode$| async)?.Qr" alt="chi img">
+            </div>
+        </div>
+        <div class="profileUserInfoSetting">
+            <input [formControl]="token" placeholder="code" type="text" />
+            <p style="color: red;" [style.display]="isDisplay ? 'block' : 'none'" class="error">Incorrect code</p>
+        </div>
+    </div>
+    <div></div>
+    <div class="popUpBtn">
+        <button class="cancelBtn" type="submit" (click)="close()">Cancel</button>
+        <button class="validationBtn" type="submit" (click)="validateInput()">{{data.action}}</button>
+    </div>
+</app-popup>

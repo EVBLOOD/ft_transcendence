@@ -18,8 +18,6 @@ async function bootstrap() {
   // },
   // });
   app.use('/avatar', express.static(join(__dirname, '../../upload/avatars')));
-
-  // app.use('/avatar', express.static(join(__dirname, '../upload/avatars')));
   app.enableCors({
     credentials: true,
     origin: 'http://localhost:4200',

@@ -51,7 +51,7 @@ export class TwoFactoryComponent {
   }
   justCancel()
   {
-    this.router.navigateByUrl('login');
+    this.replay = this.authSer.logout().subscribe({next: (data) => {this.router.navigateByUrl('login');}, complete: () => {this.replay.unsubscribe()}});
   }
 }
 

@@ -1,6 +1,6 @@
-<router-outlet *ngIf="this.notLogged == true"></router-outlet>
+<router-outlet *ngIf="getcurrentPath() == '/login' || getcurrentPath() == '/twoFactor'"></router-outlet>
 
-<div class="page" *ngIf="this.notLogged == false">
+<div class="page" *ngIf="getcurrentPath() != '/login' && getcurrentPath() != '/twoFactor'">
     <div class="container">
         <div class="header">
             <div class="logo">PING-PONG</div>
@@ -15,18 +15,20 @@
                 <ul #dropDownContent *ngIf="dropDown" @inOut class="dropdown-profile">
                     <li routerLink="">View my profile</li>
                     <li routerLink="settings">Settings</li>
-                    <li>Logout</li>
+                    <li (click)="logout()">Logout</li>
                 </ul>
             </div>
         </div>
         <div class="body">
-            <router-outlet *ngIf="getcurrentPath() != '/settings'"></router-outlet>
-            <app-profile *ngIf="getcurrentPath() == '/settings'" />
+            <router-outlet
+                *ngIf="getcurrentPath() != '/settings' && getcurrentPath() != '/acticatetwo'"></router-outlet>
+            <app-profile *ngIf="getcurrentPath() == '/settings' || getcurrentPath() == '/acticatetwo'" />
         </div>
         <div class="footer">
             <p>Copyright © 2023 ft_transcendence. All Rights Reserved</p>
         </div>
     </div>
-    <router-outlet *ngIf="getcurrentPath() == '/settings'"></router-outlet>
+    <router-outlet *ngIf="getcurrentPath() == '/settings' || getcurrentPath() == '/acticatetwo'"
+        (AvatarChanged)="updateAvatar($event)"></router-outlet>
 
 </div>

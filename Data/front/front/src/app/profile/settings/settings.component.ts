@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit, OnDestroy{
+  @Output() AvatarChanged = new EventEmitter<void>();
   private replay : any;
   fullName  = new FormControl('');
   userName  = new FormControl('');
@@ -48,9 +49,9 @@ export class SettingsComponent implements OnInit, OnDestroy{
     console.log('remove two factor');
     this.twoFactor = false;
   }
-  
   activetwofactor(){
     console.log("open new popUp or here");
+    this.router.navigateByUrl('/acticatetwo'); 
   }
 
   getname(index : number)
@@ -79,26 +80,30 @@ export class SettingsComponent implements OnInit, OnDestroy{
   }
   handleResponseone(data : any)
   {
-    if (data.statusCode)
-    console.log('error msg')
+    console.log(data);
+    if (data.statusCode && data.statusCode != 202)
+      console.log('error msg')
     else
-    console.log('fail')
+      this.AvatarChanged.emit();
   }
+
+
   async validateInput()
   {
     if (this.file)
     this.update = this.serviceUser.setUserAvatar(this.file).subscribe({next: (data) => {this.handleResponseone(data)}})
-
     this.update = this.serviceUser.updateUserInfos({username: this.userName.value,
         name: this.fullName.value,
         avatar: this.submet_this.avatar,
         twofactor: this.twoFactor}).subscribe(
       {next: (data) => {this.handleResponse(data)},}
     );
+    this.AvatarChanged.emit();
   }
 
   close()
   {
     this.router.navigateByUrl('')
   }
+
 }

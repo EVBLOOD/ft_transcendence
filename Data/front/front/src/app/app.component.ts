@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  // changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   animations: [
@@ -22,6 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private replay : any;
   notLogged : boolean = true;
   dropDown = false;
+
 
   
   @ViewChild('dropDownContent') dropDownContent !:ElementRef;
@@ -56,6 +56,18 @@ export class AppComponent implements OnInit, OnDestroy {
     if (clickedElement !== this.dropDownContent?.nativeElement && clickedElement !== this.dropDownContent_?.nativeElement  && clickedElement !== this.dropDownContent__?.nativeElement ) {
       this.dropDown = false;
     }
+  }
+
+  updateAvatar(event : any)
+  {
+    if (event)
+      console.log(';;;')
+    console.log("calling myself")
+    this.ngOnInit();
+  }
+  logout()
+  {
+    this.replay = this.profileService.logout().subscribe({next: (data) => {this.route.navigateByUrl('login'); this.notLogged = true;}, complete: () => {this.replay.unsubscribe()}}) 
   }
 
 }
