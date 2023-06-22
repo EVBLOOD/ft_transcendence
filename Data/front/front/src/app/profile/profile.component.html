@@ -1,3 +1,4 @@
+<app-page-not-found *ngIf="(profile$| async)?.statusCode" />
 <div class="body" *ngIf="!((profile$| async)?.statusCode)">
     <img class="coverProfile" src="/assets/cover.svg" alt="cover img" />
     <div class="insideProfile">
@@ -26,5 +27,4 @@
         </div>
     </div>
 </div>
-<app-page-not-found *ngIf="(profile$| async)?.statusCode">
-    <!-- <router-outlet></router-outlet> -->
+<!-- <router-outlet></router-outlet> -->

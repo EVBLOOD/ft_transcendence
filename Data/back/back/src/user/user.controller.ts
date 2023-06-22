@@ -41,7 +41,7 @@ export class UserController {
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
-  @Get('me')
+  @Get('_me')
   async thisIsME(@Req() req) {
     const replay = await this.userService.findMe(req.new_user.sub);
     if (replay) return replay;

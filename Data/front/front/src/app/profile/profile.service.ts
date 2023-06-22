@@ -11,7 +11,7 @@ export class ProfileService {
   getUserData(corrent : string)
   {
     if (!corrent || corrent == '')
-      return this.http.get('http://localhost:3000/user/me', {withCredentials: true})
+      return this.http.get('http://localhost:3000/user/_me', {withCredentials: true})
     return this.http.get('http://localhost:3000/user/' + corrent, {withCredentials: true})
   }
 
