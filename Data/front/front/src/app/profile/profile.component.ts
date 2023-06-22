@@ -17,9 +17,10 @@ export class ProfileComponent implements OnInit {
   public username : string;
   constructor(public profileService : ProfileService, private authService: AuthService, private route: ActivatedRoute) {
     this.username = this.route.snapshot.params["username"];
+    console.log(this.username);
   }
   ngOnInit(): void {
-    this.profile$ = this.profileService.getUserData(this.username).pipe( tap( res => console.log('HTTP response:', res)));
+    this.profile$ = this.profileService.getUserData(this.username);
     this.auth$ = this.authService.getCurrentUser();
   }
   sameDataEveryDay = [

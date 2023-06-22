@@ -13,7 +13,6 @@ export class ProfileService {
     if (!corrent || corrent == '')
       return this.http.get('http://localhost:3000/user/me', {withCredentials: true})
     return this.http.get('http://localhost:3000/user/' + corrent, {withCredentials: true})
-    
   }
 
   getUserAvatarPath(link: string) : string

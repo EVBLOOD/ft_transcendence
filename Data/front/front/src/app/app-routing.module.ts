@@ -11,6 +11,7 @@ import { ChatComponent } from './chat/chat.component';
 import { LeaderbordComponent } from './leaderbord/leaderbord.component';
 import { SettingsComponent } from './profile/settings/settings.component';
 import { ActivatetwoComponent } from './profile/settings/activatetwo/activatetwo.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 const routes: Routes = 
                       [
@@ -24,6 +25,7 @@ const routes: Routes =
                         {path: 'login', component: LoginComponent,  canActivate: [authGuard]},
                         {path: 'twoFactor', component: TwoFactoryComponent ,canActivate: [twoFacGuard]},
                         {path: 'profile/:username', component: ProfileComponent, canActivate: [authGuard]},
+                        {path: '**', component: PageNotFoundComponent, canActivate: [authGuard]},
                       ];
 
 @NgModule({

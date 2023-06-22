@@ -18,6 +18,7 @@ import { ChatComponent } from './chat/chat.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ActivatetwoComponent } from './profile/settings/activatetwo/activatetwo.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { ActivatetwoComponent } from './profile/settings/activatetwo/activatetwo
     GameComponent,
     ChatComponent,
     ActivatetwoComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,
