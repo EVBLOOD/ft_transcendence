@@ -1,0 +1,33 @@
+#game-container {
+  width: 100%;
+  max-width: 1232px;
+  max-height: 685px;
+  margin: auto;
+}
+#game-container-parent {
+  max-width: 1340px;
+  max-height: 839px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #103959;
+  border-radius: 40px;
+  padding: 50px;
+  box-sizing: border-box;
+  background: #103959;
+  border-radius: 40px;
+}
+
+.player-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.player {
+  margin: 0;
+  padding: 0;
+  font-size: 18px;
+  color: white;
+}
