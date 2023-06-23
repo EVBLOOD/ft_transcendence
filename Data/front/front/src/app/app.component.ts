@@ -81,7 +81,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   logout()
   {
-    this.replay = this.profileService.logout().subscribe({next: (data) => {this.route.navigateByUrl('login'); this.notLogged = true;}, complete: () => {this.replay.unsubscribe()}}) 
+    this.replay = this.profileService.logout().subscribe({next: (data) => {this.route.navigateByUrl('login'); this.notLogged = true;}, complete: () => {this.replay.unsubscribe()}})
+    this.status.Offline();
   }
 
 }

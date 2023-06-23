@@ -62,13 +62,8 @@ export class CurrentStatusGateway {
       return false;
     }
     this.SaveStatus.AddState(xyz.sub, client, 'Online');
-    this.myserver.emit(
-      'status',
-      xyz.sub +
-        ' : ' +
-        JSON.stringify(this.SaveStatus.GetCurrentState(xyz.sub)),
-    );
-    return 'He is Online';
+    this.myserver.emit('status', this.SaveStatus.GetAllUsersCurrentState());
+    return this.SaveStatus.GetAllUsersCurrentState();
   }
 
   @SubscribeMessage('Online')
@@ -102,13 +97,8 @@ export class CurrentStatusGateway {
       return false;
     }
     this.SaveStatus.AddState(xyz.sub, client, 'Online');
-    this.myserver.emit(
-      'status',
-      xyz.sub +
-        ' : ' +
-        JSON.stringify(this.SaveStatus.GetCurrentState(xyz.sub)),
-    );
-    return 'He is Online';
+    this.myserver.emit('status', this.SaveStatus.GetAllUsersCurrentState());
+    return this.SaveStatus.GetAllUsersCurrentState();
   }
 
   @SubscribeMessage('Offline')
@@ -176,12 +166,7 @@ export class CurrentStatusGateway {
       return false;
     }
     this.SaveStatus.AddState(xyz.sub, client, 'InGame');
-    this.myserver.emit(
-      'status',
-      xyz.sub +
-        ' : ' +
-        JSON.stringify(this.SaveStatus.GetCurrentState(xyz.sub)),
-    );
+    this.myserver.emit('status', this.SaveStatus.GetAllUsersCurrentState());
     return 'He is InGame';
   }
 
@@ -216,12 +201,7 @@ export class CurrentStatusGateway {
       return false;
     }
     this.SaveStatus.PruneUserState(xyz.sub);
-    this.myserver.emit(
-      'status',
-      xyz.sub +
-        ' : ' +
-        JSON.stringify(this.SaveStatus.GetCurrentState(xyz.sub)),
-    );
+    this.myserver.emit('status', this.SaveStatus.GetAllUsersCurrentState());
     return 'GoodBay world!';
   }
 
@@ -255,12 +235,7 @@ export class CurrentStatusGateway {
       client.disconnect();
       return false;
     }
-    this.myserver.emit(
-      'status',
-      xyz.sub +
-        ' : ' +
-        JSON.stringify(this.SaveStatus.GetCurrentState(xyz.sub)),
-    );
+    this.myserver.emit('status', this.SaveStatus.GetAllUsersCurrentState());
     return 'Hello world!';
   }
 
@@ -294,12 +269,7 @@ export class CurrentStatusGateway {
       return false;
     }
     this.SaveStatus.RemoveState(client, xyz.sub);
-    this.myserver.emit(
-      'status',
-      xyz.sub +
-        ' : ' +
-        JSON.stringify(this.SaveStatus.GetCurrentState(xyz.sub)),
-    );
+    this.myserver.emit('status', this.SaveStatus.GetAllUsersCurrentState());
     return 'Tab Disconnect';
   }
 }

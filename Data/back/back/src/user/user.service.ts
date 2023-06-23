@@ -21,6 +21,9 @@ export class UserService {
     return await this.UserRepo.find({ skip: skip, take: take });
   }
 
+  getAllCurrentStates() {
+    this.currentstate;
+  }
   async findOne(username: string) {
     return await this.UserRepo.findOneBy({ username: username });
   }
@@ -67,6 +70,14 @@ export class UserService {
       lastupdate: Date().toString(),
     });
     this.currentstate.set(id, colect);
+  }
+
+  GetAllUsersCurrentState() {
+    let n: { id: number; status: string }[] = [];
+    this.currentstate.forEach((value: any, key: number) => {
+      n.push({ id: key, status: this.GetCurrentState(key).status });
+    });
+    return n;
   }
 
   GetAllCurrentStates(id: number) {

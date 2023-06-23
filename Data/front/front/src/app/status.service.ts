@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-// import { io } from 'socket.io-client';
+import { BehaviorSubject } from 'rxjs';
+import { io } from 'socket.io-client';
 
 
 @Injectable({
@@ -7,26 +8,37 @@ import { Injectable } from '@angular/core';
 })
 export class StatusService {
 
-  constructor() { }
+  public current_status = new BehaviorSubject<any>([]);
+  socket : any;
+  constructor() { 
+    this.socket = io('http://localhost:3000/current_status',   {
+      withCredentials: true, 
+    },  )
+    // this.socket.emit('Online', (data : any) => {this.current_status.next(data);});
+    this.socket.on("status", (data : any) => {
+      console.log('mayaghn bchi mak')
+      this.current_status.next(data);
+    });
+  }
 
-  // socket = io('http://localhost:3000/current_status',  {
-  //   withCredentials: true
-  // })
-
+   
   online()
   {
-    // this.socket.emit('Online')
+    this.socket.emit('Online', (...args: any[]) => {console.log(args);});
   }
   inGame()
   {
-    // this.socket.emit('inGame') 
+    this.socket.emit('InGame', (...args: any[]) => {console.log(args);}) 
   }
 
   Offline()
   {
-    // this.socket.emit('Offline') 
+    this.socket.emit('Disconnect', (...args: any[]) => {console.log(args); console.log(args);}) 
   }
-  // getSta
+  getState()
+  {
+
+  }
   // socket = io('ws://localhost:3000/current_status')
 
 }
