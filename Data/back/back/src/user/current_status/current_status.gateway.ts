@@ -9,7 +9,13 @@ import { UserService } from '../user.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthenticatorService } from 'src/authenticator/authenticator.service';
 
-@WebSocketGateway({ namespace: 'current_status' })
+@WebSocketGateway({
+  namespace: 'current_status',
+  cors: {
+    credentials: true,
+    origin: 'http://localhost:4200',
+  },
+})
 export class CurrentStatusGateway {
   constructor(
     private readonly SaveStatus: UserService,
@@ -21,18 +27,35 @@ export class CurrentStatusGateway {
   myserver: Server;
 
   async handleConnection(client: Socket, ...args: any[]) {
-    if (!client.handshake.headers.authorization) {
+    console.log(
+      client.handshake.headers?.cookie
+        ?.split('; ')
+        ?.find((row) => row.startsWith('access_token='))
+        ?.split('=')[1],
+    );
+    if (
+      !client.handshake.headers?.cookie
+        ?.split('; ')
+        ?.find((row) => row.startsWith('access_token='))
+        ?.split('=')[1]
+    ) {
       client.disconnect();
       return false;
     }
     const xyz: any = this.serviceJWt.decode(
-      client.handshake.headers.authorization,
+      client.handshake.headers?.cookie
+        ?.split('; ')
+        ?.find((row) => row.startsWith('access_token='))
+        ?.split('=')[1],
     );
     if (
       !xyz ||
       (await this.serviceToken.IsSame(
         xyz.sub || '',
-        client.handshake.headers.authorization,
+        client.handshake.headers?.cookie
+          ?.split('; ')
+          ?.find((row) => row.startsWith('access_token='))
+          ?.split('=')[1],
       )) == false
     ) {
       client.disconnect();
@@ -50,18 +73,29 @@ export class CurrentStatusGateway {
 
   @SubscribeMessage('Online')
   async handleOnline(client: any, payload: any) {
-    if (!client.handshake.headers.authorization) {
+    if (
+      !client.handshake.headers?.cookie
+        ?.split('; ')
+        ?.find((row) => row.startsWith('access_token='))
+        ?.split('=')[1]
+    ) {
       client.disconnect();
       return false;
     }
     const xyz: any = this.serviceJWt.decode(
-      client.handshake.headers.authorization,
+      client.handshake.headers?.cookie
+        ?.split('; ')
+        ?.find((row) => row.startsWith('access_token='))
+        ?.split('=')[1],
     );
     if (
       !xyz ||
       (await this.serviceToken.IsSame(
         xyz.sub || '',
-        client.handshake.headers.authorization,
+        client.handshake.headers?.cookie
+          ?.split('; ')
+          ?.find((row) => row.startsWith('access_token='))
+          ?.split('=')[1],
       )) == false
     ) {
       client.disconnect();
@@ -79,18 +113,29 @@ export class CurrentStatusGateway {
 
   @SubscribeMessage('Offline')
   async handleOffline(client: any, payload: any) {
-    if (!client.handshake.headers.authorization) {
+    if (
+      !client.handshake.headers?.cookie
+        ?.split('; ')
+        ?.find((row) => row.startsWith('access_token='))
+        ?.split('=')[1]
+    ) {
       client.disconnect();
       return false;
     }
     const xyz: any = this.serviceJWt.decode(
-      client.handshake.headers.authorization,
+      client.handshake.headers?.cookie
+        ?.split('; ')
+        ?.find((row) => row.startsWith('access_token='))
+        ?.split('=')[1],
     );
     if (
       !xyz ||
       (await this.serviceToken.IsSame(
         xyz.sub || '',
-        client.handshake.headers.authorization,
+        client.handshake.headers?.cookie
+          ?.split('; ')
+          ?.find((row) => row.startsWith('access_token='))
+          ?.split('=')[1],
       )) == false
     ) {
       client.disconnect();
@@ -102,18 +147,29 @@ export class CurrentStatusGateway {
 
   @SubscribeMessage('InGame')
   async handleInGame(client: any, payload: any) {
-    if (!client.handshake.headers.authorization) {
+    if (
+      !client.handshake.headers?.cookie
+        ?.split('; ')
+        ?.find((row) => row.startsWith('access_token='))
+        ?.split('=')[1]
+    ) {
       client.disconnect();
       return false;
     }
     const xyz: any = this.serviceJWt.decode(
-      client.handshake.headers.authorization,
+      client.handshake.headers?.cookie
+        ?.split('; ')
+        ?.find((row) => row.startsWith('access_token='))
+        ?.split('=')[1],
     );
     if (
       !xyz ||
       (await this.serviceToken.IsSame(
         xyz.sub || '',
-        client.handshake.headers.authorization,
+        client.handshake.headers?.cookie
+          ?.split('; ')
+          ?.find((row) => row.startsWith('access_token='))
+          ?.split('=')[1],
       )) == false
     ) {
       client.disconnect();
@@ -131,18 +187,29 @@ export class CurrentStatusGateway {
 
   @SubscribeMessage('Disconnect')
   async handleTyping(client: any, payload: any) {
-    if (!client.handshake.headers.authorization) {
+    if (
+      !client.handshake.headers?.cookie
+        ?.split('; ')
+        ?.find((row) => row.startsWith('access_token='))
+        ?.split('=')[1]
+    ) {
       client.disconnect();
       return false;
     }
     const xyz: any = this.serviceJWt.decode(
-      client.handshake.headers.authorization,
+      client.handshake.headers?.cookie
+        ?.split('; ')
+        ?.find((row) => row.startsWith('access_token='))
+        ?.split('=')[1],
     );
     if (
       !xyz ||
       (await this.serviceToken.IsSame(
         xyz.sub || '',
-        client.handshake.headers.authorization,
+        client.handshake.headers?.cookie
+          ?.split('; ')
+          ?.find((row) => row.startsWith('access_token='))
+          ?.split('=')[1],
       )) == false
     ) {
       client.disconnect();
@@ -160,18 +227,29 @@ export class CurrentStatusGateway {
 
   @SubscribeMessage('Call')
   async handleCall(client: Socket) {
-    if (!client.handshake.headers.authorization) {
+    if (
+      !client.handshake.headers?.cookie
+        ?.split('; ')
+        ?.find((row) => row.startsWith('access_token='))
+        ?.split('=')[1]
+    ) {
       client.disconnect();
       return false;
     }
     const xyz: any = this.serviceJWt.decode(
-      client.handshake.headers.authorization,
+      client.handshake.headers?.cookie
+        ?.split('; ')
+        ?.find((row) => row.startsWith('access_token='))
+        ?.split('=')[1],
     );
     if (
       !xyz ||
       (await this.serviceToken.IsSame(
         xyz.sub || '',
-        client.handshake.headers.authorization,
+        client.handshake.headers?.cookie
+          ?.split('; ')
+          ?.find((row) => row.startsWith('access_token='))
+          ?.split('=')[1],
       )) == false
     ) {
       client.disconnect();
@@ -187,18 +265,29 @@ export class CurrentStatusGateway {
   }
 
   async handleDisconnect(client: Socket) {
-    if (!client.handshake.headers.authorization) {
+    if (
+      !client.handshake.headers?.cookie
+        ?.split('; ')
+        ?.find((row) => row.startsWith('access_token='))
+        ?.split('=')[1]
+    ) {
       client.disconnect();
       return false;
     }
     const xyz: any = this.serviceJWt.decode(
-      client.handshake.headers.authorization,
+      client.handshake.headers?.cookie
+        ?.split('; ')
+        ?.find((row) => row.startsWith('access_token='))
+        ?.split('=')[1],
     );
     if (
       !xyz ||
       (await this.serviceToken.IsSame(
         xyz.sub || '',
-        client.handshake.headers.authorization,
+        client.handshake.headers?.cookie
+          ?.split('; ')
+          ?.find((row) => row.startsWith('access_token='))
+          ?.split('=')[1],
       )) == false
     ) {
       client.disconnect();

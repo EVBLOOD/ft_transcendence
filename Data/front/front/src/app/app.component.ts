@@ -1,8 +1,9 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
-import { Observable, Subscription, distinctUntilChanged, fromEvent } from 'rxjs';
+import { Observable, Subject, Subscription, distinctUntilChanged, fromEvent } from 'rxjs';
 import { ProfileService } from './profile/profile.service';
 import { Router } from '@angular/router';
+import { StatusService } from './status.service';
 
 @Component({
   selector: 'app-root',
@@ -17,10 +18,13 @@ import { Router } from '@angular/router';
 })
 export class AppComponent implements OnInit, OnDestroy {
   logo = "PING-PONG 1337";
+  public profileSub$ !: Observable<any>;
   public profile$ !: Observable<any>;
+  // public profile$ !: Subject<any>;
   private replay : any;
   notLogged : boolean = true;
   dropDown = false;
+  profilepic : string = '';
 
 
   
@@ -28,7 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
   @ViewChild('dropDownContent_') dropDownContent_ !:ElementRef;
   @ViewChild('dropDownContent__') dropDownContent__ !:ElementRef;
   
-  constructor(public profileService : ProfileService, private route: Router) {}
+  constructor(public profileService : ProfileService, private route: Router, private status: StatusService) {}
   getcurrentPath()
   {
     return this.route.url;
@@ -37,14 +41,24 @@ export class AppComponent implements OnInit, OnDestroy {
     this.dropDown = !this.dropDown
   }
   ngOnInit(): void {
-    this.profile$ = this.profileService.getUserData('');
-    this.replay = this.profile$.subscribe({next: (data) => {
-      if (data.statusCode)
+    console.log("WHAT");
+    this.profileSub$ = this.profileService.getMyData().asObservable();
+    this.replay = this.profileSub$.subscribe({next: (data : Observable<any>) => {
+      data.subscribe({next: (dta : any) =>{
+        console.log('hello')
+        if (dta.statusCode)
         this.notLogged = true;
-      else
-        this.notLogged = false;
-
-  },});
+        else
+        {
+          this.notLogged = false;
+          this.profilepic = this.profileService.getUserAvatarPath(dta.avatar);
+          console.log(dta.avatar)
+          console.log(this.profilepic)
+        }
+      }})
+      this.profile$ = data;
+     console.log("onee")
+    },});
   }
   ngOnDestroy(): void {
     this.replay.unsubscribe()

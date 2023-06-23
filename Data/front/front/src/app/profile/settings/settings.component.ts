@@ -10,13 +10,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit, OnDestroy{
-  @Output() AvatarChanged = new EventEmitter<void>();
   private replay : any;
   fullName  = new FormControl('');
   userName  = new FormControl('');
   twoFactor : boolean = false;
   GameTheme : number = 1;
   file : any;
+  profileSubject$  !: Observable<any>;
 
   public profile$ !: Observable<any>;
   private update : any = null;
@@ -26,7 +26,9 @@ export class SettingsComponent implements OnInit, OnDestroy{
   public data = {title: "Settings", subtitle: "profile", action: "Update"}
   constructor(public serviceUser : ProfileService, private router: Router) {}
   ngOnInit() {
-    this.profile$ = this.serviceUser.getUserData('');
+    this.profileSubject$ = this.serviceUser.getMyData();
+    this.profileSubject$.subscribe({next: (data : Observable<any>) => {
+    this.profile$ = data;}});
     this.replay = this.profile$.subscribe({next: (data) => {
       if (data.statusCode)
         this.router.navigateByUrl('');
@@ -70,7 +72,10 @@ export class SettingsComponent implements OnInit, OnDestroy{
     if (data.statusCode)
       console.log('error msg')
     else
+    {
+      this.serviceUser.update();
       this.router.navigateByUrl('');
+    }
     this.replay.unsubscribe();
   }
   funct(file : any)
@@ -84,21 +89,23 @@ export class SettingsComponent implements OnInit, OnDestroy{
     if (data.statusCode && data.statusCode != 202)
       console.log('error msg')
     else
-      this.AvatarChanged.emit();
+    {
+      this.serviceUser.update();
+    }
   }
-
 
   async validateInput()
   {
     if (this.file)
-    this.update = this.serviceUser.setUserAvatar(this.file).subscribe({next: (data) => {this.handleResponseone(data)}})
+      this.update = this.serviceUser.setUserAvatar(this.file).subscribe({next: (data) => {this.handleResponseone(data)}})
     this.update = this.serviceUser.updateUserInfos({username: this.userName.value,
         name: this.fullName.value,
         avatar: this.submet_this.avatar,
         twofactor: this.twoFactor}).subscribe(
       {next: (data) => {this.handleResponse(data)},}
+      
     );
-    this.AvatarChanged.emit();
+
   }
 
   close()

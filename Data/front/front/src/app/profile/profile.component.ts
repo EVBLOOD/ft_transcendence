@@ -13,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 export class ProfileComponent implements OnInit {
 
   public profile$ !: Observable<any>;
+  public profileSubject$ !: Observable<any>;
   public auth$ !: Observable<any>;
   public username : string;
   constructor(public profileService : ProfileService, private authService: AuthService, private route: ActivatedRoute) {
@@ -20,7 +21,17 @@ export class ProfileComponent implements OnInit {
     console.log(this.username);
   }
   ngOnInit(): void {
-    this.profile$ = this.profileService.getUserData(this.username);
+    if (!this.username || this.username == '')
+    {
+      // this.profileSubject$ = this.profileService.getMyData();
+      // this.profileSubject$.subscribe({next: (data : Observable<any>) => {
+      // this.profile$ = data;}});
+      this.profileSubject$ = this.profileService.getMyData();
+      this.profileSubject$.subscribe({next: (data : Observable<any>) => {
+      this.profile$ = data;}});
+    }
+    else
+      this.profile$ = this.profileService.getUserData(this.username);
     this.auth$ = this.authService.getCurrentUser();
   }
   sameDataEveryDay = [

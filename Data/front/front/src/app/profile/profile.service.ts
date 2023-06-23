@@ -1,17 +1,24 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProfileService {
 
-  constructor(private http: HttpClient) { }
+  profile$ = new BehaviorSubject<any>({});
+  constructor(private http: HttpClient) { 
+    this.profile$.next(this.http.get('http://localhost:3000/user/_me', {withCredentials: true})); 
+  }
 
+  
+  getMyData()
+  {
+    return this.profile$;
+  }
   getUserData(corrent : string)
   {
-    if (!corrent || corrent == '')
-      return this.http.get('http://localhost:3000/user/_me', {withCredentials: true})
     return this.http.get('http://localhost:3000/user/' + corrent, {withCredentials: true})
   }
 
@@ -24,9 +31,12 @@ export class ProfileService {
     return link;
   }
 
+  update()
+  {
+    this.profile$.next(this.http.get('http://localhost:3000/user/_me', {withCredentials: true})); 
+  }
   setUserAvatar(file: any)
   {
-
     const fileform = new FormData();
     fileform.append('file', file);
     return this.http.put('http://localhost:3000/user/upload', fileform , {withCredentials: true} )
@@ -34,7 +44,8 @@ export class ProfileService {
 
   updateUserInfos(object: any)
   {
-    return this.http.post('http://localhost:3000/user/updateAll', object, {withCredentials: true});
+    const replay =  this.http.post('http://localhost:3000/user/updateAll', object, {withCredentials: true});
+    return replay;
   }
 
   getQrCode()
