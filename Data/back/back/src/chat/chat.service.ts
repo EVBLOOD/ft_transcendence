@@ -28,6 +28,7 @@ import { promises } from 'dns';
 import { SwapOwnerDTO } from './dto/SwapOwner.dto';
 import { LargeNumberLike } from 'crypto';
 import { constrainedMemory } from 'process';
+import { UpdateChatroomDTO } from './dto/updateChatroom.dto';
 
 @Injectable()
 export class ChatService {
@@ -170,7 +171,8 @@ export class ChatService {
         }
       }
     }
-    return null;
+    // return null;
+    throw new HttpException("Can't find DM", HttpStatus.NOT_FOUND);
   }
 
   async checkForAdminRoll(chatID: number, userName: string): Promise<boolean> {
@@ -231,6 +233,7 @@ export class ChatService {
     //    throw new HttpException('Can't add currently banned user', HttpStatus.FORBIDDEN);
     // }
     // else
+    // if ()
     chatroom.member.push(user);
     return chatroom;
   }
@@ -257,7 +260,6 @@ export class ChatService {
       //    throw new HttpException('You are banned', HttpStatus.FORBIDDEN);
       // }
       // else
-      // console.log("here");
       const admin = await this.chatHelpers.getUser(adminDTO.roleReceiver);
       chatroom.admin.push(admin);
       return await this.chatRoomRepo.save(chatroom);
@@ -369,4 +371,25 @@ export class ChatService {
     const newChat = deleteUser(chatroom, user);
     return await this.chatRoomRepo.save(newChat);
   }
+  async updateChatroom(chatID: number, adminName: string, updateDTO: UpdateChatroomDTO): Promise<Chat | undefined> {
+    const chatroom = await this.GetChatRoomByID(chatID);
+    if (chatroom.type === "DM") {
+      throw new HttpException("Chat room of type DM can't be chnged!", HttpStatus.BAD_REQUEST);
+    }
+    if (await this.checkForAdminRoll(chatID, adminName) === true) {
+      if (updateDTO.newChatroomName) {
+        chatroom.chatRoomName = updateDTO.newChatroomName;
+      }
+      if (updateDTO.newType) {
+        chatroom.type = updateDTO.newType;
+        if (updateDTO.newType === "password") {
+          const passwordHash = await bcrypt.hash(updateDTO.newPassword, 10);
+          chatroom.password = passwordHash;
+        }
+        return await this.chatRoomRepo.save(chatroom);
+      }
+    }
+    throw new HttpException("You don't have permission to update this chatroom", HttpStatus.FORBIDDEN);
+  }
+
 } // END OF ChatService class

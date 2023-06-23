@@ -16,11 +16,10 @@ export class UserService {
     private readonly userRepo: Repository<User>,
   ) {}
 
-  async findUserByUserName(userName: string): Promise<User | null> {
+  async findUserByUserName(Name: string): Promise<User | null> {
     const user = await this.userRepo.findOneBy({
-      userName: userName,
+      userName: Name,
     });
-    console.log(user);
     return user;
   }
   async getListOfUsers(): Promise<User[] | undefined> {

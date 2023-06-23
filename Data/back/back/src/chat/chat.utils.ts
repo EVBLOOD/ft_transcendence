@@ -14,8 +14,10 @@ export class ChatUtils {
   ) {}
 
   async getUser(userName: string): Promise<User | undefined> {
-    const user = await this.userService.findUserByUserName(userName);
-    if (user) return user;
+    if (userName) {
+      const user = await this.userService.findUserByUserName(userName);
+      if (user) return user;
+    }
     throw new HttpException(`User ${userName} Not Found`, HttpStatus.NOT_FOUND);
   }
   async checkForAdminRoll(chatID: number, Name: string): Promise<boolean> {
@@ -35,7 +37,7 @@ export class ChatUtils {
   }
 
   async checkForMemberRoll(chatID: number, Name: string): Promise<boolean> {
-    const member = await this.chatRoomRepo.findOne({
+    const chatroom = await this.chatRoomRepo.findOne({
       relations: {
         member: true,
       },
@@ -46,7 +48,15 @@ export class ChatUtils {
         },
       },
     });
-    if (member) return true;
+    if (chatroom) {
+      if (
+        chatroom.member.some((user: User) => {
+          user.userName === Name;
+        })
+      ) {
+        return true;
+      }
+    }
     return false;
   }
 
