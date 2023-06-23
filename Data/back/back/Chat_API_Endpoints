@@ -1,6 +1,6 @@
 prifix /chat
 
-GET methods: 
+GET methods:
 	[:ID] // GET CHAT ROOM BY IS ID
 	[user/:userName] // GET ALL CHATROOM ASSOCIATED WITH A GIVEN USER
 	[DM/:userName1/:userName2] // GET THE MUTUAL CHATROOM FOR THE TWO GIVEN USERS
@@ -10,21 +10,45 @@ GET methods:
 
 POST methods:
 	[create] // CREATE A CHATROOM, TAKES IN CHATROOM DTO OBJECT IN THE BODY OF A REQUEST
-	example:	
+	example:
 	{
 		"type": // private | "public | DM
 		"chatroomName":
 		"password": // only necessary in a private chatroom
-		"userName": //user that wants to create the channel (owner) 
-		"otherUser": // optional only necessary when creating a DM 	
+		"userName": //user that wants to create the channel (owner)
+		"otherUser": // optional only necessary when creating a DM
 	}
 
 PUT methods:
-	[:chatID/add/member] // ADDS A MEMBER TO THE CHATROOM (TAKE A CREATE ADMIN DTO IN THE BODY OF THE REQUEST)
+	[:chatID/add/memAber] // ADDS A MEMBER TO THE CHATROOM (TAKE A CREATE ADMIN DTO IN THE BODY OF THE REQUEST)
 	example:
 	{
 		"member": // new members name
 		"password": // must pass a password if the chatroom is of type private
 	}
-	[:chatID/add/admin] // GIVES ADMIN ROLE TO A USRE IN THE CHATROOM (MUST BE A MEMBER FIRST) ALSO TAKES IN A CREATE ADMIN IN THE BODY 
-	[:chat ]
+	[:chatID/add/admin] // GIVES ADMIN ROLE TO A USRE IN THE CHATROOM (MUST BE A MEMBER FIRST) ALSO TAKES IN A CREATE DMAIN DTO IN THE REQUEST BODY
+	example:
+	{
+		"roleGiver" : // admins name
+		"roleReceiver": // name of the member thats getting the admin role
+	}
+	[:chatID/changeOwner]: // SWAPS THE CHATROOM OWNER, TAKES IN CHANGE OWNER DTO OBJECT IN THE BODY
+	example:
+	{
+		"roleGiver" :
+		"roleReceiver":
+	}
+	[update/:chatID/admin/:adminUserName] // UPDATES A EXISTING CHATROOM, TAKE IN A UPDATE CHATROOM DTO IN THE BODY IF THE REQUEST
+	example:
+	{
+		(all the object elements are optional)
+		"newType" :
+		"newChatroom" :
+		"newPassword" :
+	}
+
+DELETE methods:
+	[delete/:chatroomID/admin/:adminUserName/user/:userToKick] // KICKES A USER FROM THE CHATROOM
+	[delete/:chatroomID/admin/:adminUserName/admin/:userToKick] // KICKES A ADMIN FROM THE CHATROOM (admins cant kick owners)
+	[leave/:chatroomID/user/:userName] // leaving the chatroom if ur the only user in the chatroom, the chatroom is then removed
+

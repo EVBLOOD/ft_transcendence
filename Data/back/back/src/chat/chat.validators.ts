@@ -2,6 +2,7 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 import { createChatroomDTO } from './dto/createChatroom.dto';
 import { User } from 'src/user/user.entity';
 import { Chat } from './chat.entity';
+import { UpdateChatroomDTO } from './dto/updateChatroom.dto';
 
 export function validateChatName(chatRoomName: string): boolean {
   if (chatRoomName == null || !(chatRoomName && chatRoomName.trim())) {
@@ -76,4 +77,15 @@ export function removeAdminStatus(chat: Chat, user: string): Chat {
     return u.userName !== user;
   });
   return chat;
+}
+
+export function ValidateUpdateDTO(dto : UpdateChatroomDTO) : void {
+  if (!dto.newType && !dto.newPassword && !dto.newChatroomName) {
+    throw new HttpException("nothing to update", HttpStatus.BAD_REQUEST);
+  }
+  else  {
+    if (dto.newChatroomName) validateChatName(dto.newChatroomName);
+    if (dto.newType) validateChatType(dto.newType);
+    if (dto.newType === "password" && dto.newPassword) validateChatPassword(dto.newPassword);
+  }
 }

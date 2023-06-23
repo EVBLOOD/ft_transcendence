@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Delete,
+  HttpException,
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { Chat } from './chat.entity';
@@ -14,22 +15,18 @@ import { createChatroomDTO } from './dto/createChatroom.dto';
 import { createMemberDTO } from './dto/createMember.dto';
 import { createAdminDTO } from './dto/createAdmin.dto';
 import { SwapOwnerDTO } from './dto/SwapOwner.dto';
+import { UpdateChatroomDTO } from './dto/updateChatroom.dto';
+import { ValidateUpdateDTO } from './chat.validators';
 
 @Controller('chat')
 export class ChatController {
   constructor(private readonly chatRoomSevice: ChatService) {}
 
   @Get(':id')
-  async getChatRoomByID(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<Chat | undefined> {
-    try {
-      return this.chatRoomSevice.GetChatRoomByID(id);
-    } catch (err) {
-      console.log(err);
-    }
+  async getChatRoomByID(@Param('id', ParseIntPipe) id: number): Promise<Chat> {
+    return this.chatRoomSevice.GetChatRoomByID(id);
   }
-
+  // returns empty array if no chatrooms are found for the given user
   @Get('user/:userName')
   async getChatRoomsOfUser(
     @Param('userName') userName: string,
@@ -41,7 +38,7 @@ export class ChatController {
   async findDMChatroom(
     @Param('firstUser') user1: string,
     @Param('secondUser') user2: string,
-  ): Promise<Chat | null> {
+  ): Promise<Chat> {
     return this.chatRoomSevice.findDMChatroom(user1, user2);
   }
 
@@ -70,15 +67,8 @@ export class ChatController {
   }
 
   @Post('create')
-  async createChatRoom(
-    @Body() chatroom: createChatroomDTO,
-  ): Promise<Chat> {
-    // try {
-      return this.chatRoomSevice.createChatroom(chatroom);
-    // } catch (err) {
-    //   console.log(err);
-    // }
-    // return null;
+  async createChatRoom(@Body() chatroom: createChatroomDTO): Promise<Chat> {
+    return this.chatRoomSevice.createChatroom(chatroom);
   }
 
   @Put(':chatID/add/member')
@@ -86,13 +76,13 @@ export class ChatController {
     @Param('chatID', ParseIntPipe) chatID: number,
     @Body() memberDTO: createMemberDTO,
   ): Promise<Chat | null> {
-    try {
-      // TODO [importent]: check if user in not banned first
-      return this.chatRoomSevice.addMemberToChatroom(chatID, memberDTO);
-    } catch (err) {
-      console.log(err);
-      return null;
-    }
+    // try {
+    // TODO [importent]: check if user in not banned first
+    return this.chatRoomSevice.addMemberToChatroom(chatID, memberDTO);
+    // } catch (err) {
+    // console.log(err);
+    // return null;
+    // }
   }
 
   @Put(':chatID/add/admin')
@@ -117,6 +107,21 @@ export class ChatController {
       return this.chatRoomSevice.changeOwnerOfChatroom(chatID, swapOwnerDto);
     } catch (err) {
       console.log(err);
+    }
+  }
+
+  @Put('update/:chatID/admin/:adminUserName')
+  async updateChatroom(
+    @Param('chatID') chatID: number,
+    @Param('adminUserName') adminName: string,
+    @Body() updateChatDTO: UpdateChatroomDTO,
+  ): Promise<Chat | null> {
+    try {
+      ValidateUpdateDTO(updateChatDTO);
+      this.chatRoomSevice.updateChatroom(chatID, adminName, updateChatDTO);
+    } catch (err) {
+      console.log(err);
+      return null;
     }
   }
 
