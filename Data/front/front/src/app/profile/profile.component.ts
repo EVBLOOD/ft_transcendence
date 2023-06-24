@@ -17,6 +17,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   public auth$ !: Observable<any>;
   public username : string;
   public status !: string;
+
+  // to unsubscribe subscribed Observables
   replay !: any;
   replay_ !: any;
 
@@ -36,8 +38,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.auth$ = this.authService.getCurrentUser();
   }
   ngOnDestroy(): void {
-    this.replay.unsubscribe();
-    this.replay_.unsubscribe();
+    if (this.replay)
+      this.replay.unsubscribe();
+    if (this.replay_)
+      this.replay_.unsubscribe();
   }
   sameDataEveryDay = [
     {path: "/assets/RankIcon.svg", name: "Rank",score: "20"},

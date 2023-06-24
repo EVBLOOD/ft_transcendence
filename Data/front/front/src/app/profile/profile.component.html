@@ -10,7 +10,9 @@
                 <div *ngIf="profile$| async">
                     <p class="userName">{{ (profile$| async)?.username }}</p>
                     {{ statusLoading((profile$| async)?.id) }}
-                    <p *ngIf="status" class="userStatus"> {{ status }}</p>
+                    <p *ngIf="status"
+                        [ngStyle]="{'color': status == 'Offline' ? '#A5A5A5' : status == 'Online' ? '#6EDB3F' : '#FFA45E'}"
+                        class="userStatus"> {{ status }}</p>
                 </div>
             </div>
             <div *ngIf="(profile$| async)?.id != (auth$| async)?.sub" class="userAction">
