@@ -87,6 +87,7 @@ export class FriendshipController {
         req.new_user.sub,
         body.Userone,
       );
+      // console.log(replay);
       if (replay) return replay;
     } catch (err) {
       throw new HttpException(

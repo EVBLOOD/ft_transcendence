@@ -166,12 +166,9 @@ export class FriendshipService {
   }
 
   async unblock(user_forgeiving: number, blocked_user: string) {
-    console.log('alo bro!');
     const { UserSending: UserBlocking, UserReceiving } =
       await this.UsersCheckerId(user_forgeiving, blocked_user);
-    console.log('aaa okeh!');
     if (UserBlocking == null || UserReceiving == null) return undefined;
-    console.log('alo oui!');
     const friendship = await this.FriendShipRepo.find({
       where: [
         {
