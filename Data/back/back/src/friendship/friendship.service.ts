@@ -23,7 +23,13 @@ export class FriendshipService {
       user_target,
     );
     if (!UserSending || !UserReceiving) return undefined;
-    console.log('well well well');
+    const Getstatus = await this.FriendShipRepo.findOne({
+      where: [
+        { receiver: UserSending.id, sender: UserReceiving.id },
+        { receiver: UserReceiving.id, sender: UserSending.id },
+      ],
+    });
+    if (Getstatus) return null;
     return await this.FriendShipRepo.save({
       sender: UserSending.id,
       receiver: UserReceiving.id,
@@ -95,6 +101,7 @@ export class FriendshipService {
         return { status: 'you are accepted' };
     }
   }
+
   async blocklist(id: number, skip: number, take: number) {
     if (!(await this.UserRepo.findOneBy({ id: id }))) return undefined;
     return await this.FriendShipRepo.find({
@@ -137,6 +144,7 @@ export class FriendshipService {
         status: 'pending',
       });
     }
+    if (friendship[0].blocked) return null;
     friendship[0].blocked = true;
     if (friendship[0].receiver === id) friendship[0].blocked_by = 'receiver';
     else friendship[0].blocked_by = 'sender';
