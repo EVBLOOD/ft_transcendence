@@ -10,7 +10,7 @@
                 <div *ngIf="profile$| async">
                     <p class="userName">{{ (profile$| async)?.username }}</p>
                     {{ statusLoading((profile$| async)?.id) }}
-                    <p class="userStatus">{{ status.new }}</p>
+                    <p *ngIf="status" class="userStatus"> {{ status }}</p>
                 </div>
             </div>
             <div *ngIf="(profile$| async)?.id != (auth$| async)?.sub" class="userAction">

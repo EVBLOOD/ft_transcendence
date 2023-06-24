@@ -14,9 +14,7 @@ export class StatusService {
     this.socket = io('http://localhost:3000/current_status',   {
       withCredentials: true, 
     },  )
-    // this.socket.emit('Online', (data : any) => {this.current_status.next(data);});
     this.socket.on("status", (data : any) => {
-      console.log('mayaghn bchi mak')
       this.current_status.next(data);
     });
   }
