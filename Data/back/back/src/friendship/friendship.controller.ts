@@ -81,18 +81,13 @@ export class FriendshipController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Post('unblock')
   @UsePipes(new UservalidatingPipe())
-  async unblock(
-    @Request() req: any,
-    @Body() body: UserValidatingDto,
-    @Query('skip', ParseIntPipe) skip: number,
-    @Query('take', ParseIntPipe) take: number,
-  ) {
+  async unblock(@Request() req: any, @Body() body: UserValidatingDto) {
     try {
       const replay = await this.friendshipService.unblock(
         req.new_user.sub,
         body.Userone,
       );
-      if (!replay) return replay;
+      if (replay) return replay;
     } catch (err) {
       throw new HttpException(
         {
@@ -177,7 +172,6 @@ export class FriendshipController {
         req.new_user.sub,
         body.Userone,
       );
-      console.log(replay);
       return replay;
     } catch (err) {
       throw new HttpException(
@@ -240,7 +234,6 @@ export class FriendshipController {
       );
       if (replay) return replay;
     } catch (err) {
-      console.log(err);
       throw new HttpException(
         {
           status: HttpStatus.BAD_GATEWAY,

@@ -1,5 +1,5 @@
-<app-page-not-found *ngIf="(profile$| async)?.statusCode" />
-<div class="body" *ngIf="!((profile$| async)?.statusCode)">
+<app-page-not-found *ngIf="(profile$| async)?.statusCode || type == 2" />
+<div class="body" *ngIf="!((profile$| async)?.statusCode) && type != 2">
     <img class="coverProfile" src="/assets/cover.svg" alt="cover img" />
     <div class="insideProfile">
         <div class="infoProfileUser">
@@ -16,7 +16,8 @@
                 </div>
             </div>
             <div *ngIf="(profile$| async)?.id != (auth$| async)?.sub" class="userAction">
-                <button>Block <img src="/assets/block.svg" alt="1"></button>
+                <button *ngIf="type != 1" (click)="blockUser()">Block <img src="/assets/block.svg" alt="1"></button>
+                <button *ngIf="type == 1" (click)="unBlock()">Unblock <img src="/assets/block.svg" alt="1"></button>
                 <button>Message <img src="/assets/MessageProfile.svg" alt="2"></button>
                 <button *ngIf="type == 0" id="friendshipAdding" (click)="addFriend()">Add Friend<img
                         src="/assets/AddFriend.svg" alt="3"></button>

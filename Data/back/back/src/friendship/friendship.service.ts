@@ -144,7 +144,7 @@ export class FriendshipService {
         status: 'pending',
       });
     }
-    if (friendship[0].blocked) return null;
+    if (friendship[0].blocked) return false;
     friendship[0].blocked = true;
     if (friendship[0].receiver === id) friendship[0].blocked_by = 'receiver';
     else friendship[0].blocked_by = 'sender';
@@ -166,9 +166,12 @@ export class FriendshipService {
   }
 
   async unblock(user_forgeiving: number, blocked_user: string) {
+    console.log('alo bro!');
     const { UserSending: UserBlocking, UserReceiving } =
       await this.UsersCheckerId(user_forgeiving, blocked_user);
-    if (UserBlocking === null || UserReceiving === null) return undefined;
+    console.log('aaa okeh!');
+    if (UserBlocking == null || UserReceiving == null) return undefined;
+    console.log('alo oui!');
     const friendship = await this.FriendShipRepo.find({
       where: [
         {
