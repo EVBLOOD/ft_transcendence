@@ -207,9 +207,6 @@
     cursor: pointer;
 }
 
-.userAction :nth-child(3) {
-    background-color: #99D98C;
-}
 
 .userStatisticsProfile {
     margin-top: 25px;
@@ -233,6 +230,41 @@
     text-transform: uppercase;
     color: #7FABCC;
     margin-bottom: 15px;
+}
+
+.userAction div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex-wrap: nowrap;
+}
+
+.friendshipResponding {
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    background-color: #F2F6FA;
+    color: #184E77;
+    font-size: 12px;
+    font-weight: 500;
+    justify-items: center;
+    padding: 7px 0px;
+}
+
+.friendshipResponding li {
+    cursor: pointer;
+    justify-items: center;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: 151px;
+    height: 32px
+}
+
+
+#friendshipAdding {
+    background: #99D98C;
 }
 
 @media only screen and (max-width: 985px) {

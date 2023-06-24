@@ -18,7 +18,21 @@
             <div *ngIf="(profile$| async)?.id != (auth$| async)?.sub" class="userAction">
                 <button>Block <img src="/assets/block.svg" alt="1"></button>
                 <button>Message <img src="/assets/MessageProfile.svg" alt="2"></button>
-                <button>Add Friend <img src="/assets/AddFriend.svg" alt="3"></button>
+                <button *ngIf="type == 0" id="friendshipAdding" (click)="addFriend()">Add Friend<img
+                        src="/assets/AddFriend.svg" alt="3"></button>
+                <button *ngIf="type == 5" class="friendshipCanceling" (click)="cancelFriend()">Cancel Request<img
+                        src="/assets/icons/checkfriend.svg" alt="3"></button>
+                <button *ngIf="type == 3" class="friendshipCanceling" (click)="cancelFriend()">Unfriend<img
+                        src="/assets/icons/checkfriend.svg" alt="3"></button>
+                <div *ngIf="type == 4">
+                    <button class="friendshipToRespond" (click)="hideIt()">Respond<img
+                            src="/assets/icons/checkfriend.svg" alt="3">
+                    </button>
+                    <ul *ngIf="displayRespondingWay" class="friendshipResponding">
+                        <li (click)="respondAcceptFriend()">Confirm Request</li>
+                        <li (click)="cancelFriend()">Delete Request</li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="userStatisticsProfile">

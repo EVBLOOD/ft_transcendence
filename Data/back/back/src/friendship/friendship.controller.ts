@@ -177,7 +177,8 @@ export class FriendshipController {
         req.new_user.sub,
         body.Userone,
       );
-      if (replay) return replay;
+      console.log(replay);
+      return replay;
     } catch (err) {
       throw new HttpException(
         {
@@ -188,7 +189,6 @@ export class FriendshipController {
         { cause: err },
       );
     }
-    throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
   }
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('requestsList')
@@ -240,6 +240,7 @@ export class FriendshipController {
       );
       if (replay) return replay;
     } catch (err) {
+      console.log(err);
       throw new HttpException(
         {
           status: HttpStatus.BAD_GATEWAY,

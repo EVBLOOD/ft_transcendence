@@ -12,12 +12,16 @@ import { FriendshipService } from './friendship.service';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit, OnDestroy {
-
+  
   public profile$ !: Observable<any>;
+  profile = "/assets/img/profile.jpg";
+  logo = "LOGO is loading";
   public profileSubject$ !: Observable<any>;
   public auth$ !: Observable<any>;
   public username : string;
   public status !: string;
+  displayRespondingWay : boolean = false;
+  type : number = 0;
 
   // to unsubscribe subscribed Observables
   replay !: any;
@@ -37,7 +41,30 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.profile$ = data;}});
     }
     else
-    this.profile$ = this.profileService.getUserData(this.username);
+    {
+      this.profile$ = this.profileService.getUserData(this.username);
+      this.friendship.friendStatus(this.username).subscribe((data : any) => {
+        console.log('lololo')
+        console.log(data);
+        if (data)
+        {
+          if (!data.status)
+            this.type = 0; // not friends
+          else if (data.status == 'you blocked')
+            this.type = 1; // unblock
+          else if (data.status == 'you are blocked')
+            this.type = 2; // nothing to show
+          else if (data.status == 'you are accepted')
+            this.type = 3; // friends
+          else if (data.status == 'accept?')
+            this.type = 4; // accept or cancel
+          else if (data.status == 'you are on pending')
+            this.type = 5; // cancel request
+        }
+        else
+          this.type = 0;
+      });
+    }
     this.auth$ = this.authService.getCurrentUser();
   }
   ngOnDestroy(): void {
@@ -68,6 +95,34 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.status = 'Offline'
       });
   }
-  logo = "LOGO is loading";
-  profile = "/assets/img/profile.jpg";
+  hideIt = () => {this.displayRespondingWay = !this.displayRespondingWay}
+  // logic of friendships
+
+  addFriend()
+  {
+    this.friendship.addFriend(this.username).subscribe({next: (data) => {console.log(data)}});
+  }
+  
+  cancelFriend()
+  {
+    this.displayRespondingWay = false;
+    this.friendship.cancelFriendRequest(this.username).subscribe({next: (data) => {console.log(data)}});
+  }
+  respondAcceptFriend()
+  {
+    this.displayRespondingWay = false;
+    this.friendship.acceptRequest(this.username).subscribe({next: (data) => {console.log(data)}});
+  }
+  unFriend()
+  {
+    this.friendship.unfriendUser(this.username).subscribe({next: (data) => {console.log(data)}});
+  }
+  blockUser()
+  {
+    this.friendship.blockUser(this.username).subscribe({next: (data) => {console.log(data)}});
+  }
+  unBlock()
+  {
+    this.friendship.unblockUser(this.username).subscribe({next: (data) => {console.log(data)}});
+  }
 }

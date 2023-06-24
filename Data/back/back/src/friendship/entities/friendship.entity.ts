@@ -26,8 +26,8 @@ export class Friendship {
   @IsDate()
   updated_at: Date;
 
-  @Column({ type: 'enum', enum: ['sender', 'receiver'] })
-  @IsEnum({ enum: ['sender', 'receiver'] })
+  @Column({ nullable: true, type: 'enum', enum: ['', 'sender', 'receiver'] })
+  @IsEnum({ enum: ['', 'sender', 'receiver'] })
   blocked_by: string;
 
   @ManyToOne(() => User)
