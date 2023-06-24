@@ -169,6 +169,28 @@ export class FriendshipController {
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
+  @Post('friendStatus')
+  @UsePipes(new UservalidatingPipe())
+  async FriendshipStatus(@Request() req: any, @Body() body: UserValidatingDto) {
+    try {
+      const replay = await this.friendshipService.FriendshipStatus(
+        req.new_user.sub,
+        body.Userone,
+      );
+      if (replay) return replay;
+    } catch (err) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_GATEWAY,
+          error: 'BAD_GATEWAY',
+        },
+        HttpStatus.BAD_GATEWAY,
+        { cause: err },
+      );
+    }
+    throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
+  }
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get('requestsList')
   async requestsList(
     @Request() req: any,

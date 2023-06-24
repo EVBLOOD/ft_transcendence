@@ -4,6 +4,7 @@ import { Observable, tap } from 'rxjs';
 import { AuthService } from '../login/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { StatusService } from '../status.service';
+import { FriendshipService } from './friendship.service';
 
 @Component({
   selector: 'app-profile',
@@ -22,7 +23,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
   replay !: any;
   replay_ !: any;
 
-  constructor(public profileService : ProfileService, private authService: AuthService, private route: ActivatedRoute, private state : StatusService) {
+  constructor(public profileService : ProfileService, private authService: AuthService,
+              private route: ActivatedRoute, private state : StatusService,
+              private friendship : FriendshipService) {
     this.username = this.route.snapshot.params["username"];
     console.log(this.username);
   }

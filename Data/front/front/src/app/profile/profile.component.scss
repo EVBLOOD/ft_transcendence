@@ -12,7 +12,7 @@
     background-color: #103959;
     border-radius: 40px;
     height: 900px;
-    overflow-y: hidden;
+    overflow-y: auto;
 }
 
 .header {
@@ -128,6 +128,7 @@
 
 .infoProfileUser {
     display: flex;
+    align-items: safe;
     justify-content: space-between;
 }
 
@@ -181,10 +182,11 @@
 
 .userAction {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
+    // justify-content: space-between;
     gap: 15px;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-wrap: nowrap;
+    // justify-content: center;
 }
 
 .userAction button {
@@ -202,6 +204,7 @@
     font-weight: 600;
     font-size: 13px;
     color: #103959;
+    cursor: pointer;
 }
 
 .userAction :nth-child(3) {
@@ -212,7 +215,8 @@
     margin-top: 25px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    gap: 20px;
+    justify-content: space-around;
     align-items: center;
 }
 
@@ -229,4 +233,23 @@
     text-transform: uppercase;
     color: #7FABCC;
     margin-bottom: 15px;
+}
+
+@media only screen and (max-width: 985px) {
+    .userAction button {
+        font-size: 0;
+        gap: 0px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .infoProfileUser {
+        justify-content: flex-start;
+        gap: 30px;
+    }
+
+    .userAction {
+        flex-direction: column;
+    }
+
 }

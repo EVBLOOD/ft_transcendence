@@ -64,6 +64,17 @@ export class FriendshipService {
     });
   }
 
+  async FriendshipStatus(id: number, lookfor: string) {
+    if (!(await this.UserRepo.findOneBy({ id: id }))) return undefined;
+    const look = await this.UserRepo.findOneBy({ username: lookfor });
+    if (!look) return undefined;
+    return await this.FriendShipRepo.findOne({
+      where: [
+        { receiver: id, sender: look.id },
+        { receiver: look.id, sender: id },
+      ],
+    });
+  }
   async blocklist(id: number, skip: number, take: number) {
     if (!(await this.UserRepo.findOneBy({ id: id }))) return undefined;
     return await this.FriendShipRepo.find({
