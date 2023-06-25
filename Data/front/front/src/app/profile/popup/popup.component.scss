@@ -19,3 +19,10 @@
     top: calc(50% - 100%/2);
     background: rgba(17, 34, 47, 0.87);
 }
+
+@media only screen and (max-width: 700px) {
+    .pop {
+        width: 350px;
+        left: calc(50% - 350px/2 - 0.5px);
+    }
+}
