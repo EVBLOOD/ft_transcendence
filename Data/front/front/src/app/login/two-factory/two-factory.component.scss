@@ -67,6 +67,8 @@
 
 }
 
+
+
 .validationBtn {
     border: none;
     height: 36px;
@@ -111,4 +113,11 @@
 
 .popUpBtn button:hover {
     cursor: pointer;
+}
+
+@media only screen and (max-width: 700px) {
+    .pop {
+        width: 350px;
+        left: calc(50% - 350px/2 - 0.5px);
+    }
 }

@@ -4,7 +4,9 @@
         <div class="groupingLI">
             <label class="twofactLbl" for="2FaInput">write down your token</label>
             <div class="errorMsgGroup">
-                <input id="twoFaInput" type="text" (focusout)="setData($event)" />
+                <input id="twoFaInput" type="text" [formControl]="token" />
+                <p *ngIf="token.errors" style="color: rgb(232, 237, 230);">Token should be six numbers
+                </p>
                 <p class="errorMsg" [style.display]="getError()">Incorrect code</p>
             </div>
         </div>

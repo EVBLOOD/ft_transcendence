@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ProfileService } from '../profile.service';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
@@ -11,8 +11,10 @@ import { Router } from '@angular/router';
 })
 export class SettingsComponent implements OnInit, OnDestroy{
   private replay : any;
-  fullName  = new FormControl('');
-  userName  = new FormControl('');
+  fullName  = new FormControl('', [Validators.required, Validators.minLength(5), Validators.pattern(/^[a-z]+(-[a-z]+)?$/)]);
+  userName  = new FormControl('', [Validators.required, Validators.minLength(5)]);
+  Myerror : boolean = false;
+  MyerrorAvatar : boolean = false;
   twoFactor : boolean = false;
   GameTheme : number = 1;
   file : any;
@@ -32,8 +34,8 @@ export class SettingsComponent implements OnInit, OnDestroy{
     this.replay = this.profile$.subscribe({next: (data) => {
       if (data.statusCode)
         this.router.navigateByUrl('');
-      this.fullName = new FormControl(data.name);
-      this.userName = new FormControl(data.username);
+      this.fullName = new FormControl(data.name, [Validators.required, Validators.minLength(5)]); 
+      this.userName =new FormControl(data.username, [Validators.required, Validators.minLength(5), Validators.pattern(/^[a-z]+(-[a-z]+)?$/)]);
       this.twoFactor = data.TwoFAenabled;
       this.GameTheme = 1; // to add
       this.submet_this.avatar = data.avatar;
@@ -70,7 +72,7 @@ export class SettingsComponent implements OnInit, OnDestroy{
   handleResponse(data : any)
   {
     if (data.statusCode)
-      console.log('error msg')
+      this.Myerror = true;
     else
     {
       this.serviceUser.update();
@@ -85,27 +87,28 @@ export class SettingsComponent implements OnInit, OnDestroy{
   }
   handleResponseone(data : any)
   {
-    console.log(data);
     if (data.statusCode && data.statusCode != 202)
-      console.log('error msg')
+      this.MyerrorAvatar = true;
     else
     {
+      this.MyerrorAvatar = false;
       this.serviceUser.update();
     }
   }
 
   async validateInput()
   {
+    if (this.userName.errors || this.fullName.errors)
+      return ;
     if (this.file)
       this.update = this.serviceUser.setUserAvatar(this.file).subscribe({next: (data) => {this.handleResponseone(data)}})
-    this.update = this.serviceUser.updateUserInfos({username: this.userName.value,
+    if (!this.fullName.pristine || !this.userName.pristine)
+      this.update = this.serviceUser.updateUserInfos({username: this.userName.value,
         name: this.fullName.value,
         avatar: this.submet_this.avatar,
         twofactor: this.twoFactor}).subscribe(
       {next: (data) => {this.handleResponse(data)},}
-      
     );
-
   }
 
   close()

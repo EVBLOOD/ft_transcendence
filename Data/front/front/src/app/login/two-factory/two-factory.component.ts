@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-two-factory',
@@ -11,15 +12,18 @@ import { Router } from '@angular/router';
 export class TwoFactoryComponent {
   
   constructor(private authSer : AuthService, private router: Router) {}
-  private token : string = '';
   private replay : any;
   private errorState = 'none';
+  token  = new FormControl('', [Validators.required, Validators.pattern(/^\d+$/), Validators.maxLength(6),  Validators.minLength(6)]);
   
   letsgo()
   {
     try
     {
-      this.replay = this.authSer.gowild(this.token).subscribe(
+      if (!this.token.value || this.token.errors || this.token.pristine)
+        return;
+      console.log(this.token.value);
+      this.replay = this.authSer.gowild(this.token.value).subscribe(
         {next: (data) => {this.handleResponseLetsgo(data)},});
     }
     catch (err)
@@ -28,11 +32,6 @@ export class TwoFactoryComponent {
     }
   }
 
-  setData(event : any)
-  {
-    this.token = event.target.value;
-    console.log(this.token);
-  }
 
   getError()
   {

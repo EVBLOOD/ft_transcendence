@@ -72,8 +72,10 @@ export class AuthenticatorController {
   ) {
     try {
       if (
-        (await this.service.TwoFA_Validate(req.new_user.sub, data.token)) ==
-        null
+        (await this.service.TwoFA_Validate(
+          req.new_user.data.sub,
+          data.token,
+        )) == null
       )
         throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
       return res.redirect('/redirection');

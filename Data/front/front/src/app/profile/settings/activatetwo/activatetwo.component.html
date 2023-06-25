@@ -13,6 +13,7 @@
         <div class="profileUserInfoSetting">
             <input [formControl]="token" placeholder="code" type="text" />
             <p style="color: red;" [style.display]="isDisplay ? 'block' : 'none'" class="error">Incorrect code</p>
+            <p *ngIf="token.errors" style="color: rgb(232, 237, 230);" class="error">Token should be six numbers</p>
         </div>
     </div>
     <div></div>
