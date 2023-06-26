@@ -1,0 +1,34 @@
+.blockCard {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    gap: 2px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    background: #30495D;
+    width: 135px;
+    height: 118px;
+    align-items: center;
+    color: #7FABCC;
+}
+
+.lololo {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+
+.avatarFriendships {
+    margin-top: -10px;
+    width: 90px;
+    height: 90px;
+    border-radius: 75px;
+}
+
+.friendName {
+    margin-top: 2px;
+}

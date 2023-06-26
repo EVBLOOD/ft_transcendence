@@ -20,6 +20,9 @@ import { RouterModule } from '@angular/router';
 import { ActivatetwoComponent } from './profile/settings/activatetwo/activatetwo.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { HttpfailInterceptor } from './httpfail.interceptor';
+import { CardFriendsComponent } from './profile/card-friends/card-friends.component';
+import { CardBlockedComponent } from './profile/card-blocked/card-blocked.component';
+import { CardRequestComponent } from './profile/card-request/card-request.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +40,9 @@ import { HttpfailInterceptor } from './httpfail.interceptor';
     ChatComponent,
     ActivatetwoComponent,
     PageNotFoundComponent,
+    CardFriendsComponent,
+    CardBlockedComponent,
+    CardRequestComponent,
   ],
   imports: [
     BrowserModule,

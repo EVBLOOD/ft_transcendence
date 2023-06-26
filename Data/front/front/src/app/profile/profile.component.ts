@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { ProfileService } from './profile.service';
-import { Observable, tap } from 'rxjs';
+import { Observable, firstValueFrom, tap } from 'rxjs';
 import { AuthService } from '../login/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { StatusService } from '../status.service';
@@ -16,6 +16,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   public profile$ !: Observable<any>;
   profile = "/assets/img/profile.jpg";
   logo = "LOGO is loading";
+  private correntUser : any;
   public profileSubject$ !: Observable<any>;
   public auth$ !: Observable<any>;
   public username : string;
@@ -32,7 +33,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute, private state : StatusService,
               private friendship : FriendshipService) {
     this.username = this.route.snapshot.params["username"];
-    console.log(this.username);
   }
   ngOnInit(): void {
     if (!this.username || this.username == '')
@@ -100,32 +100,51 @@ export class ProfileComponent implements OnInit, OnDestroy {
   hideIt = () => {this.displayRespondingWay = !this.displayRespondingWay}
   // logic of friendships
 
-  addFriend()
+  async RealUsername ()
   {
-    this.friendship.addFriend(this.username).subscribe({next: (data) => {console.log(data)}});
+    console.log('Hello')
+    try
+    {
+      this.correntUser = await firstValueFrom(this.profile$)
+      console.log(this.correntUser)
+    }
+    catch (err)
+    {
+      this.correntUser = {error: 'hey'}
+    }
+  }
+  async addFriend()
+  {
+    await this.RealUsername ();
+    this.friendship.addFriend(this.correntUser.username).subscribe({next: (data) => {console.log(data)}});
   }
   
-  cancelFriend()
+  async cancelFriend()
   {
+    await this.RealUsername ();
     this.displayRespondingWay = false;
-    this.friendship.cancelFriendRequest(this.username).subscribe({next: (data) => {console.log(data)}});
+    this.friendship.cancelFriendRequest(this.correntUser.username).subscribe({next: (data) => {console.log(data)}});
   }
-  respondAcceptFriend()
+  async respondAcceptFriend()
   {
+    await this.RealUsername ();
     this.displayRespondingWay = false;
-    this.friendship.acceptRequest(this.username).subscribe({next: (data) => {console.log(data)}});
+    this.friendship.acceptRequest(this.correntUser.username).subscribe({next: (data) => {console.log(data)}});
   }
-  unFriend()
+  async unFriend()
   {
-    this.friendship.unfriendUser(this.username).subscribe({next: (data) => {console.log(data)}});
+    await this.RealUsername ();
+    this.friendship.unfriendUser(this.correntUser.username).subscribe({next: (data) => {console.log(data)}});
   }
-  blockUser()
+  async blockUser()
   {
-    this.friendship.blockUser(this.username).subscribe({next: (data) => {console.log(data)}});
+    await this.RealUsername ();
+    this.friendship.blockUser(this.correntUser.username).subscribe({next: (data) => {console.log(data)}});
   }
-  unBlock()
+  async unBlock()
   {
-    this.friendship.unblockUser(this.username).subscribe({next: (data) => {console.log(data)}});
+    await this.RealUsername ();
+    this.friendship.unblockUser(this.correntUser.username).subscribe({next: (data) => {console.log(data)}});
   }
   changeMode()
   {

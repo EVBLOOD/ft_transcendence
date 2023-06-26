@@ -1,0 +1,38 @@
+.moreFriendships {
+    // width: 3.37px;
+    height: 15px;
+}
+
+.friendRequestsCard {
+    color: #184E77;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    gap: 2px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    background: #7FABCC;
+    width: 135px;
+    height: 118px;
+    align-items: center;
+}
+
+.lololo {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.avatarFriendships {
+    margin-top: -10px;
+    width: 90px;
+    height: 90px;
+    border-radius: 75px;
+}
+
+.friendName {
+    margin-top: 2px;
+}
