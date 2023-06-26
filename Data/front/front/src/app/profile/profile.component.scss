@@ -222,7 +222,7 @@
 
 }
 
-.userProfileTitleHistory h1 {
+h1 {
     font-style: normal;
     font-weight: 700;
     font-size: 30px;
@@ -265,6 +265,169 @@
 
 #friendshipAdding {
     background: #99D98C;
+}
+
+
+.YourAction {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 282px;
+    height: 44px;
+    border-radius: 10px;
+    background: #184E77;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.YourAction button {
+    border: 0;
+    height: 38px;
+    width: 135px;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.YourFirstChoice {
+    background: #184E77;
+    color: #7FABCC;
+}
+
+.YourSecondChoice {
+    background: #99D98C;
+    color: #1E6091;
+}
+
+
+.friendRequestsCard {
+    color: #184E77;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    gap: 2px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    background: #7FABCC;
+    width: 135px;
+    height: 118px;
+    align-items: center;
+}
+
+
+.lololo {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+
+
+.moreFriendships {
+    // width: 3.37px;
+    height: 15px;
+}
+
+.avatarFriendships {
+    margin-top: -10px;
+    width: 90px;
+    height: 90px;
+    border-radius: 75px;
+}
+
+.friendName {
+    margin-top: 2px;
+}
+
+.friendRequestsRow {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+// fiends
+
+.friendsCard {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    gap: 2px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    background: #184E77;
+    width: 135px;
+    height: 118px;
+    align-items: center;
+    color: #7FABCC;
+
+}
+
+
+.blockCard {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    gap: 2px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    background: #30495D;
+    width: 135px;
+    height: 118px;
+    align-items: center;
+    color: #7FABCC;
+}
+
+.titleNavBtn {
+    display: flex;
+    justify-content: space-between;
+}
+
+.navPrev {
+    display: inline-flex;
+    padding: 8px 11px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    width: 16px;
+    height: 16px;
+    transform: rotate(180deg);
+
+    // transform: rotate(90deg);
+    border-radius: 8px;
+    background: #7FABCC;
+    box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.25);
+}
+
+.navNext {
+    display: inline-flex;
+    padding: 8px 11px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    background: #7FABCC;
+    box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.25);
+
+}
+
+.navGroup {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+    // align-items: center;
 }
 
 @media only screen and (max-width: 985px) {

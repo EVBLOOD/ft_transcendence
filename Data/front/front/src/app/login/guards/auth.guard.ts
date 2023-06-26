@@ -6,9 +6,17 @@ import { firstValueFrom } from 'rxjs';
 export  const authGuard: CanActivateFn = async (route, state) => {
     const authService : AuthService = inject(AuthService);
     const switchRoute : Router = inject(Router);
-    const replay = await firstValueFrom(authService.getCurrentUser());
+    let replay : any = {};
+    try
+    {
+        replay = await firstValueFrom(authService.getCurrentUser());
+    }
+    catch (err)
+    {
+        replay = {statusCode: 403}
+    }
     console.log(replay);
-    if (replay.statusCode && replay.statusCode == 403)
+    if (replay?.statusCode && replay.statusCode == 403)
     {
         if (route.url.toString() == "login")
             return true;

@@ -7,8 +7,16 @@ export const twoFacGuard: CanActivateFn = async (route, state) => {
 
   const authService : AuthService = inject(AuthService);
   const switchRoute : Router = inject(Router);
-  const replay = await firstValueFrom(authService.getCurrentUser());
-  if (replay.statusCode && replay.statusCode == 403)
+  let replay : any = {};
+  try
+  {
+    replay = await firstValueFrom(authService.getCurrentUser());
+  }
+  catch (err)
+  {
+      replay = {statusCode: 403}
+  }
+  if (replay?.statusCode && replay.statusCode == 403)
   {
     switchRoute.navigateByUrl('login');
     return false;

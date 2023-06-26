@@ -22,6 +22,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   public status !: string;
   displayRespondingWay : boolean = false;
   type : number = 0;
+  YourBodyChoosen = false;
 
   // to unsubscribe subscribed Observables
   replay !: any;
@@ -36,6 +37,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (!this.username || this.username == '')
     {
+      this.YourBodyChoosen = true;
       this.profileSubject$ = this.profileService.getMyData();
       this.replay_ = this.profileSubject$.subscribe({next: (data : Observable<any>) => {
       this.profile$ = data;}});
@@ -124,5 +126,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
   unBlock()
   {
     this.friendship.unblockUser(this.username).subscribe({next: (data) => {console.log(data)}});
+  }
+  changeMode()
+  {
+    this.YourBodyChoosen = !this.YourBodyChoosen;
   }
 }

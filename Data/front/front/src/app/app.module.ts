@@ -4,7 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ProfileComponent } from './profile/profile.component';
 import { LoginComponent } from './login/login.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { TwoFactoryComponent } from './login/two-factory/two-factory.component';
 import { SettingsComponent } from './profile/settings/settings.component';
 import { CardUserStatisticsComponent } from './profile/card-user-statistics/card-user-statistics.component';
@@ -19,6 +19,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ActivatetwoComponent } from './profile/settings/activatetwo/activatetwo.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { HttpfailInterceptor } from './httpfail.interceptor';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,13 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     BrowserAnimationsModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide:  HTTP_INTERCEPTORS,
+      useClass: HttpfailInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
