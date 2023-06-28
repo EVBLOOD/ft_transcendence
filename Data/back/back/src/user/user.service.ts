@@ -24,12 +24,12 @@ export class UserService {
   getAllCurrentStates() {
     this.currentstate;
   }
-  async findOne(username: string) {
-    return await this.UserRepo.findOneBy({ username: username });
-  }
-  async findMe(id: number) {
+  async findOne(id: number) {
     return await this.UserRepo.findOneBy({ id: id });
   }
+  // async findMe(id: number) {
+  //   return await this.UserRepo.findOneBy({ id: id });
+  // }
   async UpdateAvatar(id: number, path: string) {
     return await this.UserRepo.save({ id: id, avatar: path });
   }

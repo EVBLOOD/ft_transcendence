@@ -59,12 +59,12 @@ volumes:
     driver_opts:
       o: bind
       type: 'none'
-      device: ${PWD}/Data/back
+      device: /home/sakllam/Desktop/lastProject/Data/back
   vol_front:
     driver_opts:
       type: 'none'
       o: bind
-      device: ${PWD}/Data/front
+      device: /home/sakllam/Desktop/lastProject/Data/front
   # vol_database:
   #   driver_opts:
   #     type: 'none'
