@@ -45,10 +45,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
     else
     {
       this.profile$ = this.profileService.getUserData(this.username);
+      this.friendship.friendRealTimeStatus().subscribe((state) => {
+        if (state?.senderId && state.senderId == this.username)
+          this.type = state.type;
+      })
       this.friendship.friendStatus(this.username).subscribe((data : any) => {
-        console.log(this.username);
-        console.log('lololo')
-        console.log(data);
         if (data)
         {
           if (!data.status)

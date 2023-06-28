@@ -86,14 +86,15 @@ export class FriendshipGateway {
       client.disconnect();
       return false;
     }
+    let replay : any;
     try {
       console.log(": PAYLOAD :")
       console.log(payload);
-          const replay = await this.friendshipService.create(
+          replay = await this.friendshipService.create(
             xyz.sub,
             payload,
           );
-          if (replay) return replay;
+          // if (replay) return replay;
         } catch (err) {
           return 'UserNotFound';
         }
@@ -105,7 +106,7 @@ export class FriendshipGateway {
       });
     }
     // 
-    client.emit('friendRequestSent');
+    return {sender: replay.sender, receiver: replay.receiver}
   }
   @SubscribeMessage('acceptFriendRequest')
   async handleAcceptFriendRequest(client: any, payload: number) {
@@ -137,14 +138,14 @@ export class FriendshipGateway {
       client.disconnect();
       return false;
     }
+    let replay : any;
     try {
-      const replay = await this.friendshipService.accepting(
+      replay = await this.friendshipService.accepting(
         xyz.sub,
         payload,
       );
-      if (replay) return replay;
+      // if (replay) return replay;
     } catch (err) {
-      // client.emit('UserNotFound');
       return 'UserNotFound';
     }
     const recipientSockets = this.connections.get(payload);
@@ -154,7 +155,7 @@ export class FriendshipGateway {
         socket.emit('friendRequestAccepted', { senderId: xyz.sub });
       });
     }
-    client.emit('youveAccepted');
+    return {sender: replay.sender, receiver: replay.receiver}
   }
 
   @SubscribeMessage('blockUser')
@@ -187,12 +188,13 @@ export class FriendshipGateway {
       client.disconnect();
       return false;
     }
+    let replay : any;
     try {
-      const replay = await this.friendshipService.blocking(
+      replay = await this.friendshipService.blocking(
         xyz.sub,
         payload,
       );
-      if (replay) return replay;
+      // if (replay) return replay;
     } catch (err) {
       return 'UserNotFound';
     }
@@ -203,7 +205,7 @@ export class FriendshipGateway {
         socket.emit('UserBlockedby', { senderId: xyz.sub });
       });
     }
-    client.emit('blockedUser');
+    return {sender: replay.sender, receiver: replay.receiver}
   }
 
   @SubscribeMessage('unblockUser')
@@ -236,12 +238,13 @@ export class FriendshipGateway {
       client.disconnect();
       return false;
     }
+    let replay : any;
     try {
-      const replay = await this.friendshipService.unblock(
+      replay = await this.friendshipService.unblock(
         xyz.sub,
         payload,
       );
-      if (replay) return replay;
+      // if (replay) return replay;
     } catch (err) {
       return 'UserNotFound';
     }
@@ -252,7 +255,7 @@ export class FriendshipGateway {
         socket.emit('youWereUnblocked', { senderId: xyz.sub });
       });
     }
-    client.emit('SuccessUnblock');
+    return {sender: replay.sender, receiver: replay.receiver}
   }
 
   @SubscribeMessage('deleteFriendship')
@@ -285,12 +288,13 @@ export class FriendshipGateway {
       client.disconnect();
       return false;
     }
+    let replay : any;
     try {
-      const replay = await this.friendshipService.remove(
+      replay = await this.friendshipService.remove(
         xyz.sub,
         payload,
       );
-      if (replay) return replay;
+      // if (replay) return replay;
     } catch (err) {
       return 'UserNotFound';
     }
@@ -301,7 +305,7 @@ export class FriendshipGateway {
         socket.emit('notAnyMore', { senderId: xyz.sub });
       });
     }
-    client.emit('Friendshipdeleted');
+    return {sender: replay.sender, receiver: replay.receiver}
   }
 
   // @SubscribeMessage('statusFriendship')
@@ -341,6 +345,6 @@ export class FriendshipGateway {
   //       socket.emit('notAnyMore', { senderId: xyz.sub });
   //     });
   //   }
-  //   client.emit('Friendshipdeleted');
+  //   return {sender: replay.sender, receiver: replay.receiver}
   // }
 }
