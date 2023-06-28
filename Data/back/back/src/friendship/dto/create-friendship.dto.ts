@@ -5,6 +5,7 @@ import {
   IsEmpty,
   IsEnum,
   IsNotEmpty,
+  IsNumber,
   Matches,
 } from 'class-validator';
 
@@ -47,4 +48,11 @@ export class UserValidatingDto {
   @IsNotEmpty()
   @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
   Userone: string;
+}
+
+
+export class UserIdValidatingDto {
+  @IsNotEmpty()
+  @IsNumber()
+  id: number;
 }

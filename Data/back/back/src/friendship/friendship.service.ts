@@ -17,8 +17,8 @@ export class FriendshipService {
     private readonly FriendShipRepo: Repository<Friendship>,
   ) {}
 
-  async create(id: number, user_target: string) {
-    const { UserSending, UserReceiving } = await this.UsersCheckerId(
+  async create(id: number, user_target: number) {
+    const { UserSending, UserReceiving } = await this.UsersCheckerBothId(
       id,
       user_target,
     );
@@ -41,8 +41,8 @@ export class FriendshipService {
     });
   }
 
-  async accepting(id: number, userTo_accept: string) {
-    const { UserSending, UserReceiving } = await this.UsersCheckerId(
+  async accepting(id: number, userTo_accept: number) {
+    const { UserSending, UserReceiving } = await this.UsersCheckerBothId(
       id,
       userTo_accept,
     );
@@ -71,9 +71,9 @@ export class FriendshipService {
     });
   }
 
-  async FriendshipStatus(id: number, lookfor: string) {
+  async FriendshipStatus(id: number, lookfor: number) {
     if (!(await this.UserRepo.findOneBy({ id: id }))) return undefined;
-    const look = await this.UserRepo.findOneBy({ username: lookfor });
+    const look = await this.UserRepo.findOneBy({ id: lookfor });
     if (!look) return undefined;
     const Getstatus = await this.FriendShipRepo.findOne({
       where: [
@@ -122,9 +122,17 @@ export class FriendshipService {
     return { UserSending, UserReceiving };
   }
 
-  async blocking(id: number, userTo_block: string) {
+  async UsersCheckerBothId(username1: number, username2: number) {
+    const UserSending: User = await this.UserRepo.findOneBy({ id: username1 });
+    const UserReceiving: User = await this.UserRepo.findOneBy({
+      id: username2,
+    });
+    return { UserSending, UserReceiving };
+  }
+
+  async blocking(id: number, userTo_block: number) {
     const { UserSending: UserBlocking, UserReceiving } =
-      await this.UsersCheckerId(id, userTo_block);
+      await this.UsersCheckerBothId(id, userTo_block);
     if (UserBlocking === null || UserReceiving === null) return undefined;
     const friendship = await this.FriendShipRepo.find({
       where: [
@@ -151,9 +159,9 @@ export class FriendshipService {
     return await this.FriendShipRepo.save(friendship[0]);
   }
 
-  async remove(id: number, userBeingRemoved: string) {
+  async remove(id: number, userBeingRemoved: number) {
     const { UserSending: UserBlocking, UserReceiving } =
-      await this.UsersCheckerId(id, userBeingRemoved);
+      await this.UsersCheckerBothId(id, userBeingRemoved);
     if (UserBlocking == null || UserReceiving == null) return undefined;
     const friendship = await this.FriendShipRepo.find({
       where: [
@@ -165,9 +173,9 @@ export class FriendshipService {
     return await this.FriendShipRepo.remove(friendship[0]);
   }
 
-  async unblock(user_forgeiving: number, blocked_user: string) {
+  async unblock(user_forgeiving: number, blocked_user: number) {
     const { UserSending: UserBlocking, UserReceiving } =
-      await this.UsersCheckerId(user_forgeiving, blocked_user);
+      await this.UsersCheckerBothId(user_forgeiving, blocked_user);
     if (UserBlocking == null || UserReceiving == null) return undefined;
     const friendship = await this.FriendShipRepo.find({
       where: [

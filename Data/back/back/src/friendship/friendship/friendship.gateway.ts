@@ -2,6 +2,7 @@ import { JwtService } from '@nestjs/jwt';
 import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { AuthenticatorService } from 'src/authenticator/authenticator.service';
+import { FriendshipService } from '../friendship.service';
 
 @WebSocketGateway({
   namespace: 'friendshipSock',
@@ -14,7 +15,8 @@ export class FriendshipGateway {
 
   private connections: Map<number, Set<Socket>> = new Map<number, Set<Socket>>();
 
-  constructor(private readonly serviceJWt: JwtService, private readonly serviceToken: AuthenticatorService,) {}
+  constructor(private readonly serviceJWt: JwtService, private readonly serviceToken: AuthenticatorService,
+     private readonly friendshipService: FriendshipService) {}
   @WebSocketServer()
   myserver: Server;
 
@@ -84,6 +86,17 @@ export class FriendshipGateway {
       client.disconnect();
       return false;
     }
+    try {
+      console.log(": PAYLOAD :")
+      console.log(payload);
+          const replay = await this.friendshipService.create(
+            xyz.sub,
+            payload,
+          );
+          if (replay) return replay;
+        } catch (err) {
+          return 'UserNotFound';
+        }
     const recipientSockets = this.connections.get(payload);
     if (recipientSockets)
     {
@@ -91,6 +104,7 @@ export class FriendshipGateway {
         socket.emit('friendRequestReceived', { senderId: xyz.sub });
       });
     }
+    // 
     client.emit('friendRequestSent');
   }
   @SubscribeMessage('acceptFriendRequest')
@@ -122,6 +136,16 @@ export class FriendshipGateway {
     ) {
       client.disconnect();
       return false;
+    }
+    try {
+      const replay = await this.friendshipService.accepting(
+        xyz.sub,
+        payload,
+      );
+      if (replay) return replay;
+    } catch (err) {
+      // client.emit('UserNotFound');
+      return 'UserNotFound';
     }
     const recipientSockets = this.connections.get(payload);
     if (recipientSockets)
@@ -163,6 +187,15 @@ export class FriendshipGateway {
       client.disconnect();
       return false;
     }
+    try {
+      const replay = await this.friendshipService.blocking(
+        xyz.sub,
+        payload,
+      );
+      if (replay) return replay;
+    } catch (err) {
+      return 'UserNotFound';
+    }
     const recipientSockets = this.connections.get(payload);
     if (recipientSockets)
     {
@@ -202,6 +235,15 @@ export class FriendshipGateway {
     ) {
       client.disconnect();
       return false;
+    }
+    try {
+      const replay = await this.friendshipService.unblock(
+        xyz.sub,
+        payload,
+      );
+      if (replay) return replay;
+    } catch (err) {
+      return 'UserNotFound';
     }
     const recipientSockets = this.connections.get(payload);
     if (recipientSockets)
@@ -243,6 +285,15 @@ export class FriendshipGateway {
       client.disconnect();
       return false;
     }
+    try {
+      const replay = await this.friendshipService.remove(
+        xyz.sub,
+        payload,
+      );
+      if (replay) return replay;
+    } catch (err) {
+      return 'UserNotFound';
+    }
     const recipientSockets = this.connections.get(payload);
     if (recipientSockets)
     {
@@ -252,4 +303,44 @@ export class FriendshipGateway {
     }
     client.emit('Friendshipdeleted');
   }
+
+  // @SubscribeMessage('statusFriendship')
+  // async handleStatusFriendship(client: any, payload: number) {
+  //   if (
+  //     !client.handshake.headers?.cookie
+  //       ?.split('; ')
+  //       ?.find((row) => row.startsWith('access_token='))
+  //       ?.split('=')[1]
+  //   ) {
+  //     client.disconnect();
+  //     return false;
+  //   }
+  //   const xyz: any = this.serviceJWt.decode(
+  //     client.handshake.headers?.cookie
+  //       ?.split('; ')
+  //       ?.find((row) => row.startsWith('access_token='))
+  //       ?.split('=')[1],
+  //   );
+  //   if (
+  //     !xyz ||
+  //     (await this.serviceToken.IsSame(
+  //       xyz.sub || '',
+  //       client.handshake.headers?.cookie
+  //         ?.split('; ')
+  //         ?.find((row) => row.startsWith('access_token='))
+  //         ?.split('=')[1],
+  //     )) == false
+  //   ) {
+  //     client.disconnect();
+  //     return false;
+  //   }
+  //   const recipientSockets = this.connections.get(payload);
+  //   if (recipientSockets)
+  //   {
+  //     recipientSockets.forEach((socket) => {
+  //       socket.emit('notAnyMore', { senderId: xyz.sub });
+  //     });
+  //   }
+  //   client.emit('Friendshipdeleted');
+  // }
 }

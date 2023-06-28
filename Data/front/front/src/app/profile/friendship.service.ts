@@ -1,48 +1,97 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Socket, io } from 'socket.io-client';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class FriendshipService {
 
-  constructor( private http: HttpClient ) { }
+  private socket: Socket;
 
-  addFriend(username : string)
-  {
-    return this.http.post('http://localhost:3000/friendship/send', {Userone: username}, {withCredentials: true});
-  }
+  constructor(private http: HttpClient ) { 
+    this.socket = io('http://localhost:3000/friendshipSock',   {
+      withCredentials: true, 
+    },  );
   
-  acceptRequest(username : string)
-  {
-    return this.http.post('http://localhost:3000/friendship/accept', {Userone: username}, {withCredentials: true});
-  }
   
-  blockUser(username : string)
-  {
-    return this.http.post('http://localhost:3000/friendship/blocking', {Userone: username}, {withCredentials: true});
+    this.socket.on('friendRequestReceived' ,(data : any) => {
+      console.log("friendRequestReceived")
+      console.log(data);
+      // send notif
+    });
+
+    // this.socket.on('friendRequestSent' ,(data : any) => {
+    //   // send notif
+    // });
+
+    this.socket.on('friendRequestAccepted' ,(data : any) => {
+      console.log("friendRequestAccepted")
+      console.log(data);
+
+      // send notif
+    });
+
+    // this.socket.on('youveAccepted' ,(data : any) => {
+    //   // send notif
+    // });
+
+    // this.socket.on('UserNotFound' ,(data : any) => {
+    //   // send notif
+    // });
+
+    this.socket.on('UserBlockedby' ,(data : any) => {
+      console.log("UserBlockedby")
+      console.log(data);
+
+      // send notif
+    });
+
+
+    this.socket.on('youWereUnblocked' ,(data : any) => {
+      console.log("youWereUnblocked")
+      console.log(data);
+      // send notif
+    });
+
+    this.socket.on('notAnyMore' ,(data : any) => {
+      console.log("notAnyMore")
+      console.log(data);
+      // send notif
+    });
+
+  }
     
-  }
-
-  unfriendUser(username : string)
-  {
-    return this.http.post('http://localhost:3000/friendship/unfriend', {Userone: username}, {withCredentials: true});
+  addFriend(id : number)  {
+    this.socket.emit('friendRequest', id);
   }
   
-  cancelFriendRequest(username : string)
-  {
-    return this.http.post('http://localhost:3000/friendship/unfriend', {Userone: username}, {withCredentials: true});
+  acceptRequest(id : number)  {
+    this.socket.emit('acceptFriendRequest', id);
+  }
+  
+  blockUser(id : number)  {
+    this.socket.emit('blockUser', id);    
+  }
+
+  unfriendUser(id : number) {
+    this.socket.emit('deleteFriendship', id);
+  }
+  
+  cancelFriendRequest(id : number)  {
+    this.socket.emit('deleteFriendship', id);
   }
 
 
-  unblockUser(username : string)
-  {
-    return this.http.post('http://localhost:3000/friendship/unblock', {Userone: username}, {withCredentials: true});
+  unblockUser(id : number)  {
+    this.socket.emit('unblockUser', id);
   }
 
-  friendStatus(username : string)
-  {
-    return this.http.post('http://localhost:3000/friendship/friendStatus', {Userone: username}, {withCredentials: true});
+  friendStatus(id : string) {
+    return this.http.post('http://localhost:3000/friendship/friendStatus', {id: Number.parseInt(id)}, {
+      withCredentials: true, 
+    },);
   }
 }
 // if (!data.status)

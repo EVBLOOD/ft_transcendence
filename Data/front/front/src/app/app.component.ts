@@ -4,6 +4,7 @@ import { Observable, Subject, Subscription, distinctUntilChanged, fromEvent } fr
 import { ProfileService } from './profile/profile.service';
 import { Router } from '@angular/router';
 import { StatusService } from './status.service';
+import { FriendshipService } from './profile/friendship.service';
 
 @Component({
   selector: 'app-root',
@@ -32,7 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
   @ViewChild('dropDownContent_') dropDownContent_ !:ElementRef;
   @ViewChild('dropDownContent__') dropDownContent__ !:ElementRef;
   
-  constructor(public profileService : ProfileService, private route: Router, private status: StatusService) {}
+  constructor(public profileService : ProfileService, private route: Router, private status: StatusService, private friendship: FriendshipService) {}
   getcurrentPath()
   {
     return this.route.url;

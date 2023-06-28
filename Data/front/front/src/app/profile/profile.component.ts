@@ -16,10 +16,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
   public profile$ !: Observable<any>;
   profile = "/assets/img/profile.jpg";
   logo = "LOGO is loading";
-  private correntUser : any;
+  // private correntUser : any;
   public profileSubject$ !: Observable<any>;
   public auth$ !: Observable<any>;
-  public username : string;
+  public username : any;
   public status !: string;
   displayRespondingWay : boolean = false;
   type : number = 0;
@@ -46,6 +46,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     {
       this.profile$ = this.profileService.getUserData(this.username);
       this.friendship.friendStatus(this.username).subscribe((data : any) => {
+        console.log(this.username);
         console.log('lololo')
         console.log(data);
         if (data)
@@ -100,51 +101,51 @@ export class ProfileComponent implements OnInit, OnDestroy {
   hideIt = () => {this.displayRespondingWay = !this.displayRespondingWay}
   // logic of friendships
 
-  async RealUsername ()
-  {
-    console.log('Hello')
-    try
-    {
-      this.correntUser = await firstValueFrom(this.profile$)
-      console.log(this.correntUser)
-    }
-    catch (err)
-    {
-      this.correntUser = {error: 'hey'}
-    }
-  }
+  // async RealUsername ()
+  // {
+  //   console.log('Hello')
+  //   try
+  //   {
+  //     this.correntUser = await firstValueFrom(this.profile$)
+  //     console.log(this.correntUser)
+  //   }
+  //   catch (err)
+  //   {
+  //     this.correntUser = {error: 'hey'}
+  //   }
+  // }
   async addFriend()
   {
-    await this.RealUsername ();
-    this.friendship.addFriend(this.correntUser.username).subscribe({next: (data) => {console.log(data)}});
+    // await this.RealUsername ();
+    this.friendship.addFriend(Number.parseInt( this.username));
   }
   
   async cancelFriend()
   {
-    await this.RealUsername ();
+    // await this.RealUsername ();
     this.displayRespondingWay = false;
-    this.friendship.cancelFriendRequest(this.correntUser.username).subscribe({next: (data) => {console.log(data)}});
+    this.friendship.cancelFriendRequest(Number.parseInt( this.username));
   }
   async respondAcceptFriend()
   {
-    await this.RealUsername ();
+    // await this.RealUsername ();
     this.displayRespondingWay = false;
-    this.friendship.acceptRequest(this.correntUser.username).subscribe({next: (data) => {console.log(data)}});
+    this.friendship.acceptRequest(Number.parseInt( this.username));
   }
   async unFriend()
   {
-    await this.RealUsername ();
-    this.friendship.unfriendUser(this.correntUser.username).subscribe({next: (data) => {console.log(data)}});
+    // await this.RealUsername ();
+    this.friendship.unfriendUser(Number.parseInt( this.username));
   }
   async blockUser()
   {
-    await this.RealUsername ();
-    this.friendship.blockUser(this.correntUser.username).subscribe({next: (data) => {console.log(data)}});
+    // await this.RealUsername ();
+    this.friendship.blockUser(Number.parseInt( this.username));
   }
   async unBlock()
   {
-    await this.RealUsername ();
-    this.friendship.unblockUser(this.correntUser.username).subscribe({next: (data) => {console.log(data)}});
+    // await this.RealUsername ();
+    this.friendship.unblockUser(Number.parseInt( this.username));
   }
   changeMode()
   {
