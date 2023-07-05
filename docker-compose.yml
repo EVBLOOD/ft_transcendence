@@ -20,6 +20,8 @@ services:
     networks:
       - ft_transcendence
     restart: on-failure
+    # ports:
+    #   - 3000:3000
     volumes:
       - /home/idkart/ft_transcendence/Data/back:/var/www/html/
 
@@ -30,6 +32,8 @@ services:
     networks:
       - ft_transcendence
     restart: on-failure
+    # ports:
+    #   - 4200:4200
     volumes:
       - /home/idkart/ft_transcendence/Data/front:/var/www/html/
 

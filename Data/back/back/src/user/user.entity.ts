@@ -1,5 +1,6 @@
 import { Chat } from 'src/chat/chat.entity';
 import { Message } from 'src/message/message.entity';
+import { Punishment } from 'src/chat/punishment/punishment.entity';
 import {
   Entity,
   JoinColumn,
@@ -34,4 +35,8 @@ export class User {
   @ManyToMany(() => Chat, (chatRoom: Chat) => chatRoom.admin)
   @JoinTable()
   chatRoomAdnim!: Chat[];
+
+  @OneToMany(() => Punishment, (punishment: Punishment) => punishment.user)
+  @JoinColumn()
+  punishment!: Punishment[];
 }

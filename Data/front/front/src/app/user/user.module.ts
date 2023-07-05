@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { UserComponent } from './user.component';
 
 
-
 @NgModule({
   declarations: [
     UserComponent

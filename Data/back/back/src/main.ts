@@ -1,17 +1,16 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { GlobalExceptionFilter } from './filters/global-exception.filter';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    cors: {
-      origin: 'http://localhost:4200',
-      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-      allowedHeaders: 'Content-Type, Accept',
-      exposedHeaders: 'Content-Range, X-Content-Range',
-      credentials: true,
-      maxAge: 3600,
-    },
+  const app = await NestFactory.create(AppModule);
+  app.enableCors({
+    credentials: true,
+    origin: 'http://localhost:4200',
   });
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalFilters(new GlobalExceptionFilter());
   await app.listen(3000);
 }
 bootstrap();
