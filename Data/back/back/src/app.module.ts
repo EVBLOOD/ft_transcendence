@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MessageModule } from './message/message.module';
 import { UserModule } from './user/user.module';
 import { ChatModule } from './chat/chat.module';
+import { PunishmentModule } from './chat/punishment/punishment.module';
 import DataConf from 'database.config';
 
 @Module({
@@ -13,6 +14,7 @@ import DataConf from 'database.config';
     UserModule,
     MessageModule,
     ChatModule,
+    PunishmentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

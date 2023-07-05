@@ -170,4 +170,5 @@ export class ChatController {
       console.log(err);
     }
   }
+  
 } // end of ChatController class

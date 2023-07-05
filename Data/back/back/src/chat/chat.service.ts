@@ -24,11 +24,9 @@ import { User } from 'src/user/user.entity';
 import * as bcrypt from 'bcrypt';
 import { createMemberDTO } from './dto/createMember.dto';
 import { createAdminDTO } from './dto/createAdmin.dto';
-import { promises } from 'dns';
 import { SwapOwnerDTO } from './dto/SwapOwner.dto';
-import { LargeNumberLike } from 'crypto';
-import { constrainedMemory } from 'process';
 import { UpdateChatroomDTO } from './dto/updateChatroom.dto';
+import { PunishmentService } from './punishment/punishment.service';
 
 @Injectable()
 export class ChatService {
@@ -36,7 +34,7 @@ export class ChatService {
     @InjectRepository(Chat)
     private readonly chatRoomRepo: Repository<Chat>,
     @Inject(forwardRef(() => ChatGateway))
-    private readonly chatGateway: ChatGateway,
+    private readonly chatPunishment: PunishmentService,
     private readonly chatHelpers: ChatUtils,
     private readonly messageService: MessageService,
   ) {}
@@ -123,6 +121,8 @@ export class ChatService {
 
   async postToChatroom(messageDTO: CreateMessage): Promise<Message> {
     // TODO [importent]: check if the user is a memeber of the channel && if he's not muted
+    // if ((await this.chatHelpers.checkForMemberRoll(messageDTO.charRoomId, messageDTO.userName)) == true &&
+    //   (await this.chatPunishment.))
     const chatRoom = await this.GetChatRoomByID(messageDTO.charRoomId);
     const user = await this.chatHelpers.getUser(messageDTO.userName);
     return await this.messageService.create(messageDTO, chatRoom, user);

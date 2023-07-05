@@ -8,12 +8,11 @@ import { ChatService } from './chat.service';
   styleUrls: ['./chat.component.scss']
 })
 export class ChatComponent implements OnInit {
-  Chatrooms$: Observable<any | undefined> ;
-  constructor ( private readonly playerService: ChatService) {
-    // this.Chatrooms$ = this.playerService.getChatrooms();
+  constructor(private readonly playerService: ChatService) {
   }
 
   ngOnInit(): void {
-    this.Chatrooms$ = this.playerService.getChatrooms("ali");
+    this.playerService.getChatrooms("").subscribe({ next: (data) => { console.log(data) } });
   }
+
 }

@@ -1,15 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
+
+const users: Array<string> = ["ali", "saad"];
+
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
 
-  constructor(private readonly httpClient: HttpClient
-              ) {}
-  getChatrooms(username: string) {
-    return this.httpClient.get(`localhost:3000/chat/user/${username}`)
-  }
-}
+  constructor(private httpClient: HttpClient
+  ) { }
 
+  getChatrooms(name: string) {
+    return  this.httpClient.get('http://localhost:3000')
+  }
+
+}
