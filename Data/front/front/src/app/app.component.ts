@@ -32,8 +32,9 @@ export class AppComponent implements OnInit, OnDestroy {
   @ViewChild('dropDownContent') dropDownContent !:ElementRef;
   @ViewChild('dropDownContent_') dropDownContent_ !:ElementRef;
   @ViewChild('dropDownContent__') dropDownContent__ !:ElementRef;
-  
-  constructor(public profileService : ProfileService, private route: Router, private status: StatusService, private friendship: FriendshipService) {}
+
+  constructor(public profileService : ProfileService, private route: Router,
+        private status: StatusService, private friendship: FriendshipService) {}
   getcurrentPath()
   {
     return this.route.url;
@@ -59,6 +60,11 @@ export class AppComponent implements OnInit, OnDestroy {
       }})
       this.profile$ = data;
      console.log("onee")
+     this.friendship.current_status_friend.asObservable().subscribe((data) => {
+      console.log("data: ");
+      console.log(data);
+      console.log("----------------");
+     })
     },});
   }
   ngOnDestroy(): void {

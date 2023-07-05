@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ɵafterNextNavigation } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -144,6 +144,39 @@ export class FriendshipService {
 
   friendRealTimeStatus() {
     return this.current_status_friend
+  }
+
+  requestsList(skip: number, take: number)  {
+    let params = new HttpParams();
+    params = params.append('skip', skip);
+    params = params.append('take', take);
+
+    return this.http.get('http://localhost:3000/friendship/requestsList', {
+      withCredentials: true,
+      params: params
+    });
+  }
+
+  blocklist(skip: number, take: number)   {
+    let params = new HttpParams();
+    params = params.append('skip', skip);
+    params = params.append('take', take);
+
+    return this.http.get('http://localhost:3000/friendship/blocklist', {
+      withCredentials: true,
+      params: params
+    });
+  }
+
+  friendList(skip: number, take: number)    {
+    let params = new HttpParams();
+    params = params.append('skip', skip);
+    params = params.append('take', take);
+
+    return this.http.get('http://localhost:3000/friendship/friendList', {
+      withCredentials: true,
+      params: params
+    });
   }
 }
 // if (!data.status)

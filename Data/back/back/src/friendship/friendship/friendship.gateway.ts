@@ -88,13 +88,10 @@ export class FriendshipGateway {
     }
     let replay : any;
     try {
-      console.log(": PAYLOAD :")
-      console.log(payload);
           replay = await this.friendshipService.create(
             xyz.sub,
             payload,
           );
-          // if (replay) return replay;
         } catch (err) {
           return 'UserNotFound';
         }
@@ -106,7 +103,7 @@ export class FriendshipGateway {
       });
     }
     // 
-    return {sender: replay.sender, receiver: replay.receiver}
+    return {sender: xyz.sub, receiver: payload}
   }
   @SubscribeMessage('acceptFriendRequest')
   async handleAcceptFriendRequest(client: any, payload: number) {
@@ -155,7 +152,7 @@ export class FriendshipGateway {
         socket.emit('friendRequestAccepted', { senderId: xyz.sub });
       });
     }
-    return {sender: replay.sender, receiver: replay.receiver}
+    return {sender: xyz.sub, receiver: payload}
   }
 
   @SubscribeMessage('blockUser')
@@ -205,7 +202,7 @@ export class FriendshipGateway {
         socket.emit('UserBlockedby', { senderId: xyz.sub });
       });
     }
-    return {sender: replay.sender, receiver: replay.receiver}
+    return {sender: xyz.sub, receiver: payload}
   }
 
   @SubscribeMessage('unblockUser')
@@ -255,7 +252,7 @@ export class FriendshipGateway {
         socket.emit('youWereUnblocked', { senderId: xyz.sub });
       });
     }
-    return {sender: replay.sender, receiver: replay.receiver}
+    return {sender: xyz.sub, receiver: payload}
   }
 
   @SubscribeMessage('deleteFriendship')
@@ -305,7 +302,7 @@ export class FriendshipGateway {
         socket.emit('notAnyMore', { senderId: xyz.sub });
       });
     }
-    return {sender: replay.sender, receiver: replay.receiver}
+    return {sender: xyz.sub, receiver: payload}
   }
 
   // @SubscribeMessage('statusFriendship')
@@ -345,6 +342,6 @@ export class FriendshipGateway {
   //       socket.emit('notAnyMore', { senderId: xyz.sub });
   //     });
   //   }
-  //   return {sender: replay.sender, receiver: replay.receiver}
+  //   return {sender: xyz.sub, receiver: payload}
   // }
 }

@@ -12,6 +12,7 @@
     height: 118px;
     align-items: center;
     color: #7FABCC;
+    position: relative;
 }
 
 .lololo {
@@ -31,4 +32,44 @@
 
 .friendName {
     margin-top: 2px;
+}
+
+
+
+.Displaylist
+{
+    background: whitesmoke;
+    list-style: none;
+    width: 107px;
+    // height: 79px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 6px;
+    color: #184E77;
+    font-size: 9px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    padding: 3px;
+    position: absolute;
+    top: 30%;
+}
+
+.Displaylist li
+{
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    height: 18px;
+}
+
+.moreFriendships:hover
+{
+    cursor: pointer;
+}
+
+.Displaylist li:hover
+{
+    cursor: pointer;
 }

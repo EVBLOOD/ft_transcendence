@@ -104,7 +104,7 @@ export class FriendshipService {
 
   async blocklist(id: number, skip: number, take: number) {
     if (!(await this.UserRepo.findOneBy({ id: id }))) return undefined;
-    return await this.FriendShipRepo.find({
+    let blocklist = await this.FriendShipRepo.find({
       where: [
         { receiver: id, blocked: true, blocked_by: 'receiver' },
         { sender: id, blocked: true, blocked_by: 'sender' },
@@ -112,6 +112,8 @@ export class FriendshipService {
       take: take,
       skip: skip,
     });
+    blocklist.forEach( (elmnt) => {if (elmnt.sender == id) elmnt.sender = elmnt.receiver} )
+    return blocklist;
   }
 
   async UsersCheckerId(username1: number, username2: string) {
@@ -137,11 +139,13 @@ export class FriendshipService {
     const friendship = await this.FriendShipRepo.find({
       where: [
         { receiver: UserReceiving.id, sender: id },
-        { sender: id, receiver: UserReceiving.id },
+        { receiver: id, sender: UserReceiving.id },
       ],
     });
-    if (friendship.length > 1 || friendship.length === 0) {
+    if (friendship.length > 1 || friendship.length == 0) {
       if (friendship.length != 0) return undefined;
+      console.log(` id : ${id}`)
+      console.log(` UserReceiving.id : ${UserReceiving.id}`)
       return await this.FriendShipRepo.save({
         sender: id,
         receiver: UserReceiving.id,
@@ -154,8 +158,10 @@ export class FriendshipService {
     }
     if (friendship[0].blocked) return false;
     friendship[0].blocked = true;
-    if (friendship[0].receiver === id) friendship[0].blocked_by = 'receiver';
-    else friendship[0].blocked_by = 'sender';
+    if (friendship[0].sender == id)
+      friendship[0].blocked_by = 'sender';
+    else
+      friendship[0].blocked_by = 'receiver';
     return await this.FriendShipRepo.save(friendship[0]);
   }
 
@@ -197,8 +203,8 @@ export class FriendshipService {
     return await this.FriendShipRepo.remove(friendship[0]);
   }
 
-  async friendList(username: string, skip: number, take: number) {
-    const user = await this.UserRepo.findOneBy({ username: username });
+  async friendList(id: number, skip: number, take: number) {
+    const user = await this.UserRepo.findOneBy({ id: id });
     if (user == null) return undefined;
     let findList: any;
     if (skip == 0 && take == 0) {
@@ -206,42 +212,50 @@ export class FriendshipService {
         .leftJoinAndSelect('friendship.user1', 'user1')
         .leftJoinAndSelect('friendship.user2', 'user2')
         .where('friendship.receiver = :id', { id: user.id })
+        .andWhere('friendship.blocked = :blocked', { blocked: false })
+        .andWhere('friendship.status = :status', { status: 'accepted' })
         .orWhere('friendship.sender = :id', { id: user.id })
         .andWhere('friendship.blocked = :blocked', { blocked: false })
         .andWhere('friendship.status = :status', { status: 'accepted' })
         .getMany();
     } else {
+      console.log("findList is on progress");
       findList = await this.FriendShipRepo.createQueryBuilder('friendship')
         .leftJoinAndSelect('friendship.user1', 'user1')
         .leftJoinAndSelect('friendship.user2', 'user2')
         .where('friendship.receiver = :id', { id: user.id })
+        .andWhere('friendship.blocked = :blocked', { blocked: false })
+        .andWhere('friendship.status = :status', { status: 'accepted' })
         .orWhere('friendship.sender = :id', { id: user.id })
         .andWhere('friendship.blocked = :blocked', { blocked: false })
         .andWhere('friendship.status = :status', { status: 'accepted' })
-        .take(take)
         .skip(skip)
+        .take(take)
         .getMany();
-    }
+      }
     if (findList == null) return null;
     let friends: Array<User> = [];
     findList.forEach((element) => {
-      if (element.receiver == user.id) friends.push(element.user2);
+      if (element.user1.id == user.id) friends.push(element.user2);
       else friends.push(element.user1);
     });
+    console.log("this is the end that shouldn't be ")
+    console.log(friends);
+    console.log(findList);
     return friends;
   }
 
-  async suggested(username: string, skip: number, take: number) {
-    let frindList = await this.friendList(username, 0, 0);
+  async suggested(id: number, skip: number, take: number) {
+    let frindList = await this.friendList(id, 0, 0);
     if (frindList == undefined) return undefined;
     else if (frindList == null) frindList = [];
-    let friends_UserName: Array<string> = [];
-    friends_UserName.push(username);
+    let friends_UserName: Array<number> = [];
+    friends_UserName.push(id);
     frindList.forEach((element) => {
-      friends_UserName.push(element.username);
+      friends_UserName.push(element.id);
     });
     return await this.UserRepo.find({
-      where: { username: Not(Any(friends_UserName)) },
+      where: { id: Not(Any(friends_UserName)) },
       take: take,
       skip: skip,
     }); // TODO: I may check next the User if is blockig you..

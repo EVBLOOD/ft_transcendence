@@ -63,21 +63,23 @@ export class FriendshipController {
   //   throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
   // }
 
-  // @UseInterceptors(ClassSerializerInterceptor)
-  // @Get('friendList')
-  // async friendList(
-  //   @Request() req: any,
-  //   @Query('skip', ParseIntPipe) skip: number,
-  //   @Query('take', ParseIntPipe) take: number,
-  // ) {
-  //   const replay = await this.friendshipService.friendList(
-  //     req.new_user.sub,
-  //     skip,
-  //     take,
-  //   );
-  //   if (replay) return replay;
-  //   throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
-  // }
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get('friendList')
+  async friendList(
+    @Request() req: any,
+    @Query('skip', ParseIntPipe) skip: number,
+    @Query('take', ParseIntPipe) take: number,
+  ) {
+    const replay = await this.friendshipService.friendList(
+      req.new_user.sub,
+      skip,
+      take,
+    );
+    console.log("ALO oui");
+    if (replay && replay.length != 0) return replay;
+    console.log(replay)
+    throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
+  }
 
   // @UseInterceptors(ClassSerializerInterceptor)
   // @Post('unblock')
@@ -149,21 +151,22 @@ export class FriendshipController {
   //   throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
   // }
 
-  // @UseInterceptors(ClassSerializerInterceptor)
-  // @Get('blocklist')
-  // async blocklist(
-  //   @Request() req: any,
-  //   @Query('skip', ParseIntPipe) skip: number,
-  //   @Query('take', ParseIntPipe) take: number,
-  // ) {
-  //   const replay = await this.friendshipService.blocklist(
-  //     req.new_user.sub,
-  //     skip,
-  //     take,
-  //   );
-  //   if (replay) return replay;
-  //   throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
-  // }
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get('blocklist')
+  async blocklist(
+    @Request() req: any,
+    @Query('skip', ParseIntPipe) skip: number,
+    @Query('take', ParseIntPipe) take: number,
+  ) {
+    const replay = await this.friendshipService.blocklist(
+      req.new_user.sub,
+      skip,
+      take,
+    );
+    console.log(replay)
+    if (replay && replay.length) return replay;
+    throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
+  }
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Post('friendStatus')
@@ -187,21 +190,22 @@ export class FriendshipController {
       );
     }
   }
-  // @UseInterceptors(ClassSerializerInterceptor)
-  // @Get('requestsList')
-  // async requestsList(
-  //   @Request() req: any,
-  //   @Query('skip', ParseIntPipe) skip: number,
-  //   @Query('take', ParseIntPipe) take: number,
-  // ) {
-  //   const replay = await this.friendshipService.requestsList(
-  //     req.new_user.sub,
-  //     skip,
-  //     take,
-  //   );
-  //   if (replay) return replay;
-  //   throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
-  // }
+
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get('requestsList')
+  async requestsList(
+    @Request() req: any,
+    @Query('skip', ParseIntPipe) skip: number,
+    @Query('take', ParseIntPipe) take: number,
+  ) {
+    const replay = await this.friendshipService.requestsList(
+      req.new_user.sub,
+      skip,
+      take,
+    );
+    if (replay && replay.length) return replay;
+    throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
+  }
 
   // @UseInterceptors(ClassSerializerInterceptor)
   // @Post('accept')

@@ -25,6 +25,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
   type : number = 0;
   YourBodyChoosen = false;
 
+  friendRequest$!: Observable<any>;
+  friendList$!: Observable<any>;
+  blockedList$!: Observable<any>;
+  friendRequestSkip : number = 0;
+  friendListSkip : number = 0;
+  blockListSkip : number = 0;
+
   // to unsubscribe subscribed Observables
   replay !: any;
   replay_ !: any;
@@ -41,6 +48,18 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.profileSubject$ = this.profileService.getMyData();
       this.replay_ = this.profileSubject$.subscribe({next: (data : Observable<any>) => {
       this.profile$ = data;}});
+      this.friendRequest$ = this.friendship.requestsList(this.friendRequestSkip, 10)
+      this.blockedList$ = this.friendship.blocklist(this.blockListSkip, 10)
+      this.friendList$ = this.friendship.friendList(this.friendListSkip, 10)
+      this.friendship.friendRealTimeStatus().subscribe((data : any) => {
+        if (data)
+        {
+          console.log(data);
+          this.friendList$ = this.friendship.friendList(this.friendListSkip, 10);
+          this.friendRequest$ = this.friendship.requestsList(this.friendRequestSkip, 10);
+          this.blockedList$ = this.friendship.blocklist(this.blockListSkip, 10);
+        }});
+
     }
     else
     {
@@ -151,5 +170,32 @@ export class ProfileComponent implements OnInit, OnDestroy {
   changeMode()
   {
     this.YourBodyChoosen = !this.YourBodyChoosen;
+  }
+  isObject(value: any): boolean {
+    return Array.isArray(value)
+  }
+
+  updating (type: number)
+  {
+    if (type == 1)
+    this.friendList$ = this.friendship.friendList(this.friendListSkip, 10);
+  else if (type == 2)
+    this.friendRequest$ = this.friendship.requestsList(this.friendRequestSkip, 10);
+  else
+    this.blockedList$ = this.friendship.blocklist(this.blockListSkip, 10);
+  }
+  up(skip: number, type : number)
+  {
+    skip += 10;
+    this.updating(type);
+  }
+  
+  down(skip: number, type : number)
+  {
+    if (skip)
+    {
+      skip -= 10;
+      this.updating(type);
+    }
   }
 }
