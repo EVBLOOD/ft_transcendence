@@ -76,13 +76,12 @@ export class ChatController {
     @Param('chatID', ParseIntPipe) chatID: number,
     @Body() memberDTO: createMemberDTO,
   ): Promise<Chat | null> {
-    // try {
-    // TODO [importent]: check if user in not banned first
-    return this.chatRoomSevice.addMemberToChatroom(chatID, memberDTO);
-    // } catch (err) {
-    // console.log(err);
-    // return null;
-    // }
+    try {
+      return this.chatRoomSevice.addMemberToChatroom(chatID, memberDTO);
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
   }
 
   @Put(':chatID/add/admin')
@@ -170,5 +169,4 @@ export class ChatController {
       console.log(err);
     }
   }
-  
 } // end of ChatController class

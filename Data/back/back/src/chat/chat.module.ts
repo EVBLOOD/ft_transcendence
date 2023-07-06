@@ -9,10 +9,19 @@ import { ChatGateway } from './chat.gateway';
 import { ChatUtils } from './chat.utils';
 import { MessageService } from 'src/message/message.service';
 import { UserService } from 'src/user/user.service';
+import { PunishmentService } from './punishment/punishment.service';
+import { Punishment } from './punishment/punishment.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Message, User, Chat])],
-  providers: [ChatService, ChatUtils, ChatGateway, MessageService, UserService],
+  imports: [TypeOrmModule.forFeature([Message, User, Chat, Punishment])],
+  providers: [
+    ChatService,
+    ChatUtils,
+    ChatGateway,
+    MessageService,
+    UserService,
+    PunishmentService,
+  ],
   controllers: [ChatController],
 })
 export class ChatModule {}

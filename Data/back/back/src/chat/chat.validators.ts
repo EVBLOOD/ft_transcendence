@@ -79,13 +79,13 @@ export function removeAdminStatus(chat: Chat, user: string): Chat {
   return chat;
 }
 
-export function ValidateUpdateDTO(dto : UpdateChatroomDTO) : void {
+export function ValidateUpdateDTO(dto: UpdateChatroomDTO): void {
   if (!dto.newType && !dto.newPassword && !dto.newChatroomName) {
-    throw new HttpException("nothing to update", HttpStatus.BAD_REQUEST);
-  }
-  else  {
+    throw new HttpException('nothing to update', HttpStatus.BAD_REQUEST);
+  } else {
     if (dto.newChatroomName) validateChatName(dto.newChatroomName);
     if (dto.newType) validateChatType(dto.newType);
-    if (dto.newType === "password" && dto.newPassword) validateChatPassword(dto.newPassword);
+    if (dto.newType === 'password' && dto.newPassword)
+      validateChatPassword(dto.newPassword);
   }
 }
