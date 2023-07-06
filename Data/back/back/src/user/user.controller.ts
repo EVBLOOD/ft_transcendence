@@ -7,9 +7,7 @@ export class UserController {
   constructor(private readonly usersercice: UserService) {}
   @Get()
   async getListOfUsers(): Promise<User[] | undefined> {
-    console.log(
-      "called"
-    )
+    console.log('called');
     try {
       return this.usersercice.getListOfUsers();
     } catch (err) {

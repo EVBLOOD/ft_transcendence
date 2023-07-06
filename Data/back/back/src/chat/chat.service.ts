@@ -34,6 +34,7 @@ export class ChatService {
     @InjectRepository(Chat)
     private readonly chatRoomRepo: Repository<Chat>,
     @Inject(forwardRef(() => ChatGateway))
+    private readonly chatGateaway: ChatGateway,
     private readonly chatPunishment: PunishmentService,
     private readonly chatHelpers: ChatUtils,
     private readonly messageService: MessageService,
@@ -120,13 +121,21 @@ export class ChatService {
   }
 
   async postToChatroom(messageDTO: CreateMessage): Promise<Message> {
-    // TODO [importent]: check if the user is a memeber of the channel && if he's not muted
-    // if ((await this.chatHelpers.checkForMemberRoll(messageDTO.charRoomId, messageDTO.userName)) == true &&
-    //   (await this.chatPunishment.))
-    const chatRoom = await this.GetChatRoomByID(messageDTO.charRoomId);
-    const user = await this.chatHelpers.getUser(messageDTO.userName);
-    return await this.messageService.create(messageDTO, chatRoom, user);
-    // if not throw !
+    if (
+      (await this.chatHelpers.checkForMemberRoll(
+        messageDTO.charRoomId,
+        messageDTO.userName,
+      )) == true &&
+      (await this.chatPunishment.isMutedInChatroom(
+        messageDTO.charRoomId,
+        messageDTO.userName,
+      )) == false
+    ) {
+      const chatRoom = await this.GetChatRoomByID(messageDTO.charRoomId);
+      const user = await this.chatHelpers.getUser(messageDTO.userName);
+      return await this.messageService.create(messageDTO, chatRoom, user);
+    }
+    throw new HttpException("Can't send messages here", HttpStatus.FORBIDDEN);
   }
 
   async findDMChatroom(user1: string, user2: string): Promise<Chat | null> {
@@ -228,14 +237,19 @@ export class ChatService {
       return await this.GetChatRoomByID(chatID);
     }
     const user = await this.chatHelpers.getUser(memberDTO.member);
-    // TODO[importent]: check if the user is not banned from the chatroom
-    // if (banned == true ) {
-    //    throw new HttpException('Can't add currently banned user', HttpStatus.FORBIDDEN);
-    // }
-    // else
-    // if ()
-    chatroom.member.push(user);
-    return chatroom;
+    if (
+      (await this.chatPunishment.isBannedInChatroom(
+        chatID,
+        memberDTO.member,
+      )) == false
+    ) {
+      chatroom.member.push(user);
+      return this.chatRoomRepo.save(chatroom);
+    }
+    throw new HttpException(
+      'You are banned from joining this chatroom',
+      HttpStatus.FORBIDDEN,
+    );
   }
 
   async addAdminToChatroom(
@@ -255,14 +269,16 @@ export class ChatService {
       ) {
         return await this.GetChatRoomByID(chatID);
       }
-      // TODO [importent] : check if the user is not banned b4 getting admin status
-      // if (banned == true ) {
-      //    throw new HttpException('You are banned', HttpStatus.FORBIDDEN);
-      // }
-      // else
-      const admin = await this.chatHelpers.getUser(adminDTO.roleReceiver);
-      chatroom.admin.push(admin);
-      return await this.chatRoomRepo.save(chatroom);
+      if (
+        (await this.chatPunishment.isBannedInChatroom(
+          chatID,
+          adminDTO.roleReceiver,
+        )) == false
+      ) {
+        const admin = await this.chatHelpers.getUser(adminDTO.roleReceiver);
+        chatroom.admin.push(admin);
+        return await this.chatRoomRepo.save(chatroom);
+      }
     }
     throw new HttpException(
       "You can't assign a new admin",
@@ -278,20 +294,22 @@ export class ChatService {
       (await this.chatHelpers.checkForAdminRoll(chatID, swapDTO.roleReciver)) ==
         true &&
       (await this.chatHelpers.checkForOwnerRoll(chatID, swapDTO.roleReciver)) ==
-        true
+        true &&
+      (await this.chatPunishment.isBannedInChatroom(
+        chatID,
+        swapDTO.roleReciver,
+      )) == false
     ) {
-      // TODO [importent]: check if the user is not banned in the chatroom
       const newOwner = await this.chatHelpers.getUser(swapDTO.roleReciver);
       chatroom.owner = newOwner;
       const newChat = chatroom;
       this.chatRoomRepo.save(newChat);
       return newChat;
-    } else {
-      throw new HttpException(
-        "Can't change channel ownership",
-        HttpStatus.BAD_REQUEST,
-      );
     }
+    throw new HttpException(
+      "Can't change channel ownership",
+      HttpStatus.BAD_REQUEST,
+    );
   }
 
   async kickUserFromChatroom(
@@ -371,25 +389,34 @@ export class ChatService {
     const newChat = deleteUser(chatroom, user);
     return await this.chatRoomRepo.save(newChat);
   }
-  async updateChatroom(chatID: number, adminName: string, updateDTO: UpdateChatroomDTO): Promise<Chat | undefined> {
+  async updateChatroom(
+    chatID: number,
+    adminName: string,
+    updateDTO: UpdateChatroomDTO,
+  ): Promise<Chat | undefined> {
     const chatroom = await this.GetChatRoomByID(chatID);
-    if (chatroom.type === "DM") {
-      throw new HttpException("Chat room of type DM can't be chnged!", HttpStatus.BAD_REQUEST);
+    if (chatroom.type === 'DM') {
+      throw new HttpException(
+        "Chat room of type DM can't be chnged!",
+        HttpStatus.BAD_REQUEST,
+      );
     }
-    if (await this.checkForAdminRoll(chatID, adminName) === true) {
+    if ((await this.checkForAdminRoll(chatID, adminName)) === true) {
       if (updateDTO.newChatroomName) {
         chatroom.chatRoomName = updateDTO.newChatroomName;
       }
       if (updateDTO.newType) {
         chatroom.type = updateDTO.newType;
-        if (updateDTO.newType === "password") {
+        if (updateDTO.newType === 'password') {
           const passwordHash = await bcrypt.hash(updateDTO.newPassword, 10);
           chatroom.password = passwordHash;
         }
         return await this.chatRoomRepo.save(chatroom);
       }
     }
-    throw new HttpException("You don't have permission to update this chatroom", HttpStatus.FORBIDDEN);
+    throw new HttpException(
+      "You don't have permission to update this chatroom",
+      HttpStatus.FORBIDDEN,
+    );
   }
-
 } // END OF ChatService class

@@ -60,5 +60,4 @@ export class Chat {
   @OneToMany(() => Punishment, (punishment: Punishment) => punishment.user)
   @JoinColumn()
   punishment!: Punishment[];
-
 }

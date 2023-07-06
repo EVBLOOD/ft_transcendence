@@ -15,7 +15,9 @@ import { CreateMessage } from 'src/message/dto/message.dto';
 @WebSocketGateway({
   namespace: 'chat',
 })
-export class ChatGateway  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect{
+export class ChatGateway
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+{
   @WebSocketServer()
   server: Server;
   constructor(
@@ -34,13 +36,12 @@ export class ChatGateway  implements OnGatewayInit, OnGatewayConnection, OnGatew
   }
 
   afterInit(server: Server) {
-    console.log("Init: ", server);
+    console.log('Init: ', server);
   }
   handleConnection(client: Socket) {
-    console.log("Connection: ", client);
+    console.log('Connection: ', client);
   }
   handleDisconnect(client: Server) {
-    console.log("Disconnect: ", client);
+    console.log('Disconnect: ', client);
   }
-
 }
