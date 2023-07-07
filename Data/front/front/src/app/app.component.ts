@@ -1,6 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
-import { Observable, Subject, Subscription, distinctUntilChanged, fromEvent } from 'rxjs';
+import { Observable, Subject, Subscription, distinctUntilChanged, firstValueFrom, fromEvent } from 'rxjs';
 import { ProfileService } from './profile/profile.service';
 import { Router } from '@angular/router';
 import { StatusService } from './status.service';
@@ -64,13 +64,20 @@ export class AppComponent implements OnInit, OnDestroy {
       }})
       this.profile$ = data;
       console.log("onee")
-      this.friendship.current_status_friend.asObservable().subscribe((data) => {
-      console.log("data: ");
-      console.log(data);
-      this.showPopup('me and')
-      console.log("----------------");
-     })
     },});
+    this.friendship.current_status_friend.asObservable().subscribe((data) => {
+      if (data)
+      {
+        console.log("this is the data: ")
+        console.log(data);
+        console.log("okey");
+        if (data?.type == 4)
+        {
+          console.log(`this this invite was sent by user :  ${data.senderId}`)
+          this.showPopup(data.senderId)
+        }
+      }
+   })
   }
   
   ngOnDestroy(): void {
@@ -98,30 +105,30 @@ export class AppComponent implements OnInit, OnDestroy {
     this.status.Offline();
   }
 
-  showPopup(friendName: string) {
+  async showPopup(id: string,) {
+    const user : any = await firstValueFrom(this.profileService.getUserData(id));
+    console.log(user);
     Swal.fire({
       title: 'Friend Request',
-      html: `<p class="accept_notif-text" >You have a new friend request from ${friendName}!</p>`,
-      iconHtml: '<img class="accept_notif-icon" src="assets/img/profile.jpeg">',
+      html: `<p class="accept_notif-text" >You have a new friend request from ${user.username}!</p>`,
+      iconHtml: '<img class="accept_notif-icon" src="' + this.profileService.getUserAvatarPath(user.avatar) + '">',
       showCancelButton: true,
       confirmButtonText: 'Accept',
       cancelButtonText: 'Decline',
       customClass: {
         popup: 'accept_notif-container',
-        // validationMessage: 'accept_notif-text',
-        // htmlContainer: 'accept_notif-container',
-        // icon: 'accept_notif-icon',
-        // container: 'accept_notif-container',
         title: 'accept_notif-title',
-        // content: 'accept_notif-content',
         confirmButton: 'accept_notif-confirm-button',
         cancelButton: 'accept_notif-cancel-button'
       },
-      position: 'top-end'
+      position: 'top-end',
+      timer: 5000
     }).then((result) => {
       if (result.isConfirmed) {
+        this.friendship.acceptRequest(user.id);
         // Handle accept button click
       } else if (result.dismiss === Swal.DismissReason.cancel) {
+        this.friendship.cancelFriendRequest(user.id);
         // Handle decline button click
       }
     });
