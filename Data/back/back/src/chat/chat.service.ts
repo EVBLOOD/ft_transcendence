@@ -27,6 +27,8 @@ import { createAdminDTO } from './dto/createAdmin.dto';
 import { SwapOwnerDTO } from './dto/SwapOwner.dto';
 import { UpdateChatroomDTO } from './dto/updateChatroom.dto';
 import { PunishmentService } from './punishment/punishment.service';
+import { Punishment } from './punishment/punishment.entity';
+import { createPunishmentDTO } from './punishment/dto/createPunishment.dto';
 
 @Injectable()
 export class ChatService {
@@ -417,6 +419,94 @@ export class ChatService {
     throw new HttpException(
       "You don't have permission to update this chatroom",
       HttpStatus.FORBIDDEN,
+    );
+  }
+
+  async getChatroomsByType(type: string): Promise<Chat[]> {
+    const chatrooms = await this.chatRoomRepo.find({
+      where: {
+        type: type,
+      },
+      relations: {
+        owner: true,
+      },
+      select: {
+        chatRoomName: true,
+        id: true,
+        type: true,
+        owner: {
+          userName: true,
+        },
+      },
+      order: {
+        id: 'asc',
+      },
+      cache: true,
+    });
+    return chatrooms;
+  }
+  async getMessagesByChatID(chatID: number): Promise<Message[]> {
+    return this.messageService.getMessagesByChatID(chatID);
+  }
+  async getChatroomPunishments(chatID: number): Promise<Punishment[]> {
+    return this.chatPunishment.getChatroomPunishments(chatID);
+  }
+
+  async deleteUserFromChatroom(
+    chatroomId: number,
+    user: string,
+  ): Promise<Chat> {
+    const chatroom = await this.GetChatRoomByID(chatroomId);
+    if (await this.chatHelpers.checkForOwnerRoll(chatroomId, user)) {
+      throw new HttpException(
+        'Cannot remove owner of chatroom',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const updatedChatroom = deleteUser(chatroom, user);
+    return await this.chatRoomRepo.save(updatedChatroom);
+  }
+
+  async createPunishment(
+    chatID: number,
+    userName: string,
+    punishmentDTO: createPunishmentDTO,
+  ): Promise<Punishment> {
+    if (
+      (await this.chatHelpers.canBePunished(chatID, userName, punishmentDTO)) ==
+      true
+    ) {
+      if (
+        punishmentDTO.type == 'ban' &&
+        (await this.chatPunishment.isBannedInChatroom(
+          chatID,
+          punishmentDTO.user,
+        )) == true
+      ) {
+        throw new HttpException('User already banned', HttpStatus.BAD_REQUEST);
+      } else if (
+        punishmentDTO.type == 'mute' &&
+        (await this.chatPunishment.isMutedInChatroom(
+          chatID,
+          punishmentDTO.user,
+        )) == true
+      ) {
+        throw new HttpException('User already muted', HttpStatus.BAD_REQUEST);
+      }
+      if (punishmentDTO.type == 'ban') {
+        this.deleteUserFromChatroom(chatID, punishmentDTO.user);
+      }
+      const chat = await this.GetChatRoomByID(punishmentDTO.chatID);
+      const user = await this.chatHelpers.getUser(punishmentDTO.user);
+      return await this.chatPunishment.createPunishment(
+        chat,
+        user,
+        punishmentDTO,
+      );
+    }
+    throw new HttpException(
+      'Unable to create Punishment',
+      HttpStatus.BAD_REQUEST,
     );
   }
 } // END OF ChatService class
