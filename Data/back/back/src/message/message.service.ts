@@ -99,4 +99,63 @@ export class MessageService {
     const message = createNewMessage(messageDTO.value, chatRoom, user);
     return this.messageRepo.save(message);
   }
+  async getMessagesByChatID(chatID: number): Promise<Message[]> {
+    const messages = await this.messageRepo.find({
+      where: {
+        chatRoomId: {
+          id: chatID,
+        },
+      },
+      relations: {
+        chatRoomId: true,
+        userId: true,
+      },
+      select: {
+        userId: {
+          userName: true,
+        },
+        chatRoomId: {
+          id: true,
+          chatRoomName: true,
+          type: true,
+        },
+        value: true,
+      },
+      cache: true,
+    });
+    return messages;
+  }
+
+  // async getUserMessagesInChatroom(chatID: number, userName: string) : Promise<Message[]> {
+  //   const messages = await this.messageRepo.find({
+  //     order: {
+  //       id: 'asc'
+  //     },
+  //     where: {
+  //       chatRoomId: {
+  //         id: chatID,
+  //       },
+  //       userId: {
+  //         userName: userName,
+  //       },
+  //     },
+  //     relations: {
+  //       chatRoomId: true,
+  //       userId: true,
+  //     },
+  //     select: {
+  //       userId: {
+  //         userName: true,
+  //       },
+  //       chatRoomId: {
+  //         id :true,
+  //         chatRoomName: true,
+  //         type: true,
+  //       },
+  //       value: true,
+  //     },
+  //     cache: true,
+  //   })
+  //   return messages;
+  // }
 } // END OF MessageService Class

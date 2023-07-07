@@ -4,6 +4,8 @@ import { Admin, Repository, ReturnDocument } from 'typeorm';
 import { Chat } from './chat.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/user.entity';
+import { createPunishmentDTO } from './punishment/dto/createPunishment.dto';
+import { throws } from 'assert';
 
 @Injectable()
 export class ChatUtils {
@@ -114,6 +116,25 @@ export class ChatUtils {
       (await this.isMoreThenOneMemberInChatroom(chatID)) == true
     ) {
       return false;
+    }
+    return true;
+  }
+  async canBePunished(
+    chatID: number,
+    userName: string,
+    punishmentDTO: createPunishmentDTO,
+  ): Promise<boolean> {
+    if ((await this.checkForAdminRoll(chatID, userName)) == true) {
+      throw new HttpException(
+        'Not allowed to Punishe users',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+    if (
+      (await this.checkForOwnerRoll(chatID, punishmentDTO.user)) == true &&
+      punishmentDTO.type === 'ban'
+    ) {
+      throw new HttpException('Cannot ban the owner', HttpStatus.FORBIDDEN);
     }
     return true;
   }

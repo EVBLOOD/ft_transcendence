@@ -1,8 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Punishment } from './punishment.entity';
-import { getTimeDiff } from './punishment.utils';
+import {
+  createPunishmenEntity,
+  getTimeDiff,
+  validatePunishmentDto,
+} from './punishment.utils';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/user/user.entity';
+import { createChatroomDTO } from '../dto/createChatroom.dto';
+import { createPunishmentDTO } from './dto/createPunishment.dto';
+import { Chat } from '../chat.entity';
 
 @Injectable()
 export class PunishmentService {
@@ -96,6 +104,74 @@ export class PunishmentService {
           console.log('start time: ', currentTime);
           console.log('ban time: ', banTime);
           if (getTimeDiff(currentTime, banTime) < 2) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+  async getChatroomPunishments(chatID: number): Promise<Punishment[]> {
+    const punishments = this.PunishmentRepo.find({
+      where: {
+        chat: {
+          id: chatID,
+        },
+      },
+      relations: {
+        user: true,
+        chat: true,
+      },
+      select: {
+        user: {
+          userName: true,
+        },
+        chat: {
+          id: true,
+          chatRoomName: true,
+        },
+        time: true,
+        PunishmentType: true,
+        id: true,
+      },
+    });
+    return punishments;
+  }
+
+  async createPunishment(
+    chat: Chat,
+    user: User,
+    punishmentDTO: createPunishmentDTO,
+  ): Promise<Punishment> {
+    if (validatePunishmentDto(punishmentDTO) == true) {
+      const newPunishment = createPunishmenEntity(chat, user, punishmentDTO);
+      return await this.PunishmentRepo.save(newPunishment);
+    }
+    throw new HttpException('Incorrect Penalty Type.', HttpStatus.BAD_REQUEST);
+  }
+  async checkIfUserBanned(chatID: number, userName: string): Promise<boolean> {
+    const users = await this.getBannedUsers(chatID, userName);
+    if (users.length !== 0) {
+      for (const i of users) {
+        const user = i.time;
+        if (user !== undefined) {
+          const current = new Date();
+          if (getTimeDiff(current, user) < 2) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+  async checkIfUserMuted(chatID: number, userName: string): Promise<boolean> {
+    const users = await this.getMutedUsers(chatID, userName);
+    if (users.length !== 0) {
+      for (const i of users) {
+        const user = i.time;
+        if (user !== undefined) {
+          const current = new Date();
+          if (getTimeDiff(current, user) < 2) {
             return true;
           }
         }

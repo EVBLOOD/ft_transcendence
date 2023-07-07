@@ -7,7 +7,6 @@ import {
   Post,
   Put,
   Delete,
-  HttpException,
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { Chat } from './chat.entity';
@@ -17,6 +16,9 @@ import { createAdminDTO } from './dto/createAdmin.dto';
 import { SwapOwnerDTO } from './dto/SwapOwner.dto';
 import { UpdateChatroomDTO } from './dto/updateChatroom.dto';
 import { ValidateUpdateDTO } from './chat.validators';
+import { Message } from 'src/message/message.entity';
+import { Punishment } from './punishment/punishment.entity';
+import { createPunishmentDTO } from './punishment/dto/createPunishment.dto';
 
 @Controller('chat')
 export class ChatController {
@@ -66,9 +68,49 @@ export class ChatController {
     return this.chatRoomSevice.checkForOwnerRoll(chatID, userName);
   }
 
+  @Get('type/:type')
+  async getChatroomsByType(@Param('type') type: string): Promise<Chat[]> {
+    return this.chatRoomSevice.getChatroomsByType(type);
+  }
+  @Get(':chatID/messages')
+  async getMessagesByChatID(
+    @Param('chatID', ParseIntPipe) chatID: number,
+  ): Promise<Message[]> {
+    return this.chatRoomSevice.getMessagesByChatID(chatID);
+  }
+
+  // @Get(':chatID/user/:userName/messages')
+  // async getUserMessagesInChatroom(@Param('chatID', ParseIntPipe) chatID: number, @Param('userName') userName: string) : Promise<Message[]> {
+  //   return this.chatRoomSevice.getUserMessagesInChatroom(chatID, userName);
+  // }
+
+  @Get(':chatID/punishments')
+  async getChatroomPunishments(
+    @Param('chatID', ParseIntPipe) chatID: number,
+  ): Promise<Punishment[]> {
+    return this.chatRoomSevice.getChatroomPunishments(chatID);
+  }
+
   @Post('create')
   async createChatRoom(@Body() chatroom: createChatroomDTO): Promise<Chat> {
     return this.chatRoomSevice.createChatroom(chatroom);
+  }
+
+  @Post(':chatID/admin/:adminName/punishment')
+  async createPunishment(
+    @Param('chatID', ParseIntPipe) chatID: number,
+    @Param('adminName') userName: string,
+    @Body() punishmentsDTO: createPunishmentDTO,
+  ): Promise<Punishment> {
+    try {
+      return await this.chatRoomSevice.createPunishment(
+        chatID,
+        userName,
+        punishmentsDTO,
+      );
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   @Put(':chatID/add/member')
