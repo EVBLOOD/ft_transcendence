@@ -5,6 +5,8 @@ import { ProfileService } from './profile/profile.service';
 import { Router } from '@angular/router';
 import { StatusService } from './status.service';
 import { FriendshipService } from './profile/friendship.service';
+// import { NgToastService } from 'ng-angular-popup';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-root',
@@ -34,7 +36,9 @@ export class AppComponent implements OnInit, OnDestroy {
   @ViewChild('dropDownContent__') dropDownContent__ !:ElementRef;
 
   constructor(public profileService : ProfileService, private route: Router,
-        private status: StatusService, private friendship: FriendshipService) {}
+        private status: StatusService, private friendship: FriendshipService,) {}
+
+        
   getcurrentPath()
   {
     return this.route.url;
@@ -59,14 +63,16 @@ export class AppComponent implements OnInit, OnDestroy {
         }
       }})
       this.profile$ = data;
-     console.log("onee")
-     this.friendship.current_status_friend.asObservable().subscribe((data) => {
+      console.log("onee")
+      this.friendship.current_status_friend.asObservable().subscribe((data) => {
       console.log("data: ");
       console.log(data);
+      this.showPopup('me and')
       console.log("----------------");
      })
     },});
   }
+  
   ngOnDestroy(): void {
     this.replay.unsubscribe()
   }
@@ -92,4 +98,32 @@ export class AppComponent implements OnInit, OnDestroy {
     this.status.Offline();
   }
 
+  showPopup(friendName: string) {
+    Swal.fire({
+      title: 'Friend Request',
+      html: `<p class="accept_notif-text" >You have a new friend request from ${friendName}!</p>`,
+      iconHtml: '<img class="accept_notif-icon" src="assets/img/profile.jpeg">',
+      showCancelButton: true,
+      confirmButtonText: 'Accept',
+      cancelButtonText: 'Decline',
+      customClass: {
+        popup: 'accept_notif-container',
+        // validationMessage: 'accept_notif-text',
+        // htmlContainer: 'accept_notif-container',
+        // icon: 'accept_notif-icon',
+        // container: 'accept_notif-container',
+        title: 'accept_notif-title',
+        // content: 'accept_notif-content',
+        confirmButton: 'accept_notif-confirm-button',
+        cancelButton: 'accept_notif-cancel-button'
+      },
+      position: 'top-end'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Handle accept button click
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        // Handle decline button click
+      }
+    });
+  }
 }
