@@ -27,9 +27,11 @@ export class SettingsComponent implements OnInit, OnDestroy{
 
   public data = {title: "Settings", subtitle: "profile", action: "Update"}
   constructor(public serviceUser : ProfileService, private router: Router) {}
+  private replay_ : any;
+  
   ngOnInit() {
     this.profileSubject$ = this.serviceUser.getMyData();
-    this.profileSubject$.subscribe({next: (data : Observable<any>) => {
+    this.replay_ = this.profileSubject$.subscribe({next: (data : Observable<any>) => {
     this.profile$ = data;}});
     this.replay = this.profile$.subscribe({next: (data) => {
       if (data.statusCode)
@@ -44,17 +46,15 @@ export class SettingsComponent implements OnInit, OnDestroy{
   ngOnDestroy(): void {
     if (this.replay)
       this.replay.unsubscribe();
-    if (this.update)
-      this.update.unsubscribe()
+    if (this.replay_)
+      this.replay_.unsubscribe();
   }
 
   canceltwofactor()
   {
-    console.log('remove two factor');
     this.twoFactor = false;
   }
   activetwofactor(){
-    console.log("open new popUp or here");
     this.router.navigateByUrl('/acticatetwo'); 
   }
 
@@ -78,7 +78,7 @@ export class SettingsComponent implements OnInit, OnDestroy{
       this.serviceUser.update();
       this.router.navigateByUrl('');
     }
-    this.replay.unsubscribe();
+    this.update.unsubscribe();
   }
   funct(file : any)
   { 
@@ -94,6 +94,7 @@ export class SettingsComponent implements OnInit, OnDestroy{
       this.MyerrorAvatar = false;
       this.serviceUser.update();
     }
+    this.update.unsubscribe();
   }
 
   async validateInput()

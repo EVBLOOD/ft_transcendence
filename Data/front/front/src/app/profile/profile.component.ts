@@ -35,6 +35,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   // to unsubscribe subscribed Observables
   replay !: any;
   replay_ !: any;
+  replay__ !: any;
 
   constructor(public profileService : ProfileService, private authService: AuthService,
               private route: ActivatedRoute, private state : StatusService,
@@ -46,12 +47,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
     {
       this.YourBodyChoosen = true;
       this.profileSubject$ = this.profileService.getMyData();
+      // subjectBehi :
       this.replay_ = this.profileSubject$.subscribe({next: (data : Observable<any>) => {
       this.profile$ = data;}});
       this.friendRequest$ = this.friendship.requestsList(this.friendRequestSkip, 10)
       this.blockedList$ = this.friendship.blocklist(this.blockListSkip, 10)
       this.friendList$ = this.friendship.friendList(this.friendListSkip, 10)
-      this.friendship.friendRealTimeStatus().subscribe((data : any) => {
+      // socket :
+      this.replay__ = this.friendship.friendRealTimeStatus().subscribe((data : any) => {
         if (data)
         {
           console.log(data);
@@ -64,11 +67,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
     else
     {
       this.profile$ = this.profileService.getUserData(this.username);
-      this.friendship.friendRealTimeStatus().subscribe((state) => {
+      // socket
+      this.replay_ = this.friendship.friendRealTimeStatus().subscribe((state) => {
         if (state?.senderId && state.senderId == this.username)
-          this.type = state.type;
+        this.type = state.type;
       })
-      this.friendship.friendStatus(this.username).subscribe((data : any) => {
+      // socket
+      this.replay__ = this.friendship.friendStatus(this.username).subscribe((data : any) => {
         if (data)
         {
           if (!data.status)
@@ -95,6 +100,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.replay.unsubscribe();
     if (this.replay_)
       this.replay_.unsubscribe();
+    if (this.replay__)
+      this.replay__.unsubscribe();
   }
   sameDataEveryDay = [
     {path: "/assets/RankIcon.svg", name: "Rank",score: "20"},

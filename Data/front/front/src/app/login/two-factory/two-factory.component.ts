@@ -22,7 +22,6 @@ export class TwoFactoryComponent {
     {
       if (!this.token.value || this.token.errors || this.token.pristine)
         return;
-      console.log(this.token.value);
       this.replay = this.authSer.gowild(this.token.value).subscribe(
         {next: (data) => {this.handleResponseLetsgo(data)},});
     }

@@ -25,6 +25,9 @@ export class AppComponent implements OnInit, OnDestroy {
   public profile$ !: Observable<any>;
   // public profile$ !: Subject<any>;
   private replay : any;
+  private replay_ : any;
+  private replay__ : any;
+  private replay___ : any;
   notLogged : boolean = true;
   dropDown = false;
   profilepic : string = '';
@@ -47,13 +50,12 @@ export class AppComponent implements OnInit, OnDestroy {
     this.dropDown = !this.dropDown
   }
   ngOnInit(): void {
-    console.log("WHAT");
     this.profileSub$ = this.profileService.getMyData().asObservable();
+    // API but can't use await:
     this.replay = this.profileSub$.subscribe({next: (data : Observable<any>) => {
-      data.subscribe({next: (dta : any) =>{
-        console.log('hello')
+      this.replay_ = data.subscribe({next: (dta : any) =>{
         if (dta.statusCode)
-        this.notLogged = true;
+          this.notLogged = true;
         else
         {
           this.notLogged = false;
@@ -65,7 +67,8 @@ export class AppComponent implements OnInit, OnDestroy {
       this.profile$ = data;
       console.log("onee")
     },});
-    this.friendship.current_status_friend.asObservable().subscribe((data) => {
+    // socket:
+    this.replay__ = this.friendship.current_status_friend.asObservable().subscribe((data) => {
       if (data)
       {
         console.log("this is the data: ")
@@ -81,7 +84,14 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   
   ngOnDestroy(): void {
+    if (this.replay)
     this.replay.unsubscribe()
+    if (this.replay_)
+    this.replay_.unsubscribe()
+    if (this.replay__)
+    this.replay__.unsubscribe()
+    if (this.replay___)
+    this.replay___.unsubscribe();
   }
 
   @HostListener('document:click', ['$event'])
@@ -101,7 +111,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   logout()
   {
-    this.replay = this.profileService.logout().subscribe({next: (data) => {this.route.navigateByUrl('login'); this.notLogged = true;}, complete: () => {this.replay.unsubscribe()}})
+    this.replay___ = this.profileService.logout().subscribe({next: (data) => {this.route.navigateByUrl('login'); this.notLogged = true;}})
     this.status.Offline();
   }
 
