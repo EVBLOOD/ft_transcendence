@@ -13,6 +13,6 @@ export class HttpfailInterceptor implements HttpInterceptor {
   constructor() {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<any> {
-    return next.handle(request).pipe(retry(1),  catchError((err) => {console.log('error'); return of({statusCode: 403})}) )
+    return next.handle(request).pipe(retry(1),  catchError((err) => {return of({statusCode: 403})}) )
   }
 }

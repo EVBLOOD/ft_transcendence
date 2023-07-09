@@ -60,26 +60,16 @@ export class AppComponent implements OnInit, OnDestroy {
         {
           this.notLogged = false;
           this.profilepic = this.profileService.getUserAvatarPath(dta.avatar);
-          console.log(dta.avatar)
-          console.log(this.profilepic)
         }
       }})
       this.profile$ = data;
-      console.log("onee")
     },});
     // socket:
     this.replay__ = this.friendship.current_status_friend.asObservable().subscribe((data) => {
-      if (data)
-      {
-        console.log("this is the data: ")
-        console.log(data);
-        console.log("okey");
         if (data?.type == 4)
         {
-          console.log(`this this invite was sent by user :  ${data.senderId}`)
           this.showPopup(data.senderId)
         }
-      }
    })
   }
   
@@ -104,9 +94,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   updateAvatar(event : any)
   {
-    if (event)
-      console.log(';;;')
-    console.log("calling myself")
     this.ngOnInit();
   }
   logout()
@@ -117,7 +104,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   async showPopup(id: string,) {
     const user : any = await firstValueFrom(this.profileService.getUserData(id));
-    console.log(user);
     Swal.fire({
       title: 'Friend Request',
       html: `<p class="accept_notif-text" >You have a new friend request from ${user.username}!</p>`,

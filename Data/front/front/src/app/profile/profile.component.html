@@ -1,5 +1,8 @@
+
 <app-page-not-found *ngIf="(profile$| async)?.statusCode || type == 2" />
+
 <div class="body" *ngIf="!((profile$| async)?.statusCode) && type != 2">
+    <div  class="body" style="display: flex; justify-content: center; align-content: center;" *ngIf="!(profile$| async) || !(auth$| async)">waiting ..</div>
     <img class="coverProfile" src="/assets/cover.svg" alt="cover img" />
     <div class="insideProfile">
         <div class="infoProfileUser">

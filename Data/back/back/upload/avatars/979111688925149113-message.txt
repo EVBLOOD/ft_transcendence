@@ -1,0 +1,130 @@
+```
+// User Entity
+import { IsBoolean, IsEmail, Matches } from "class-validator";
+import { Messages } from "src/chat/entities/Messages.entity";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn, } from "typeorm";
+
+@Entity({name: "Users"})
+export class User {
+
+    @PrimaryColumn()
+    @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
+    username: string;
+
+    @Column()
+    name: string;
+
+    @Column()
+    @IsBoolean()
+    two_factor_authentication_state: boolean;
+
+    @Column()
+    avatar: string;
+
+    @Column()
+    @IsEmail()
+    email: string;
+
+
+    @OneToMany( () => Messages, (messages) => messages.chat_id)
+    messages: Messages;
+}
+// Chat Entity
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Messages } from "./Messages.entity";
+
+@Entity('Chat')
+export class Chat {
+
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column()
+    name: string;
+
+    @Column({ type: 'enum', enum: ['direct', 'public', 'private', 'protected'] })
+    type: string;
+
+    @Column()
+    password: string;
+
+    @OneToMany( () => Messages, (messages) => messages.chat_id)
+    messages: Messages;
+}
+
+
+/*
+• The user should be able to create channels (chat rooms) that can be either public,
+or private, or protected by a password.
+• The user should be able to send direct messages to other users.
+• The user should be able to block other users. This way, they will see no more
+messages from the account they blocked.
+• The user who has created a new channel is automatically set as the channel owner
+until they leave it.
+◦ The channel owner can set a password required to access the channel, change
+it, and also remove it.
+◦ The channel owner is a channel administrator. They can set other users as
+administrators.
+◦ A user who is an administrator of a channel can kick, ban or mute (for a
+limited time) other users, but not the channel owners.
+• The user should be able to invite other users to play a Pong game through the chat
+interface.
+• The user should be able to access other players profiles through the chat interface.
+*/
+// Members Entity
+import { User } from "src/user/entities/user.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
+import { Chat } from "./chat.entity";
+
+@Entity('Members')
+export class Members
+{
+    @PrimaryColumn()
+    username: string;
+
+    @PrimaryColumn()
+    chatID: number;
+
+    @Column()
+    state: boolean; // active 1 - blocked 0
+    
+    @Column({type: 'enum', enum: ["none", "admin", "owner"]})
+    role: string;
+
+    @Column()
+    mute: Date; // should be the date and time when mute ends
+
+    @ManyToOne(() => User)
+    @JoinColumn({name: 'username'})
+    user: User;
+
+    @ManyToOne(() => Chat)
+    @JoinColumn({name: 'chatID'})
+    chat: Chat;
+}
+// Messages Entity
+import { User } from "src/user/entities/user.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Chat } from "./chat.entity";
+
+@Entity('Messages')
+export class Messages {
+
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column()
+    content: string;
+
+    @Column()
+    time: Date;
+    
+    @ManyToOne(() => User, (user) => user.username)
+    @JoinColumn({name: 'sender_username'})
+    username: string;
+    
+    @ManyToOne(() => Chat, (chat) => chat.id)
+    @JoinColumn({name: 'part_of_chat_id'})
+    chat_id: number;
+}
+```

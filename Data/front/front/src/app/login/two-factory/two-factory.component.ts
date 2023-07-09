@@ -15,7 +15,6 @@ export class TwoFactoryComponent {
   private replay : any;
   private errorState = 'none';
   token  = new FormControl('', [Validators.required, Validators.pattern(/^\d+$/), Validators.maxLength(6),  Validators.minLength(6)]);
-  
   letsgo()
   {
     try
@@ -27,7 +26,7 @@ export class TwoFactoryComponent {
     }
     catch (err)
     {
-      console.error("Make sure the tpo is valid");
+      console.log("tpo is not valid");
     }
   }
 

@@ -57,7 +57,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.replay__ = this.friendship.friendRealTimeStatus().subscribe((data : any) => {
         if (data)
         {
-          console.log(data);
           this.friendList$ = this.friendship.friendList(this.friendListSkip, 10);
           this.friendRequest$ = this.friendship.requestsList(this.friendRequestSkip, 10);
           this.blockedList$ = this.friendship.blocklist(this.blockListSkip, 10);
@@ -126,52 +125,33 @@ export class ProfileComponent implements OnInit, OnDestroy {
       });
   }
   hideIt = () => {this.displayRespondingWay = !this.displayRespondingWay}
-  // logic of friendships
 
-  // async RealUsername ()
-  // {
-  //   console.log('Hello')
-  //   try
-  //   {
-  //     this.correntUser = await firstValueFrom(this.profile$)
-  //     console.log(this.correntUser)
-  //   }
-  //   catch (err)
-  //   {
-  //     this.correntUser = {error: 'hey'}
-  //   }
-  // }
+
   async addFriend()
   {
-    // await this.RealUsername ();
     this.friendship.addFriend(Number.parseInt( this.username));
   }
   
   async cancelFriend()
   {
-    // await this.RealUsername ();
     this.displayRespondingWay = false;
     this.friendship.cancelFriendRequest(Number.parseInt( this.username));
   }
   async respondAcceptFriend()
   {
-    // await this.RealUsername ();
     this.displayRespondingWay = false;
     this.friendship.acceptRequest(Number.parseInt( this.username));
   }
   async unFriend()
   {
-    // await this.RealUsername ();
     this.friendship.unfriendUser(Number.parseInt( this.username));
   }
   async blockUser()
   {
-    // await this.RealUsername ();
     this.friendship.blockUser(Number.parseInt( this.username));
   }
   async unBlock()
   {
-    // await this.RealUsername ();
     this.friendship.unblockUser(Number.parseInt( this.username));
   }
   changeMode()

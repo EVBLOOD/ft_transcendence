@@ -97,10 +97,11 @@ export class UserController {
         destination: './upload/avatars',
         filename: (req, file, callback) => {
           if (
-            (file.mimetype != 'image/jpeg' && file.mimetype != 'image/png') ||
+            (!file ||  file.mimetype != 'image/jpeg' && file.mimetype != 'image/png') ||
             file.size > 1 * 1024 * 1024
           )
-            callback(null, null);
+            callback(null, '');
+
           const newname =
             Math.floor(10 + (99999 - 10) * Math.random()) +
             Date.now().toString() +
@@ -117,7 +118,7 @@ export class UserController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     try {
-      if (file?.filename && file.filename != '') {
+      if (file && file.filename && file.filename != '') {
         await this.userService.UpdateAvatar(req.new_user.sub, file.filename);
         throw new HttpException('ACCEPTABLE', HttpStatus.ACCEPTED);
         return;

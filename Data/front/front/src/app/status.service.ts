@@ -22,21 +22,15 @@ export class StatusService {
    
   online()
   {
-    this.socket.emit('Online', (...args: any[]) => {console.log(args);});
+    this.socket.emit('Online', (...args: any[]) => {});
   }
   inGame()
   {
-    this.socket.emit('InGame', (...args: any[]) => {console.log(args);}) 
+    this.socket.emit('InGame', (...args: any[]) => {}) 
   }
 
   Offline()
   {
-    this.socket.emit('Disconnect', (...args: any[]) => {console.log(args); console.log(args);}) 
+    this.socket.emit('Disconnect', (...args: any[]) => {}) 
   }
-  getState()
-  {
-
-  }
-  // socket = io('ws://localhost:3000/current_status')
-
 }

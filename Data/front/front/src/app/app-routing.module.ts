@@ -18,7 +18,7 @@ const routes: Routes =
                         {path: '', component: ProfileComponent, canActivate: [authGuard]},
                         {path: 'game', component: GameComponent,  canActivate: [authGuard]},
                         {path: 'settings', component: SettingsComponent,  canActivate: [authGuard]},
-                       {path: 'acticatetwo', component: ActivatetwoComponent ,canActivate: [authGuard]},
+                        {path: 'acticatetwo', component: ActivatetwoComponent, canActivate: [authGuard]},
                         {path: 'activatetwof', component: ActivatetwoComponent,  canActivate: [authGuard]},
                         {path: 'chat', component: ChatComponent,  canActivate: [authGuard]},
                         {path: 'leaderboard', component: LeaderbordComponent,  canActivate: [authGuard]},

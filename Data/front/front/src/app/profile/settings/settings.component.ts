@@ -83,7 +83,6 @@ export class SettingsComponent implements OnInit, OnDestroy{
   funct(file : any)
   { 
     this.file = file.target.files[0];
-    console.log(this.file);
   }
   handleResponseone(data : any)
   {
