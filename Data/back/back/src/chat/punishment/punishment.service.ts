@@ -8,7 +8,6 @@ import {
 } from './punishment.utils';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/user.entity';
-import { createChatroomDTO } from '../dto/createChatroom.dto';
 import { createPunishmentDTO } from './dto/createPunishment.dto';
 import { Chat } from '../chat.entity';
 
@@ -94,7 +93,7 @@ export class PunishmentService {
     return users;
   }
 
-  async isBannedInChatroom(chatID: number, user: string): Promise<Boolean> {
+  async isBannedInChatroom(chatID: number, user: string): Promise<boolean> {
     const bannedUsers = await this.getBannedUsers(chatID, user);
     if (bannedUsers) {
       for (const i of bannedUsers) {
