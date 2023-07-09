@@ -12,7 +12,13 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.playerService.getChatrooms("").subscribe({ next: (data) => { console.log(data) } });
+    // this.playerService.getChatrooms("ali").subscribe({ next: (data) => { console.log(data) } });
+  }
+  getUserChatrooms() {
+    this.playerService.getChatrooms("ali").subscribe({ next: (data) => { console.log(data) } });
+  }
+  createChatroom() {
+    return this.playerService.joinChatroom().subscribe({next: (data ) => {console.log(data)}});
   }
 
 }
