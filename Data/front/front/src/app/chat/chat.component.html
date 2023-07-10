@@ -1,36 +1,59 @@
 <div class="chat">
     <div class="grid1">
         <div class="toggle">
-            <a class="button">
+            <a (click)="!toggle && SwitchChat()" class="button" [ngClass]="{'activeButton' : toggle}">
                 <img src="/assets/icons/direct.svg" >
                 <p>Direct</p>
             </a>
-            <a class="button">
+            <a (click)="toggle && SwitchChat()" class="button" [ngClass]="{'activeButton' : !toggle}">
                 <img src="/assets/icons/channels.svg" >
                 <p>Channels</p>
             </a>
         </div>
-        <input class="textbox" type="text" placeholder="Search"/>
-        <div class="friendsonline">
+        <input class="textbox search" type="text" placeholder="Search" *ngIf="toggle"/>
+        <input class="textbox search" type="text" placeholder="Search" *ngIf="!toggle"/>
+        <div class="friendsonline" *ngIf="toggle">
             <div *ngFor="let item of friends" class="friend">
                 <div class="friend-profile">
                     <img src="{{item.avatar}}" >
-                    <div *ngIf="item.status" class="statusOnline"></div>
+                    <div *ngIf="item.status" class="statusCircle Online"></div>
+                    <div *ngIf="!item.status" class="statusCircle Offline"></div>
                 </div>
                 <p class="name-friend">{{item.name}}</p>
                 <div *ngIf="item.notifs" class="nb-messages">{{item.notifs}}</div>
             </div>
         </div>
+        <div class="channels" *ngIf="!toggle">
+            <div *ngFor="let item of channels" class="channel">
+                <img class="hashtag" src="/assets/icons/hashtag.svg" >
+                <p class="name-friend">{{item.name}}</p>
+                <div *ngIf="item.notifs" class="nb-messages">{{item.notifs}}</div>
+            </div>
+        </div>
+        <a routerLink="create-channel" class="button-create-channel" *ngIf="!toggle">Create channel</a>
+
     </div>
     <div class="grid2">
-        <div class="header-chat">
+        <div class="header-chat" *ngIf="toggle">
             <img src="/assets/images/profile.jpg">
             <div class="name-status">
                 <div class="name">Karim Idbouhouch</div>
                 <div class="status">Online</div>
             </div>
         </div>
-        <div class="conversation">
+
+        <div class="header-chat-channel" *ngIf="!toggle">
+            <div class="icon-name-channel">
+                <img src="/assets/icons/hashtag.svg">
+                <div class="name-status">
+                    <div class="name">Annoncement</div>
+                    <div class="nb-members-channel">12 Members</div>
+                </div>
+            </div>
+            <img src="/assets/icons/3points.svg">
+        </div>
+
+        <div class="conversation" *ngIf="toggle">
             <div class="receiver">
                 <img src="/assets/images/profile.jpg">
                 <div>
@@ -132,6 +155,111 @@
                 </div>
             </div>
         </div>
+
+        <div class="conversation" *ngIf="!toggle">
+            <div class="receiver">
+                <img src="/assets/images/profile.jpg">
+                <div>
+                    <div class="infos">
+                        <p class="name">Karim Idbouhouch</p>
+                        <p class="time">14:00</p>
+                    </div>
+                    <div class="msg">Hello karim, what are you doing ?</div>
+                </div>
+            </div>
+            <div class="sender">
+                <img src="/assets/images/profile.jpg">
+                <div>
+                    <div class="infos">
+                        <p class="name">You</p>
+                        <p class="time">14:10</p>
+                    </div>
+                    <div class="msg">I’m fine and you ?</div>
+                </div>
+            </div>
+            <div class="receiver">
+                <img src="/assets/images/profile.jpg">
+                <div>
+                    <div class="infos">
+                        <p class="name">Karim Idbouhouch</p>
+                        <p class="time">14:00</p>
+                    </div>
+                    <div class="msg">Hello karim, what are you doing ?</div>
+                </div>
+            </div>
+            <div class="sender">
+                <img src="/assets/images/profile.jpg">
+                <div>
+                    <div class="infos">
+                        <p class="name">You</p>
+                        <p class="time">14:10</p>
+                    </div>
+                    <div class="msg">I’m fine and you ?</div>
+                </div>
+            </div>
+            <div class="receiver">
+                <img src="/assets/images/profile.jpg">
+                <div>
+                    <div class="infos">
+                        <p class="name">Karim Idbouhouch</p>
+                        <p class="time">14:00</p>
+                    </div>
+                    <div class="msg">Hello karim, what are you doing ?</div>
+                </div>
+            </div>
+            <div class="sender">
+                <img src="/assets/images/profile.jpg">
+                <div>
+                    <div class="infos">
+                        <p class="name">You</p>
+                        <p class="time">14:10</p>
+                    </div>
+                    <div class="msg">I’m fine and you ?</div>
+                </div>
+            </div>
+            <div class="receiver">
+                <img src="/assets/images/profile.jpg">
+                <div>
+                    <div class="infos">
+                        <p class="name">Karim Idbouhouch</p>
+                        <p class="time">14:00</p>
+                    </div>
+                    <div class="msg">Hello karim, what are you doing ? Hello karim, what are you doing ?Hello karim, what are you doing ?Hello karim, what are you doing ?</div>
+                </div>
+            </div>
+            <div class="sender">
+                <img src="/assets/images/profile.jpg">
+                <div>
+                    <div class="infos">
+                        <p class="name">You</p>
+                        <p class="time">14:10</p>
+                    </div>
+                    <div class="msg">I’m fine and you ?</div>
+                </div>
+            </div>
+            <div class="receiver">
+                <img src="/assets/images/profile.jpg">
+                <div>
+                    <div class="infos">
+                        <p class="name">Karim Idbouhouch</p>
+                        <p class="time">14:00</p>
+                    </div>
+                    <div class="msg">Hello karim, what are you doing ?</div>
+                </div>
+            </div>
+            <div class="sender">
+                <img src="/assets/images/profile.jpg">
+                <div>
+                    <div class="infos">
+                        <p class="name">You</p>
+                        <p class="time">14:10</p>
+                    </div>
+                    <div class="msg">I’m fine and you ?</div>
+                </div>
+            </div>
+        </div>
+
+
         <div class="sendMessage">
             <input type="text" class="textbox message" placeholder="Message">
             <a class="buttonSend">
@@ -140,12 +268,51 @@
             </a>
         </div>
     </div>
-    <div class="grid3">
-        <img class="profile" src="/assets/images/profile.jpg">
-        <div class="buttonsProfile">
-            <a><img src="/assets/icons/block.svg" />Block</a>
-            <a><img src="/assets/icons/viewprofile.svg" />View profile</a>
-            <a><img src="/assets/icons/viewprofile.svg" />Play</a>
+    <div class="grid3" *ngIf="toggle">
+        <div class="profile">
+            <img class="img-profile" src="/assets/images/profile.jpg">
+            <div class="buttonsProfile">
+                <a class="btn">
+                    <div><img src="/assets/icons/block.svg"/></div>
+                    <p>Block</p>
+                </a>
+                <a class="btn">
+                    <div><img src="/assets/icons/viewprofile.svg"/></div>
+                    <p>View profile</p>
+                </a>
+                <a class="btn">
+                    <div><img src="/assets/icons/play.svg"/></div>
+                    <p>Play</p>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="grid3" *ngIf="!toggle">
+        <div class="MembersChannel">
+            <p class="NameRole">Operators</p>
+            <div>
+                <div *ngFor="let item of friends" class="friend">
+                    <div class="friend-profile">
+                        <img src="{{item.avatar}}" >
+                        <div *ngIf="item.status" class="statusCircle Online"></div>
+                        <div *ngIf="!item.status" class="statusCircle Offline"></div>
+                    </div>
+                    <p class="name-friend">{{item.name}}</p>
+                    <img class="listbox-member" src="/assets/icons/3points.svg">
+                </div>
+            </div>
+            <p class="NameRole">Members</p>
+            <div>
+                <div *ngFor="let item of friends" class="friend">
+                    <div class="friend-profile">
+                        <img src="{{item.avatar}}" >
+                        <div *ngIf="item.status" class="statusCircle Online"></div>
+                        <div *ngIf="!item.status" class="statusCircle Offline"></div>
+                    </div>
+                    <p class="name-friend">{{item.name}}</p>
+                    <img class="listbox-member" src="/assets/icons/3points.svg">
+                </div>
+            </div>
         </div>
     </div>
 </div>

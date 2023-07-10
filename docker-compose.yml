@@ -21,7 +21,7 @@ services:
       - ft_transcendence
     restart: on-failure
     volumes:
-      - vol_back:/var/www/html/
+      - /home/idkart/ft_transcendence/Data/back:/var/www/html/
 
   front:
     build: ./srcs/front
@@ -31,7 +31,7 @@ services:
       - ft_transcendence
     restart: on-failure
     volumes:
-      - vol_front:/var/www/html/
+      - /home/idkart/ft_transcendence/Data/front:/var/www/html/
 
   database:
     image: postgres
@@ -50,17 +50,17 @@ networks:
   ft_transcendence:
     driver: bridge
 
-volumes:
-  vol_back:
-    driver_opts:
-      o: bind
-      type: 'none'
-      device: ${PWD}/Data/back
-  vol_front:
-    driver_opts:
-      type: 'none'
-      o: bind
-      device: ${PWD}/Data/front
+# volumes:
+#   vol_back:
+#     driver_opts:
+#       o: bind
+#       type: 'none'
+#       device: /home/idkart/ft_transcendence/Data/back
+#   vol_front:
+#     driver_opts:
+#       type: 'none'
+#       o: bind
+#       device: /home/idkart/ft_transcendence/Data/front
   # vol_database:
   #   driver_opts:
   #     type: 'none'

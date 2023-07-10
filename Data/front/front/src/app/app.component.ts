@@ -10,7 +10,7 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { Observable, Subscription, fromEvent } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -36,7 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
   @ViewChild('dropDownContent_') dropDownContent_ !:ElementRef;
   @ViewChild('dropDownContent__') dropDownContent__ !:ElementRef;
   
-  constructor() {}
+  constructor(private route: Router,) {}
   desplaySettings()
   {
     this.activeSettings = !this.activeSettings;
@@ -65,6 +65,10 @@ export class AppComponent implements OnInit, OnDestroy {
     if (clickedElement !== this.dropDownContent?.nativeElement && clickedElement !== this.dropDownContent_?.nativeElement  && clickedElement !== this.dropDownContent__?.nativeElement ) {
       this.dropDown = false;
     }
+  }
+
+  getcurrentPath(){
+    return this.route.url;
   }
 
 }

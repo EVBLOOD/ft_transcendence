@@ -8,6 +8,7 @@
     padding: 20px;
     display: grid;
     gap: 10px;
+    grid-template-rows: auto auto 1fr auto;
 }
 
 .grid1 .toggle{
@@ -21,6 +22,7 @@
 }
 
 .grid1 .toggle .button{
+    transition: 0.3s;
     cursor: pointer;
     font-size: 13px;
     font-weight: 500;
@@ -38,12 +40,19 @@
     color: #184E77;
 }
 
+.activeButton{
+    background-color: #99D98C;
+    color: #184E77;
+}
+
 .grid1 .toggle img{
     height: 18px;
     width: 18px;
 }
 
 .textbox {
+    // margin-top: 10px;
+    // margin-bottom: 10px;
     color: #D8D8D8;
     height: 32px;
     background: #184E77;
@@ -52,6 +61,7 @@
     border: none;
     outline: none;
     padding-left: 10px;
+    // width: 100%;
 }
 
 .textbox::placeholder {
@@ -78,15 +88,22 @@
     height: 100%;
 }
 
-.statusOnline{
+.statusCircle{
     position: absolute;
-    background-color: #6EDB3F;
     border: 3px solid #103959;
     width: 12px;
     height: 12px;  
     border-radius: 50%;
     bottom: 0;
     right: 0;  
+}
+
+.Online{
+    background-color: #6EDB3F;
+}
+
+.Offline{
+    background-color: #8F8D8D;
 }
 
 .nb-messages{
@@ -102,6 +119,7 @@
 }
 
 .friend{
+    transition: 0.3s;
     display: grid;
     grid-template-columns: min-content auto min-content;
     gap: 6px;
@@ -111,13 +129,29 @@
     cursor: pointer;
 }
 
+.channel{
+    transition: 0.3s;
+    display: grid;
+    grid-template-columns: min-content auto min-content;
+    gap: 6px;
+    align-items: center;
+    font-size: 15px;
+    padding: 7px;
+    cursor: pointer;
+}
+
+.channel:hover{
+    background-color: #184E77;
+    border-radius: 10px;
+}
+
 .friend:hover{
     background-color: #184E77;
     border-radius: 10px;
 }
 
 .friendsonline{
-    display: grid;
+    // display: grid;
     // overflow-y: auto;
     // gap: 4px;
 
@@ -125,6 +159,17 @@
     position:relative;
     height: 760px;
     // max-height: fit-content;
+}
+
+.hashtag {
+    position: relative;
+    width: 33px;
+}
+
+.channels{
+    overflow-y:auto; 
+    position:relative;
+    height: 650px;
 }
 
 ::-webkit-scrollbar {
@@ -154,13 +199,26 @@
     gap: 7px;
 }
 
+.header-chat-channel{
+    display: grid;
+    grid-template-columns: 1fr min-content;
+    border-bottom: 1px solid #184E77;
+    padding: 25px;
+    align-items: center;
+}
+
+.icon-name-channel {
+    display: flex;
+    gap: 7px;
+}
+
 .header-chat img{
     width: 58px;
     height: 58px;
     border-radius: 50%;
 }
 
-.header-chat .name-status{
+.name-status{
     font-size: 19px;
     align-content: center;
     display: flex;
@@ -173,6 +231,13 @@
     font-weight: 600;
     color: #6EDB3F;
 }
+
+.nb-members-channel{
+    font-size: 13px;
+    font-weight: 600;
+    color: #D8D8D8;
+}
+
 .conversation {
     padding: 25px;
     display: flex;
@@ -276,26 +341,91 @@
     opacity: 70%; 
 }
 
-.grid3{
+.button-create-channel{
     display: flex;
-    flex-direction: column;
-    padding: 20px;
+    gap: 3px;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #103959;
+    cursor: pointer;
+    border-radius: 8px;
+    background: #99D98C;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.25);
+    transition: 0.3;
+    // height: 100%;
+    height: 38px;
+    justify-content: center;
+}
+
+.button-create-channel:hover{
+    opacity: 70%;
 }
 
 .profile{
+    display: flex;
+    flex-direction: column;
+    padding: 40px 20px;
+    align-items: center;
+    gap: 20px;
+}
+
+.img-profile{
     width: 166px;
     height: 166px;
     object-fit: cover;
     border-radius: 50%;
 }
 
-.buttonsProfile a {
-    
+.buttonsProfile {
+    display: flex;
+    gap: 12px;
 }
 
-.buttonsProfile img{
+.buttonsProfile .btn{
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 11px;
+    display: flex;
+    gap: 4px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.buttonsProfile .btn:hover{
+    opacity: 70%;
+}
+
+.buttonsProfile .btn div{
     background-color: #1E6091;
-    border-radius: 50%;
     width: 38px;
     height: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+.buttonsProfile img{   
+    width: 22px;
+    height: 22px;
+}
+
+.MembersChannel{
+    padding: 20px 13px;
+    overflow-y:auto; 
+    position:relative;
+    height: 830px;
+}
+
+.NameRole{
+    color: #7FABCC;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.listbox-member{
+    width: 4px;
 }
