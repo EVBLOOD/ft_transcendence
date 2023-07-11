@@ -14,6 +14,11 @@ import { CreateMessage } from 'src/message/dto/message.dto';
 
 @WebSocketGateway({
   namespace: 'chat',
+  cors: {
+    origin: ["http://localhost:4200", "http://localhost:3000"],
+    credentials: true,
+  }
+
 })
 export class ChatGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
