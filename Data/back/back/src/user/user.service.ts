@@ -33,6 +33,7 @@ export class UserService {
     return users;
   }
   async addUser(userdto: createUserDTO): Promise<User | undefined> {
+    console.log("userdto: ", userdto);
     const user = await this.userRepo.find({
       where: {
         userName: userdto.userName,

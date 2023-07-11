@@ -1,3 +1,12 @@
 <p>chat works!</p>
 <button (click)="getUserChatrooms()">getUserChatrooms</button> <br/>
-<button (click)="createChatroom()">createChatroom</button>
+<form>
+	<label for="username">Username:</label>
+	<input type="text" id="username" #userInput>
+	<br>
+	<button (click)="addUser(userInput.value)">submit</button>
+</form>
+<br/>
+<button (click)="createChatroom()">createChatroom</button><br/>
+<!-- <button (click)="sendMessage()">send</button><br/>
+<button (click)="getChatroomMessages()">getChatroomMessages</button><br/> -->

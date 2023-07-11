@@ -1,8 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
-
-const users: Array<string> = ["ali", "saad"];
+import { Socket, io } from 'socket.io-client';
 
 type createChatroom  = {
   type: string;
@@ -12,14 +10,25 @@ type createChatroom  = {
   otherUser: string;
 };
 
+
+type sendMessageDTO = {
+  userName: string;
+  value: string;
+  charRoomId: number;
+};
+
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
 
+  private sock: Socket;
   constructor(private httpClient: HttpClient
-  ) { }
-    // const socket: Socket
+  ) {
+    this.sock = io('http://localhost:3000/chat', {
+      withCredentials: true,
+    });
+   }
   getChatrooms(name: string) {
     return  this.httpClient.get(`http://localhost:3000/chat/user/${name}`)
   }
@@ -34,5 +43,14 @@ export class ChatService {
     return  this.httpClient.post(`http://localhost:3000/chat/create`, input);
   }
 
+  // sendMessage(message: sendMessageDTO) {
+  //   this.sock.emit("sendMessage", message);
+  // }
+  getChatroomMessages() {
+    return this.httpClient.get('http://localhost:3000/chat/1/messages');
+  }
+  addUser(user: string) {
+    return this.httpClient.post(`http://localhost:3000/user`, {userName: user});
+  }
 
 }
