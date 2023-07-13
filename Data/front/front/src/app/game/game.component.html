@@ -42,5 +42,16 @@
             <p class="title">History Last Matches</p>
             <a class="button">Read more</a>
         </div>
+        <div *ngFor="let item of history" class="userProfileHistoryRaw">
+            <div class="userProfileHistoryPlayers">
+                <div>
+                    <img [src]=item.img1 alt="" />
+                    <img [src]=item.img2 alt="" />
+                </div>
+                <p>{{item.names}}</p>
+            </div>
+            <div class="userProfileHistoryStatus">{{item.state}}</div>
+            <div class="userProfileHistoryDate">{{item.date}}</div>
+        </div>
     </div>
 </div>
