@@ -107,10 +107,10 @@ export class AppComponent implements OnInit, OnDestroy {
     Swal.fire({
       title: 'Friend Request',
       html: `<p class="accept_notif-text" >You have a new friend request from ${user.username}!</p>`,
-      iconHtml: '<img class="accept_notif-icon" src="' + this.profileService.getUserAvatarPath(user.avatar) + '">',
       showCancelButton: true,
       confirmButtonText: 'Accept',
       cancelButtonText: 'Decline',
+      imageUrl: this.profileService.getUserAvatarPath(user.avatar),
       customClass: {
         popup: 'accept_notif-container',
         title: 'accept_notif-title',
@@ -122,10 +122,8 @@ export class AppComponent implements OnInit, OnDestroy {
     }).then((result) => {
       if (result.isConfirmed) {
         this.friendship.acceptRequest(user.id);
-        // Handle accept button click
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         this.friendship.cancelFriendRequest(user.id);
-        // Handle decline button click
       }
     });
   }

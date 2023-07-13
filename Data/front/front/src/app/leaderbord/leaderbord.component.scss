@@ -1,4 +1,4 @@
-.body{
+.body {
     position: relative;
     background-color: #103959;
     border-radius: 40px;
@@ -7,10 +7,27 @@
     overflow-y: auto;
 }
 
-.table
-{
-    display: flex;
-    flex-direction: row;
-    // gap: 20%;
-    justify-content: space-around;
+.cul {
+    grid-area: first;
+}
+
+.cul2 {
+    grid-area: second;
+}
+
+.cul3 {
+    grid-area: third;
+}
+
+.cul4 {
+    grid-area: forth;
+}
+
+.cul5 {
+    grid-area: fifth;
+}
+
+.table {
+    grid-template:
+        "first second third forth fifth";
 }
