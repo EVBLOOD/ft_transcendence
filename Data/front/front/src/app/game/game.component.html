@@ -1,1 +1,46 @@
-<p>game works!</p>
+<div class="body">
+    <div class="section">
+        <div class="row">
+            <p class="title">Play with friends</p>
+            <a class="button">Quick Pairing</a>
+        </div>
+        <div class="onlinePlayers">
+            <div *ngFor="let item of players" class="onlinePlayer">
+                <div class="colorgradient">
+                    <img src={{item.img}} />
+                    <p class="namePlayer">{{item.name}}</p>
+                    <div *ngIf="item.status" class="statusOnline">
+                        <div class="circle"></div>
+                        <p>Online</p>
+                    </div>
+                    <div *ngIf="!item.status" class="statusOffline">
+                        <div class="circle"></div>
+                        <p>Offline</p>
+                    </div>
+                    <a class="buttonChallenge">Challenge</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="row">
+            <p class="title">Leaderboard</p>
+            <a class="button">Read more</a>
+        </div>
+        <div class="leaderboard">
+            <div *ngFor="let item of leaderboard" class="user">
+                <div class="rank-img">
+                    <img class="rank-user" src="{{item.rank}}" />
+                    <img class="img-user" src="{{item.img}}" />
+                </div>
+                <p class="name-user">{{item.name}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="row">
+            <p class="title">History Last Matches</p>
+            <a class="button">Read more</a>
+        </div>
+    </div>
+</div>
