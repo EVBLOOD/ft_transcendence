@@ -23,6 +23,7 @@ import { HttpfailInterceptor } from './httpfail.interceptor';
 import { CardFriendsComponent } from './profile/card-friends/card-friends.component';
 import { CardBlockedComponent } from './profile/card-blocked/card-blocked.component';
 import { CardRequestComponent } from './profile/card-request/card-request.component';
+import { LeaderBordRowComponent } from './leaderbord/leader-bord-row/leader-bord-row.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { CardRequestComponent } from './profile/card-request/card-request.compon
     CardFriendsComponent,
     CardBlockedComponent,
     CardRequestComponent,
+    LeaderBordRowComponent,
   ],
   imports: [
     BrowserModule,

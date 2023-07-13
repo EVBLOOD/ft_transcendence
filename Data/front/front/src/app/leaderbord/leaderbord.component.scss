@@ -1,33 +1,65 @@
 .body {
-    position: relative;
-    background-color: #103959;
-    border-radius: 40px;
-    padding: 36px;
-    height: 900px;
+    padding: 65px;
     overflow-y: auto;
 }
 
-.cul {
-    grid-area: first;
+.row {
+    justify-items: center;
+    justify-content: center;
+    align-content: space-around;
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20%;
+    height: 100%;
 }
 
-.cul2 {
-    grid-area: second;
+.headRow {
+    color: #D9ED92;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
 }
 
-.cul3 {
-    grid-area: third;
+.title {
+    color: #7FABCC;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
 }
 
-.cul4 {
-    grid-area: forth;
+.column {
+    width: 100%;
+    display: flex;
+    align-items: center;
 }
 
-.cul5 {
-    grid-area: fifth;
+@media only screen and (max-width: 650px) {
+    div {
+        font-size: 12px;
+    }
+
+    .title {
+        font-size: 15px;
+    }
 }
 
-.table {
-    grid-template:
-        "first second third forth fifth";
+@media only screen and (max-width: 400px) {
+    .row :nth-child(3) {
+        display: none;
+    }
+
+    .row :nth-child(4) {
+        display: none;
+
+    }
+
+    .row :nth-child(5) {
+        display: none;
+    }
+
+    .row {
+        grid-template-columns: 50% 50%;
+    }
 }

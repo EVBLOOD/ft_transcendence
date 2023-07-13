@@ -144,15 +144,3 @@ export class FriendshipService {
     });
   }
 }
-// if (!data.status)
-// this.type = 0; // not friends
-// else if (data.status == 'you blocked')
-// this.type = 1; // unblock
-// else if (data.status == 'you are blocked')
-// this.type = 2; // nothing to show
-// else if (data.status == 'you are accepted')
-// this.type = 3; // friends
-// else if (data.status == 'accept?')
-// this.type = 4; // accept or cancel
-// else if (data.status == 'you are on pending')
-// this.type = 5; // cancel request
