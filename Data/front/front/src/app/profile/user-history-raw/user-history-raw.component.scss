@@ -59,3 +59,21 @@ h1 {
     font-size: 17px;
     color: #7FABCC;
 }
+
+@media only screen and (max-width: 600px) {
+    .userProfileHistoryPlayers p {
+        display: none;
+    }
+
+    .userProfileHistoryDate {
+        display: none;
+    }
+
+    .userProfileHistoryRaw {
+        flex-direction: row;
+    }
+
+    .userProfileHistoryPlayers {
+        flex-direction: column;
+    }
+}

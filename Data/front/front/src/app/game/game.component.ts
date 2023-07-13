@@ -24,9 +24,9 @@ export class GameComponent {
   ];
   history = [
     { img1:'/assets/img/profile.jpeg', img2:'/assets/img/profile.jpeg', names: 'kid-bouh vs yamzil', state: 'Win 🏆', date: 'Today'},
-    { img1:'/assets/img/profile.jpeg', img2:'/assets/img/profile.jpeg', names: 'kid-bouh vs agoumiiiiii', state: 'Win 🏆', date: 'Today'},
-    { img1:'/assets/img/profile.jpeg', img2:'/assets/img/profile.jpeg', names: 'kid-bouh vs simo', state: 'Lose 😥', date: 'Yesterday'},
+    { img1:'/assets/img/profile.jpeg', img2:'/assets/img/profile.jpeg', names: 'kid-bouh vs xyz', state: 'Win 🏆', date: 'Today'},
+    { img1:'/assets/img/profile.jpeg', img2:'/assets/img/profile.jpeg', names: 'kid-bouh vs level', state: 'Lose 😥', date: 'Yesterday'},
     { img1:'/assets/img/profile.jpeg', img2:'/assets/img/profile.jpeg', names: 'kid-bouh vs test', state: 'Lose 😥', date: 'Yesterday'},
-    { img1:'/assets/img/profile.jpeg', img2:'/assets/img/profile.jpeg', names: 'kid-bouh vs sel-mars', state: 'Win 🏆', date: 'Yesterday'},
+    { img1:'/assets/img/profile.jpeg', img2:'/assets/img/profile.jpeg', names: 'kid-bouh vs sakllam', state: 'Win 🏆', date: 'Yesterday'},
   ];
 }

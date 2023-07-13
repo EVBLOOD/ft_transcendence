@@ -113,7 +113,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
     {pathU: "/assets/profilePic.svg", pathOp: "/assets/theplayer.svg", name: "Kid-bouh VS Sakllam", state: "Win 🏆", date: "Date" }, 
     {pathU: "/assets/profilePic.svg", pathOp: "/assets/theplayer.svg", name: "Kid-bouh VS Sakllam", state: "Win 🏆", date: "Date" }, 
   ]
-
+  // history = [
+  //   { img1:'/assets/img/profile.jpeg', img2:'/assets/img/profile.jpeg', names: 'kid-bouh vs yamzil', state: 'Win 🏆', date: 'Today'},
+  //   { img1:'/assets/img/profile.jpeg', img2:'/assets/img/profile.jpeg', names: 'kid-bouh vs xyz', state: 'Win 🏆', date: 'Today'},
+  //   { img1:'/assets/img/profile.jpeg', img2:'/assets/img/profile.jpeg', names: 'kid-bouh vs level', state: 'Lose 😥', date: 'Yesterday'},
+  //   { img1:'/assets/img/profile.jpeg', img2:'/assets/img/profile.jpeg', names: 'kid-bouh vs test', state: 'Lose 😥', date: 'Yesterday'},
+  //   { img1:'/assets/img/profile.jpeg', img2:'/assets/img/profile.jpeg', names: 'kid-bouh vs sakllam', state: 'Win 🏆', date: 'Yesterday'},
+  // ];
   statusLoading(id: any)
   {
       this.replay = this.state.current_status.subscribe((curr) => {
