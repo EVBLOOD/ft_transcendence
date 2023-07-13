@@ -92,6 +92,7 @@ export class FriendshipGateway {
             xyz.sub,
             payload,
           );
+          if (!replay) return 'UserNotFound';
         } catch (err) {
           return 'UserNotFound';
         }
@@ -105,6 +106,7 @@ export class FriendshipGateway {
     // 
     return {sender: xyz.sub, receiver: payload}
   }
+
   @SubscribeMessage('acceptFriendRequest')
   async handleAcceptFriendRequest(client: any, payload: number) {
     if (
@@ -140,9 +142,9 @@ export class FriendshipGateway {
       replay = await this.friendshipService.accepting(
         xyz.sub,
         payload,
-      );
-      // if (replay) return replay;
-    } catch (err) {
+        );
+        if (!replay)  return 'UserNotFound';
+      } catch (err) {
       return 'UserNotFound';
     }
     const recipientSockets = this.connections.get(payload);
@@ -191,7 +193,7 @@ export class FriendshipGateway {
         xyz.sub,
         payload,
       );
-      // if (replay) return replay;
+      if (!replay) return 'UserNotFound';
     } catch (err) {
       return 'UserNotFound';
     }
@@ -241,7 +243,7 @@ export class FriendshipGateway {
         xyz.sub,
         payload,
       );
-      // if (replay) return replay;
+      if (!replay) return 'UserNotFound';
     } catch (err) {
       return 'UserNotFound';
     }
@@ -291,7 +293,7 @@ export class FriendshipGateway {
         xyz.sub,
         payload,
       );
-      // if (replay) return replay;
+      if (!replay) return 'UserNotFound';
     } catch (err) {
       return 'UserNotFound';
     }

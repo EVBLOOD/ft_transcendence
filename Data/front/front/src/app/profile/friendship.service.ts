@@ -48,6 +48,8 @@ export class FriendshipService {
   }
   addFriend(id : number)  {
     this.socket.emit('friendRequest', id, (data : any) => {
+      if (data === "UserNotFound")
+      return ;
       this.current_status_friend.next({senderId: id, type: 5})
       
     });
@@ -56,6 +58,8 @@ export class FriendshipService {
   acceptRequest(id : number)  {
     this.socket.emit('acceptFriendRequest', id, (data : any) => 
     {
+      if (data === "UserNotFound")
+        return ;
       this.current_status_friend.next({senderId: id, type: 3})
     });
   }
@@ -63,6 +67,8 @@ export class FriendshipService {
   blockUser(id : number)  {
     this.socket.emit('blockUser', id , (data : any) => 
     {
+      if (data === "UserNotFound")
+      return ;
       this.current_status_friend.next({senderId: id, type: 1})
     });    
   }
@@ -70,6 +76,8 @@ export class FriendshipService {
   unfriendUser(id : number) {
     this.socket.emit('deleteFriendship', id, (data : any) => 
     {
+      if (data === "UserNotFound")
+      return ;
       this.current_status_friend.next({senderId: id, type: 0})
     });    
   }
@@ -77,6 +85,8 @@ export class FriendshipService {
   cancelFriendRequest(id : number)  {
     this.socket.emit('deleteFriendship', id, (data : any) => 
     {
+      if (data === "UserNotFound")
+      return ;
       this.current_status_friend.next({senderId: id, type: 0})
     });
   }
@@ -85,6 +95,8 @@ export class FriendshipService {
   unblockUser(id : number)  {
     this.socket.emit('unblockUser', id, (data : any) => 
     {
+      if (data === "UserNotFound")
+      return ;
       this.current_status_friend.next({senderId: id, type: 0})
     });
   }
@@ -96,7 +108,7 @@ export class FriendshipService {
       }
 
   friendRealTimeStatus() {
-    return this.current_status_friend
+    return this.current_status_friend;
   }
 
   requestsList(skip: number, take: number)  {
