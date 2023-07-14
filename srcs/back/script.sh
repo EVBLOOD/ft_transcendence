@@ -1,5 +1,5 @@
 #!bin/bash
-npm install -g npm@latest
+
 if test -d /var/www/html/back;
 then
     echo "folder already exists";

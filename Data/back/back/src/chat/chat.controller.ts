@@ -33,6 +33,9 @@ export class ChatController {
   async getChatRoomsOfUser(
     @Param('userName') userName: string,
   ): Promise<Chat[]> {
+    console.log(
+      "called123", userName
+    )
     return this.chatRoomSevice.getChatRoomOfUsers(userName); // can return empty array !!
   }
 
@@ -118,6 +121,7 @@ export class ChatController {
     @Param('chatID', ParseIntPipe) chatID: number,
     @Body() memberDTO: createMemberDTO,
   ): Promise<Chat | null> {
+    console.log("adding member: " + memberDTO.member);
     try {
       return this.chatRoomSevice.addMemberToChatroom(chatID, memberDTO);
     } catch (err) {

@@ -6,7 +6,7 @@ import {
   forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UsingJoinColumnOnlyOnOneSideAllowedError } from 'typeorm';
 import { ChatGateway } from './chat.gateway';
 import { Chat } from './chat.entity';
 import { CreateMessage } from 'src/message/dto/message.dto';
@@ -50,6 +50,7 @@ export class ChatService {
       relations: {
         owner: true,
         member: true,
+        admin: true,
       },
       where: {
         member: {
@@ -108,7 +109,10 @@ export class ChatService {
     if (validateChatDTO(chatroomDTO) === true) {
       const user = await this.chatHelpers.getUser(chatroomDTO.user);
       let secondUser: User | undefined = undefined;
-      if (chatroomDTO.otherUser !== undefined) {
+      if (chatroomDTO.otherUser !== "" ) {
+        console.log(
+          "here", chatroomDTO.otherUser
+        )
         secondUser = await this.chatHelpers.getUser(chatroomDTO.otherUser);
       }
       if (chatroomDTO.type === 'password') {

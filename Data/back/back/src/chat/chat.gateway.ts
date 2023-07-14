@@ -41,12 +41,12 @@ export class ChatGateway
   }
 
   afterInit(server: Server) {
-    console.log('Init: ', server);
+    // console.log('Init: ', server);
   }
   handleConnection(client: Socket) {
-    console.log('Connection: ', client);
+    // console.log('Connection: ', client.id);
   }
   handleDisconnect(client: Server) {
-    console.log('Disconnect: ', client);
+    // console.log('Disconnect: ', client);
   }
 }
