@@ -3,7 +3,7 @@
         <button></button>
     </div>
     <h2 class="popTitle">{{data.title}}</h2>
-    <label *ngIf="data.subtitle" class="popTitleProfile">{{data.subtitle}}</label>
+    <p *ngIf="data.subtitle" class="popTitleProfile">{{data.subtitle}}</p>
     <div class="groupingLI">
         <div class="profileImageSettingCentring">
             <img class="profileImageSetting" [src]="serviceUser.getUserAvatarPath((profile$ | async)?.avatar)" alt="" />
@@ -11,8 +11,8 @@
                     (change)="funct($event)"></div>
         </div>
         <div class="profileUserInfoSetting">
-            <input type="text" [formControl]="userName" />
-            <input type="text" [formControl]="fullName" />
+            <input id="userName" autocomplete="nickname" type="text" [formControl]="userName" />
+            <input id="fullName" autocomplete="name" type="text" [formControl]="fullName" />
         </div>
         <div *ngIf="userName.errors || fullName.errors || Myerror || MyerrorAvatar"
             style="color: red;margin-top: 2px; display: flex; gap: 2px; flex-direction: column;">

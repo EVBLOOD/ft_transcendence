@@ -2,9 +2,9 @@
     <div class="pop">
         <h2 class="popTitle">2F authentication</h2>
         <div class="groupingLI">
-            <label class="twofactLbl" for="2FaInput">write down your token</label>
+            <p class="twofactLbl">write down your token</p>
             <div class="errorMsgGroup">
-                <input id="twoFaInput" type="text" [formControl]="token" />
+                <input id="twoFaInput" autocomplete="none" type="text" [formControl]="token" />
                 <p *ngIf="token.errors" style="color: rgb(232, 237, 230);">Token should be six numbers
                 </p>
                 <p class="errorMsg" [style.display]="getError()">Incorrect code</p>
