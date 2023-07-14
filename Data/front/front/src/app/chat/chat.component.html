@@ -1,12 +1,46 @@
 <p>chat works!</p>
-<button (click)="getUserChatrooms()">getUserChatrooms</button> <br/>
-<form>
+<!-- <form>
 	<label for="username">Username:</label>
-	<input type="text" id="username" #userInput>
+	<input type="text" #name>
 	<br>
+	<button (click)="getUserChatrooms(name.value)">get user chat rooms</button>
+</form> -->
+<div>
+	<label >getUserChatrooms:</label>
+	<input type="text" #username name="username" placeholder="get chat user rooms">
+	<button (click)="getUserChatrooms(username.value)">Submit</button>
+</div>
+
+<div>
+	<label >add user:</label>
+	<input type="text" #userInput>
 	<button (click)="addUser(userInput.value)">submit</button>
-</form>
-<br/>
-<button (click)="createChatroom()">createChatroom</button><br/>
-<!-- <button (click)="sendMessage()">send</button><br/>
-<button (click)="getChatroomMessages()">getChatroomMessages</button><br/> -->
+</div>
+<div>
+	<label >create chatroom:</label>
+	<input type="text" #username_ name="username_" placeholder="chatroom name">
+	<input type="text" #type name="type" placeholder="chatroom type">
+	<input type="text" #password name="password" placeholder="password">
+	<input type="text" #user name="user" placeholder="user">
+	<input type="text" #otherUser name="other user" placeholder="other user">
+	<button (click)="createChatroom(username_.value, type.value, password.value, user.value, otherUser.value)">Submit</button>
+</div>
+<div>
+	<label >addUserToChatroom:</label>
+	<input type="text" #chatID name="chatID" placeholder="chatID">
+	<input type="text" #mp name="mp" placeholder="password">
+	<input type="text" #name_ name="name_" placeholder="user to add">
+	<button (click)="addUserToChatRoom(chatID.value, name_.value, mp.value)">Submit</button>
+</div>
+<div>
+	<label >addAdminTOChatrom:</label>
+	<input type="text" #nb name="nb" placeholder="nb">
+	<input type="text" #admin name="admin" placeholder="admin">
+	<input type="text" #newAdmin name="newAdmin" placeholder="user to add">
+	<button (click)="addAdminToChatRoom(nb.value, admin.value, newAdmin.value)">Submit</button>
+</div>
+
+<button (click)="sendMessage()">send</button><br />
+<button (click)="getChatroomMessages()">getChatroomMessages</button><br />
+<button (click)="getUser()">getUsers</button><br />
+<button (click)="printChatrooms()">printChatrooms</button><br />
