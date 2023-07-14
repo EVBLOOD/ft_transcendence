@@ -21,5 +21,11 @@ export const twoFacGuard: CanActivateFn = async (route, state) => {
     switchRoute.navigateByUrl('login');
     return false;
   }
-  return replay.steps;
+  if (!replay.steps)
+  {
+    switchRoute.navigateByUrl('');
+    return true;
+  }
+  return true;
+  // return replay.steps;
 };

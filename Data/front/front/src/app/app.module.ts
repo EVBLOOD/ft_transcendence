@@ -24,6 +24,7 @@ import { CardFriendsComponent } from './profile/card-friends/card-friends.compon
 import { CardBlockedComponent } from './profile/card-blocked/card-blocked.component';
 import { CardRequestComponent } from './profile/card-request/card-request.component';
 import { LeaderBordRowComponent } from './leaderbord/leader-bord-row/leader-bord-row.component';
+import { AppBodyComponent } from './app-body/app-body.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { LeaderBordRowComponent } from './leaderbord/leader-bord-row/leader-bord
     CardBlockedComponent,
     CardRequestComponent,
     LeaderBordRowComponent,
+    AppBodyComponent,
   ],
   imports: [
     BrowserModule,
