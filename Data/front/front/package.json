@@ -19,14 +19,14 @@
     "@angular/platform-browser-dynamic": "^16.0.0",
     "@angular/router": "^16.0.0",
     "rxjs": "~7.8.0",
-    "socket.io-client": "^4.7.1",
-    "sweetalert2": "^11.7.12",
     "tslib": "^2.3.0",
+    "socket.io-client": "^4.7.1",
     "zone.js": "~0.13.0"
   },
   "devDependencies": {
+    "sweetalert2": "^11.7.12",
     "@angular-devkit/build-angular": "^16.0.4",
-    "@angular/cli": "~16.0.4",
+    "@angular/cli": "^16.1.4",
     "@angular/compiler-cli": "^16.0.0",
     "@types/jasmine": "~4.3.0",
     "jasmine-core": "~4.6.0",
