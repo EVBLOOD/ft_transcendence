@@ -45,7 +45,7 @@ export class Chat {
     nullable: false,
     default: 'public',
   })
-  type!: string; // public, private, protected, DM
+  type!: string; // public, private, password, DM
 
   @Column({
     nullable: true,
