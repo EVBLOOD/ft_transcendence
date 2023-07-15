@@ -51,6 +51,9 @@ export class ChatService {
         owner: true,
         member: true,
         admin: true,
+        message: {
+          userId: true,
+        }
       },
       where: {
         member: {
@@ -62,9 +65,12 @@ export class ChatService {
         chatRoomName: true,
         type: true,
         owner: {
-          // userName: true,
           userName: true,
         },
+        message: {
+          value: true,
+          id: true,
+        }
       },
       cache: true,
     });
@@ -81,15 +87,12 @@ export class ChatService {
         chatRoomName: true,
         type: true,
         owner: {
-          // id: true,
           userName: true,
         },
         member: {
-          // id: true,
           userName: true,
         },
         admin: {
-          // id: true,
           userName: true,
         },
       },

@@ -39,8 +39,22 @@
 	<input type="text" #newAdmin name="newAdmin" placeholder="user to add">
 	<button (click)="addAdminToChatRoom(nb.value, admin.value, newAdmin.value)">Submit</button>
 </div>
-
-<button (click)="sendMessage()">send</button><br />
-<button (click)="getChatroomMessages()">getChatroomMessages</button><br />
+<div>
+	<label >sendMessage:</label>
+	<input type="text" #chat_nb name="chat_nb" placeholder="nb">
+	<input type="text" #sender name="sender" placeholder="sender">
+	<input type="text" #message name="message" placeholder="message">
+	<button (click)="sendMessage(chat_nb.value, sender.value, message.value)">Submit</button>
+</div>
+<div>
+	<label >getUserMessages:</label>
+	<input type="text" #_userName name="_userName" placeholder="_userName">
+	<button (click)="getUserMessages(_userName.value)">Submit</button>
+</div>
+<div>
+	<label >getChatroomMessages:</label>
+	<input type="text" #__chatID name="__chatID" placeholder="__chatID">
+	<button (click)="getChatroomMessages(__chatID.value)">Submit</button>
+</div>
+<!-- <button (click)="getChatroomMessages()">getChatroomMessages</button><br /> -->
 <button (click)="getUser()">getUsers</button><br />
-<button (click)="printChatrooms()">printChatrooms</button><br />

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ChatService, addUserDTO, createChatroom } from './chat.service';
+import { ChatService, addUserDTO, createChatroom, sendMessageDTO } from './chat.service';
 
 @Component({
   selector: 'app-chat',
@@ -9,16 +9,12 @@ import { ChatService, addUserDTO, createChatroom } from './chat.service';
 export class ChatComponent implements OnInit {
   constructor(private readonly ChatService: ChatService) {
   }
-  userChatRooms = new Array<any>;
   ngOnInit(): void {
   }
   getUserChatrooms(name: string) {
-    console.log("name" , name);
-    return this.ChatService.getChatrooms(name).subscribe({ next: (data) => {this.userChatRooms = []; this.userChatRooms.push(data)}, error: (err) => console.log(err) });
+    return this.ChatService.getChatrooms(name).subscribe({ next: (data) => {console.log(data)}, error: (err) => console.log(err) });
   }
-  printChatrooms() {
-    console.log(this.userChatRooms);
-  }
+
   addUser(name: string) {
     const user: addUserDTO = {
       userName: name,
@@ -37,11 +33,8 @@ export class ChatComponent implements OnInit {
     return this.ChatService.joinChatroom(chat).subscribe({next: (data ) => {console.log(data)}});
   }
 
-  sendMessage() {
-    this.ChatService.sendMessage({ userName: 'ali', value:"Hello", charRoomId: 1})
-  }
-  getChatroomMessages() {
-    return this.ChatService.getChatroomMessages().subscribe({next: (data ) => {console.log(data)}});
+  getChatroomMessages(id: string) {
+    return this.ChatService.getChatroomMessages(Number(id)).subscribe({next: (data ) => {console.log(data)}});
   }
   getUser() {
     return this.ChatService.getUser().subscribe({next: (data) => console.log(data), error: (err) => console.log(err)})
@@ -52,5 +45,15 @@ export class ChatComponent implements OnInit {
   addAdminToChatRoom(id: string, admin: string, user: string) {
     return this.ChatService.addAdminToChatRoom(id, admin, user).subscribe({next: (data) => console.log(data), error: (err) => console.log(err)})
   }
-
+  sendMessage(chatID: string, userName: string, value: string) {
+    const message:sendMessageDTO = {
+      charRoomId: Number(chatID),
+      value: value,
+      userName: userName,
+    };
+    return this.ChatService.sendMessage(message)
+  }
+  getUserMessages(userName: string): any {
+    return this.ChatService.getUserMessages(userName).subscribe({next: (data) => console.log(data), error: (err) => console.log(err)});
+  }
 }

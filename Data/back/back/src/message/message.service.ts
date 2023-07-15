@@ -95,7 +95,7 @@ export class MessageService {
     user: User,
   ): Promise<Message> {
     if (validateMessage(messageDTO.value) == false)
-      throw new BadRequestException('connot send enpty message');
+      throw new BadRequestException('connot send empty message');
     const message = createNewMessage(messageDTO.value, chatRoom, user);
     return this.messageRepo.save(message);
   }

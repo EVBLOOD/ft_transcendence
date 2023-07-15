@@ -7,7 +7,7 @@ import { Message } from './message.entity';
 	// and also chekes if the messages is full of white spaces only!!
 */
 export function validateMessage(message: string): boolean {
-  if (message == null || message.match(/^\s*$/) !== null) return true;
+  if (message != null || message.match(/^\s*$/) !== null) return true;
   return false;
 }
 

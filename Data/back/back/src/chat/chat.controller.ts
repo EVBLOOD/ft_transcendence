@@ -33,9 +33,6 @@ export class ChatController {
   async getChatRoomsOfUser(
     @Param('userName') userName: string,
   ): Promise<Chat[]> {
-    console.log(
-      "called123", userName
-    )
     return this.chatRoomSevice.getChatRoomOfUsers(userName); // can return empty array !!
   }
 

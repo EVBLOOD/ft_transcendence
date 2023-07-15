@@ -16,7 +16,7 @@ type createAdminDTO  = {
   roleReceiver: string;
 }
 
-type sendMessageDTO = {
+export type sendMessageDTO = {
   userName: string;
   value: string;
   charRoomId: number;
@@ -42,6 +42,12 @@ export class ChatService {
     this.sock = io('http://localhost:3000/chat', {
       withCredentials: true,
     });
+    this.sock.on(
+      'recMessage', (data) =>  {
+        console.log(data.userId.userName + ": " + data.value);
+        // console.log(data.value)
+      }
+    );
    }
   getChatrooms(name: string) {
     return  this.httpClient.get<string>(`http://localhost:3000/chat/user/${name}`)
@@ -51,10 +57,11 @@ export class ChatService {
   }
 
   sendMessage(message: sendMessageDTO) {
+    console.log("message DTO", message);
     this.sock.emit("sendMessage", message);
   }
-  getChatroomMessages() {
-    return this.httpClient.get('http://localhost:3000/chat/1/messages');
+  getChatroomMessages(id: number) {
+    return this.httpClient.get<number>(URL + `/chat/${id}/messages`);
   }
   addUser(user: addUserDTO) {
     return this.httpClient.post<addUserDTO>(`http://localhost:3000/user`, user);
@@ -78,4 +85,8 @@ export class ChatService {
     console.log("dto", dto, "id == ", id);
     return this.httpClient.put<string>(`http://localhost:3000/chat/${id}/add/admin`, dto);
   }
+  getUserMessages (user: string ) {
+    return this.httpClient.get<string>(URL + `/message/user/${user}`);
+  }
+
 }

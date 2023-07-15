@@ -51,13 +51,13 @@ export class ChatUtils {
       },
     });
     if (chatroom) {
-      if (
-        chatroom.member.some((user: User) => {
-          user.userName === Name;
-        })
-      ) {
+      // if (
+      //   chatroom.member.some((user: User) => {
+      //     user.userName === Name;
+      //   })
+      // ) {
         return true;
-      }
+      // }
     }
     return false;
   }
