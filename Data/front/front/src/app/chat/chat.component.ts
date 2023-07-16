@@ -56,4 +56,14 @@ export class ChatComponent implements OnInit {
   getUserMessages(userName: string): any {
     return this.ChatService.getUserMessages(userName).subscribe({next: (data) => console.log(data), error: (err) => console.log(err)});
   }
+  kickuser(chatID: string, admin: string, user: string) {
+    return this.ChatService.kickuser(Number(chatID), admin, user).subscribe({next: (data) => console.log(data), error: (err) => console.log(err)});
+  }
+  // kickAdmin(chatID: string, admin: string, admin2kick: string) {
+  //   console.log("called : ", chatID, admin, admin2kick);
+  //   return this.ChatService.kickAdmin(Number(chatID), admin, admin2kick).subscribe({next: (data) => console.log(data), error: (err) => console.log(err)});
+  // }
+  leaveChatroom(id: string, name: string){
+    return this.ChatService.leaveChatroom(Number(id), name).subscribe({ next: (data) => {console.log(data)}, error: (err) => console.log(err)})
+  }
 }

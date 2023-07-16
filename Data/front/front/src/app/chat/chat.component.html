@@ -56,5 +56,18 @@
 	<input type="text" #__chatID name="__chatID" placeholder="__chatID">
 	<button (click)="getChatroomMessages(__chatID.value)">Submit</button>
 </div>
-<!-- <button (click)="getChatroomMessages()">getChatroomMessages</button><br /> -->
+
+<div>
+	<label >kick user from chatroom:</label>
+	<input type="text" #__ID name="__ID" placeholder="__ID">
+	<input type="text" #__admin name="__admin" placeholder="__admin">
+	<input type="text" #__user name="__user" placeholder="__user">
+	<button (click)="kickuser(__ID.value, __admin.value, __user.value)">Submit</button>
+</div>
+<div>
+	<label >leave chatroom:</label>
+	<input type="text" #ID name="ID-" placeholder="ID">
+	<input type="text" #_user_ name="_user_" placeholder="_user_">
+	<button (click)="leaveChatroom(ID.value, _user_.value)">Submit</button>
+</div>
 <button (click)="getUser()">getUsers</button><br />

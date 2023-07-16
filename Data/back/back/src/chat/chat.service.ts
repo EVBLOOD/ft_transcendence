@@ -29,6 +29,8 @@ import { UpdateChatroomDTO } from './dto/updateChatroom.dto';
 import { PunishmentService } from './punishment/punishment.service';
 import { Punishment } from './punishment/punishment.entity';
 import { createPunishmentDTO } from './punishment/dto/createPunishment.dto';
+import { constrainedMemory } from 'process';
+import { timeStamp } from 'console';
 
 @Injectable()
 export class ChatService {
@@ -65,6 +67,9 @@ export class ChatService {
         chatRoomName: true,
         type: true,
         owner: {
+          userName: true,
+        },
+        member: {
           userName: true,
         },
         message: {
@@ -328,8 +333,20 @@ export class ChatService {
   ): Promise<Chat | undefined> {
     const chatroom = await this.GetChatRoomByID(chatID);
     if ((await this.checkForAdminRoll(chatID, adminUserName)) == true) {
-      const newChat = deleteUser(chatroom, userUserName);
-      return await this.chatRoomRepo.save(newChat);
+      if ((await this.checkForOwnerRoll(chatID, userUserName)) == false) {
+        if ((await this.checkForAdminRoll(chatID, userUserName)) == false) {
+          const newChat = deleteUser(chatroom, userUserName);
+          return await this.chatRoomRepo.save(newChat);
+        } else {
+          const newChat = removeAdminStatus(chatroom, userUserName);
+          return await this.chatRoomRepo.save(newChat);
+        }
+      } else {
+        throw new HttpException(
+          'you can\'t kick chatroom owner',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
     }
     throw new HttpException(
       'you need administrator permission to kick users',
@@ -351,6 +368,9 @@ export class ChatService {
     adminUserName: string,
     userUserName: string,
   ): Promise<Chat | undefined> {
+    console.log("chat id : ", chatID);
+    console.log("adminUserName : ", adminUserName);
+    console.log("userUserName : ", userUserName);
     const chatroom = await this.GetChatRoomByID(chatID);
     if (
       (await this.chatHelpers.checkForAdminRoll(chatID, adminUserName)) &&
