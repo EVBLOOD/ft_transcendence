@@ -184,22 +184,22 @@ export class ChatController {
     }
   }
 
-  @Delete('delete/:chatroomID/admin/:adminUserName/admin/:userToKick')
-  async removeAdminFromChatroom(
-    @Param('chatroomID') chatroomID: number,
-    @Param('adminUserName') adminUserName: string,
-    @Param('userToKick') userToKick: string,
-  ) {
-    try {
-      return this.chatRoomSevice.removeAdminFromChatroom(
-        chatroomID,
-        adminUserName,
-        userToKick,
-      );
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  // @Delete('delete/:chatroomID/admin/:adminUserName/admin/:userToKick')
+  // async removeAdminFromChatroom(
+  //   @Param('chatroomID') chatroomID: number,
+  //   @Param('adminUserName') adminUserName: string,
+  //   @Param('userToKick') userToKick: string,
+  // ) {
+  //   try {
+  //     return this.chatRoomSevice.removeAdminFromChatroom(
+  //       chatroomID,
+  //       adminUserName,
+  //       userToKick,
+  //     );
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }
 
   @Delete('leave/:chatroomID/user/:userName')
   async leaveChat(

@@ -76,6 +76,9 @@ export function removeAdminStatus(chat: Chat, user: string): Chat {
   chat.admin = chat.admin.filter((u: User) => {
     return u.userName !== user;
   });
+  chat.member = chat.member.filter((u: User) => {
+    return u.userName !== user;
+  });
   return chat;
 }
 

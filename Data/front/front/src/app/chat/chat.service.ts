@@ -35,7 +35,8 @@ type createMemberDTO = {
   providedIn: 'root'
 })
 export class ChatService {
-
+  private currentUser: string = "ali";
+  private message: string = "";
   private sock: Socket;
   constructor(private httpClient: HttpClient
   ) {
@@ -44,7 +45,10 @@ export class ChatService {
     });
     this.sock.on(
       'recMessage', (data) =>  {
-        console.log(data.userId.userName + ": " + data.value);
+        this.message = data.value;
+        console.log( "user: ",data.userId.userName);
+        if (this.currentUser !== data.userId.userName)
+          console.log(data.userId.userName + ": " + this.message);
         // console.log(data.value)
       }
     );
@@ -88,5 +92,10 @@ export class ChatService {
   getUserMessages (user: string ) {
     return this.httpClient.get<string>(URL + `/message/user/${user}`);
   }
-
+  kickuser(chatID: number, admin: string, user: string) {
+    return this.httpClient.delete(URL + `/chat/delete/${chatID}/admin/${admin}/user/${user}`);
+  }
+  leaveChatroom(id: number, name: string) {
+    return this.httpClient.delete(URL + `/chat/leave/${id}/user/${name}`)
+  }
 }
