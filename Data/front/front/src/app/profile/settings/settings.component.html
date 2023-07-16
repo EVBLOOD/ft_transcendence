@@ -40,16 +40,16 @@
             <button *ngIf="!this.twoFactor" class="validationBtn" (click)="activetwofactor()">Enable</button>
             <button *ngIf="this.twoFactor" class="cancelBtn" (click)="canceltwofactor()">Disable</button>
         </div>
-        <div class="profileGameSettings">
-            <h2 class="popTitleProfile">Game theme</h2>
+        <div class="profilePlaySettings">
+            <h2 class="popTitleProfile">Play theme</h2>
             <div class="radioSettings">
-                <div [ngClass]="this.getname(1)" class="radioSettingsChoice" (click)="chooseGame(1)">
+                <div [ngClass]="this.getname(1)" class="radioSettingsChoice" (click)="choosePlay(1)">
                     <img src="/assets/whiteThemeSet.svg" alt="">
                 </div>
-                <div [ngClass]="this.getname(2)" class="radioSettingsChoice" (click)="chooseGame(2)">
+                <div [ngClass]="this.getname(2)" class="radioSettingsChoice" (click)="choosePlay(2)">
                     <img src="/assets/greenThemeSet.svg" alt="">
                 </div>
-                <div [ngClass]="this.getname(3)" class="radioSettingsChoice" (click)="chooseGame(3)">
+                <div [ngClass]="this.getname(3)" class="radioSettingsChoice" (click)="choosePlay(3)">
                     <img src="/assets/blueThemeSet.svg" alt="">
                 </div>
             </div>

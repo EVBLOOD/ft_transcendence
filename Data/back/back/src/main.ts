@@ -20,7 +20,8 @@ async function bootstrap() {
   app.use('/avatar', express.static(join(__dirname, '../../upload/avatars')));
   app.enableCors({
     credentials: true,
-    origin: 'http://localhost:4200',
+    // origin: 'http://0.0.0.0:4200',
+    origin: process.env.HOST + ':4200',
   });
   app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe({ transform: true }));

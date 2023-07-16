@@ -14,131 +14,126 @@ export class FriendshipService {
   public current_status_friend = new BehaviorSubject<any>(0);
 
 
-  constructor(private http: HttpClient ) { 
-    this.socket = io('http://localhost:3000/friendshipSock',   {
-      withCredentials: true, 
-    },  );
+  constructor(private http: HttpClient) {
+    this.socket = io('http://10.13.3.9:3000/friendshipSock', {
+      withCredentials: true,
+    },);
 
 
-    this.socket.on('friendRequestReceived' ,(data : any) => {
-      this.current_status_friend.next({senderId: data.senderId, type: 4 })
+    this.socket.on('friendRequestReceived', (data: any) => {
+      this.current_status_friend.next({ senderId: data.senderId, type: 4 })
     });
 
 
-    this.socket.on('friendRequestAccepted' ,(data : any) => {
-      this.current_status_friend.next({senderId: data.senderId, type: 3 })
-
-    });
-
-
-    this.socket.on('UserBlockedby' ,(data : any) => {
-      this.current_status_friend.next({senderId: data.senderId, type: 2 })
+    this.socket.on('friendRequestAccepted', (data: any) => {
+      this.current_status_friend.next({ senderId: data.senderId, type: 3 })
 
     });
 
 
-    this.socket.on('youWereUnblocked' ,(data : any) => {
-      this.current_status_friend.next({senderId: data.senderId, type: 0 })
+    this.socket.on('UserBlockedby', (data: any) => {
+      this.current_status_friend.next({ senderId: data.senderId, type: 2 })
+
     });
 
-    this.socket.on('notAnyMore' ,(data : any) => {
-      this.current_status_friend.next({senderId: data.senderId, type: 0})
+
+    this.socket.on('youWereUnblocked', (data: any) => {
+      this.current_status_friend.next({ senderId: data.senderId, type: 0 })
+    });
+
+    this.socket.on('notAnyMore', (data: any) => {
+      this.current_status_friend.next({ senderId: data.senderId, type: 0 })
     });
 
   }
-  addFriend(id : number)  {
-    this.socket.emit('friendRequest', id, (data : any) => {
+  addFriend(id: number) {
+    this.socket.emit('friendRequest', id, (data: any) => {
       if (data === "UserNotFound")
-      return ;
-      this.current_status_friend.next({senderId: id, type: 5})
-      
+        return;
+      this.current_status_friend.next({ senderId: id, type: 5 })
+
     });
-  }
-  
-  acceptRequest(id : number)  {
-    this.socket.emit('acceptFriendRequest', id, (data : any) => 
-    {
-      if (data === "UserNotFound")
-        return ;
-      this.current_status_friend.next({senderId: id, type: 3})
-    });
-  }
-  
-  blockUser(id : number)  {
-    this.socket.emit('blockUser', id , (data : any) => 
-    {
-      if (data === "UserNotFound")
-      return ;
-      this.current_status_friend.next({senderId: id, type: 1})
-    });    
   }
 
-  unfriendUser(id : number) {
-    this.socket.emit('deleteFriendship', id, (data : any) => 
-    {
+  acceptRequest(id: number) {
+    this.socket.emit('acceptFriendRequest', id, (data: any) => {
       if (data === "UserNotFound")
-      return ;
-      this.current_status_friend.next({senderId: id, type: 0})
-    });    
+        return;
+      this.current_status_friend.next({ senderId: id, type: 3 })
+    });
   }
-  
-  cancelFriendRequest(id : number)  {
-    this.socket.emit('deleteFriendship', id, (data : any) => 
-    {
+
+  blockUser(id: number) {
+    this.socket.emit('blockUser', id, (data: any) => {
       if (data === "UserNotFound")
-      return ;
-      this.current_status_friend.next({senderId: id, type: 0})
+        return;
+      this.current_status_friend.next({ senderId: id, type: 1 })
+    });
+  }
+
+  unfriendUser(id: number) {
+    this.socket.emit('deleteFriendship', id, (data: any) => {
+      if (data === "UserNotFound")
+        return;
+      this.current_status_friend.next({ senderId: id, type: 0 })
+    });
+  }
+
+  cancelFriendRequest(id: number) {
+    this.socket.emit('deleteFriendship', id, (data: any) => {
+      if (data === "UserNotFound")
+        return;
+      this.current_status_friend.next({ senderId: id, type: 0 })
     });
   }
 
 
-  unblockUser(id : number)  {
-    this.socket.emit('unblockUser', id, (data : any) => 
-    {
+  unblockUser(id: number) {
+    this.socket.emit('unblockUser', id, (data: any) => {
       if (data === "UserNotFound")
-      return ;
-      this.current_status_friend.next({senderId: id, type: 0})
+        return;
+      this.current_status_friend.next({ senderId: id, type: 0 })
     });
   }
-  
-  friendStatus(id : string) {
-    return this.http.post('http://localhost:3000/friendship/friendStatus', { id: Number.parseInt(id) }, {
-          withCredentials: true,
-        });
-      }
+
+  friendStatus(id: string) {
+    return this.http.post('http://10.13.3.9:3000/friendship/friendStatus', { id: Number.parseInt(id) }, {
+      withCredentials: true,
+    });
+  }
 
   friendRealTimeStatus() {
     return this.current_status_friend;
   }
 
-  requestsList(skip: number, take: number)  {
+  requestsList(skip: number, take: number) {
     let params = new HttpParams();
     params = params.append('skip', skip);
     params = params.append('take', take);
 
-    return this.http.get('http://localhost:3000/friendship/requestsList', {
+    return this.http.get('http://10.13.3.9:3000/friendship/requestsList', {
       withCredentials: true,
       params: params
     });
   }
 
-  blocklist(skip: number, take: number)   {
+  blocklist(skip: number, take: number) {
     let params = new HttpParams();
     params = params.append('skip', skip);
     params = params.append('take', take);
 
-    return this.http.get('http://localhost:3000/friendship/blocklist', {
+    return this.http.get('http://10.13.3.9:3000/friendship/blocklist', {
       withCredentials: true,
       params: params
     });
   }
 
-  friendList(skip: number, take: number)    {
+  friendList(skip: number, take: number) {
     let params = new HttpParams();
     params = params.append('skip', skip);
     params = params.append('take', take);
 
-    return this.http.get('http://localhost:3000/friendship/friendList', {
+    return this.http.get('http://10.13.3.9:3000/friendship/friendList', {
       withCredentials: true,
       params: params
     });

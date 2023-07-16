@@ -8,7 +8,9 @@ import { FriendshipService } from '../friendship.service';
   namespace: 'friendshipSock',
   cors: {
     credentials: true,
-    origin: 'http://localhost:4200',
+    origin: 'http://10.13.3.9:4200',
+
+    // origin: 'http://0.0.0.0:4200',
   },
 })
 export class FriendshipGateway {
@@ -16,7 +18,7 @@ export class FriendshipGateway {
   private connections: Map<number, Set<Socket>> = new Map<number, Set<Socket>>();
 
   constructor(private readonly serviceJWt: JwtService, private readonly serviceToken: AuthenticatorService,
-     private readonly friendshipService: FriendshipService) {}
+    private readonly friendshipService: FriendshipService) { }
   @WebSocketServer()
   myserver: Server;
 
@@ -86,25 +88,24 @@ export class FriendshipGateway {
       client.disconnect();
       return false;
     }
-    let replay : any;
+    let replay: any;
     try {
-          replay = await this.friendshipService.create(
-            xyz.sub,
-            payload,
-          );
-          if (!replay) return 'UserNotFound';
-        } catch (err) {
-          return 'UserNotFound';
-        }
+      replay = await this.friendshipService.create(
+        xyz.sub,
+        payload,
+      );
+      if (!replay) return 'UserNotFound';
+    } catch (err) {
+      return 'UserNotFound';
+    }
     const recipientSockets = this.connections.get(payload);
-    if (recipientSockets)
-    {
+    if (recipientSockets) {
       recipientSockets.forEach((socket) => {
         socket.emit('friendRequestReceived', { senderId: xyz.sub });
       });
     }
     // 
-    return {sender: xyz.sub, receiver: payload}
+    return { sender: xyz.sub, receiver: payload }
   }
 
   @SubscribeMessage('acceptFriendRequest')
@@ -137,24 +138,23 @@ export class FriendshipGateway {
       client.disconnect();
       return false;
     }
-    let replay : any;
+    let replay: any;
     try {
       replay = await this.friendshipService.accepting(
         xyz.sub,
         payload,
-        );
-        if (!replay)  return 'UserNotFound';
-      } catch (err) {
+      );
+      if (!replay) return 'UserNotFound';
+    } catch (err) {
       return 'UserNotFound';
     }
     const recipientSockets = this.connections.get(payload);
-    if (recipientSockets)
-    {
+    if (recipientSockets) {
       recipientSockets.forEach((socket) => {
         socket.emit('friendRequestAccepted', { senderId: xyz.sub });
       });
     }
-    return {sender: xyz.sub, receiver: payload}
+    return { sender: xyz.sub, receiver: payload }
   }
 
   @SubscribeMessage('blockUser')
@@ -187,7 +187,7 @@ export class FriendshipGateway {
       client.disconnect();
       return false;
     }
-    let replay : any;
+    let replay: any;
     try {
       replay = await this.friendshipService.blocking(
         xyz.sub,
@@ -198,13 +198,12 @@ export class FriendshipGateway {
       return 'UserNotFound';
     }
     const recipientSockets = this.connections.get(payload);
-    if (recipientSockets)
-    {
+    if (recipientSockets) {
       recipientSockets.forEach((socket) => {
         socket.emit('UserBlockedby', { senderId: xyz.sub });
       });
     }
-    return {sender: xyz.sub, receiver: payload}
+    return { sender: xyz.sub, receiver: payload }
   }
 
   @SubscribeMessage('unblockUser')
@@ -237,7 +236,7 @@ export class FriendshipGateway {
       client.disconnect();
       return false;
     }
-    let replay : any;
+    let replay: any;
     try {
       replay = await this.friendshipService.unblock(
         xyz.sub,
@@ -248,13 +247,12 @@ export class FriendshipGateway {
       return 'UserNotFound';
     }
     const recipientSockets = this.connections.get(payload);
-    if (recipientSockets)
-    {
+    if (recipientSockets) {
       recipientSockets.forEach((socket) => {
         socket.emit('youWereUnblocked', { senderId: xyz.sub });
       });
     }
-    return {sender: xyz.sub, receiver: payload}
+    return { sender: xyz.sub, receiver: payload }
   }
 
   @SubscribeMessage('deleteFriendship')
@@ -287,7 +285,7 @@ export class FriendshipGateway {
       client.disconnect();
       return false;
     }
-    let replay : any;
+    let replay: any;
     try {
       replay = await this.friendshipService.remove(
         xyz.sub,
@@ -298,13 +296,12 @@ export class FriendshipGateway {
       return 'UserNotFound';
     }
     const recipientSockets = this.connections.get(payload);
-    if (recipientSockets)
-    {
+    if (recipientSockets) {
       recipientSockets.forEach((socket) => {
         socket.emit('notAnyMore', { senderId: xyz.sub });
       });
     }
-    return {sender: xyz.sub, receiver: payload}
+    return { sender: xyz.sub, receiver: payload }
   }
 
   // @SubscribeMessage('statusFriendship')

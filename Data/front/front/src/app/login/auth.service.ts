@@ -7,30 +7,25 @@ import { EMPTY, Observable, catchError } from 'rxjs';
 })
 export class AuthService {
 
-  private twofactor : boolean = false;
+  private twofactor: boolean = false;
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient) {
   }
-  public getCurrentUser() : Observable<any>
-  {
-    return this.http.get('http://localhost:3000/isItLogged', {withCredentials: true}).pipe(catchError((err, caught) =>  EMPTY))
+  public getCurrentUser(): Observable<any> {
+    return this.http.get('http://10.13.3.9:3000/isItLogged', { withCredentials: true }).pipe(catchError((err, caught) => EMPTY))
   }
-  public getTwoFactorSatat() : boolean
-  {
+  public getTwoFactorSatat(): boolean {
     return this.twofactor;
   }
 
-  public setTwoFactorSatat(param : boolean)
-  {
+  public setTwoFactorSatat(param: boolean) {
     this.twofactor = param;
   }
   // public callFortyTwo()
-  public gowild(token : string)  : Observable<any>
-  {
-    return this.http.post('http://localhost:3000/validate', {token: token}, {withCredentials: true}).pipe(catchError((err, caught) =>  EMPTY));
+  public gowild(token: string): Observable<any> {
+    return this.http.post('http://10.13.3.9:3000/validate', { token: token }, { withCredentials: true }).pipe(catchError((err, caught) => EMPTY));
   }
-  logout()
-  {
-    return this.http.get('http://localhost:3000/logout', {withCredentials: true}).pipe(catchError((err, caught) =>  EMPTY));
+  logout() {
+    return this.http.get('http://10.13.3.9:3000/logout', { withCredentials: true }).pipe(catchError((err, caught) => EMPTY));
   }
 }

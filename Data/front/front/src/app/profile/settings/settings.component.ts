@@ -16,7 +16,7 @@ export class SettingsComponent implements OnInit, OnDestroy{
   Myerror : boolean = false;
   MyerrorAvatar : boolean = false;
   twoFactor : boolean = false;
-  GameTheme : number = 1;
+  PlayTheme : number = 1;
   file : any;
   profileSubject$  !: Observable<any>;
 
@@ -39,7 +39,7 @@ export class SettingsComponent implements OnInit, OnDestroy{
       this.fullName = new FormControl(data.name, [Validators.required, Validators.minLength(5)]); 
       this.userName =new FormControl(data.username, [Validators.required, Validators.minLength(5), Validators.pattern(/^[a-z]+(-[a-z]+)?$/)]);
       this.twoFactor = data.TwoFAenabled;
-      this.GameTheme = 1; // to add
+      this.PlayTheme = 1; // to add
       this.submet_this.avatar = data.avatar;
     },});
   }
@@ -60,14 +60,14 @@ export class SettingsComponent implements OnInit, OnDestroy{
 
   getname(index : number)
   {
-    if (index === this.GameTheme)
+    if (index === this.PlayTheme)
       return 'activeRadio';
     return '';
   }
 
-  chooseGame(index: number)
+  choosePlay(index: number)
   {
-    this.GameTheme = index;
+    this.PlayTheme = index;
   }
   handleResponse(data : any)
   {

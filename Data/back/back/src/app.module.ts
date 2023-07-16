@@ -9,6 +9,8 @@ import { UserModule } from './user/user.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
+import { GameModule } from './game/game.module';
+import { MatchModule } from './match/match.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { ConfigModule } from '@nestjs/config';
       secret: process.env.ACCESS_TOKEN_SECRET,
       global: true,
     }),
+    GameModule,
+    MatchModule
   ],
   controllers: [AppController],
   providers: [AppService],

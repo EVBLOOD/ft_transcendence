@@ -20,4 +20,4 @@ npm install;
 # npm audit fix --legacy-peer-deps;
 # npm install;
 echo "--------------------- Starting --------------------------------";
-exec ng serve;
+exec ng serve --host 0.0.0.0;

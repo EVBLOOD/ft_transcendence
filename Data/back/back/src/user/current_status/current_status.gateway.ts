@@ -13,7 +13,8 @@ import { AuthenticatorService } from 'src/authenticator/authenticator.service';
   namespace: 'current_status',
   cors: {
     credentials: true,
-    origin: 'http://localhost:4200',
+    // origin: 'http://0.0.0.0:4200',
+    origin: 'http://10.13.3.9:4200',
   },
 })
 export class CurrentStatusGateway {
@@ -21,7 +22,7 @@ export class CurrentStatusGateway {
     private readonly SaveStatus: UserService,
     private readonly serviceJWt: JwtService,
     private readonly serviceToken: AuthenticatorService,
-  ) {}
+  ) { }
 
   @WebSocketServer()
   myserver: Server;

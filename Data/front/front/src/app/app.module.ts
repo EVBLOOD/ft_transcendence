@@ -13,10 +13,8 @@ import { PgbuttonComponent } from './profile/pgbutton/pgbutton.component';
 import { PopupComponent } from './profile/popup/popup.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LeaderbordComponent } from './leaderbord/leaderbord.component';
-import { GameComponent } from './game/game.component';
 import { ChatComponent } from './chat/chat.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
 import { ActivatetwoComponent } from './profile/settings/activatetwo/activatetwo.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { HttpfailInterceptor } from './httpfail.interceptor';
@@ -25,6 +23,9 @@ import { CardBlockedComponent } from './profile/card-blocked/card-blocked.compon
 import { CardRequestComponent } from './profile/card-request/card-request.component';
 import { LeaderBordRowComponent } from './leaderbord/leader-bord-row/leader-bord-row.component';
 import { AppBodyComponent } from './app-body/app-body.component';
+import { PlayComponent } from './play/play.component';
+import { GameComponent } from './play/game/game.component';
+import { GameModule } from './play/game/game.module';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,7 @@ import { AppBodyComponent } from './app-body/app-body.component';
     PgbuttonComponent,
     PopupComponent,
     LeaderbordComponent,
-    GameComponent,
+    PlayComponent,
     ChatComponent,
     ActivatetwoComponent,
     PageNotFoundComponent,
@@ -53,7 +54,8 @@ import { AppBodyComponent } from './app-body/app-body.component';
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    GameModule
   ],
   providers: [
     {

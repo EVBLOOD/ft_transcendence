@@ -3,6 +3,7 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
+  Headers,
   HttpException,
   HttpStatus,
   Post,
@@ -24,11 +25,11 @@ export class AuthenticatorController {
   constructor(
     private readonly jwtService: JwtService,
     private readonly service: AuthenticatorService,
-  ) {}
+  ) { }
 
   @Get('login')
   @UseGuards(fortytwoAuthGuard)
-  login() {}
+  login() { }
 
   @Get('auth/callback')
   @UseGuards(fortytwoAuthGuard)
@@ -47,7 +48,7 @@ export class AuthenticatorController {
     else token = req.cookies[process.env.TOKEN_NAME];
     const tokenUser = await this.service.GenToken(req.user.id, token);
     if (tokenUser) res.cookie(process.env.TOKEN_NAME, tokenUser.token);
-    return res.redirect('http://localhost:4200/');
+    return res.redirect(process.env.HOST + ':4200');
   }
 
   @UseGuards(JwtAuthGuard)

@@ -1,6 +1,7 @@
 import { Exclude } from 'class-transformer';
 import { IsBoolean, IsEmail, Matches, isNumber } from 'class-validator';
-import { Column, Entity, PrimaryColumn, Unique } from 'typeorm';
+import { Match } from 'src/match/entities/match.entity';
+import { Column, Entity, OneToMany, PrimaryColumn, Unique } from 'typeorm';
 
 @Entity({ name: 'Users' })
 export class User {
@@ -28,6 +29,15 @@ export class User {
   @Exclude()
   @Column({ nullable: true })
   TwoFAsecret: string;
+
+  @OneToMany(() => Match, match => match.player1)
+  matchesAsPlayer1: Match[];
+
+  @OneToMany(() => Match, match => match.player2)
+  matchesAsPlayer2: Match[];
+
+  @OneToMany(() => Match, match => match.winner)
+  wonMatches: Match[];
 
   constructor(partial: Partial<User>) {
     Object.assign(this, partial);

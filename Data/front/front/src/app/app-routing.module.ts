@@ -6,13 +6,14 @@ import { ProfileComponent } from './profile/profile.component';
 import { authGuard } from './login/guards/auth.guard';
 import { twoFacGuard } from './login/guards/two-fac.guard';
 import { TwoFactoryComponent } from './login/two-factory/two-factory.component';
-import { GameComponent } from './game/game.component';
+import { PlayComponent } from './play/play.component';
 import { ChatComponent } from './chat/chat.component';
 import { LeaderbordComponent } from './leaderbord/leaderbord.component';
 import { SettingsComponent } from './profile/settings/settings.component';
 import { ActivatetwoComponent } from './profile/settings/activatetwo/activatetwo.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AppBodyComponent } from './app-body/app-body.component';
+import { GameComponent } from './play/game/game.component';
 
 const routes: Routes = 
                       [
@@ -20,6 +21,7 @@ const routes: Routes =
                         {path: 'twoFactor', component: TwoFactoryComponent ,canActivate: [twoFacGuard]},
                         {path: '', component: AppBodyComponent, canActivate: [authGuard], children: [
                           {path: '', component: ProfileComponent,canActivate: [authGuard]},
+                          {path: 'play', component: PlayComponent,canActivate: [authGuard] },
                           {path: 'game', component: GameComponent,canActivate: [authGuard] },
                           {path: 'settings', component: SettingsComponent,canActivate: [authGuard] },
                           {path: 'acticatetwo', component: ActivatetwoComponent,canActivate: [authGuard]},
