@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { LessThanOrEqual, Repository } from 'typeorm';
 import { Punishment } from './punishment.entity';
 import {
   createPunishmenEntity,
@@ -10,6 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/user.entity';
 import { createPunishmentDTO } from './dto/createPunishment.dto';
 import { Chat } from '../chat.entity';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class PunishmentService {
@@ -146,7 +147,10 @@ export class PunishmentService {
       const newPunishment = createPunishmenEntity(chat, user, punishmentDTO);
       return await this.PunishmentRepo.save(newPunishment);
     }
-    throw new HttpException('Incorrect Penalty Type.', HttpStatus.BAD_REQUEST);
+    throw new HttpException(
+      'Incorrect Punishment Type.',
+      HttpStatus.BAD_REQUEST,
+    );
   }
   async checkIfUserBanned(chatID: number, userName: string): Promise<boolean> {
     const users = await this.getBannedUsers(chatID, userName);
@@ -177,5 +181,40 @@ export class PunishmentService {
       }
     }
     return false;
+  }
+  async getPunishmentOlderThan5Min(): Promise<Punishment[]> {
+    const dateFiveMinAgo = new Date(Date.now() - 1000 * (60 * 5));
+    const Punishments = await this.PunishmentRepo.find({
+      order: {
+        time: 'ASC',
+      },
+      where: {
+        time: LessThanOrEqual(dateFiveMinAgo),
+      },
+    });
+    return Punishments;
+  }
+
+  async deletePunishment(id: number) {
+    await this.PunishmentRepo.createQueryBuilder('Punishment')
+      .delete()
+      .from(Punishment)
+      .where('id == :id', { id: id })
+      .execute();
+  }
+
+  async clearOldPunishments() {
+    const Punishments = await this.getPunishmentOlderThan5Min();
+    if (Object.keys(Punishments).length !== 0) {
+      for (const pun of Punishments) {
+        this.deletePunishment(pun.id);
+      }
+    }
+  }
+
+  @Cron('*/15 * * * *')
+  async scheduledPunishmentEraser() {
+    console.log('Punishments cleared');
+    await this.clearOldPunishments();
   }
 }

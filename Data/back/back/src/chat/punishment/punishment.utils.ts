@@ -20,9 +20,9 @@ export function createPunishmenEntity(
   user: User,
   dto: createPunishmentDTO,
 ): Punishment {
-  const newPenalty = new Punishment();
-  newPenalty.chat = chat;
-  newPenalty.user = user;
-  newPenalty.PunishmentType = dto.type;
-  return newPenalty;
+  const newPunishment = new Punishment();
+  newPunishment.chat = chat;
+  newPunishment.user = user;
+  newPunishment.PunishmentType = dto.type;
+  return newPunishment;
 }

@@ -15,10 +15,9 @@ import { CreateMessage } from 'src/message/dto/message.dto';
 @WebSocketGateway({
   namespace: 'chat',
   cors: {
-    origin: ["http://localhost:4200", "http://localhost:3000"],
+    origin: ['http://localhost:4200', 'http://localhost:3000'],
     credentials: true,
-  }
-
+  },
 })
 export class ChatGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
@@ -32,7 +31,7 @@ export class ChatGateway
 
   @SubscribeMessage('sendMessage')
   async sendMessage(clisnt: Socket, payload: CreateMessage): Promise<void> {
-    console.log("message: ", payload);
+    console.log('message: ', payload);
     try {
       const message = await this.chatService.postToChatroom(payload);
       this.server.emit('recMessage', message);
