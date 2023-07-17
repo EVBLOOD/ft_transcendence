@@ -79,10 +79,10 @@ export class ChatController {
     return this.chatRoomSevice.getMessagesByChatID(chatID);
   }
 
-  // @Get(':chatID/user/:userName/messages')
-  // async getUserMessagesInChatroom(@Param('chatID', ParseIntPipe) chatID: number, @Param('userName') userName: string) : Promise<Message[]> {
-  //   return this.chatRoomSevice.getUserMessagesInChatroom(chatID, userName);
-  // }
+  @Get(':chatID/user/:userName/messages')
+  async getUserMessagesInChatroom(@Param('chatID', ParseIntPipe) chatID: number, @Param('userName') userName: string) : Promise<Message[]> {
+    return this.chatRoomSevice.getUserMessagesInChatroom(chatID, userName);
+  }
 
   @Get(':chatID/punishments')
   async getChatroomPunishments(
@@ -118,7 +118,7 @@ export class ChatController {
     @Param('chatID', ParseIntPipe) chatID: number,
     @Body() memberDTO: createMemberDTO,
   ): Promise<Chat | null> {
-    console.log("adding member: " + memberDTO.member);
+    console.log('adding member: ' + memberDTO.member);
     try {
       return this.chatRoomSevice.addMemberToChatroom(chatID, memberDTO);
     } catch (err) {

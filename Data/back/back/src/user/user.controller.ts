@@ -17,9 +17,7 @@ export class UserController {
   @Post()
   async addUser(@Body() user: createUserDTO): Promise<User | undefined> {
     try {
-      console.log(
-        'user: ', user
-      );
+      console.log('user: ', user);
       // const userDTO: createUserDTO = {
       //   userName: user,
       // }

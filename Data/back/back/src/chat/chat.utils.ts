@@ -56,7 +56,7 @@ export class ChatUtils {
       //     user.userName === Name;
       //   })
       // ) {
-        return true;
+      return true;
       // }
     }
     return false;

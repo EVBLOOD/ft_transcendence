@@ -3,10 +3,11 @@ import { PunishmentController } from './punishment.controller';
 import { PunishmentService } from './punishment.service';
 import { Punishment } from './punishment.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { PunishmentGateway } from './punishment.gateway';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Punishment])],
   controllers: [PunishmentController],
-  providers: [PunishmentService],
+  providers: [PunishmentService, PunishmentGateway],
 })
 export class PunishmentModule {}

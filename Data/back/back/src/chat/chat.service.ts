@@ -6,7 +6,7 @@ import {
   forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UsingJoinColumnOnlyOnOneSideAllowedError } from 'typeorm';
+import { Repository } from 'typeorm';
 import { ChatGateway } from './chat.gateway';
 import { Chat } from './chat.entity';
 import { CreateMessage } from 'src/message/dto/message.dto';
@@ -29,16 +29,12 @@ import { UpdateChatroomDTO } from './dto/updateChatroom.dto';
 import { PunishmentService } from './punishment/punishment.service';
 import { Punishment } from './punishment/punishment.entity';
 import { createPunishmentDTO } from './punishment/dto/createPunishment.dto';
-import { constrainedMemory } from 'process';
-import { timeStamp } from 'console';
 
 @Injectable()
 export class ChatService {
   constructor(
     @InjectRepository(Chat)
     private readonly chatRoomRepo: Repository<Chat>,
-    @Inject(forwardRef(() => ChatGateway))
-    private readonly chatGateaway: ChatGateway,
     private readonly chatPunishment: PunishmentService,
     private readonly chatHelpers: ChatUtils,
     private readonly messageService: MessageService,
@@ -55,7 +51,7 @@ export class ChatService {
         admin: true,
         message: {
           userId: true,
-        }
+        },
       },
       where: {
         member: {
@@ -75,7 +71,7 @@ export class ChatService {
         message: {
           value: true,
           id: true,
-        }
+        },
       },
       cache: true,
     });
@@ -117,10 +113,8 @@ export class ChatService {
     if (validateChatDTO(chatroomDTO) === true) {
       const user = await this.chatHelpers.getUser(chatroomDTO.user);
       let secondUser: User | undefined = undefined;
-      if (chatroomDTO.otherUser !== "" ) {
-        console.log(
-          "here", chatroomDTO.otherUser
-        )
+      if (chatroomDTO.otherUser !== '') {
+        console.log('here', chatroomDTO.otherUser);
         secondUser = await this.chatHelpers.getUser(chatroomDTO.otherUser);
       }
       if (chatroomDTO.type === 'password') {
@@ -135,6 +129,7 @@ export class ChatService {
   }
 
   async postToChatroom(messageDTO: CreateMessage): Promise<Message> {
+    this.chatPunishment.clearOldPunishments()
     if (
       (await this.chatHelpers.checkForMemberRoll(
         messageDTO.charRoomId,
@@ -343,7 +338,7 @@ export class ChatService {
         }
       } else {
         throw new HttpException(
-          'you can\'t kick chatroom owner',
+          "you can't kick chatroom owner",
           HttpStatus.BAD_REQUEST,
         );
       }
@@ -368,9 +363,9 @@ export class ChatService {
     adminUserName: string,
     userUserName: string,
   ): Promise<Chat | undefined> {
-    console.log("chat id : ", chatID);
-    console.log("adminUserName : ", adminUserName);
-    console.log("userUserName : ", userUserName);
+    console.log('chat id : ', chatID);
+    console.log('adminUserName : ', adminUserName);
+    console.log('userUserName : ', userUserName);
     const chatroom = await this.GetChatRoomByID(chatID);
     if (
       (await this.chatHelpers.checkForAdminRoll(chatID, adminUserName)) &&
@@ -536,4 +531,10 @@ export class ChatService {
       HttpStatus.BAD_REQUEST,
     );
   }
+  async getUserMessagesInChatroom(id: number, userName: string) : Promise<Message[]> {
+    const messages = await this.messageService.getMessagesByChatroomID(id);
+    // TODO: get blocked users and filter there messages befor returning
+    return messages;
+  }
+
 } // END OF ChatService class
