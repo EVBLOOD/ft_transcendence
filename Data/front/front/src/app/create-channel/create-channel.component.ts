@@ -7,4 +7,21 @@ import { Component } from '@angular/core';
 })
 export class CreateChannelComponent {
 
+
+  // close()
+  // {
+  //   this.router.navigateByUrl('')
+  // }
+
+  privateToggle = false;
+  secretToggle = false;
+  
+  clickPrivateChannel(){
+    this.privateToggle = !this.privateToggle;
+  }
+  clickSecretChannel(){
+    this.secretToggle = !this.secretToggle;
+  }
+
+
 }

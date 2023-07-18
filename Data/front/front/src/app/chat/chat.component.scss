@@ -4,6 +4,7 @@
 }
 
 .grid1{
+    display: block;
     border-right: 1px solid #184E77;
     padding: 20px;
     display: grid;
@@ -119,6 +120,7 @@
 }
 
 .friend{
+    position: relative;
     transition: 0.3s;
     display: grid;
     grid-template-columns: min-content auto min-content;
@@ -161,6 +163,11 @@
     // max-height: fit-content;
 }
 
+.friend-selected{
+    background-color: #184E77;
+    border-radius: 10px;
+}
+
 .hashtag {
     position: relative;
     width: 33px;
@@ -186,6 +193,7 @@
 }
 
 .grid2{
+    display: block;
     border-right: 1px solid #184E77;
     display: grid;
     grid-template-rows: min-content auto min-content;
@@ -195,7 +203,6 @@
     display: flex;
     border-bottom: 1px solid #184E77;
     padding: 25px;
-    display: flex;
     gap: 7px;
 }
 
@@ -205,6 +212,61 @@
     border-bottom: 1px solid #184E77;
     padding: 25px;
     align-items: center;
+}
+
+.dropdown-profile{
+    display: block;
+    position: absolute;
+    z-index: 1;
+    width: 150px;
+    right: 0px;
+    padding: 3px;
+    font-size: 12px;
+    border-radius: 5px;
+    background-color: #F2F6FA;
+    color: #103959;
+    list-style-type: none;
+    box-shadow: 0px 0px 1px #181818;
+}
+
+.dropdown-profile li {
+    transition: 0.3;
+    padding: 10px 15px 10px 15px;
+    border-radius: 2px;
+}
+
+.dropdown-profile li:hover {
+    cursor: pointer;
+    background-color: #103959;
+    color: #F2F6FA;
+}
+
+
+.dropdown-user{
+    display: block;
+    position: absolute;
+    z-index: 1;
+    width: 150px;
+    right: 12px;
+    padding: 3px;
+    font-size: 12px;
+    border-radius: 5px;
+    background-color: #F2F6FA;
+    color: #103959;
+    list-style-type: none;
+    box-shadow: 0px 0px 1px #181818;
+}
+
+.dropdown-user li {
+    transition: 0.3;
+    padding: 10px 15px 10px 15px;
+    border-radius: 2px;
+}
+
+.dropdown-user li:hover {
+    cursor: pointer;
+    background-color: #103959;
+    color: #F2F6FA;
 }
 
 .icon-name-channel {
@@ -236,6 +298,11 @@
     font-size: 13px;
     font-weight: 600;
     color: #D8D8D8;
+}
+
+.threedotschannel{
+    cursor: pointer;
+    position: relative;
 }
 
 .conversation {
@@ -428,4 +495,18 @@
 
 .listbox-member{
     width: 4px;
+}
+
+.grid3{
+    display: block;
+}
+
+@media only screen and (max-width: 800px) {
+    .chat{
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+    .grid2, .grid3{
+        display: none;
+    }
 }

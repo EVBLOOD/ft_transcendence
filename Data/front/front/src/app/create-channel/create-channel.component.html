@@ -1,3 +1,25 @@
 <app-popup>
-    <p>create-channel works!</p>
+    <div class="CloseBtnPop">
+        <button></button>
+    </div>
+    <h2 class="popTitle">Create channel</h2>
+    <input class="textbox" type="text" placeholder="Channel name"/>
+    <div class="rowToggle">
+        <p class="title">Private Channel</p>
+        <div class="toggle" [ngClass]="{'toggleChecked' : privateToggle}" (click)="clickPrivateChannel()">
+            <div class="circle" [ngClass]="{'circleChecked' : privateToggle}"></div>
+        </div>
+    </div>
+    <div class="rowToggle" *ngIf="!privateToggle">
+        <p class="title">Secret Channel</p>
+        <div class="toggle" [ngClass]="{'toggleChecked' : secretToggle}" (click)="clickSecretChannel()">
+            <div class="circle" [ngClass]="{'circleChecked' : secretToggle}"></div>
+        </div>
+    </div>
+    <input class="textbox" type="text" placeholder="Password" *ngIf="secretToggle && !privateToggle"/>
+    <div class="buttons">
+        <a class="cancel">Cancel</a>
+        <a class="createChannel">Create Channel</a>
+    </div>
+
 </app-popup>

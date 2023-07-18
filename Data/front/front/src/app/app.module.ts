@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ChatComponent } from './chat/chat.component';
 import { PopupComponent } from './popup/popup.component';
 import { CreateChannelComponent } from './create-channel/create-channel.component';
+import { InviteComponent } from './invite/invite.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { CreateChannelComponent } from './create-channel/create-channel.componen
     ApplicationComponent,
     ChatComponent,
     PopupComponent,
-    CreateChannelComponent
+    CreateChannelComponent,
+    InviteComponent
   ],
   imports: [
     BrowserModule,
