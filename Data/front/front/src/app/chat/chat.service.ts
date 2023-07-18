@@ -15,6 +15,19 @@ type createAdminDTO  = {
   roleGiver: string;
   roleReceiver: string;
 }
+export type UpdateChatroomDTO = {
+  newType: string;
+  newPassword: string;
+  newChatroomName: string;
+}
+
+export type CreatePunishmentDto = {
+  type: string;
+
+  user: string;
+
+  chatID: number;
+}
 
 export type sendMessageDTO = {
   userName: string;
@@ -52,6 +65,9 @@ export class ChatService {
         // console.log(data.value)
       }
     );
+    this.sock.on("kickUser", (data)=> {
+      console.log("kicked user: " + data.userName);
+    })
    }
   getChatrooms(name: string) {
     return  this.httpClient.get<string>(`http://localhost:3000/chat/user/${name}`)
@@ -97,5 +113,14 @@ export class ChatService {
   }
   leaveChatroom(id: number, name: string) {
     return this.httpClient.delete(URL + `/chat/leave/${id}/user/${name}`)
+  }
+  updateChatroom(id: number, user: string, dto: UpdateChatroomDTO) {
+    return this.httpClient.put<UpdateChatroomDTO>(URL + `/chat/update/${id}/admin/${user}`, dto);
+  }
+  PunishUser(admin: string, dto: CreatePunishmentDto) {
+    console.log("dto: ", dto);
+    return this.httpClient.post<CreatePunishmentDto>(
+      URL + `/chat/${dto.chatID}/admin/${admin}/punishment`, dto
+    )
   }
 }

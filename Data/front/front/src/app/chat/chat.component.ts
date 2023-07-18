@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ChatService, addUserDTO, createChatroom, sendMessageDTO } from './chat.service';
+import { ChatService, CreatePunishmentDto, UpdateChatroomDTO, addUserDTO, createChatroom, sendMessageDTO } from './chat.service';
 
 @Component({
   selector: 'app-chat',
@@ -65,5 +65,23 @@ export class ChatComponent implements OnInit {
   // }
   leaveChatroom(id: string, name: string){
     return this.ChatService.leaveChatroom(Number(id), name).subscribe({ next: (data) => {console.log(data)}, error: (err) => console.log(err)})
+  }
+
+  updateChatroom(id: string, user: string, newChatType: string, newPass: string, ChatName: string) {
+    const dto : UpdateChatroomDTO = {
+      newType: newChatType,
+      newChatroomName: ChatName,
+      newPassword: newPass,
+    };
+    return this.ChatService.updateChatroom(Number(id), user, dto).subscribe({ next: (data)=> console.log(data), error: (err)=> console.log(err)});
+  }
+  PunishUser(chatID__2: string, Admin__: string, penaltyType: string, user11: string) {
+    const dto: CreatePunishmentDto = {
+        type: penaltyType,
+        user: user11,
+        chatID: Number(chatID__2),
+    };
+    console.log(dto);
+    return this.ChatService.PunishUser(Admin__, dto).subscribe({next: (data)=> console.log(data), error: (err)=> console.log(err)});
   }
 }

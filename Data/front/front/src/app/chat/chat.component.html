@@ -70,4 +70,22 @@
 	<input type="text" #_user_ name="_user_" placeholder="_user_">
 	<button (click)="leaveChatroom(ID.value, _user_.value)">Submit</button>
 </div>
+<div>
+	<label >update chatroom:</label>
+	<input type="text" #chatID__ name="chatID__" placeholder="chatID__">
+	<input type="text" #USER__ name="USER__" placeholder="USER__">
+	<input type="text" #ChatName name="ChatName" placeholder="ChatName">
+	<input type="text" #newPass name="newPass" placeholder="newPass">
+	<input type="text" #newChatType name="newChatType" placeholder="newChatType">
+	<button (click)="updateChatroom(chatID__.value, USER__.value, newChatType.value, newPass.value, ChatName.value)">Submit</button>
+</div>
+<div>
+	<label >punish user:</label>
+	<input type="text" #chatID__2 name="chatID__2" placeholder="chatID__2">
+	<input type="text" #Admin__ name="Admin__" placeholder="Admin__">
+	<input type="text" #penaltyType name="penaltyType" placeholder="penaltyType">
+	<input type="text" #user11 name="user11" placeholder="user11">
+	<button (click)="PunishUser(chatID__2.value, Admin__.value, penaltyType.value, user11.value)">Submit</button>
+</div>
+
 <button (click)="getUser()">getUsers</button><br />

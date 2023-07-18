@@ -125,6 +125,8 @@ export class ChatUtils {
     punishmentDTO: createPunishmentDTO,
   ): Promise<boolean> {
     if ((await this.checkForAdminRoll(chatID, userName)) == true) {
+      console.log('admin', userName);
+      console.log('chatid', chatID);
       throw new HttpException(
         'Not allowed to Punishe users',
         HttpStatus.FORBIDDEN,

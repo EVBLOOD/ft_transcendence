@@ -1,13 +1,6 @@
-import {
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-  forwardRef,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ChatGateway } from './chat.gateway';
 import { Chat } from './chat.entity';
 import { CreateMessage } from 'src/message/dto/message.dto';
 import { Message } from 'src/message/message.entity';
@@ -129,7 +122,7 @@ export class ChatService {
   }
 
   async postToChatroom(messageDTO: CreateMessage): Promise<Message> {
-    this.chatPunishment.clearOldPunishments()
+    this.chatPunishment.clearOldPunishments();
     if (
       (await this.chatHelpers.checkForMemberRoll(
         messageDTO.charRoomId,
@@ -531,10 +524,12 @@ export class ChatService {
       HttpStatus.BAD_REQUEST,
     );
   }
-  async getUserMessagesInChatroom(id: number, userName: string) : Promise<Message[]> {
+  async getUserMessagesInChatroom(
+    id: number,
+    userName: string,
+  ): Promise<Message[]> {
     const messages = await this.messageService.getMessagesByChatroomID(id);
     // TODO: get blocked users and filter there messages befor returning
     return messages;
   }
-
 } // END OF ChatService class
