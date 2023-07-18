@@ -34,20 +34,24 @@ export class AuthenticatorController {
   @Get('auth/callback')
   @UseGuards(fortytwoAuthGuard)
   async CallBack(@Req() req, @Res({ passthrough: true }) res: Response) {
-    if (!req.user)
+    console.log(req.user)
+    if (!(req.user))
       throw new HttpException(
         'INTERNAL_SERVER_ERROR',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     var token: string;
+    console.log("a")
     if (!req.cookies || !req.cookies[process.env.TOKEN_NAME])
       token = this.jwtService.sign({
         sub: req.user.id,
         user_name: req.user.username,
       });
     else token = req.cookies[process.env.TOKEN_NAME];
+    console.log("b")
     const tokenUser = await this.service.GenToken(req.user.id, token);
     if (tokenUser) res.cookie(process.env.TOKEN_NAME, tokenUser.token);
+    console.log(process.env.HOST)
     return res.redirect(process.env.HOST + ':4200');
   }
 

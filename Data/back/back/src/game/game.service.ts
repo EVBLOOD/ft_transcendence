@@ -7,8 +7,8 @@ import { sampleSize } from 'lodash';
 // install flatbuffers and socket io and matter js and class-validator
 // @types/matter-js --dev
 
-export const GAMEWIDTH = 1232;
-export const GAMEHEIGHT = 685;
+export const GAMEWIDTH = 1428;
+export const GAMEHEIGHT = 700;
 export const BALLRADIUS = 10;
 export const PADDLEWIDTH = 12;
 export const PADDLEHEIGHT = 119;
@@ -26,7 +26,8 @@ export class GameService {
   private queue: Array<{ id: number, socket: Socket }> = [];
   private currentPlayers = new Array<{ id: number, socket: Socket }>();
   private activeGameInstances: { [key: string]: GameInstance } = {};
-  public onlineUsers = new Array<{ id: number, socket: Socket }>();
+  // public onlineUsers = new Array<{ id: number, socket: Socket }>();
+  public onlineUsers = new Map<number, Set<Socket>>();
 
   // a service to know the connected users 
   constructor(private matchService: MatchService) {
@@ -62,8 +63,8 @@ export class GameService {
 
       if (this.queue.length >= 2) {
         let [player1, player2]: { id: number, socket: Socket }[] = sampleSize(this.queue, 2);
-        player1.socket.emit('startTheGame')
-        player2.socket.emit('startTheGame')
+        player1.socket.emit('startTheGame', { Fplayer: player1.id, Splayer: player2.id })
+        player2.socket.emit('startTheGame', { Fplayer: player1.id, Splayer: player2.id })
         this.queue = this.queue.filter(player => player.id !== player1.id && player.id !== player2.id);
         this.activeGameInstances[`${player1.id},${player2.id}`] = new GameInstance(player1.socket, player2.socket);
         this.currentPlayers.push(player1);
@@ -89,23 +90,31 @@ export class GameService {
       this.queue.push({ id: id1, socket })
       socket.emit('changeState', JSON.stringify({ gameState: 'Queue' }));
     } else {
-      // console.log("online list", this.service.onlineUsers)
-      const invitedUser = this.onlineUsers.find(_ => _.id === id2);
+      const invitedUser = this.onlineUsers.get(id2);
       if (invitedUser) {
-        invitedUser.socket.emit('invite', id1);
-        invitedUser.socket.once('inviteResponse', (response) => {
-          console.log("res", response);
-          if (response === true) {
-            const player1 = this.onlineUsers.find(_ => _.id === id1);
-            const player2 = this.onlineUsers.find(_ => _.id === id2);
-            player2.socket.emit('startTheGame')
-            player1.socket.emit('startTheGame')
-            this.activeGameInstances[`${player1.id},${player2.id}`] = new GameInstance(player1.socket, player2.socket);
-            this.currentPlayers.push(player1);
-            this.currentPlayers.push(player2);
-          }
+        invitedUser.forEach((socket_) => {
+          socket_.emit('invite', id1);
+          socket_.once('inviteResponse', (response) => {
+            invitedUser.forEach((socket__) => {
+              if (socket__.id == socket_.id && response == true &&
+                !(id2 && (this.currentPlayers.find(player => player.id === id2) || this.queue.find(player => player.id === id2)))) {
+                // socket.emit('startTheGame')
+                // socket__.emit('startTheGame')
+                socket.emit('startTheGame', { Fplayer: id1, Splayer: id2 })
+                socket__.emit('startTheGame', { Fplayer: id1, Splayer: id2 })
+                this.currentPlayers.push(
+                  { id: id1, socket: socket }
+                )
+                this.currentPlayers.push(
+                  { id: id2, socket: socket__ }
+                )
+                this.activeGameInstances[`${id1},${id2}`] = new GameInstance(socket, socket__);
+                this.currentPlayers.push({ id: id2, socket: socket__ });
+                this.currentPlayers.push({ id: id1, socket: socket });
+              }
+            })
+          })
         })
-        console.log('user is online', invitedUser.id);
       } else {
         console.log('user is offline', id2);
       }
@@ -113,11 +122,11 @@ export class GameService {
   }
 
 
-  handleDisconnect(socket: any) {
-    socket.on('disconnect', () => {
-      this.queue = this.queue.filter(player => player.socket !== socket);
-      socket.removeAllListeners('disconnect');
-    });
-  }
+  // handleDisconnect(socket: any) {
+  //   socket.on('disconnect', () => {
+  //     this.queue = this.queue.filter(player => player.socket !== socket);
+  //     socket.removeAllListeners('disconnect');
+  //   });
+  // }
 
 }

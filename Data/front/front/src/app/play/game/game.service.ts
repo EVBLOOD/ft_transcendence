@@ -28,28 +28,41 @@ export type Match = {
   providedIn: 'root'
 })
 export class GameService {
+  public gameRequest = new BehaviorSubject<number>(0);
+
   // public ip = '10.12.8.7';
   gameIsCreated$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  public ip = 'http://10.13.3.9';
+  // Players$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  public Players: any = undefined;
+  public ip = 'http://10.13.4.8';
   // public url_base_user = `http://${this.ip}:3000/user`;
   public url_base_match = `http://${this.ip}:3000/match`;
   public socket = new Socket({ url: `${this.ip}:3000/game`, options: { withCredentials: true } });
+  public isIngame: boolean = false;
 
   constructor(private httpClient: HttpClient,) {
-    this.socket.on('invite', (inviterId: string) => {
-      const id = parseInt(inviterId);
-      const response = confirm(`You have been invited by player id ${id}. Do you accept?`);
-      this.socket.emit('inviteResponse', response);
-    });
-    this.socket.on('startTheGame', () => {
-      console.log("startTheGame")
+    this.socket.on('startTheGame', (players: any) => {
+      this.Players = players;
+      this.isIngame = true;
       this.gameIsCreated$.next(true);
     });
+    this.socket.on('invite', (inviterId: string) => {
+      console.log("HELLO")
+      const id = parseInt(inviterId);
+      // const response = confirm(`You have been invited by player id ${id}. Do you accept?`);
+      // this.socket.emit('inviteResponse', response);
+      this.gameRequest.next(id);
+    });
+  }
+
+  acceptGame(feed: boolean) {
+    // console.log("LOLO", feed)
+    this.socket.emit('inviteResponse', feed);
   }
   createGame(id2?: number) {
     this.socket.emit('createGame', id2);
   }
-
+  // { Fplayer: id1, Splayer: id2 }
   getState() {
     return this.socket.fromEvent<string>('changeState')
   }
@@ -61,6 +74,10 @@ export class GameService {
     const buffer = builder.asUint8Array();
 
     this.socket.emit('sendMyPaddleState', buffer);
+  }
+
+  gameInv() {
+    return this.socket.fromEvent<any>('invitation')
   }
 
   updateOpponentPaddle() {

@@ -26,6 +26,7 @@ import { AppBodyComponent } from './app-body/app-body.component';
 import { PlayComponent } from './play/play.component';
 import { GameComponent } from './play/game/game.component';
 import { GameModule } from './play/game/game.module';
+import { PlayWithfrComponent } from './play/play-withfr/play-withfr.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { GameModule } from './play/game/game.module';
     CardRequestComponent,
     LeaderBordRowComponent,
     AppBodyComponent,
+    PlayWithfrComponent,
   ],
   imports: [
     BrowserModule,

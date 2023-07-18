@@ -31,21 +31,21 @@ import { JwtAuthGuard } from 'src/authenticator/jwtauth.guard';
 @Controller('friendship')
 export class FriendshipController {
   private readonly logger = new Logger(FriendshipController.name);
-  constructor(private readonly friendshipService: FriendshipService) {}
+  constructor(private readonly friendshipService: FriendshipService) { }
 
   @Get()
   itsMe(@Request() req: any) {
     return req.new_user.user_name;
   }
 
-  // @UseInterceptors(ClassSerializerInterceptor)
-  // @Get('find/:id')
-  // @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
-  // async findOne(@Req() req, @Param('id') id: string) {
-  //   const replay = await this.friendshipService.findOne(req.new_user.sub, id);
-  //   if (replay) return replay;
-  //   throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
-  // }
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get('find/:id')
+  async findOne(@Req() req, @Param('id') id: number) {
+    console.log(id)
+    const replay = await this.friendshipService.findOne(req.new_user.sub, id);
+    return replay;
+    // throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
+  }
 
   // @UseInterceptors(ClassSerializerInterceptor)
   // @Get('suggestions')
@@ -206,7 +206,14 @@ export class FriendshipController {
     if (replay && replay.length) return replay;
     throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
   }
-
+  // @UseInterceptors(ClassSerializerInterceptor)
+  // @Get('isfriend')
+  // async isfriend(
+  //   @Request() req: any,
+  //   @Query('id', ParseIntPipe) id: number,)
+  //   {
+  //     const replay = await this.friendshipService.findOne
+  //   }
   // @UseInterceptors(ClassSerializerInterceptor)
   // @Post('accept')
   // @UsePipes(new UservalidatingPipe())

@@ -81,6 +81,39 @@ export class AppBodyComponent implements OnInit, OnDestroy {
         this.showPopup(data.senderId)
       }
     })
+    this.gameService.gameRequest.asObservable().subscribe((data) => {
+      // console.log(data)
+      if (data)
+        this.showPopupGame(data.toString());
+    })
+  }
+
+  async showPopupGame(id: string,) {
+    const user: any = await firstValueFrom(this.profileService.getUserData(id));
+    Swal.fire({
+      title: 'Game Request',
+      html: `<p class="accept_notif-text" >You have a new game request from ${user.username}!</p>`,
+      showCancelButton: true,
+      confirmButtonText: 'Accept',
+      cancelButtonText: 'Decline',
+      imageUrl: this.profileService.getUserAvatarPath(user.avatar),
+      customClass: {
+        popup: 'accept_notif-container',
+        title: 'accept_notif-title',
+        confirmButton: 'accept_notif-confirm-button',
+        cancelButton: 'accept_notif-cancel-button'
+      },
+      position: 'top-end',
+      timer: 5000
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.gameService.acceptGame(true)
+        // this.gameService.ac(user.id);
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        this.gameService.acceptGame(false)
+        // this.friendship.cancelFriendRequest(user.id);
+      }
+    });
   }
 
   ngOnDestroy(): void {

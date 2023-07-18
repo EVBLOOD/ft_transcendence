@@ -60,9 +60,11 @@ export class GameInstance {
     World.add(this.world, [this.paddle1, this.paddle2, this.ball]);
 
     player1.on('ping', () => {
+      console.log("JAMAL")
       player1.emit('pong');
     });
     player2.on('ping', () => {
+      console.log("JAMAL")
       player2.emit('pong');
     });
 

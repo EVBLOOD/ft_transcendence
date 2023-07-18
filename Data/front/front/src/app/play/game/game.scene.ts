@@ -42,26 +42,29 @@ export class GameScene extends Phaser.Scene {
   }
 
   preload() {
+    console.log('start')
     this.sound.stopAll();
     if (this.color == Color.White) {
-      this.load.image('background', 'assets/white/background.png');
-      this.load.image('paddle', '../assets/white/paddle.png');
-      this.load.image('ball', '../assets/white/ball.png');
-      this.load.image('line', '../assets/white/line.png');
+      this.load.image('background', '/assets/asset/white/background.png');
+      this.load.image('paddle', '/assets/asset/white/paddle.png');
+      this.load.image('ball', '/assets/asset/white/ball.png');
+      this.load.image('line', '/assets/asset/white/line.png');
     } else {
       if (this.color == Color.Green) {
-        this.load.image('background', 'assets/green/background.png');
+        this.load.image('background', '/assets/asset/green/background.png');
       } else if (this.color == Color.Blue) {
-        this.load.image('background', 'assets/blue/background.png');
+        this.load.image('background', '/assets/asset/blue/background.png');
       }
-      this.load.image('paddle', '../assets/paddle.png');
-      this.load.image('ball', '../assets/ball.png');
-      this.load.image('line', '../assets/line.png');
+      this.load.image('paddle', '/assets/asset/paddle.png');
+      this.load.image('ball', '/assets/asset/ball.png');
+      this.load.image('line', '/assets/asset/line.png');
     }
-    this.load.image('win', '../assets/win.png');
+    this.load.image('win', '/assets/asset/win.png');
+    console.log('end')
   }
 
   setupGameObject() {
+    console.log('start 1')
     switch (this.playerNumber) {
       case Player.One:
         {
@@ -81,6 +84,7 @@ export class GameScene extends Phaser.Scene {
 
     this.ball = this.add.image(this.gameWidth / 2, this.gameHeight / 2, 'ball');
     this.win = this.add.image(this.gameWidth / 2, this.gameHeight / 2, 'win').setVisible(false);
+    console.log('end 1')
   }
 
   initText() {
@@ -152,7 +156,7 @@ export class GameScene extends Phaser.Scene {
 
   private previousY = 0;
   override update() {
-
+    console.log('update')
     // console.log(this.myPaddle.y, this.previousY);
     if (this.myPaddle.body?.velocity) {
       const newPaddleVelocity = new Phaser.Math.Vector2(0, 0);

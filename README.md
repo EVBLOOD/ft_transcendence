@@ -1,6 +1,6 @@
 # ft_transcendence
 
-
+host in back end is now easy to change - a var in service code and an other in .env
 ## reminder
 before lanching the project you should first create the `base` folder for database.
 after that there is a `.env` file that should be created in back-end folder root where you have your 42API infos listed as :

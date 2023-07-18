@@ -1,17 +1,18 @@
 <div class="body">
     <div class="section">
         <div class="row">
-            <p class="title">Play with friends</p>
+            <p *ngIf="(friendList| async)?.length" class="title">Play with friends</p>
             <a class="button" (click)="quickPairing()">Quick Pairing</a>
         </div>
-        <div class="onlinePlayers">
-            <div *ngFor="let item of players" class="onlinePlayer">
+        <div *ngIf="(friendList| async)?.length" class="onlinePlayers">
+            <app-play-withfr *ngFor="let item of (friendList | async)" [item]="item" />
+            <!-- <div *ngFor="let item of (friendList | async)" class="onlinePlayer">
                 <div class="colorgradient">
-                    <img src={{item.img}} />
+                    <img [src]="item.avatar" />
                     <p class="namePlayer">{{item.name}}</p>
                     <div *ngIf="item.status" class="statusOnline">
                         <div class="circle"></div>
-                        <p>Online</p>
+                        <p>statusLoading((profile$| async)?.id)</p>
                     </div>
                     <div *ngIf="!item.status" class="statusOffline">
                         <div class="circle"></div>
@@ -19,7 +20,7 @@
                     </div>
                     <a class="buttonChallenge">Challenge</a>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
     <div class="section">

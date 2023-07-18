@@ -1,16 +1,15 @@
-import { WebSocketGateway, SubscribeMessage, OnGatewayDisconnect } from '@nestjs/websockets';
+import { WebSocketGateway, SubscribeMessage, OnGatewayDisconnect, OnGatewayInit } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 import { GameService } from './game.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthenticatorService } from 'src/authenticator/authenticator.service';
+import { hostSocket } from 'src/app.service';
 
 @WebSocketGateway({
   namespace: "game",
   cors: {
     credentials: true,
-    // origin: 'http://0.0.0.0:4200',
-
-    origin: 'http://10.13.3.9:4200',
+    origin: hostSocket,
   },
 })
 export class GameGateway
@@ -20,75 +19,103 @@ export class GameGateway
 
   async handleConnection(client: Socket, ...args: any[]) {
     console.log("Hello world");
+    const cookie = client.handshake.headers?.cookie
+      ?.split('; ')
+      ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
+      ?.split('=')[1];
     if (
-      !client.handshake.headers?.cookie
-        ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
-        ?.split('=')[1]
+      !cookie
     ) {
       client.disconnect();
       return false;
     }
     const xyz: any = this.serviceJWt.decode(
-      client.handshake.headers?.cookie
-        ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
-        ?.split('=')[1],
+      cookie,
     );
     if (
       !xyz ||
       (await this.serviceToken.IsSame(
         xyz.sub || '',
-        client.handshake.headers?.cookie
-          ?.split('; ')
-          ?.find((row) => row.startsWith('access_token='))
-          ?.split('=')[1],
+        cookie,
       )) == false
     ) {
       client.disconnect();
       return false;
     }
-    this.gameService.onlineUsers.push({ id: xyz.sub, socket: client })
+    let userSockets = this.gameService.onlineUsers.get(xyz.sub);
+    if (!userSockets)
+      userSockets = new Set<Socket>();
+    userSockets.add(client);
+    this.gameService.onlineUsers.set(xyz.sub, userSockets)
+    // this.gameService.onlineUsers.push({ id: xyz.sub, socket: client })
     return true;
   }
   @SubscribeMessage('createGame')
   async create(client: Socket, payload?: number) {
+    console.log("ONLY ONCE")
+    const cookie = client.handshake.headers?.cookie
+      ?.split('; ')
+      ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
+      ?.split('=')[1];
     if (
-      !client.handshake.headers?.cookie
-        ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
-        ?.split('=')[1]
+      !cookie
     ) {
       client.disconnect();
       return false;
     }
     const xyz: any = this.serviceJWt.decode(
-      client.handshake.headers?.cookie
-        ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
-        ?.split('=')[1],
+      cookie
     );
     if (
       !xyz ||
       (await this.serviceToken.IsSame(
         xyz.sub || '',
-        client.handshake.headers?.cookie
-          ?.split('; ')
-          ?.find((row) => row.startsWith('access_token='))
-          ?.split('=')[1],
+        cookie,
       )) == false
     ) {
       client.disconnect();
       return false;
     }
+    console.log("auth end")
     if (!payload)
       this.gameService.createGame(client, { id1: xyz.sub });
     else
       this.gameService.createGame(client, { id1: xyz.sub, id2: payload })
   }
 
-  handleDisconnect(socket: any) {
-    this.gameService.handleDisconnect(socket);
+  async handleDisconnect(client: any) {
+    const cookie = client.handshake.headers?.cookie
+      ?.split('; ')
+      ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
+      ?.split('=')[1];
+    if (
+      !cookie
+    ) {
+      client.disconnect();
+      return false;
+    }
+    const xyz: any = this.serviceJWt.decode(
+      cookie,
+    );
+    if (
+      !xyz ||
+      (await this.serviceToken.IsSame(
+        xyz.sub || '',
+        cookie,
+      )) == false
+    ) {
+      client.disconnect();
+      return false;
+    }
+    let userSockets = this.gameService.onlineUsers.get(xyz.sub);
+    // if (!userSockets)
+    //   userSockets = new Set<Socket>();
+    userSockets.delete(client);
+    if (userSockets.size)
+      this.gameService.onlineUsers.set(xyz.sub, userSockets)
+    else
+      this.gameService.onlineUsers.delete(xyz.sub)
+    // this.gameService.handleDisconnect(socket);
   }
 }
 

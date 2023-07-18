@@ -15,7 +15,7 @@ export class FriendshipService {
     @InjectRepository(User) private readonly UserRepo: Repository<User>,
     @InjectRepository(Friendship)
     private readonly FriendShipRepo: Repository<Friendship>,
-  ) {}
+  ) { }
 
   async create(id: number, user_target: number) {
     const { UserSending, UserReceiving } = await this.UsersCheckerBothId(
@@ -112,7 +112,7 @@ export class FriendshipService {
       take: take,
       skip: skip,
     });
-    blocklist.forEach( (elmnt) => {if (elmnt.sender == id) elmnt.sender = elmnt.receiver} )
+    blocklist.forEach((elmnt) => { if (elmnt.sender == id) elmnt.sender = elmnt.receiver })
     return blocklist;
   }
 
@@ -232,7 +232,7 @@ export class FriendshipService {
         .skip(skip)
         .take(take)
         .getMany();
-      }
+    }
     if (findList == null) return null;
     let friends: Array<User> = [];
     findList.forEach((element) => {
@@ -261,24 +261,20 @@ export class FriendshipService {
     }); // TODO: I may check next the User if is blockig you..
   }
 
-  async findOne(id: number, userSearching: string) {
+  async findOne(id: number, userSearching: number) {
     const user1 = await this.UserRepo.findOneBy({ id: id });
     if (!user1) return undefined;
-    const user2 = await this.UserRepo.findOneBy({ username: userSearching });
+    const user2 = await this.UserRepo.findOneBy({ id: userSearching });
     if (!user2) return undefined;
-    const retur = await this.FriendShipRepo.find({
+    return await this.FriendShipRepo.find({
       where: [
         {
           receiver: id,
           sender: user2.id,
-          blocked: true,
-          blocked_by: 'receiver',
+          blocked: false,
         },
-        { receiver: id, sender: user2.id, blocked: true, blocked_by: 'sender' },
+        { sender: id, receiver: user2.id, blocked: false },
       ],
     });
-    if (retur.length == 0)
-      return await this.UserRepo.find({ where: { username: userSearching } });
-    return {};
   }
 }

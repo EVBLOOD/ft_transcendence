@@ -16,18 +16,18 @@ import { MatchModule } from './match/match.module';
   imports: [
     TypeOrmModule.forRoot(DataConf),
     UserModule,
-    PassportModule.register({ session: true }),
-    ConfigModule.forRoot({ isGlobal: true }),
     FriendshipModule,
     AuthenticatorModule,
+    GameModule,
+    MatchModule,
+    PassportModule.register({ session: true }),
+    ConfigModule.forRoot({ isGlobal: true }),
     JwtModule.register({
       secret: process.env.ACCESS_TOKEN_SECRET,
       global: true,
-    }),
-    GameModule,
-    MatchModule
+    })
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

@@ -1,24 +1,30 @@
 import { JwtService } from '@nestjs/jwt';
-import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { AuthenticatorService } from 'src/authenticator/authenticator.service';
 import { FriendshipService } from '../friendship.service';
+import { hostSocket } from 'src/app.service';
 
 @WebSocketGateway({
   namespace: 'friendshipSock',
   cors: {
     credentials: true,
-    origin: 'http://10.13.3.9:4200',
+    origin: hostSocket,
 
-    // origin: 'http://0.0.0.0:4200',
   },
 })
-export class FriendshipGateway {
+export class FriendshipGateway implements OnGatewayInit {
 
+
+  afterInit() {
+    console.log(process.env.HOST)
+  }
   private connections: Map<number, Set<Socket>> = new Map<number, Set<Socket>>();
 
   constructor(private readonly serviceJWt: JwtService, private readonly serviceToken: AuthenticatorService,
-    private readonly friendshipService: FriendshipService) { }
+    private readonly friendshipService: FriendshipService) {
+    console.log('HOST:', process.env.HOST);
+  }
   @WebSocketServer()
   myserver: Server;
 
@@ -26,7 +32,7 @@ export class FriendshipGateway {
     if (
       !client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1]
     ) {
       client.disconnect();
@@ -35,7 +41,7 @@ export class FriendshipGateway {
     const xyz: any = this.serviceJWt.decode(
       client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1],
     );
     if (
@@ -44,7 +50,7 @@ export class FriendshipGateway {
         xyz.sub || '',
         client.handshake.headers?.cookie
           ?.split('; ')
-          ?.find((row) => row.startsWith('access_token='))
+          ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
           ?.split('=')[1],
       )) == false
     ) {
@@ -63,7 +69,7 @@ export class FriendshipGateway {
     if (
       !client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1]
     ) {
       client.disconnect();
@@ -72,7 +78,7 @@ export class FriendshipGateway {
     const xyz: any = this.serviceJWt.decode(
       client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1],
     );
     if (
@@ -81,7 +87,7 @@ export class FriendshipGateway {
         xyz.sub || '',
         client.handshake.headers?.cookie
           ?.split('; ')
-          ?.find((row) => row.startsWith('access_token='))
+          ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
           ?.split('=')[1],
       )) == false
     ) {
@@ -113,7 +119,7 @@ export class FriendshipGateway {
     if (
       !client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1]
     ) {
       client.disconnect();
@@ -122,7 +128,7 @@ export class FriendshipGateway {
     const xyz: any = this.serviceJWt.decode(
       client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1],
     );
     if (
@@ -131,7 +137,7 @@ export class FriendshipGateway {
         xyz.sub || '',
         client.handshake.headers?.cookie
           ?.split('; ')
-          ?.find((row) => row.startsWith('access_token='))
+          ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
           ?.split('=')[1],
       )) == false
     ) {
@@ -162,7 +168,7 @@ export class FriendshipGateway {
     if (
       !client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1]
     ) {
       client.disconnect();
@@ -171,7 +177,7 @@ export class FriendshipGateway {
     const xyz: any = this.serviceJWt.decode(
       client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1],
     );
     if (
@@ -180,7 +186,7 @@ export class FriendshipGateway {
         xyz.sub || '',
         client.handshake.headers?.cookie
           ?.split('; ')
-          ?.find((row) => row.startsWith('access_token='))
+          ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
           ?.split('=')[1],
       )) == false
     ) {
@@ -211,7 +217,7 @@ export class FriendshipGateway {
     if (
       !client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1]
     ) {
       client.disconnect();
@@ -220,7 +226,7 @@ export class FriendshipGateway {
     const xyz: any = this.serviceJWt.decode(
       client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1],
     );
     if (
@@ -229,7 +235,7 @@ export class FriendshipGateway {
         xyz.sub || '',
         client.handshake.headers?.cookie
           ?.split('; ')
-          ?.find((row) => row.startsWith('access_token='))
+          ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
           ?.split('=')[1],
       )) == false
     ) {
@@ -260,7 +266,7 @@ export class FriendshipGateway {
     if (
       !client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1]
     ) {
       client.disconnect();
@@ -269,7 +275,7 @@ export class FriendshipGateway {
     const xyz: any = this.serviceJWt.decode(
       client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1],
     );
     if (
@@ -278,7 +284,7 @@ export class FriendshipGateway {
         xyz.sub || '',
         client.handshake.headers?.cookie
           ?.split('; ')
-          ?.find((row) => row.startsWith('access_token='))
+          ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
           ?.split('=')[1],
       )) == false
     ) {
@@ -309,7 +315,7 @@ export class FriendshipGateway {
   //   if (
   //     !client.handshake.headers?.cookie
   //       ?.split('; ')
-  //       ?.find((row) => row.startsWith('access_token='))
+  //       ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
   //       ?.split('=')[1]
   //   ) {
   //     client.disconnect();
@@ -318,7 +324,7 @@ export class FriendshipGateway {
   //   const xyz: any = this.serviceJWt.decode(
   //     client.handshake.headers?.cookie
   //       ?.split('; ')
-  //       ?.find((row) => row.startsWith('access_token='))
+  //       ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
   //       ?.split('=')[1],
   //   );
   //   if (
@@ -327,7 +333,7 @@ export class FriendshipGateway {
   //       xyz.sub || '',
   //       client.handshake.headers?.cookie
   //         ?.split('; ')
-  //         ?.find((row) => row.startsWith('access_token='))
+  //         ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
   //         ?.split('=')[1],
   //     )) == false
   //   ) {

@@ -14,24 +14,27 @@ import { ActivatetwoComponent } from './profile/settings/activatetwo/activatetwo
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AppBodyComponent } from './app-body/app-body.component';
 import { GameComponent } from './play/game/game.component';
+import { isgamingGuard } from './play/game/isgaming.guard';
 
-const routes: Routes = 
-                      [
-                        {path: 'login', component: LoginComponent,  canActivate: [authGuard]},
-                        {path: 'twoFactor', component: TwoFactoryComponent ,canActivate: [twoFacGuard]},
-                        {path: '', component: AppBodyComponent, canActivate: [authGuard], children: [
-                          {path: '', component: ProfileComponent,canActivate: [authGuard]},
-                          {path: 'play', component: PlayComponent,canActivate: [authGuard] },
-                          {path: 'game', component: GameComponent,canActivate: [authGuard] },
-                          {path: 'settings', component: SettingsComponent,canActivate: [authGuard] },
-                          {path: 'acticatetwo', component: ActivatetwoComponent,canActivate: [authGuard]},
-                          {path: 'activatetwof', component: ActivatetwoComponent,canActivate: [authGuard] },
-                          {path: 'chat', component: ChatComponent,canActivate: [authGuard] },
-                          {path: 'leaderboard', component: LeaderbordComponent,canActivate: [authGuard] },
-                          {path: 'profile/:username', component: ProfileComponent,canActivate: [authGuard]},
-                        ]},
-                        {path: '**', component: PageNotFoundComponent, canActivate: [authGuard]},
-                      ];
+const routes: Routes =
+  [
+    { path: 'login', component: LoginComponent, canActivate: [authGuard] },
+    { path: 'twoFactor', component: TwoFactoryComponent, canActivate: [twoFacGuard] },
+    {
+      path: '', component: AppBodyComponent, canActivate: [authGuard], children: [
+        { path: '', component: ProfileComponent, canActivate: [authGuard] },
+        { path: 'play', component: PlayComponent, canActivate: [authGuard] },
+        { path: 'game', component: GameComponent, canActivate: [authGuard, isgamingGuard] },
+        { path: 'settings', component: SettingsComponent, canActivate: [authGuard] },
+        { path: 'acticatetwo', component: ActivatetwoComponent, canActivate: [authGuard] },
+        { path: 'activatetwof', component: ActivatetwoComponent, canActivate: [authGuard] },
+        { path: 'chat', component: ChatComponent, canActivate: [authGuard] },
+        { path: 'leaderboard', component: LeaderbordComponent, canActivate: [authGuard] },
+        { path: 'profile/:username', component: ProfileComponent, canActivate: [authGuard] },
+      ]
+    },
+    { path: '**', component: PageNotFoundComponent, canActivate: [authGuard] },
+  ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

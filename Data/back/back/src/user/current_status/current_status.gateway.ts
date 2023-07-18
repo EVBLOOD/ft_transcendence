@@ -8,13 +8,16 @@ import { SocketAuthGuard } from 'src/authenticator/socket.guard';
 import { UserService } from '../user.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthenticatorService } from 'src/authenticator/authenticator.service';
+import { ConfigService } from '@nestjs/config';
+import { hostSocket } from 'src/app.service';
 
+
+const host = process.env.HOST;
 @WebSocketGateway({
   namespace: 'current_status',
   cors: {
     credentials: true,
-    // origin: 'http://0.0.0.0:4200',
-    origin: 'http://10.13.3.9:4200',
+    origin: hostSocket,
   },
 })
 export class CurrentStatusGateway {
@@ -31,13 +34,13 @@ export class CurrentStatusGateway {
     console.log(
       client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1],
     );
     if (
       !client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1]
     ) {
       client.disconnect();
@@ -46,7 +49,7 @@ export class CurrentStatusGateway {
     const xyz: any = this.serviceJWt.decode(
       client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1],
     );
     if (
@@ -55,7 +58,7 @@ export class CurrentStatusGateway {
         xyz.sub || '',
         client.handshake.headers?.cookie
           ?.split('; ')
-          ?.find((row) => row.startsWith('access_token='))
+          ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
           ?.split('=')[1],
       )) == false
     ) {
@@ -72,7 +75,7 @@ export class CurrentStatusGateway {
     if (
       !client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1]
     ) {
       client.disconnect();
@@ -81,7 +84,7 @@ export class CurrentStatusGateway {
     const xyz: any = this.serviceJWt.decode(
       client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1],
     );
     if (
@@ -90,7 +93,7 @@ export class CurrentStatusGateway {
         xyz.sub || '',
         client.handshake.headers?.cookie
           ?.split('; ')
-          ?.find((row) => row.startsWith('access_token='))
+          ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
           ?.split('=')[1],
       )) == false
     ) {
@@ -107,7 +110,7 @@ export class CurrentStatusGateway {
     if (
       !client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1]
     ) {
       client.disconnect();
@@ -116,7 +119,7 @@ export class CurrentStatusGateway {
     const xyz: any = this.serviceJWt.decode(
       client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1],
     );
     if (
@@ -125,7 +128,7 @@ export class CurrentStatusGateway {
         xyz.sub || '',
         client.handshake.headers?.cookie
           ?.split('; ')
-          ?.find((row) => row.startsWith('access_token='))
+          ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
           ?.split('=')[1],
       )) == false
     ) {
@@ -141,7 +144,7 @@ export class CurrentStatusGateway {
     if (
       !client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1]
     ) {
       client.disconnect();
@@ -150,7 +153,7 @@ export class CurrentStatusGateway {
     const xyz: any = this.serviceJWt.decode(
       client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1],
     );
     if (
@@ -159,7 +162,7 @@ export class CurrentStatusGateway {
         xyz.sub || '',
         client.handshake.headers?.cookie
           ?.split('; ')
-          ?.find((row) => row.startsWith('access_token='))
+          ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
           ?.split('=')[1],
       )) == false
     ) {
@@ -176,7 +179,7 @@ export class CurrentStatusGateway {
     if (
       !client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1]
     ) {
       client.disconnect();
@@ -185,7 +188,7 @@ export class CurrentStatusGateway {
     const xyz: any = this.serviceJWt.decode(
       client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1],
     );
     if (
@@ -194,7 +197,7 @@ export class CurrentStatusGateway {
         xyz.sub || '',
         client.handshake.headers?.cookie
           ?.split('; ')
-          ?.find((row) => row.startsWith('access_token='))
+          ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
           ?.split('=')[1],
       )) == false
     ) {
@@ -211,7 +214,7 @@ export class CurrentStatusGateway {
     if (
       !client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1]
     ) {
       client.disconnect();
@@ -220,7 +223,7 @@ export class CurrentStatusGateway {
     const xyz: any = this.serviceJWt.decode(
       client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1],
     );
     if (
@@ -229,7 +232,7 @@ export class CurrentStatusGateway {
         xyz.sub || '',
         client.handshake.headers?.cookie
           ?.split('; ')
-          ?.find((row) => row.startsWith('access_token='))
+          ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
           ?.split('=')[1],
       )) == false
     ) {
@@ -244,7 +247,7 @@ export class CurrentStatusGateway {
     if (
       !client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1]
     ) {
       client.disconnect();
@@ -253,7 +256,7 @@ export class CurrentStatusGateway {
     const xyz: any = this.serviceJWt.decode(
       client.handshake.headers?.cookie
         ?.split('; ')
-        ?.find((row) => row.startsWith('access_token='))
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
         ?.split('=')[1],
     );
     if (
@@ -262,7 +265,7 @@ export class CurrentStatusGateway {
         xyz.sub || '',
         client.handshake.headers?.cookie
           ?.split('; ')
-          ?.find((row) => row.startsWith('access_token='))
+          ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
           ?.split('=')[1],
       )) == false
     ) {
