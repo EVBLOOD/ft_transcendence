@@ -1,4 +1,5 @@
-<div class="body">
+<div *ngIf="!(History$|async)">waiting</div>
+<div *ngIf="(History$|async)" class="body">
     <div class="section">
         <div class="row">
             <p *ngIf="(friendList| async)?.length" class="title">Play with friends</p>
@@ -6,21 +7,6 @@
         </div>
         <div *ngIf="(friendList| async)?.length" class="onlinePlayers">
             <app-play-withfr *ngFor="let item of (friendList | async)" [item]="item" />
-            <!-- <div *ngFor="let item of (friendList | async)" class="onlinePlayer">
-                <div class="colorgradient">
-                    <img [src]="item.avatar" />
-                    <p class="namePlayer">{{item.name}}</p>
-                    <div *ngIf="item.status" class="statusOnline">
-                        <div class="circle"></div>
-                        <p>statusLoading((profile$| async)?.id)</p>
-                    </div>
-                    <div *ngIf="!item.status" class="statusOffline">
-                        <div class="circle"></div>
-                        <p>Offline</p>
-                    </div>
-                    <a class="buttonChallenge">Challenge</a>
-                </div>
-            </div> -->
         </div>
     </div>
     <div class="section">
@@ -41,17 +27,18 @@
     <div class="section">
         <div class="row">
             <p class="title">History Last Matches</p>
-            <a class="button">Read more</a>
+            <a *ngIf="(History$|async)?.length >= 5" class="button" (click)="goProfile()">Read more</a>
         </div>
-        <div *ngFor="let item of history" class="userProfileHistoryRaw">
+        <div *ngFor="let item of (History$|async)" class="userProfileHistoryRaw">
             <div class="userProfileHistoryPlayers">
                 <div>
-                    <img [src]=item.img1 alt="" />
-                    <img [src]=item.img2 alt="" />
+                    <img [src]=item.player1.avatar alt="" />
+                    <img [src]=item.player2.avatar alt="" />
                 </div>
-                <p>{{item.names}}</p>
+                <p>{{item.player1.username + ' vs ' + item.player2.username}}</p>
             </div>
-            <div class="userProfileHistoryStatus">{{item.state}}</div>
+            <div *ngIf="item.winner.id == item.player1.id" class="userProfileHistoryStatus">win 🏆</div>
+            <div *ngIf="item.winner.id == item.player2.id" class="userProfileHistoryStatus">Lost 😥</div>
             <div class="userProfileHistoryDate">{{item.date}}</div>
         </div>
     </div>

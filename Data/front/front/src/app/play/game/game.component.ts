@@ -101,6 +101,7 @@ export class GameComponent implements OnDestroy, OnInit {
 
   // profiles
   ngOnDestroy(): void {
+    this.gameService.gameEnd()
     this.game.scene.remove('GameScene');
     if (this.gameScene) {
       this.gameScene.destroy();

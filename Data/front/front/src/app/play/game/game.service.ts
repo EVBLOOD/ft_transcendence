@@ -100,5 +100,11 @@ export class GameService {
     return this.httpClient.get<Match[]>(`${this.url_base_match}/${id}`);
   }
 
+  gameEnd() {
+    // this.socket.emit('disconnect');
+    this.socket.disconnect()
+    this.socket.connect()
+
+  }
 
 }

@@ -5,9 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Match } from './entities/match.entity';
 import { UserModule } from 'src/user/user.module';
 import { User } from 'src/user/entities/user.entity';
+import { AuthenticatorModule } from 'src/authenticator/authenticator.module';
 
 @Module({
-  imports: [UserModule, TypeOrmModule.forFeature([User, Match])],
+  imports: [UserModule, TypeOrmModule.forFeature([User, Match]), AuthenticatorModule],
   controllers: [MatchController],
   providers: [MatchService],
   exports: [MatchService],

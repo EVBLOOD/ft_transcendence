@@ -51,7 +51,7 @@
             </div>
             <div class="userProfileTitleHistory">
                 <h1>History</h1>
-                <app-user-history-raw *ngFor="let item of historyRaw;" [data]="item" />
+                <app-user-history-raw *ngFor="let item of (History$|async)" [item]="item" />
             </div>
         </div>
         <div *ngIf="YourBodyChoosen">

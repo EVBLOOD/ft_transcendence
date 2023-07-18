@@ -98,8 +98,6 @@ export class GameService {
             invitedUser.forEach((socket__) => {
               if (socket__.id == socket_.id && response == true &&
                 !(id2 && (this.currentPlayers.find(player => player.id === id2) || this.queue.find(player => player.id === id2)))) {
-                // socket.emit('startTheGame')
-                // socket__.emit('startTheGame')
                 socket.emit('startTheGame', { Fplayer: id1, Splayer: id2 })
                 socket__.emit('startTheGame', { Fplayer: id1, Splayer: id2 })
                 this.currentPlayers.push(

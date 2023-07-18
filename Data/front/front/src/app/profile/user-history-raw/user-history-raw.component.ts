@@ -6,5 +6,5 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./user-history-raw.component.scss']
 })
 export class UserHistoryRawComponent {
-  @Input() data: any;
+  @Input() item: any;
 }

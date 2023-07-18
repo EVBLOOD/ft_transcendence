@@ -32,21 +32,53 @@ export class MatchService {
       .leftJoinAndSelect('match.winner', 'winner')
       .where('player1.id = :userId OR player2.id = :userId', { userId })
       .getMany();
+
     return matches.map(match => ({
       id: match.id,
       player1: {
         id: match.player1.id,
-        username: match.player1.username
+        username: match.player1.username,
+        avatar: match.player1.avatar,
       },
       player2: {
         id: match.player2.id,
-        username: match.player2.username
+        username: match.player2.username,
+        avatar: match.player2.avatar,
       },
       winner: match.winner ? {
         id: match.winner.id,
         username: match.winner.username
       } : null,
-      date: match.date
+      date: match.date.toDateString()
+    }));
+  }
+
+  async getMatchHistoryView(userId: number) {
+    const matches = await this.matchRepository
+      .createQueryBuilder('match')
+      .leftJoinAndSelect('match.player1', 'player1')
+      .leftJoinAndSelect('match.player2', 'player2')
+      .leftJoinAndSelect('match.winner', 'winner')
+      .where('player1.id = :userId OR player2.id = :userId', { userId }).take(5)
+      .getMany();
+
+    return matches.map(match => ({
+      id: match.id,
+      player1: {
+        id: match.player1.id,
+        username: match.player1.username,
+        avatar: match.player1.avatar,
+      },
+      player2: {
+        id: match.player2.id,
+        username: match.player2.username,
+        avatar: match.player2.avatar,
+      },
+      winner: match.winner ? {
+        id: match.winner.id,
+        username: match.winner.username
+      } : null,
+      date: match.date.toDateString()
     }));
   }
 

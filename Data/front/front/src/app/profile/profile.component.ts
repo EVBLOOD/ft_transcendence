@@ -5,6 +5,8 @@ import { AuthService } from '../login/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { StatusService } from '../status.service';
 import { FriendshipService } from './friendship.service';
+import { GameService } from '../play/game/game.service';
+import { AboutGamesService } from '../play/about-games.service';
 
 @Component({
   selector: 'app-profile',
@@ -31,6 +33,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   friendRequestSkip: number = 0;
   friendListSkip: number = 0;
   blockListSkip: number = 0;
+  History$!: Observable<any>;
 
   // to unsubscribe subscribed Observables
   replay !: any;
@@ -39,11 +42,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   constructor(public profileService: ProfileService, private authService: AuthService,
     private route: ActivatedRoute, private state: StatusService,
-    private friendship: FriendshipService) {
+    private friendship: FriendshipService, private gameStats: AboutGamesService) {
     this.username = this.route.snapshot.params["username"];
   }
   ngOnInit(): void {
     if (!this.username || this.username == '') {
+      this.History$ = this.gameStats.getPlayersHistory();
       this.YourBodyChoosen = true;
       this.profileSubject$ = this.profileService.getMyData();
       // subjectBehi :
@@ -67,6 +71,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
     else {
       this.profile$ = this.profileService.getUserData(this.username);
+      this.History$ = this.gameStats.APlayersHistory(this.username);
       // socket
       this.replay_ = this.friendship.friendRealTimeStatus().subscribe((state) => {
         if (state?.senderId && state.senderId == this.username)
