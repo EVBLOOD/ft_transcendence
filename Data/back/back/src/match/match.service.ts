@@ -30,7 +30,7 @@ export class MatchService {
       .leftJoinAndSelect('match.player1', 'player1')
       .leftJoinAndSelect('match.player2', 'player2')
       .leftJoinAndSelect('match.winner', 'winner')
-      .where('player1.id = :userId OR player2.id = :userId', { userId })
+      .where('player1.id = :userId OR player2.id = :userId', { userId }).orderBy('match.date')
       .getMany();
 
     return matches.map(match => ({
@@ -50,7 +50,8 @@ export class MatchService {
         username: match.winner.username
       } : null,
       date: match.date.toDateString()
-    }));
+    }))
+
   }
 
   async getMatchHistoryView(userId: number) {
@@ -59,7 +60,7 @@ export class MatchService {
       .leftJoinAndSelect('match.player1', 'player1')
       .leftJoinAndSelect('match.player2', 'player2')
       .leftJoinAndSelect('match.winner', 'winner')
-      .where('player1.id = :userId OR player2.id = :userId', { userId }).take(5)
+      .where('player1.id = :userId OR player2.id = :userId', { userId }).orderBy('match.date', 'DESC').take(5)
       .getMany();
 
     return matches.map(match => ({
@@ -79,7 +80,7 @@ export class MatchService {
         username: match.winner.username
       } : null,
       date: match.date.toDateString()
-    }));
+    }))
   }
 
 }
