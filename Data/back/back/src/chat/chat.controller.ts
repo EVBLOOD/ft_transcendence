@@ -80,7 +80,10 @@ export class ChatController {
   }
 
   @Get(':chatID/user/:userName/messages')
-  async getUserMessagesInChatroom(@Param('chatID', ParseIntPipe) chatID: number, @Param('userName') userName: string) : Promise<Message[]> {
+  async getUserMessagesInChatroom(
+    @Param('chatID', ParseIntPipe) chatID: number,
+    @Param('userName') userName: string,
+  ): Promise<Message[]> {
     return this.chatRoomSevice.getUserMessagesInChatroom(chatID, userName);
   }
 
@@ -103,6 +106,9 @@ export class ChatController {
     @Body() punishmentsDTO: createPunishmentDTO,
   ): Promise<Punishment> {
     try {
+      console.log('chatID= ', chatID);
+      console.log('adminName= ', userName);
+      console.log('punishmentsDTO= ', punishmentsDTO);
       return await this.chatRoomSevice.createPunishment(
         chatID,
         userName,
@@ -160,7 +166,11 @@ export class ChatController {
   ): Promise<Chat | null> {
     try {
       ValidateUpdateDTO(updateChatDTO);
-      this.chatRoomSevice.updateChatroom(chatID, adminName, updateChatDTO);
+      return this.chatRoomSevice.updateChatroom(
+        chatID,
+        adminName,
+        updateChatDTO,
+      );
     } catch (err) {
       console.log(err);
       return null;
