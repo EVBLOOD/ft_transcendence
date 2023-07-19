@@ -532,4 +532,29 @@ export class ChatService {
     // TODO: get blocked users and filter there messages befor returning
     return messages;
   }
+
+  async clearPunishment(id: number, admin: string, user: string, type: string) {
+    if ((await this.checkForAdminRoll(id, admin)) == false) {
+      throw new HttpException(
+        "You don't have the necessary permissions",
+        HttpStatus.FORBIDDEN,
+      );
+    }
+    if (
+      type === 'ban' &&
+      (await this.chatPunishment.checkIfUserBanned(id, user)) == true
+    ) {
+      return this.chatPunishment.clearUserPunishment(id, user, type);
+    } else if (
+      type === 'mute' &&
+      (await this.chatPunishment.checkIfUserMuted(id, user)) == true
+    ) {
+      return this.chatPunishment.clearUserPunishment(id, user, type);
+    } else {
+      throw new HttpException(
+        `User is not ` + type === 'ban' ? 'banned' : 'muted',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
 } // END OF ChatService class

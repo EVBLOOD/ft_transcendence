@@ -217,4 +217,19 @@ export class PunishmentService {
     console.log('Punishments cleared');
     await this.clearOldPunishments();
   }
+
+  async clearUserPunishment(id: number, user: string, type: string) {
+    const userPunishment = await this.PunishmentRepo.findOne({
+      where: {
+        user: {
+          userName: user,
+        },
+        PunishmentType: type,
+      },
+      select: {
+        id: true,
+      },
+    });
+    this.deletePunishment(userPunishment.id);
+  }
 }
