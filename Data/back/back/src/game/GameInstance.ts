@@ -218,26 +218,17 @@ export class GameInstance {
       isFixed: true,
       delta: 1000 / 60
     });
-    this.engine.constraintIterations = 20;
-    this.engine.velocityIterations = 20;
-    this.engine.positionIterations = 20;
+    this.engine.velocityIterations = 10;
+    this.engine.positionIterations = 10;
 
     this.runner = Runner.run(runner, this.engine);
 
     Events.on(this.engine, 'collisionStart', (event) => {
-      const pairs = event.pairs;
-
-      for (let i = 0; i < pairs.length; i++) {
-        const pair = pairs[i];
-        const bodyA = pair.bodyA;
-        const bodyB = pair.bodyB;
-
-        if ((bodyA === this.ball && bodyB === this.paddle1) || (bodyB === this.ball && bodyA === this.paddle1)) {
-          console.log("ball paddle1 collision", Date.now())
-          this.checkBallPaddle1Collision();
-        } else if ((bodyA === this.ball && bodyB === this.paddle2) || (bodyB === this.ball && bodyA === this.paddle2)) {
-          this.checkBallPaddle2Collision();
-        }
+      const pair = event.pairs[0];
+      if (pair.bodyA == this.ball) {
+        this.handleBallPaddleCollision(pair.bodyB);
+      } else {
+        this.handleBallPaddleCollision(pair.bodyA);
       }
     });
 
@@ -280,6 +271,10 @@ export class GameInstance {
     // });
   }
 
+  private clamp(value: number, min: number, max: number) {
+    return Math.min(Math.max(value, min), max);
+  }
+
   private sendBallPosition() {
     const builder = new flatbuffers.Builder();
     const ballStateOffset = PositionState.createPositionState(builder, this.ball.position.x, this.ball.position.y);
@@ -290,33 +285,34 @@ export class GameInstance {
     this.player2.emit('updateBallState', buffer);
   }
 
-  readonly PADDLEHEIGHTHALF = PADDLEHEIGHT / 2;
-  readonly PADDLEWIDTHHALF = PADDLEWIDTH / 2;
-  private checkBallPaddle1Collision() {
-    const angle = this.ball.position.y - this.paddle1.position.y;
-    const sign = (this.ball.position.x - this.paddle1.position.x) < 0 ? -1 : 1;
+  // readonly PADDLEHEIGHTHALF = PADDLEHEIGHT / 2;
+  // readonly PADDLEWIDTHHALF = PADDLEWIDTH / 2;
+  private handleBallPaddleCollision(paddle: Matter.Body) {
+    const angle = this.clamp((this.ball.position.y - paddle.position.y), -50, 50);
+    console.log("angle", this.ball.position.y - paddle.position.y, angle);
+    const sign = (this.ball.position.x - paddle.position.x) < 0 ? -1 : 1;
     const velocity = {
       x: sign * this.speed * Math.cos(this.degreesToRadians(angle)),
       y: this.speed * Math.sign(this.degreesToRadians(angle)),
     }
     Body.setVelocity(this.ball, velocity);
-    if (this.speed < 18)
+    if (this.speed < 17)
       this.speed += 1;
   }
 
-  private checkBallPaddle2Collision() {
-    const angle = this.ball.position.y - this.paddle2.position.y;
-    const sign = (this.ball.position.x - this.paddle2.position.x) < 0 ? -1 : 1;
-    const velocity = {
-      x: sign * this.speed * Math.cos(this.degreesToRadians(angle)),
-      y: this.speed * Math.sign(this.degreesToRadians(angle)),
-    }
-    Body.setVelocity(this.ball, velocity);
+  // private checkBallPaddle2Collision() {
+  //   const angle = this.clamp((this.ball.position.y - this.paddle2.position.y), -50, 50);
+  //   const sign = (this.ball.position.x - this.paddle2.position.x) < 0 ? -1 : 1;
+  //   const velocity = {
+  //     x: sign * this.speed * Math.cos(this.degreesToRadians(angle)),
+  //     y: this.speed * Math.sign(this.degreesToRadians(angle)),
+  //   }
+  //   Body.setVelocity(this.ball, velocity);
 
-    if (this.speed < 18)
-      this.speed += 1;
+  //   if (this.speed < 17)
+  //     this.speed += 1;
 
-  }
+  // }
 
   private getNewStart(gameWidth: number, gameHeight: number) {
     this.speed = INITALBALLSPEED;

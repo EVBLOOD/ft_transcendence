@@ -156,21 +156,19 @@ export class GameScene extends Phaser.Scene {
 
   private previousY = 0;
   override update() {
-    console.log('update')
+    // console.log('update')
     // console.log(this.myPaddle.y, this.previousY);
     if (this.myPaddle.body?.velocity) {
-      const newPaddleVelocity = new Phaser.Math.Vector2(0, 0);
-
       if (this.cursors.up.isDown) {
-        newPaddleVelocity.y = -this.paddleSpeed;
+        this.myPaddle.setVelocityY(-this.paddleSpeed);
       } else if (this.cursors.down.isDown) {
-        newPaddleVelocity.y = this.paddleSpeed;
+        this.myPaddle.setVelocityY(this.paddleSpeed);
       } else if (this.myPaddle.body.velocity.y != 0) {
         this.myPaddle.setVelocityY(0);
       }
 
 
-      this.myPaddle.body.velocity.lerp(newPaddleVelocity, this.interpolationFactor);
+      // this.myPaddle.body.velocity.lerp(newPaddleVelocity, this.interpolationFactor);
 
       this.myPaddle.setY(Phaser.Math.Clamp(this.myPaddle.y,
         this.myPaddle.height / 2 + 15,
