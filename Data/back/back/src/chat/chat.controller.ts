@@ -19,6 +19,7 @@ import { ValidateUpdateDTO } from './chat.validators';
 import { Message } from 'src/message/message.entity';
 import { Punishment } from './punishment/punishment.entity';
 import { createPunishmentDTO } from './punishment/dto/createPunishment.dto';
+import { CommandStartedEvent } from 'typeorm';
 
 @Controller('chat')
 export class ChatController {
@@ -114,6 +115,21 @@ export class ChatController {
         userName,
         punishmentsDTO,
       );
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  @Put(':chatID/admin/:adminName/user/:userName/pardon/:type')
+  async clearPunishment(
+    @Param('chatID') id: number,
+    @Param('adminName') admin: string,
+    @Param('userName') user: string,
+    @Param('type')
+    type: string,
+  ) {
+    try {
+      return this.chatRoomSevice.clearPunishment(id, admin, user, type);
     } catch (err) {
       console.log(err);
     }

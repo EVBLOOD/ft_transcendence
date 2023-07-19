@@ -124,7 +124,7 @@ export class ChatUtils {
     userName: string,
     punishmentDTO: createPunishmentDTO,
   ): Promise<boolean> {
-    if ((await this.checkForAdminRoll(chatID, userName)) == true) {
+    if ((await this.checkForAdminRoll(chatID, userName)) == false) {
       console.log('admin', userName);
       console.log('chatid', chatID);
       throw new HttpException(
@@ -133,10 +133,9 @@ export class ChatUtils {
       );
     }
     if (
-      (await this.checkForOwnerRoll(chatID, punishmentDTO.user)) == true &&
-      punishmentDTO.type === 'ban'
+      (await this.checkForOwnerRoll(chatID, punishmentDTO.user)) == true
     ) {
-      throw new HttpException('Cannot ban the owner', HttpStatus.FORBIDDEN);
+      throw new HttpException('Cannot Punishment chatroom the owner', HttpStatus.FORBIDDEN);
     }
     return true;
   }
