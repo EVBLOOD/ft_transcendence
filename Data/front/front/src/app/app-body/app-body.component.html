@@ -4,9 +4,14 @@
         <div class="header">
             <div class="logo">PING-PONG</div>
             <ul class="menu">
-                <li routerLink="play"><img src="/assets/icons/play.svg"> Play</li>
-                <li routerLink="chat"><img src="/assets/icons/message.svg" />Message</li>
-                <li routerLink="leaderboard"><img src="/assets/icons/leaderboard.svg" />Leaderboard</li>
+                <li [style.background]="getcurrentPath() == '/play' ? '#103959' : '#184E77'" routerLink="play">
+                    <img src="/assets/icons/play.svg"> Play
+                </li>
+                <li [style.background]="getcurrentPath() == '/chat' ?  '#103959' : '#184E77'" routerLink="chat">
+                    <img src="/assets/icons/message.svg" />Message
+                </li>
+                <li [style.background]="getcurrentPath() == '/leaderboard'? '#103959' : '#184E77'"
+                    routerLink="leaderboard"><img src="/assets/icons/leaderboard.svg" />Leaderboard</li>
             </ul>
             <div #dropDownContent_ class="profile">
                 <a (click)="onclick()" class="dropdown-btn"><img #dropDownContent__ [src]="profilepic"

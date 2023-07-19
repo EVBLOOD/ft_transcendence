@@ -31,7 +31,6 @@ export class AppBodyComponent implements OnInit, OnDestroy {
   notLogged: boolean = true;
   dropDown = false;
   profilepic: string = '';
-  color = 5;
 
 
   @ViewChild('dropDownContent') dropDownContent !: ElementRef;
@@ -54,7 +53,6 @@ export class AppBodyComponent implements OnInit, OnDestroy {
     return this.route.url;
   }
   onclick() {
-    this.ChangeColor(5)
     this.dropDown = !this.dropDown
   }
   ngOnInit(): void {
@@ -88,9 +86,6 @@ export class AppBodyComponent implements OnInit, OnDestroy {
     })
   }
 
-  ChangeColor(i: number) {
-    this.color = i;
-  }
 
   async showPopupGame(id: string,) {
     const user: any = await firstValueFrom(this.profileService.getUserData(id));
