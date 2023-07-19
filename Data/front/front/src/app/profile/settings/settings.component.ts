@@ -9,39 +9,48 @@ import { Router } from '@angular/router';
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
-export class SettingsComponent implements OnInit, OnDestroy{
-  private replay : any;
-  fullName  = new FormControl('', [Validators.required, Validators.minLength(5), Validators.pattern(/^[a-z]+(-[a-z]+)?$/)]);
-  userName  = new FormControl('', [Validators.required, Validators.minLength(5)]);
-  Myerror : boolean = false;
-  MyerrorAvatar : boolean = false;
-  twoFactor : boolean = false;
-  PlayTheme : number = 1;
-  file : any;
+export class SettingsComponent implements OnInit, OnDestroy {
+  private replay: any;
+  fullName = new FormControl('', [Validators.required, Validators.minLength(5), Validators.pattern(/^[a-z]+(-[a-z]+)?$/)]);
+  userName = new FormControl('', [Validators.required, Validators.minLength(5)]);
+  Myerror: boolean = false;
+  MyerrorAvatar: boolean = false;
+  twoFactor: boolean = false;
+  PlayTheme: number = 1;
+  PlayThemeInit: number = 1;
+  file: any;
   profileSubject$  !: Observable<any>;
+  twoFactorInit: boolean = false;
 
   public profile$ !: Observable<any>;
-  private update : any = null;
-  private submet_this : any = {avatar: ''};
+  private update: any = null;
+  private submet_this: any = { avatar: '' };
 
 
-  public data = {title: "Settings", subtitle: "profile", action: "Update"}
-  constructor(public serviceUser : ProfileService, private router: Router) {}
-  private replay_ : any;
-  
+  public data = { title: "Settings", subtitle: "profile", action: "Update" }
+  constructor(public serviceUser: ProfileService, private router: Router) { }
+  private replay_: any;
+
   ngOnInit() {
     this.profileSubject$ = this.serviceUser.getMyData();
-    this.replay_ = this.profileSubject$.subscribe({next: (data : Observable<any>) => {
-    this.profile$ = data;}});
-    this.replay = this.profile$.subscribe({next: (data) => {
-      if (data.statusCode)
-        this.router.navigateByUrl('');
-      this.fullName = new FormControl(data.name, [Validators.required, Validators.minLength(5)]); 
-      this.userName =new FormControl(data.username, [Validators.required, Validators.minLength(5), Validators.pattern(/^[a-z]+(-[a-z]+)?$/)]);
-      this.twoFactor = data.TwoFAenabled;
-      this.PlayTheme = 1; // to add
-      this.submet_this.avatar = data.avatar;
-    },});
+    this.replay_ = this.profileSubject$.subscribe({
+      next: (data: Observable<any>) => {
+        this.profile$ = data;
+      }
+    });
+    this.replay = this.profile$.subscribe({
+      next: (data) => {
+        if (data.statusCode)
+          this.router.navigateByUrl('');
+        this.fullName = new FormControl(data.name, [Validators.required, Validators.minLength(5)]);
+        this.userName = new FormControl(data.username, [Validators.required, Validators.minLength(5), Validators.pattern(/^[a-z]+(-[a-z]+)?$/)]);
+        this.twoFactor = data.TwoFAenabled;
+        this.PlayTheme = data.theme;
+        this.PlayThemeInit = data.theme;
+        this.submet_this.avatar = data.avatar;
+        this.twoFactorInit = data.TwoFAenabled;
+      },
+    });
   }
   ngOnDestroy(): void {
     if (this.replay)
@@ -50,69 +59,62 @@ export class SettingsComponent implements OnInit, OnDestroy{
       this.replay_.unsubscribe();
   }
 
-  canceltwofactor()
-  {
+  canceltwofactor() {
     this.twoFactor = false;
   }
-  activetwofactor(){
-    this.router.navigateByUrl('/acticatetwo'); 
+  activetwofactor() {
+    this.router.navigateByUrl('/acticatetwo');
   }
 
-  getname(index : number)
-  {
+  getname(index: number) {
     if (index === this.PlayTheme)
       return 'activeRadio';
     return '';
   }
 
-  choosePlay(index: number)
-  {
+  choosePlay(index: number) {
     this.PlayTheme = index;
   }
-  handleResponse(data : any)
-  {
+  handleResponse(data: any) {
     if (data.statusCode)
       this.Myerror = true;
-    else
-    {
+    else {
       this.serviceUser.update();
       this.router.navigateByUrl('');
     }
     this.update.unsubscribe();
   }
-  funct(file : any)
-  { 
+  funct(file: any) {
     this.file = file.target.files[0];
   }
-  handleResponseone(data : any)
-  {
+  handleResponseone(data: any) {
     if (data.statusCode && data.statusCode != 202)
       this.MyerrorAvatar = true;
-    else
-    {
+    else {
       this.MyerrorAvatar = false;
       this.serviceUser.update();
     }
     this.update.unsubscribe();
   }
 
-  async validateInput()
-  {
+  async validateInput() {
     if (this.userName.errors || this.fullName.errors)
-      return ;
+      return;
     if (this.file)
-      this.update = this.serviceUser.setUserAvatar(this.file).subscribe({next: (data) => {this.handleResponseone(data)}})
-    if (!this.fullName.pristine || !this.userName.pristine)
-      this.update = this.serviceUser.updateUserInfos({username: this.userName.value,
+      this.update = this.serviceUser.setUserAvatar(this.file).subscribe({ next: (data) => { this.handleResponseone(data) } })
+    if (!this.fullName.pristine || !this.userName.pristine || this.PlayTheme != this.PlayThemeInit || this.twoFactor != this.twoFactorInit)
+      this.update = this.serviceUser.updateUserInfos({
+        username: this.userName.value,
         name: this.fullName.value,
         avatar: this.submet_this.avatar,
-        twofactor: this.twoFactor}).subscribe(
-      {next: (data) => {this.handleResponse(data)},}
-    );
+        twofactor: this.twoFactor,
+        theme: this.PlayTheme
+      }).subscribe(
+        { next: (data) => { this.handleResponse(data) }, }
+      );
   }
 
-  close()
-  {
+  close() {
     this.router.navigateByUrl('')
   }
 

@@ -22,6 +22,9 @@ export class User {
   @IsBoolean()
   TwoFAenabled: boolean;
 
+  @Column()
+  theme: number;
+
   @Exclude()
   @Column({ nullable: true })
   backups: string;

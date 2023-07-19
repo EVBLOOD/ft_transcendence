@@ -1,4 +1,4 @@
-import { IsBoolean, IsEmail, IsNotEmpty, Matches } from 'class-validator';
+import { IsBoolean, IsEmail, IsNotEmpty, IsNumber, Matches } from 'class-validator';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -34,4 +34,7 @@ export class UpdateUserDto {
 
   @IsNotEmpty()
   twofactor: boolean;
+
+  @IsNumber()
+  theme: number;
 }

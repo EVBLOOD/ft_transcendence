@@ -10,7 +10,7 @@ import { escape } from 'querystring';
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly UserRepo: Repository<User>,
-  ) {}
+  ) { }
 
   private currentstate = new Map<
     number,
@@ -41,6 +41,7 @@ export class UserService {
       name: updateUserDto.name,
       avatar: updateUserDto.avatar,
       TwoFAenabled: updateUserDto.twofactor,
+      theme: updateUserDto.theme
     });
   }
 

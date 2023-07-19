@@ -13,7 +13,7 @@ export class AuthenticatorService {
   constructor(
     @InjectRepository(User) private readonly UserRepo: Repository<User>,
     @InjectRepository(Token) private readonly TokenRepo: Repository<Token>,
-  ) {}
+  ) { }
 
   async TwoFA_Disable(id: number) {
     const user = await this.UserRepo.findOne({ where: { id: id } });
@@ -21,7 +21,7 @@ export class AuthenticatorService {
     return await this.UserRepo.save({
       id: id,
       TwoFAenabled: false,
-      TwoFAsecret: '',
+      TwoFAsecret: ''
     });
   }
 
@@ -136,6 +136,7 @@ export class AuthenticatorService {
       avatar: avatar,
       TwoFAenabled: false,
       TwoFAsecret: '',
+      theme: 1
     });
   }
   async GenToken(id: number, new_token: string) {
