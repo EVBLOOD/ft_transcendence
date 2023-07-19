@@ -3,8 +3,8 @@
         <button></button>
     </div>
     <div class="contentPopup">
-        <h2 class="popTitle">Create channel</h2>
-        <input class="textbox" type="text" placeholder="Channel name"/>
+        <h2 class="popTitle">Parameter channel</h2>
+        <input class="textbox" type="text" placeholder="Channel name" value={{Channel}}/>
         <div class="rowToggle">
             <p class="title">Private Channel</p>
             <div class="toggle" [ngClass]="{'toggleChecked' : privateToggle}" (click)="clickPrivateChannel()">
@@ -17,10 +17,10 @@
                 <div class="circle" [ngClass]="{'circleChecked' : secretToggle}"></div>
             </div>
         </div>
-        <input class="textbox" type="text" placeholder="Password" *ngIf="secretToggle && !privateToggle"/>
+        <input class="textbox" type="text" value={{Password}} placeholder="Password" *ngIf="secretToggle && !privateToggle"/>
         <div class="buttons">
             <a class="cancel">Cancel</a>
-            <a class="createChannel">Create Channel</a>
+            <a class="createChannel">Update</a>
         </div>
     </div>
 

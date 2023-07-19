@@ -1,6 +1,5 @@
 <div class="chat">
-    <div class="grid1">
-        <!-- [ngStyle]="{'display': clickFriend ? 'none' : 'block'}" -->
+     <div class="grid1"><!-- [ngStyle]="{'display': (clickFriend && toggle) ? 'none' : 'block'}"> -->
         <div class="toggle">
             <a (click)="!toggle && SwitchChat()" class="button" [ngClass]="{'activeButton' : toggle}">
                 <img src="/assets/icons/direct.svg" >
@@ -64,9 +63,9 @@
             <div #dropDownChannelRef__ class="threedotschannel">
                 <img (click)="onclickThreePointChannel()" #dropDownChannelRef_ src="/assets/icons/3points.svg">
                 <ul *ngIf="dropDownChannel" @inOut #dropDownChannelRef class="dropdown-profile">
-                    <li>Leave</li>
+                    <li routerLink="areyousure">Leave</li>
                     <li routerLink="invite">Invite</li>
-                    <li>Settings</li>
+                    <li routerLink="parameter-channel">Settings</li>
                 </ul>
             </div>
         </div>

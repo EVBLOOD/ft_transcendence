@@ -501,12 +501,23 @@
     display: block;
 }
 
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 900px) {
     .chat{
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: auto auto;
     }
-    .grid2, .grid3{
+    .grid3{
+        display: none;
+    }
+}
+
+
+@media only screen and (max-width: 600px) {
+    .chat{
+        display: grid;
+        grid-template-columns: auto;
+    }
+    .grid3, .grid1{
         display: none;
     }
 }

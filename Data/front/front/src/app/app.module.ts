@@ -8,6 +8,8 @@ import { ChatComponent } from './chat/chat.component';
 import { PopupComponent } from './popup/popup.component';
 import { CreateChannelComponent } from './create-channel/create-channel.component';
 import { InviteComponent } from './invite/invite.component';
+import { ConfigChannelComponent } from './config-channel/config-channel.component';
+import { PopupToBeSureComponent } from './popup-to-be-sure/popup-to-be-sure.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { InviteComponent } from './invite/invite.component';
     ChatComponent,
     PopupComponent,
     CreateChannelComponent,
-    InviteComponent
+    InviteComponent,
+    ConfigChannelComponent,
+    PopupToBeSureComponent
   ],
   imports: [
     BrowserModule,
