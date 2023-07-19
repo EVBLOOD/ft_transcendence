@@ -30,27 +30,63 @@ export class MatchService {
       .leftJoinAndSelect('match.player1', 'player1')
       .leftJoinAndSelect('match.player2', 'player2')
       .leftJoinAndSelect('match.winner', 'winner')
-      .where('player1.id = :userId OR player2.id = :userId', { userId }).orderBy('match.date')
+      .where('player1.id = :userId OR player2.id = :userId', { userId }).orderBy('match.date', 'DESC')
       .getMany();
-
-    return matches.map(match => ({
-      id: match.id,
-      player1: {
-        id: match.player1.id,
-        username: match.player1.username,
-        avatar: match.player1.avatar,
-      },
-      player2: {
-        id: match.player2.id,
-        username: match.player2.username,
-        avatar: match.player2.avatar,
-      },
-      winner: match.winner ? {
-        id: match.winner.id,
-        username: match.winner.username
-      } : null,
-      date: match.date.toDateString()
-    }))
+    return matches.map((match) => {
+      return match.player1.id == userId ? {
+        id: match.id,
+        player1: {
+          id: match.player1.id,
+          username: match.player1.username,
+          avatar: match.player1.avatar,
+        },
+        player2: {
+          id: match.player2.id,
+          username: match.player2.username,
+          avatar: match.player2.avatar,
+        },
+        winner: match.winner ? {
+          id: match.winner.id,
+          username: match.winner.username
+        } : null,
+        date: match.date.toDateString()
+      } : {
+        id: match.id,
+        player2: {
+          id: match.player1.id,
+          username: match.player1.username,
+          avatar: match.player1.avatar,
+        },
+        player1: {
+          id: match.player2.id,
+          username: match.player2.username,
+          avatar: match.player2.avatar,
+        },
+        winner: match.winner ? {
+          id: match.winner.id,
+          username: match.winner.username
+        } : null,
+        date: match.date.toDateString()
+      }
+    })
+    // return matches.map(match => ({
+    //   id: match.id,
+    //   player1: {
+    //     id: match.player1.id,
+    //     username: match.player1.username,
+    //     avatar: match.player1.avatar,
+    //   },
+    //   player2: {
+    //     id: match.player2.id,
+    //     username: match.player2.username,
+    //     avatar: match.player2.avatar,
+    //   },
+    //   winner: match.winner ? {
+    //     id: match.winner.id,
+    //     username: match.winner.username
+    //   } : null,
+    //   date: match.date.toDateString()
+    // }))
 
   }
 
@@ -63,24 +99,61 @@ export class MatchService {
       .where('player1.id = :userId OR player2.id = :userId', { userId }).orderBy('match.date', 'DESC').take(5)
       .getMany();
 
-    return matches.map(match => ({
-      id: match.id,
-      player1: {
-        id: match.player1.id,
-        username: match.player1.username,
-        avatar: match.player1.avatar,
-      },
-      player2: {
-        id: match.player2.id,
-        username: match.player2.username,
-        avatar: match.player2.avatar,
-      },
-      winner: match.winner ? {
-        id: match.winner.id,
-        username: match.winner.username
-      } : null,
-      date: match.date.toDateString()
-    }))
+    // return matches.map(match => ({
+    //   id: match.id,
+    //   player1: {
+    //     id: match.player1.id,
+    //     username: match.player1.username,
+    //     avatar: match.player1.avatar,
+    //   },
+    //   player2: {
+    //     id: match.player2.id,
+    //     username: match.player2.username,
+    //     avatar: match.player2.avatar,
+    //   },
+    //   winner: match.winner ? {
+    //     id: match.winner.id,
+    //     username: match.winner.username
+    //   } : null,
+    //   date: match.date.toDateString()
+    // }))
+    return matches.map((match) => {
+      return match.player1.id == userId ? {
+        id: match.id,
+        player1: {
+          id: match.player1.id,
+          username: match.player1.username,
+          avatar: match.player1.avatar,
+        },
+        player2: {
+          id: match.player2.id,
+          username: match.player2.username,
+          avatar: match.player2.avatar,
+        },
+        winner: match.winner ? {
+          id: match.winner.id,
+          username: match.winner.username
+        } : null,
+        date: match.date.toDateString()
+      } : {
+        id: match.id,
+        player2: {
+          id: match.player1.id,
+          username: match.player1.username,
+          avatar: match.player1.avatar,
+        },
+        player1: {
+          id: match.player2.id,
+          username: match.player2.username,
+          avatar: match.player2.avatar,
+        },
+        winner: match.winner ? {
+          id: match.winner.id,
+          username: match.winner.username
+        } : null,
+        date: match.date.toDateString()
+      }
+    })
   }
 
 }

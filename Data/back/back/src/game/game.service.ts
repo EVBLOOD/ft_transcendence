@@ -48,7 +48,7 @@ export class GameService {
             {
               player1Id,
               player2Id,
-              winnerId: value.score.player1 > value.score.player2 ? player1Id : player2Id,
+              winnerId: value.score.player1 > value.score.player2 ? player1Id : player2Id, // bug
             })
           value.toRemove = true;
         }

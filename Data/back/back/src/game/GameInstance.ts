@@ -88,11 +88,15 @@ export class GameInstance {
 
     player1.on('disconnect', () => {
       player2.emit('changeState', JSON.stringify({ gameState: 'Finished', isWin: true }));
+      this.score.player1 = 0;
+      this.score.player2 = 1;
       this.stopGame();
     });
 
     player2.on('disconnect', () => {
       player1.emit('changeState', JSON.stringify({ gameState: 'Finished', isWin: true }));
+      this.score.player1 = 1;
+      this.score.player2 = 0;
       this.stopGame();
     });
 
@@ -167,14 +171,19 @@ export class GameInstance {
       Body.setPosition(this.paddle2, position);
       this.player1.emit('updateOpponentPaddle', JSON.stringify({ x: this.paddle2.position.x, y: this.paddle2.position.y }));
     });
-
     this.player1.off('disconnect', () => {
       this.player2.emit('changeState', JSON.stringify({ gameState: 'Finished', isWin: true }));
+      this.score.player1 = 0;
+      this.score.player2 = 1;
+      // I mean why req
       this.stopGame();
     });
 
     this.player2.off('disconnect', () => {
       this.player1.emit('changeState', JSON.stringify({ gameState: 'Finished', isWin: true }));
+      this.score.player1 = 1;
+      this.score.player2 = 0;
+      // I mean why req
       this.stopGame();
     });
 
