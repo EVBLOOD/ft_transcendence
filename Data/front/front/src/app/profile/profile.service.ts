@@ -16,6 +16,10 @@ export class ProfileService {
   getMyData() {
     return this.profile$;
   }
+
+  getMyObservData() {
+    return this.http.get('http://10.13.4.8:3000/user/_me', { withCredentials: true });
+  }
   getUserData(corrent: string) {
     return this.http.get('http://10.13.4.8:3000/user/' + corrent, { withCredentials: true })
   }

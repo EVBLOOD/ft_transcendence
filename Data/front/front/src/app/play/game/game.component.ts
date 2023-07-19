@@ -47,7 +47,8 @@ export class GameComponent implements OnDestroy, OnInit {
   id !: number;
   id_ !: number;
   hideInv: boolean = false;
-
+  color = [Color.White, Color.Green, Color.Blue]
+  themeIndx: number = 1;
   constructor(private gameService: GameService, public profile: ProfileService, private switchRoute: Router, private auth: AuthService, public friends: FriendshipService) {
 
     this.auth$ = auth.getCurrentUser()
@@ -84,18 +85,20 @@ export class GameComponent implements OnDestroy, OnInit {
     this.players = this.gameService.Players;
     this.Fplayer$ = this.profile.getUserData(this.players.Fplayer)
     this.Splayer$ = this.profile.getUserData(this.players.Splayer)
-    this.profile.getUserData(this.players.Fplayer).subscribe((data: any) => {
+    this.profile.getUserData(this.players.Fplayer).subscribe((data: any) => { // to free
       if (data) {
         this.test_$ = this.friends.isFriend(data.id.toString());
         this.id = data.id;
       }
     })
-    this.profile.getUserData(this.players.Splayer).subscribe((data: any) => {
+    this.profile.getUserData(this.players.Splayer).subscribe((data: any) => {// to free
       if (data) {
         this.test$ = this.friends.isFriend(data.id.toString());
         this.id_ = data.id;
-
       }
+    })
+    this.profile.getMyObservData().subscribe((data: any) => {// to free
+      this.themeIndx = data.theme;
     })
   }
 
@@ -119,16 +122,13 @@ export class GameComponent implements OnDestroy, OnInit {
       .subscribe((payload: string) => {
         const state: { gameState: GameStateType, playerNumber: Player, isWin: boolean, color: Color } = JSON.parse(payload);
         if (state.gameState == GameStateType.Playing) {
-          console.log("HERE WE GOO")
           if (!this.gameScene) {
-            this.gameScene = new GameScene(this.gameService, state.playerNumber, state.color ?? Color.White);
-            // setTimeout(() => {
-            this.game.scene.add('GameScene', this.gameScene);
-            this.gameScene.scene.start();
-            this.gameService.playerIsReady();
-            // }, 0);
-            // setTimeout(() => {
-            // }, 0);
+            this.gameScene = new GameScene(this.gameService, state.playerNumber, this.color[this.themeIndx - 1] ?? Color.White);
+            setTimeout(() => {
+              this.game.scene.add('GameScene', this.gameScene);
+              this.gameScene.scene.start();
+              this.gameService.playerIsReady();
+            }, 0);
           }
         } else if (state.gameState == GameStateType.Finished) {
           if (this.gameScene) {
