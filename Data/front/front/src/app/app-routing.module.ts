@@ -15,6 +15,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { AppBodyComponent } from './app-body/app-body.component';
 import { GameComponent } from './play/game/game.component';
 import { isgamingGuard } from './play/game/isgaming.guard';
+import { ConfigChannelComponent } from './config-channel/config-channel.component';
+import { CreateChannelComponent } from './create-channel/create-channel.component';
 
 const routes: Routes =
   [
@@ -31,6 +33,8 @@ const routes: Routes =
         { path: 'chat', component: ChatComponent, canActivate: [authGuard] },
         { path: 'leaderboard', component: LeaderbordComponent, canActivate: [authGuard] },
         { path: 'profile/:username', component: ProfileComponent, canActivate: [authGuard] },
+        { path: 'channelSetting', component: ConfigChannelComponent, canActivate: [authGuard] },
+        { path: 'channelCreating', component: CreateChannelComponent, canActivate: [authGuard] }
       ]
     },
     { path: '**', component: PageNotFoundComponent, canActivate: [authGuard] },

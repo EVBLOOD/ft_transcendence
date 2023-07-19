@@ -27,6 +27,10 @@ import { PlayComponent } from './play/play.component';
 import { GameComponent } from './play/game/game.component';
 import { GameModule } from './play/game/game.module';
 import { PlayWithfrComponent } from './play/play-withfr/play-withfr.component';
+import { CreateChannelComponent } from './create-channel/create-channel.component';
+import { InviteComponent } from './invite/invite.component';
+import { ConfigChannelComponent } from './config-channel/config-channel.component';
+import { PopupToBeSureComponent } from './popup-to-be-sure/popup-to-be-sure.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +54,11 @@ import { PlayWithfrComponent } from './play/play-withfr/play-withfr.component';
     LeaderBordRowComponent,
     AppBodyComponent,
     PlayWithfrComponent,
+    ChatComponent,
+    CreateChannelComponent,
+    InviteComponent,
+    ConfigChannelComponent,
+    PopupToBeSureComponent
   ],
   imports: [
     BrowserModule,
@@ -61,7 +70,7 @@ import { PlayWithfrComponent } from './play/play-withfr/play-withfr.component';
   ],
   providers: [
     {
-      provide:  HTTP_INTERCEPTORS,
+      provide: HTTP_INTERCEPTORS,
       useClass: HttpfailInterceptor,
       multi: true
     }

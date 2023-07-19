@@ -25,13 +25,15 @@
         </div>
         <div class="body">
             <router-outlet
-                *ngIf="getcurrentPath() != '/settings' && getcurrentPath() != '/acticatetwo'"></router-outlet>
+                *ngIf="getcurrentPath() != '/settings' && getcurrentPath() != '/acticatetwo' &&  getcurrentPath() != '/channelCreating' && getcurrentPath() != '/channelSetting'"></router-outlet>
             <app-profile *ngIf="getcurrentPath() == '/settings' || getcurrentPath() == '/acticatetwo'" />
+            <app-chat *ngIf="getcurrentPath() == '/channelCreating' || getcurrentPath() == '/channelSetting'" />
         </div>
         <div class="footer">
             <p>Copyright © 2023 ft_transcendence. All Rights Reserved</p>
         </div>
     </div>
-    <router-outlet *ngIf="getcurrentPath() == '/settings' || getcurrentPath() == '/acticatetwo'"
+    <router-outlet
+        *ngIf="getcurrentPath() == '/settings' || getcurrentPath() == '/acticatetwo' || getcurrentPath() == '/channelCreating' || getcurrentPath() == '/channelSetting'"
         (AvatarChanged)="updateAvatar($event)"></router-outlet>
 </div>
