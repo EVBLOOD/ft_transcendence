@@ -34,7 +34,7 @@ export class GameService {
   gameIsCreated$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   // Players$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   public Players: any = undefined;
-  public ip = 'http://localhost';
+  public ip = 'http://10.13.4.8';
   // public url_base_user = `http://${this.ip}:3000/user`;
   public url_base_match = `http://${this.ip}:3000/match`;
   public socket = new Socket({ url: `${this.ip}:3000/game`, options: { withCredentials: true } });

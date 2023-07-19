@@ -27,6 +27,14 @@ div {
     line-height: normal;
 }
 
+
+@media only screen and (max-width: 990px) {
+    .usernameHiding {
+        display: none;
+    }
+
+}
+
 @media only screen and (max-width: 650px) {
     div {
         font-size: 12px;

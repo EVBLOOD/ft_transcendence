@@ -31,13 +31,12 @@ export class AppBodyComponent implements OnInit, OnDestroy {
   notLogged: boolean = true;
   dropDown = false;
   profilepic: string = '';
-
+  color = 5;
 
 
   @ViewChild('dropDownContent') dropDownContent !: ElementRef;
   @ViewChild('dropDownContent_') dropDownContent_ !: ElementRef;
   @ViewChild('dropDownContent__') dropDownContent__ !: ElementRef;
-
   constructor(public profileService: ProfileService, private route: Router,
     private status: StatusService, private friendship: FriendshipService, private gameService: GameService) {
 
@@ -55,6 +54,7 @@ export class AppBodyComponent implements OnInit, OnDestroy {
     return this.route.url;
   }
   onclick() {
+    this.ChangeColor(5)
     this.dropDown = !this.dropDown
   }
   ngOnInit(): void {
@@ -86,6 +86,10 @@ export class AppBodyComponent implements OnInit, OnDestroy {
       if (data)
         this.showPopupGame(data.toString());
     })
+  }
+
+  ChangeColor(i: number) {
+    this.color = i;
   }
 
   async showPopupGame(id: string,) {

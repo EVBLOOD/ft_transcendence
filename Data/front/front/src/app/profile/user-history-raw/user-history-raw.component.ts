@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ProfileService } from '../profile.service';
 
 @Component({
   selector: 'app-user-history-raw',
@@ -7,4 +8,5 @@ import { Component, Input } from '@angular/core';
 })
 export class UserHistoryRawComponent {
   @Input() item: any;
+  constructor(public profile: ProfileService) { }
 }

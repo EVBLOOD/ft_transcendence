@@ -26,7 +26,6 @@ export class GameService {
   private queue: Array<{ id: number, socket: Socket }> = [];
   private currentPlayers = new Array<{ id: number, socket: Socket }>();
   private activeGameInstances: { [key: string]: GameInstance } = {};
-  // public onlineUsers = new Array<{ id: number, socket: Socket }>();
   public onlineUsers = new Map<number, Set<Socket>>();
 
   // a service to know the connected users 
@@ -51,11 +50,12 @@ export class GameService {
               player2Id,
               winnerId: value.score.player1 > value.score.player2 ? player1Id : player2Id,
             })
+          value.toRemove = true;
         }
       });
       // TODO: datarace ! if a game is done but you didn't add match history !!
       this.activeGameInstances = Object.entries(this.activeGameInstances)
-        .filter(([_, gameInstance]) => !gameInstance.inactive)
+        .filter(([_, gameInstance]) => !gameInstance.toRemove)
         .reduce((result, [key, value]) => {
           result[key] = value;
           return result;
@@ -63,12 +63,18 @@ export class GameService {
 
       if (this.queue.length >= 2) {
         let [player1, player2]: { id: number, socket: Socket }[] = sampleSize(this.queue, 2);
-        player1.socket.emit('startTheGame', { Fplayer: player1.id, Splayer: player2.id })
-        player2.socket.emit('startTheGame', { Fplayer: player1.id, Splayer: player2.id })
-        this.queue = this.queue.filter(player => player.id !== player1.id && player.id !== player2.id);
-        this.activeGameInstances[`${player1.id},${player2.id}`] = new GameInstance(player1.socket, player2.socket);
-        this.currentPlayers.push(player1);
-        this.currentPlayers.push(player2);
+        if (this.onlineUsers.get(player1.id).has(player1.socket) && this.onlineUsers.get(player2.id).has(player2.socket)) {
+          player1.socket.emit('startTheGame', { Fplayer: player1.id, Splayer: player2.id })
+          player2.socket.emit('startTheGame', { Fplayer: player1.id, Splayer: player2.id })
+          this.queue = this.queue.filter(player => player.id !== player1.id && player.id !== player2.id);
+          this.activeGameInstances[`${player1.id},${player2.id}`] = new GameInstance(player1.socket, player2.socket);
+          this.currentPlayers.push(player1);
+          this.currentPlayers.push(player2);
+        }
+        else if (!this.onlineUsers.get(player1.id).has(player1.socket))
+          this.queue = this.queue.filter((elemets) => { return elemets.id != player1.id });
+        else if (!this.onlineUsers.get(player1.id).has(player1.socket))
+          this.queue = this.queue.filter((elemets) => { return elemets.id != player2.id });
       }
       // console.log("after", process.memoryUsage())
     }, 200);
@@ -77,18 +83,27 @@ export class GameService {
   createGame(socket: Socket, payload: any) {
     const { id1, id2 } = payload;
     console.log({ id1, id2 });
-    if (this.currentPlayers.find(player => player.id === id1) || this.queue.find(player => player.id === id1)) {
+    if (this.currentPlayers.find(player => player.id == id1)) {
       // socket.emit("in_game")
       return;
     }
-    if (id2 && (this.currentPlayers.find(player => player.id === id2) || this.queue.find(player => player.id === id2))) {
+    if (id2 && this.currentPlayers.find(player => player.id == id2)) {
       // socket.emit("opponent_in_game")
       return;
     }
 
     if (!id2) {
-      this.queue.push({ id: id1, socket })
-      socket.emit('changeState', JSON.stringify({ gameState: 'Queue' }));
+      if (!this.queue.find(player => player.id === id1)) {
+        this.queue.push({ id: id1, socket })
+        socket.emit('changeState', JSON.stringify({ gameState: 'Queue' }));
+      }
+      else {
+        this.queue = this.queue.filter((elements) => {
+          return elements.id != id1;
+        })
+        this.queue.push({ id: id1, socket })
+        socket.emit('changeState', JSON.stringify({ gameState: 'Queue' }));
+      }
     } else {
       const invitedUser = this.onlineUsers.get(id2);
       if (invitedUser) {
@@ -97,7 +112,11 @@ export class GameService {
           socket_.once('inviteResponse', (response) => {
             invitedUser.forEach((socket__) => {
               if (socket__.id == socket_.id && response == true &&
-                !(id2 && (this.currentPlayers.find(player => player.id === id2) || this.queue.find(player => player.id === id2)))) {
+                !this.currentPlayers.find(player => player.id === id2) && !this.currentPlayers.find(player => player.id === id1) && this.onlineUsers.get(id1)?.has(socket)) {
+                if (this.queue.find(player => player.id === id1))
+                  this.queue = this.queue.filter((elemets) => { return elemets.id != id1 });
+                if (this.queue.find(player => player.id === id2))
+                  this.queue = this.queue.filter((elemets) => { return elemets.id != id2 });
                 socket.emit('startTheGame', { Fplayer: id1, Splayer: id2 })
                 socket__.emit('startTheGame', { Fplayer: id1, Splayer: id2 })
                 this.currentPlayers.push(

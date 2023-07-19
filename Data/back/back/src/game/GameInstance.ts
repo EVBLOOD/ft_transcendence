@@ -17,7 +17,7 @@ export class GameInstance {
   private speed: number = INITALBALLSPEED;
   private checkBallPaddleColisionInterval: NodeJS.Timer;
   public inactive = false;
-
+  public toRemove = false;
   // private velocity: Vector = { x: 0, y: 0 };
 
 

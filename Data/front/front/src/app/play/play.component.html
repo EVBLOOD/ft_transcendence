@@ -12,7 +12,7 @@
     <div class="section">
         <div class="row">
             <p class="title">Leaderboard</p>
-            <a class="button">Read more</a>
+            <a class="button" (click)="goLeaderBoard()">Read more</a>
         </div>
         <div class="leaderboard">
             <div *ngFor="let item of leaderboard" class="user">
@@ -32,8 +32,8 @@
         <div *ngFor="let item of (History$|async)" class="userProfileHistoryRaw">
             <div class="userProfileHistoryPlayers">
                 <div>
-                    <img [src]=item.player1.avatar alt="" />
-                    <img [src]=item.player2.avatar alt="" />
+                    <img [src]="profile.getUserAvatarPath(item.player1.avatar)" alt="" />
+                    <img [src]="profile.getUserAvatarPath(item.player2.avatar)" alt="" />
                 </div>
                 <p>{{item.player1.username + ' vs ' + item.player2.username}}</p>
             </div>

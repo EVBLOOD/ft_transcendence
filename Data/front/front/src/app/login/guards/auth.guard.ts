@@ -1,33 +1,30 @@
-import {  Injectable, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { CanActivateFn, Route, Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { firstValueFrom } from 'rxjs';
 
-export  const authGuard: CanActivateFn = async (route, state) => {
-    const authService : AuthService = inject(AuthService);
-    const switchRoute : Router = inject(Router);
-    let replay : any = {};
-    try
-    {
+export const authGuard: CanActivateFn = async (route, state) => {
+    const authService: AuthService = inject(AuthService);
+    const switchRoute: Router = inject(Router);
+    let replay: any = {};
+    try {
         replay = await firstValueFrom(authService.getCurrentUser());
     }
-    catch (err)
-    {
-        replay = {statusCode: 403}
+    catch (err) {
+        replay = { statusCode: 403 }
     }
-    if (replay?.statusCode && replay.statusCode == 403)
-    {
+    if (replay?.statusCode && replay.statusCode == 403) {
+        console.log("?????")
         if (route.url.toString() == "login")
             return true;
         switchRoute.navigateByUrl('login');
         return false;
     }
-    if (replay.steps)
-    {
+    if (replay.steps) {
         switchRoute.navigateByUrl('twoFactor');
         return false;
     }
     if (route.url.toString() == 'login')
-        switchRoute.navigateByUrl('');  
+        switchRoute.navigateByUrl('');
     return true;
 };

@@ -102,12 +102,12 @@ export class GameComponent implements OnDestroy, OnInit {
   // profiles
   ngOnDestroy(): void {
     this.gameService.gameEnd()
-    this.game.scene.remove('GameScene');
+    this.game?.scene?.remove('GameScene');
     if (this.gameScene) {
-      this.gameScene.destroy();
+      this.gameScene?.destroy();
     }
-    this.gameStateSub.unsubscribe();
-    this.game.destroy(true);
+    this.gameStateSub?.unsubscribe();
+    this.game?.destroy(true);
 
     // this.game.destroy(true);
   }
@@ -122,21 +122,21 @@ export class GameComponent implements OnDestroy, OnInit {
           console.log("HERE WE GOO")
           if (!this.gameScene) {
             this.gameScene = new GameScene(this.gameService, state.playerNumber, state.color ?? Color.White);
-            setTimeout(() => {
-              this.game.scene.add('GameScene', this.gameScene);
-              this.gameScene.scene.start();
-              this.gameService.playerIsReady();
-            }, 0);
+            // setTimeout(() => {
+            this.game.scene.add('GameScene', this.gameScene);
+            this.gameScene.scene.start();
+            this.gameService.playerIsReady();
+            // }, 0);
             // setTimeout(() => {
             // }, 0);
           }
         } else if (state.gameState == GameStateType.Finished) {
           if (this.gameScene) {
             console.log("game Finished")
-            this.gameScene.win.setVisible(true);
-            this.gameScene.winText.setText(state.isWin ? "WON" : "LOST");
-            this.gameScene.winText.setStyle({ fontFamily: 'Montserrat', fontWeight: 800 })
-            this.gameScene.physics.pause();
+            this.gameScene?.win?.setVisible(true);
+            this.gameScene?.winText?.setText(state.isWin ? "WON" : "LOST");
+            this.gameScene?.winText?.setStyle({ fontFamily: 'Montserrat', fontWeight: 800 })
+            this.gameScene?.physics?.pause();
             setTimeout(() => {
               this.switchRoute.navigateByUrl('/play')
             }, 3000)

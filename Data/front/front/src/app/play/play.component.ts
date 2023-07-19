@@ -5,6 +5,7 @@ import { StatusService } from '../status.service';
 import { Observable } from 'rxjs';
 import { AboutGamesService } from './about-games.service';
 import { Router } from '@angular/router';
+import { ProfileService } from '../profile/profile.service';
 
 @Component({
   selector: 'app-play',
@@ -14,15 +15,19 @@ import { Router } from '@angular/router';
 export class PlayComponent {
   friendList: Observable<any>;
   History$!: Observable<any>;
-  constructor(private gameService: GameService, private friendService: FriendshipService, private gameStats: AboutGamesService, private switchRoute: Router) {
+  constructor(private gameService: GameService, private friendService: FriendshipService, private gameStats: AboutGamesService, private switchRoute: Router, public profile: ProfileService) {
     this.friendList = this.friendService.friendList(0, 0);
-    this.History$ = gameStats.getHistory();
+    this.History$ = this.gameStats.getHistory();
   }
   quickPairing() {
     this.gameService.createGame();
   }
   goProfile() {
     this.switchRoute.navigateByUrl('');
+  }
+
+  goLeaderBoard() {
+    this.switchRoute.navigateByUrl('/leaderboard');
   }
   players = [
     { img: '/assets/img/profile.jpeg', name: 'sakllam', status: 1 },

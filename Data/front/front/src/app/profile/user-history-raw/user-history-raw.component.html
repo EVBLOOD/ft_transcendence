@@ -1,19 +1,8 @@
-<!-- <div class="userProfileHistoryRaw">
-    <div class="userProfileHistoryPlayers">
-        <div>
-            <img [src]=data.pathU alt="" />
-            <img [src]=data.pathOp alt="" />
-        </div>
-        <p>{{data.name}}</p>
-    </div>
-    <div class="userProfileHistoryStatus">{{data.state}}</div>
-    <div class="userProfileHistoryDate">{{data.date}}</div>
-</div> -->
 <div class="userProfileHistoryRaw">
     <div class="userProfileHistoryPlayers">
         <div>
-            <img [src]=item.player1.avatar alt="" />
-            <img [src]=item.player2.avatar alt="" />
+            <img [src]="profile.getUserAvatarPath(item.player1.avatar)" alt="" />
+            <img [src]="profile.getUserAvatarPath(item.player2.avatar)" alt="" />
         </div>
         <p>{{item.player1.username + ' vs ' + item.player2.username}}</p>
     </div>
