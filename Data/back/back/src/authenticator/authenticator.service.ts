@@ -7,12 +7,14 @@ import * as speakeasy from 'speakeasy';
 import * as qrcode from 'qrcode';
 import * as crypto from 'crypto';
 import * as bcrypt from 'bcrypt';
+import { Statastics } from 'src/game/statistics/entities/statistics.entity';
 
 @Injectable()
 export class AuthenticatorService {
   constructor(
     @InjectRepository(User) private readonly UserRepo: Repository<User>,
     @InjectRepository(Token) private readonly TokenRepo: Repository<Token>,
+    @InjectRepository(Statastics) private readonly StatisticsRepo: Repository<Statastics>
   ) { }
 
   async TwoFA_Disable(id: number) {
@@ -127,9 +129,9 @@ export class AuthenticatorService {
     name: string,
     avatar: string,
   ): Promise<User> | undefined {
-    const user = await this.UserRepo.findOne({ where: { id: id } });
+    let user = await this.UserRepo.findOne({ where: { id: id } });
     if (user) return user;
-    return await this.UserRepo.save({
+    user = await this.UserRepo.save({
       id: id,
       username: username,
       name: name,
@@ -138,6 +140,8 @@ export class AuthenticatorService {
       TwoFAsecret: '',
       theme: 1
     });
+    await this.StatisticsRepo.save({ User: user, score: 0, total: 0 });
+    return user;
   }
   async GenToken(id: number, new_token: string) {
     var time = new Date();

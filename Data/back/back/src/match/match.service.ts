@@ -6,8 +6,6 @@ import { Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
 import { Match } from './entities/match.entity';
 
-// needs User entity and UserService
-//
 @Injectable()
 export class MatchService {
   constructor(
@@ -69,25 +67,6 @@ export class MatchService {
         date: match.date.toDateString()
       }
     })
-    // return matches.map(match => ({
-    //   id: match.id,
-    //   player1: {
-    //     id: match.player1.id,
-    //     username: match.player1.username,
-    //     avatar: match.player1.avatar,
-    //   },
-    //   player2: {
-    //     id: match.player2.id,
-    //     username: match.player2.username,
-    //     avatar: match.player2.avatar,
-    //   },
-    //   winner: match.winner ? {
-    //     id: match.winner.id,
-    //     username: match.winner.username
-    //   } : null,
-    //   date: match.date.toDateString()
-    // }))
-
   }
 
   async getMatchHistoryView(userId: number) {
@@ -98,25 +77,6 @@ export class MatchService {
       .leftJoinAndSelect('match.winner', 'winner')
       .where('player1.id = :userId OR player2.id = :userId', { userId }).orderBy('match.date', 'DESC').take(5)
       .getMany();
-
-    // return matches.map(match => ({
-    //   id: match.id,
-    //   player1: {
-    //     id: match.player1.id,
-    //     username: match.player1.username,
-    //     avatar: match.player1.avatar,
-    //   },
-    //   player2: {
-    //     id: match.player2.id,
-    //     username: match.player2.username,
-    //     avatar: match.player2.avatar,
-    //   },
-    //   winner: match.winner ? {
-    //     id: match.winner.id,
-    //     username: match.winner.username
-    //   } : null,
-    //   date: match.date.toDateString()
-    // }))
     return matches.map((match) => {
       return match.player1.id == userId ? {
         id: match.id,
@@ -154,6 +114,10 @@ export class MatchService {
         date: match.date.toDateString()
       }
     })
+  }
+
+  async getLeadering() {
+    return this.matchRepository.find()
   }
 
 }

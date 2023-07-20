@@ -11,7 +11,7 @@ export class StatusService {
   public current_status = new BehaviorSubject<any>([]);
   socket: any;
   constructor() {
-    this.socket = io('http://10.13.4.8:3000/current_status', {
+    this.socket = io('http://10.13.11.1:3000/current_status', {
       withCredentials: true,
     },)
     this.socket.on("status", (data: any) => {

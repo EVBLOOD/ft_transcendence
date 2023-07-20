@@ -23,4 +23,9 @@ export class MatchController {
   findThem(@Req() req: any, @Param('id') id: number) {
     return this.matchService.getMatchHistory(id);
   }
+
+  @Get('leaderbeerd')
+  async leadring() {
+    return await this.matchService.getLeadering();
+  }
 }

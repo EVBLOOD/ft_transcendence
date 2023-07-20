@@ -15,7 +15,7 @@ export class FriendshipService {
 
 
   constructor(private http: HttpClient) {
-    this.socket = io('http://10.13.4.8:3000/friendshipSock', {
+    this.socket = io('http://10.13.11.1:3000/friendshipSock', {
       withCredentials: true,
     },);
 
@@ -97,7 +97,7 @@ export class FriendshipService {
   }
 
   friendStatus(id: string) {
-    return this.http.post('http://10.13.4.8:3000/friendship/friendStatus', { id: Number.parseInt(id) }, {
+    return this.http.post('http://10.13.11.1:3000/friendship/friendStatus', { id: Number.parseInt(id) }, {
       withCredentials: true,
     });
   }
@@ -111,7 +111,7 @@ export class FriendshipService {
     params = params.append('skip', skip);
     params = params.append('take', take);
 
-    return this.http.get('http://10.13.4.8:3000/friendship/requestsList', {
+    return this.http.get('http://10.13.11.1:3000/friendship/requestsList', {
       withCredentials: true,
       params: params
     });
@@ -122,7 +122,7 @@ export class FriendshipService {
     params = params.append('skip', skip);
     params = params.append('take', take);
 
-    return this.http.get('http://10.13.4.8:3000/friendship/blocklist', {
+    return this.http.get('http://10.13.11.1:3000/friendship/blocklist', {
       withCredentials: true,
       params: params
     });
@@ -133,12 +133,12 @@ export class FriendshipService {
     params = params.append('skip', skip);
     params = params.append('take', take);
 
-    return this.http.get('http://10.13.4.8:3000/friendship/friendList', {
+    return this.http.get('http://10.13.11.1:3000/friendship/friendList', {
       withCredentials: true,
       params: params
     });
   }
   isFriend(id: string) {
-    return this.http.get('http://10.13.4.8:3000/friendship/find/' + id, { withCredentials: true, })
+    return this.http.get('http://10.13.11.1:3000/friendship/find/' + id, { withCredentials: true, })
   }
 }

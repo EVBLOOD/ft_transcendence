@@ -3,6 +3,9 @@ import { Socket } from 'socket.io';
 import { GameInstance } from './GameInstance';
 import { MatchService } from 'src/match/match.service';
 import { sampleSize } from 'lodash';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Statastics } from './statistics/entities/statistics.entity';
+import { Repository } from 'typeorm';
 
 // install flatbuffers and socket io and matter js and class-validator
 // @types/matter-js --dev
@@ -29,7 +32,7 @@ export class GameService {
   public onlineUsers = new Map<number, Set<Socket>>();
 
   // a service to know the connected users 
-  constructor(private matchService: MatchService) {
+  constructor(private matchService: MatchService, @InjectRepository(Statastics) private readonly StatisticsRepo: Repository<Statastics>) {
     setInterval(() => {
       // console.log("queue :", this.queue.map(_ => _.id));
       // console.log("active game instances :", Object.keys(this.activeGameInstances));
@@ -48,8 +51,19 @@ export class GameService {
             {
               player1Id,
               player2Id,
-              winnerId: value.score.player1 > value.score.player2 ? player1Id : player2Id, // bug
+              winnerId: value.score.player1 > value.score.player2 ? player1Id : player2Id,
             })
+          this.StatisticsRepo.createQueryBuilder().update().set({
+            total: () => 'total + 1',
+            score: () => `score + (${value.score.player1 > value.score.player2 ? 3 : -1})`
+          }).where("User = :user", { user: player1Id })
+            .execute();
+
+          this.StatisticsRepo.createQueryBuilder().update().set({
+            total: () => 'total + 1',
+            score: () => `score + (${value.score.player2 > value.score.player1 ? 3 : -1})`
+          }).where("User = :user", { user: player2Id })
+            .execute();
           value.toRemove = true;
         }
       });

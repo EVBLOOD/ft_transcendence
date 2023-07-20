@@ -9,14 +9,14 @@ export class AboutGamesService {
   constructor(private client: HttpClient) { }
 
   getHistory() {
-    return this.client.get('http://10.13.4.8:3000/match/', { withCredentials: true });
+    return this.client.get('http://10.13.11.1:3000/match/', { withCredentials: true });
   }
 
   getPlayersHistory() {
-    return this.client.get('http://10.13.4.8:3000/match/all', { withCredentials: true });
+    return this.client.get('http://10.13.11.1:3000/match/all', { withCredentials: true });
   }
 
   APlayersHistory(id: string) {
-    return this.client.get('http://10.13.4.8:3000/match/player/' + id, { withCredentials: true });
+    return this.client.get('http://10.13.11.1:3000/match/player/' + id, { withCredentials: true });
   }
 }

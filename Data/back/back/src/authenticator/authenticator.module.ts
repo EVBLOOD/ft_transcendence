@@ -7,11 +7,12 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { AuthStrategy } from './fortytwo.strategy';
 import { Token } from './entities/Token.entity';
+import { Statastics } from 'src/game/statistics/entities/statistics.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Token])],
+  imports: [TypeOrmModule.forFeature([User, Token, Statastics])],
   controllers: [AuthenticatorController],
   providers: [AuthenticatorService, JwtStrategy, AuthStrategy],
   exports: [AuthenticatorService]
 })
-export class AuthenticatorModule {}
+export class AuthenticatorModule { }

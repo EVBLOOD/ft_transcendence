@@ -54,7 +54,6 @@ import { PopupToBeSureComponent } from './popup-to-be-sure/popup-to-be-sure.comp
     LeaderBordRowComponent,
     AppBodyComponent,
     PlayWithfrComponent,
-    ChatComponent,
     CreateChannelComponent,
     InviteComponent,
     ConfigChannelComponent,
