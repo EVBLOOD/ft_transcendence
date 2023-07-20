@@ -40,7 +40,7 @@ export class FriendshipController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('find/:id')
-  async findOne(@Req() req, @Param('id') id: number) {
+  async findOne(@Req() req, @Param('id', ParseIntPipe) id: number) {
     console.log(id)
     const replay = await this.friendshipService.findOne(req.new_user.sub, id);
     return replay;

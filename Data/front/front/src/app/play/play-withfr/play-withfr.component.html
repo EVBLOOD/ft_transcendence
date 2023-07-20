@@ -12,6 +12,10 @@
             <div class="circle"></div>
             <p>Offline</p>
         </div>
+        <div *ngIf="status == 'InGame'" class="statusInGame">
+            <div class="circle"></div>
+            <p>InGame</p>
+        </div>
         <a class="buttonChallenge" (click)="playwith(item.id)">Challenge</a>
     </div>
 </div>

@@ -5,9 +5,9 @@
         <div class="column">Players</div>
         <div class="column">Matches played</div>
         <div class="column">Wins</div>
-        <div class="column">Ratio</div>
+        <div class="column">Score</div>
     </div>
     <app-leader-bord-row class="row"
         style="height: 60px; border-bottom-style: solid; border-color: #184E77; padding-bottom: 5px; margin-bottom: 10px; border-width: thin;"
-        *ngFor="let item of rank; index as i" [index]='i + 1' [data]="item" />
+        *ngFor="let item of (Leaders$|async); index as i" [index]='i + 1' [data]="item" />
 </div>

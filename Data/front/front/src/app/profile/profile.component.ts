@@ -30,6 +30,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   friendRequest$!: Observable<any>;
   friendList$!: Observable<any>;
   blockedList$!: Observable<any>;
+  sameDataEveryDayHelpMe$!: Observable<any>;
   friendRequestSkip: number = 0;
   friendListSkip: number = 0;
   blockListSkip: number = 0;
@@ -47,6 +48,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
   ngOnInit(): void {
     if (!this.username || this.username == '') {
+      this.sameDataEveryDayHelpMe$ = this.gameStats.Ilead();
       this.History$ = this.gameStats.getPlayersHistory();
       this.profileSubject$ = this.profileService.getMyData();
       this.replay_ = this.profileSubject$.subscribe({
@@ -70,6 +72,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     else {
       this.profile$ = this.profileService.getUserData(this.username);
       this.History$ = this.gameStats.APlayersHistory(this.username);
+      this.sameDataEveryDayHelpMe$ = this.gameStats.leader(this.username);
       // socket
       this.replay_ = this.friendship.friendRealTimeStatus().subscribe((state) => {
         if (state?.senderId && state.senderId == this.username)
@@ -106,10 +109,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.replay__.unsubscribe();
   }
   sameDataEveryDay = [
-    { path: "/assets/RankIcon.svg", name: "Rank", score: "20" },
-    { path: "/assets/RankIcon.svg", name: "Rank", score: "01" },
-    { path: "/assets/RankIcon.svg", name: "Rank", score: "01" },
-    { path: "/assets/RankIcon.svg", name: "Rank", score: "01" }]
+    { path: "/assets/RankIcon.svg", name: "Rank" },
+    { path: "/assets/MatchsIcon.svg", name: "Played" },
+    { path: "/assets/WinsIcon.svg", name: "Wins" },
+    { path: "/assets/ScoresIcon.svg", name: "Score" }]
   statusLoading(id: any) {
     this.replay = this.state.current_status.subscribe((curr) => {
       const newone = curr.find((obj: any) => { if (obj.id == id) return obj; });

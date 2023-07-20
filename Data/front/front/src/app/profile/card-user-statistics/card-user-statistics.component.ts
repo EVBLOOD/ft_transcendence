@@ -7,4 +7,7 @@ import { Component, Input } from '@angular/core';
 })
 export class CardUserStatisticsComponent {
   @Input() data: any;
+  @Input() helps: any;
+  constructor() {
+  }
 }

@@ -5,12 +5,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
 import { Match } from './entities/match.entity';
+import { Statastics } from 'src/game/statistics/entities/statistics.entity';
 
 @Injectable()
 export class MatchService {
   constructor(
     @InjectRepository(Match) private readonly matchRepository: Repository<Match>,
-    private userService: UserService
+    private userService: UserService,
+    @InjectRepository(Statastics) private readonly StatasticsRepo: Repository<Statastics>
   ) { };
 
   async create(createMatchDto: CreateMatchDto) {
@@ -117,7 +119,27 @@ export class MatchService {
   }
 
   async getLeadering() {
-    return this.matchRepository.find()
+    return (await this.StatasticsRepo.createQueryBuilder('stats')
+      .leftJoinAndSelect('stats.User', 'User').orderBy('stats.score', 'DESC').getMany()).map((info) => {
+        return {
+          user: { username: info.User.username, avatar: info.User.avatar }, matchPlayed: info.total, win: info.win, ratio: info.score
+        }
+      })
   }
 
+  async getMyLeadering(id: number) {
+    let i = 0;
+    let ending
+    (await this.StatasticsRepo.createQueryBuilder('stats')
+      .leftJoinAndSelect('stats.User', 'User').orderBy('stats.score', 'DESC').getMany()).map((info) => {
+        i++;
+        if (id == info.User.id) {
+          ending = {
+            rank: i, matchPlayed: info.total, win: info.win, score: info.score
+          }
+        }
+      })
+    console.log(ending)
+    return ending;
+  }
 }

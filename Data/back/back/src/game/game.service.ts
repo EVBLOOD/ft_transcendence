@@ -55,13 +55,15 @@ export class GameService {
             })
           this.StatisticsRepo.createQueryBuilder().update().set({
             total: () => 'total + 1',
-            score: () => `score + (${value.score.player1 > value.score.player2 ? 3 : -1})`
+            score: () => `score + (${value.score.player1 > value.score.player2 ? 3 : -1})`,
+            win: () => `win + (${value.score.player1 > value.score.player2 ? 1 : 0})`
           }).where("User = :user", { user: player1Id })
             .execute();
 
           this.StatisticsRepo.createQueryBuilder().update().set({
             total: () => 'total + 1',
-            score: () => `score + (${value.score.player2 > value.score.player1 ? 3 : -1})`
+            score: () => `score + (${value.score.player2 > value.score.player1 ? 3 : -1})`,
+            win: () => `win + (${value.score.player2 > value.score.player1 ? 1 : 0})`
           }).where("User = :user", { user: player2Id })
             .execute();
           value.toRemove = true;

@@ -16,12 +16,17 @@
 }
 
 .cardUserStatisticsTitle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-style: normal;
     font-weight: 500;
     font-size: 20px;
 }
 
 .cardUserStatisticsValue {
+    display: flex;
+    justify-content: center;
     font-style: normal;
     font-weight: 700;
     font-size: 40px;

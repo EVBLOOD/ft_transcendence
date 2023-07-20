@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Query, ClassSerializerInterceptor, UseInterceptors, ParseIntPipe } from '@nestjs/common';
 import { MatchService } from './match.service';
 import { CreateMatchDto } from './dto/create-match.dto';
 import { UpdateMatchDto } from './dto/update-match.dto';
@@ -20,12 +20,24 @@ export class MatchController {
   }
 
   @Get('player/:id')
-  findThem(@Req() req: any, @Param('id') id: number) {
+  findThem(@Req() req: any, @Param('id', ParseIntPipe) id: number) {
+    console.log(id)
     return this.matchService.getMatchHistory(id);
   }
 
-  @Get('leaderbeerd')
+  @Get('leadring')
   async leadring() {
     return await this.matchService.getLeadering();
+  }
+
+
+  @Get('leader/:id')
+  async leadr(@Param('id', ParseIntPipe) id: number) {
+    return await this.matchService.getMyLeadering(id);
+  }
+
+  @Get('Ilead')
+  async Ilead(@Req() req: any) {
+    return await this.matchService.getMyLeadering(req.new_user.sub);
   }
 }

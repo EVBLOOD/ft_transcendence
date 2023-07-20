@@ -59,6 +59,22 @@
     align-items: center;
 }
 
+.onlinePlayer .statusInGame {
+    font-size: 10px;
+    color: #FFA45E;
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    align-items: center;
+}
+
+.onlinePlayer .statusInGame .circle {
+    width: 7px;
+    height: 7px;
+    background-color: #FFA45E;
+    border-radius: 50%;
+}
+
 .onlinePlayer .statusOffline .circle {
     width: 7px;
     height: 7px;

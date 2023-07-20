@@ -6,9 +6,10 @@ import { Match } from './entities/match.entity';
 import { UserModule } from 'src/user/user.module';
 import { User } from 'src/user/entities/user.entity';
 import { AuthenticatorModule } from 'src/authenticator/authenticator.module';
+import { Statastics } from 'src/game/statistics/entities/statistics.entity';
 
 @Module({
-  imports: [UserModule, TypeOrmModule.forFeature([User, Match]), AuthenticatorModule],
+  imports: [UserModule, TypeOrmModule.forFeature([User, Match, Statastics]), AuthenticatorModule],
   controllers: [MatchController],
   providers: [MatchService],
   exports: [MatchService],

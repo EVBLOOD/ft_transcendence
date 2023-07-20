@@ -13,6 +13,9 @@ export class Statastics {
   @Column()
   score: number;
 
+  @Column()
+  win: number;
+
   @OneToOne(() => User)
   @JoinColumn()
   User: User;

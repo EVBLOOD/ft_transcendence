@@ -9,6 +9,7 @@ import { ProfileService } from 'src/app/profile/profile.service';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/login/auth.service';
 import { FriendshipService } from 'src/app/profile/friendship.service';
+import { StatusService } from 'src/app/status.service';
 
 export enum GameStateType {
   Created = "Created",
@@ -49,7 +50,7 @@ export class GameComponent implements OnDestroy, OnInit {
   hideInv: boolean = false;
   color = [Color.White, Color.Green, Color.Blue]
   themeIndx: number = 1;
-  constructor(private gameService: GameService, public profile: ProfileService, private switchRoute: Router, private auth: AuthService, public friends: FriendshipService) {
+  constructor(private gameService: GameService, public profile: ProfileService, private switchRoute: Router, private auth: AuthService, public friends: FriendshipService, private status: StatusService) {
 
     this.auth$ = auth.getCurrentUser()
     this.config = {
@@ -111,10 +112,11 @@ export class GameComponent implements OnDestroy, OnInit {
     }
     this.gameStateSub?.unsubscribe();
     this.game?.destroy(true);
-
+    this.status.online();
     // this.game.destroy(true);
   }
   ngOnInit(): void {
+    this.status.inPlay();
     // setTimeout(() => {
     this.game = new Phaser.Game(this.config);
     // })

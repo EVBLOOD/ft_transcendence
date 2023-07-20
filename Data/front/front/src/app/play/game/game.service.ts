@@ -4,6 +4,7 @@ import * as flatbuffers from 'flatbuffers';
 import { PositionState } from './position.state';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { StatusService } from 'src/app/status.service';
 
 // needs 3 packages
 // socket io : npm i --save ngx-socket-io
@@ -40,7 +41,7 @@ export class GameService {
   public socket = new Socket({ url: `${this.ip}:3000/game`, options: { withCredentials: true } });
   public isIngame: boolean = false;
 
-  constructor(private httpClient: HttpClient,) {
+  constructor(private httpClient: HttpClient) {
     this.socket.on('startTheGame', (players: any) => {
       this.Players = players;
       this.isIngame = true;
@@ -54,6 +55,7 @@ export class GameService {
       this.gameRequest.next(id);
     });
   }
+
 
   acceptGame(feed: boolean) {
     // console.log("LOLO", feed)

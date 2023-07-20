@@ -2,7 +2,7 @@
 
 <div class="body" *ngIf="!((profile$| async)?.statusCode) && type != 2 && type != 1">
     <div class="body" style="display: flex; justify-content: center; align-content: center;"
-        *ngIf="!(profile$| async) || !(auth$| async)">waiting ..</div>
+        *ngIf="!(profile$| async) || !(auth$| async) || !(sameDataEveryDayHelpMe$|async)">waiting ..</div>
     <img class="coverProfile" src="/assets/cover.svg" alt="cover img" />
     <div class="insideProfile">
         <div class="infoProfileUser">
@@ -47,7 +47,8 @@
         </div>
         <div *ngIf="!YourBodyChoosen">
             <div class="userStatisticsProfile">
-                <app-card-user-statistics *ngFor="let item of sameDataEveryDay;" [data]=item />
+                <app-card-user-statistics *ngFor="let item of sameDataEveryDay;" [data]=item
+                    [helps]="(sameDataEveryDayHelpMe$|async)" />
             </div>
             <div class="userProfileTitleHistory">
                 <h1>History</h1>

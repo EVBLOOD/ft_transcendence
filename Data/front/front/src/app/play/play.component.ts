@@ -15,9 +15,11 @@ import { ProfileService } from '../profile/profile.service';
 export class PlayComponent {
   friendList: Observable<any>;
   History$!: Observable<any>;
+  Leaders$!: Observable<any>;
   constructor(private gameService: GameService, private friendService: FriendshipService, private gameStats: AboutGamesService, private switchRoute: Router, public profile: ProfileService) {
     this.friendList = this.friendService.friendList(0, 0);
     this.History$ = this.gameStats.getHistory();
+    this.Leaders$ = this.gameStats.Leadring();
   }
   quickPairing() {
     this.gameService.createGame();
@@ -38,12 +40,12 @@ export class PlayComponent {
     { img: '/assets/img/profile.jpeg', name: 'test', status: 0 },
   ];
 
-  leaderboard = [
-    { img: '/assets/img/profile.jpeg', name: 'kid-bouh', rank: '/assets/icons/firstRank.svg' },
-    { img: '/assets/img/profile.jpeg', name: 'yamzil', rank: '/assets/icons/firstRank.svg' },
-    { img: '/assets/img/profile.jpeg', name: 'sakllam', rank: '/assets/icons/firstRank.svg' },
-    { img: '/assets/img/profile.jpeg', name: 'eagoumi', rank: '/assets/icons/firstRank.svg' },
-    { img: '/assets/img/profile.jpeg', name: 'imabid', rank: '/assets/icons/firstRank.svg' },
+  public leaderboard = [
+    '/assets/icons/firstRank.svg',
+    '/assets/icons/firstRank.svg',
+    '/assets/icons/firstRank.svg',
+    '/assets/icons/firstRank.svg',
+    '/assets/icons/firstRank.svg',
   ];
   history = [
     { img1: '/assets/img/profile.jpeg', img2: '/assets/img/profile.jpeg', names: 'kid-bouh vs yamzil', state: 'Win 🏆', date: 'Today' },

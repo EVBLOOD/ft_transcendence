@@ -21,13 +21,13 @@ import { UserService } from './user.service';
 import { JwtAuthGuard } from 'src/authenticator/jwtauth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { CreateUserDto, UpdateUserDto } from './dto/create-user.dto';
-import { existsSync } from 'fs';
+import { UpdateUserDto } from './dto/create-user.dto';
+
 
 @UseGuards(JwtAuthGuard)
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get()
@@ -61,7 +61,7 @@ export class UserController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
-  async findOne(@Param('id') id: number) {
+  async findOne(@Param('id', ParseIntPipe) id: number) {
     const replay = await this.userService.findOne(id);
     if (replay) return replay;
     throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
@@ -97,7 +97,7 @@ export class UserController {
         destination: './upload/avatars',
         filename: (req, file, callback) => {
           if (
-            (!file ||  file.mimetype != 'image/jpeg' && file.mimetype != 'image/png') ||
+            (!file || file.mimetype != 'image/jpeg' && file.mimetype != 'image/png') ||
             file.size > 1 * 1024 * 1024
           )
             callback(null, '');

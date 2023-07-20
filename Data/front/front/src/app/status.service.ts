@@ -24,7 +24,7 @@ export class StatusService {
     this.socket.emit('Online', (...args: any[]) => { });
   }
   inPlay() {
-    this.socket.emit('InPlay', (...args: any[]) => { })
+    this.socket.emit('InGame', (...args: any[]) => { })
   }
 
   Offline() {

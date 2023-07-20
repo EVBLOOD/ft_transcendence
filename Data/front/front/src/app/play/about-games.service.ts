@@ -19,4 +19,17 @@ export class AboutGamesService {
   APlayersHistory(id: string) {
     return this.client.get('http://10.13.11.1:3000/match/player/' + id, { withCredentials: true });
   }
+
+  Leadring() {
+    return this.client.get('http://10.13.11.1:3000/match/leadring', { withCredentials: true });
+  }
+
+  leader(id: string) {
+    return this.client.get('http://10.13.11.1:3000/match/leader/' + id, { withCredentials: true });
+  }
+
+
+  Ilead() {
+    return this.client.get('http://10.13.11.1:3000/match/Ilead', { withCredentials: true });
+  }
 }

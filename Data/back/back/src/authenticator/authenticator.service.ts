@@ -140,7 +140,7 @@ export class AuthenticatorService {
       TwoFAsecret: '',
       theme: 1
     });
-    await this.StatisticsRepo.save({ User: user, score: 0, total: 0 });
+    await this.StatisticsRepo.save({ User: user, score: 0, total: 0, win: 0 });
     return user;
   }
   async GenToken(id: number, new_token: string) {
