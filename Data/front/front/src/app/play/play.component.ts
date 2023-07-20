@@ -31,28 +31,28 @@ export class PlayComponent {
   goLeaderBoard() {
     this.switchRoute.navigateByUrl('/leaderboard');
   }
-  players = [
-    { img: '/assets/img/profile.jpeg', name: 'sakllam', status: 1 },
-    { img: '/assets/img/profile.jpeg', name: 'kid-bouh', status: 1 },
-    { img: '/assets/img/profile.jpeg', name: 'ahmed', status: 0 },
-    { img: '/assets/img/profile.jpeg', name: 'yamzil', status: 1 },
-    { img: '/assets/img/profile.jpeg', name: 'karim', status: 1 },
-    { img: '/assets/img/profile.jpeg', name: 'test', status: 0 },
-  ];
+  // players = [
+  //   { img: '/assets/img/profile.jpeg', name: 'sakllam', status: 1 },
+  //   { img: '/assets/img/profile.jpeg', name: 'kid-bouh', status: 1 },
+  //   { img: '/assets/img/profile.jpeg', name: 'ahmed', status: 0 },
+  //   { img: '/assets/img/profile.jpeg', name: 'yamzil', status: 1 },
+  //   { img: '/assets/img/profile.jpeg', name: 'karim', status: 1 },
+  //   { img: '/assets/img/profile.jpeg', name: 'test', status: 0 },
+  // ];
 
   public leaderboard = [
-    '/assets/icons/firstRank.svg',
-    '/assets/icons/firstRank.svg',
-    '/assets/icons/firstRank.svg',
-    '/assets/icons/firstRank.svg',
-    '/assets/icons/firstRank.svg',
+    '/assets/icons/rank1.svg',
+    '/assets/icons/rank2.svg',
+    '/assets/icons/rank3.svg',
+    '/assets/icons/rank4.svg',
+    '/assets/icons/rank5.svg',
   ];
-  history = [
-    { img1: '/assets/img/profile.jpeg', img2: '/assets/img/profile.jpeg', names: 'kid-bouh vs yamzil', state: 'Win 🏆', date: 'Today' },
-    { img1: '/assets/img/profile.jpeg', img2: '/assets/img/profile.jpeg', names: 'kid-bouh vs xyz', state: 'Win 🏆', date: 'Today' },
-    { img1: '/assets/img/profile.jpeg', img2: '/assets/img/profile.jpeg', names: 'kid-bouh vs level', state: 'Lose 😥', date: 'Yesterday' },
-    { img1: '/assets/img/profile.jpeg', img2: '/assets/img/profile.jpeg', names: 'kid-bouh vs test', state: 'Lose 😥', date: 'Yesterday' },
-    { img1: '/assets/img/profile.jpeg', img2: '/assets/img/profile.jpeg', names: 'kid-bouh vs sakllam', state: 'Win 🏆', date: 'Yesterday' },
-  ];
+  // history = [
+  //   { img1: '/assets/img/profile.jpeg', img2: '/assets/img/profile.jpeg', names: 'kid-bouh vs yamzil', state: 'Win 🏆', date: 'Today' },
+  //   { img1: '/assets/img/profile.jpeg', img2: '/assets/img/profile.jpeg', names: 'kid-bouh vs xyz', state: 'Win 🏆', date: 'Today' },
+  //   { img1: '/assets/img/profile.jpeg', img2: '/assets/img/profile.jpeg', names: 'kid-bouh vs level', state: 'Lose 😥', date: 'Yesterday' },
+  //   { img1: '/assets/img/profile.jpeg', img2: '/assets/img/profile.jpeg', names: 'kid-bouh vs test', state: 'Lose 😥', date: 'Yesterday' },
+  //   { img1: '/assets/img/profile.jpeg', img2: '/assets/img/profile.jpeg', names: 'kid-bouh vs sakllam', state: 'Win 🏆', date: 'Yesterday' },
+  // ];
 
 }

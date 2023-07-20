@@ -40,4 +40,13 @@ export class MatchController {
   async Ilead(@Req() req: any) {
     return await this.matchService.getMyLeadering(req.new_user.sub);
   }
+
+  @Get('play/:id')
+  async playerCounter(@Req() req: any, @Param('id', ParseIntPipe) id) {
+    return await this.matchService.getWinnCalc(req.new_user.sub, id)
+  }
+  @Get('playU/:id')
+  async playerCounterU(@Req() req: any, @Param('id', ParseIntPipe) id) {
+    return await this.matchService.getWinnCalc(id, req.new_user.sub)
+  }
 }

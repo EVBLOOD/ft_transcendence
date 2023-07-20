@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -31,5 +32,13 @@ export class AboutGamesService {
 
   Ilead() {
     return this.client.get('http://10.13.11.1:3000/match/Ilead', { withCredentials: true });
+  }
+
+  playerWinns(id: string) {
+    return this.client.get('http://10.13.11.1:3000/match/play/' + id, { withCredentials: true })
+  }
+
+  playerLost(id: string) {
+    return this.client.get('http://10.13.11.1:3000/match/playU/' + id, { withCredentials: true })
   }
 }

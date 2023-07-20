@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/login/auth.service';
 import { FriendshipService } from 'src/app/profile/friendship.service';
 import { StatusService } from 'src/app/status.service';
+import { AboutGamesService } from '../about-games.service';
 
 export enum GameStateType {
   Created = "Created",
@@ -37,6 +38,10 @@ export class GameComponent implements OnDestroy, OnInit {
   public Fplayer$ !: Observable<any>;
   public test$ !: Observable<any>;
   public test_$ !: Observable<any>;
+  public WinnerNumber1$ !: Observable<any>;
+  public WinnerNumber2$ !: Observable<any>;
+  public LostNumber1$ !: Observable<any>;
+  public LostNumber2$ !: Observable<any>;
   public Splayer$ !: Observable<any>;
   public auth$ !: Observable<any>;
   public players: any = undefined;
@@ -50,9 +55,10 @@ export class GameComponent implements OnDestroy, OnInit {
   hideInv: boolean = false;
   color = [Color.White, Color.Green, Color.Blue]
   themeIndx: number = 1;
-  constructor(private gameService: GameService, public profile: ProfileService, private switchRoute: Router, private auth: AuthService, public friends: FriendshipService, private status: StatusService) {
+  constructor(private gameService: GameService, public profile: ProfileService, private switchRoute: Router,
+    private auth: AuthService, public friends: FriendshipService, private status: StatusService, public statistics: AboutGamesService) {
 
-    this.auth$ = auth.getCurrentUser()
+    this.auth$ = this.auth.getCurrentUser()
     this.config = {
       type: Phaser.AUTO,
       width: RESOLUTION.width,
@@ -86,6 +92,11 @@ export class GameComponent implements OnDestroy, OnInit {
     this.players = this.gameService.Players;
     this.Fplayer$ = this.profile.getUserData(this.players.Fplayer)
     this.Splayer$ = this.profile.getUserData(this.players.Splayer)
+    console.log(this.players)
+    this.WinnerNumber1$ = this.statistics.playerWinns(this.players.Splayer); //  I'm the winner
+    this.LostNumber1$ = this.statistics.playerLost(this.players.Fplayer); // I'm the loser
+    this.WinnerNumber2$ = this.statistics.playerWinns(this.players.Fplayer);
+    this.LostNumber2$ = this.statistics.playerLost(this.players.Splayer);
     this.profile.getUserData(this.players.Fplayer).subscribe((data: any) => { // to free
       if (data) {
         this.test_$ = this.friends.isFriend(data.id.toString());

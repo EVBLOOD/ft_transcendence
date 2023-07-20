@@ -13,7 +13,10 @@
                                 <img src="/assets/icons/addfriend.svg" alt="add">
                             </div>
                         </div>
-                        <p class="score">50</p>
+                        <p *ngIf="(auth$| async)?.sub == (Fplayer$|async)?.id" class="score">
+                            {{(WinnerNumber1$|async)?.number}}</p>
+                        <p *ngIf="(auth$| async)?.sub != (Fplayer$|async)?.id" class="score">
+                            {{(LostNumber1$|async)?.number}}</p>
                     </div>
                 </div>
             </div>
@@ -26,7 +29,11 @@
                         </div>
                         <p>{{(Splayer$|async)?.username}}</p>
                     </div>
-                    <p class="score P2">50</p>
+                    <p *ngIf="(auth$| async)?.sub == (Splayer$|async)?.id" class="score P2">
+                        {{(WinnerNumber2$|async)?.number}}</p>
+                    <p *ngIf="(auth$| async)?.sub != (Splayer$|async)?.id" class="score P2">
+                        {{(LostNumber2$|async)?.number}}</p>
+
                 </div>
                 <div class="player"><img [src]="profile.getUserAvatarPath((Splayer$|async)?.avatar)" alt="add">
                 </div>

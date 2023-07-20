@@ -129,7 +129,7 @@ export class MatchService {
 
   async getMyLeadering(id: number) {
     let i = 0;
-    let ending
+    let ending = {};
     (await this.StatasticsRepo.createQueryBuilder('stats')
       .leftJoinAndSelect('stats.User', 'User').orderBy('stats.score', 'DESC').getMany()).map((info) => {
         i++;
@@ -139,7 +139,18 @@ export class MatchService {
           }
         }
       })
-    console.log(ending)
     return ending;
   }
+
+  async getWinnCalc(id1: number, id2: number) {
+    return {
+      number: (await this.matchRepository
+        .createQueryBuilder('match')
+        .leftJoinAndSelect('match.player1', 'player1')
+        .leftJoinAndSelect('match.player2', 'player2')
+        .leftJoinAndSelect('match.winner', 'winner')
+        .where('winner.id = :id1 AND (player1.id = :id2 OR player2.id = :id2)', { id1: id1, id2: id2 }).getCount())
+    }
+  }
+
 }
