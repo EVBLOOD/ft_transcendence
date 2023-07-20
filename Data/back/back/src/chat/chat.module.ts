@@ -23,5 +23,6 @@ import { Punishment } from './punishment/punishment.entity';
     PunishmentService,
   ],
   controllers: [ChatController],
+  exports: [ChatService],
 })
 export class ChatModule {}

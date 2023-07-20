@@ -4,9 +4,10 @@ import { PunishmentService } from './punishment.service';
 import { Punishment } from './punishment.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PunishmentGateway } from './punishment.gateway';
+import { ChatModule } from '../chat.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Punishment])],
+  imports: [TypeOrmModule.forFeature([Punishment]), ChatModule],
   controllers: [PunishmentController],
   providers: [PunishmentService, PunishmentGateway],
 })

@@ -107,9 +107,6 @@ export class ChatController {
     @Body() punishmentsDTO: createPunishmentDTO,
   ): Promise<Punishment> {
     try {
-      console.log('chatID= ', chatID);
-      console.log('adminName= ', userName);
-      console.log('punishmentsDTO= ', punishmentsDTO);
       return await this.chatRoomSevice.createPunishment(
         chatID,
         userName,

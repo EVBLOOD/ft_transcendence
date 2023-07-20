@@ -22,6 +22,7 @@ import { UpdateChatroomDTO } from './dto/updateChatroom.dto';
 import { PunishmentService } from './punishment/punishment.service';
 import { Punishment } from './punishment/punishment.entity';
 import { createPunishmentDTO } from './punishment/dto/createPunishment.dto';
+import { triggerAsyncId } from 'async_hooks';
 
 @Injectable()
 export class ChatService {
@@ -44,7 +45,7 @@ export class ChatService {
         admin: true,
         message: {
           userId: true,
-        },
+        }
       },
       where: {
         member: {

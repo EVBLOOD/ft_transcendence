@@ -12,7 +12,7 @@ export class ChatComponent implements OnInit {
   ngOnInit(): void {
   }
   getUserChatrooms(name: string) {
-    return this.ChatService.getChatrooms(name).subscribe({ next: (data) => {console.log(data)}, error: (err) => console.log(err) });
+    return this.ChatService.getChatrooms(name).subscribe({ next: (data) => {console.log(data)}, error: (err) => console.log("here: ", err) });
   }
 
   addUser(name: string) {
@@ -82,6 +82,7 @@ export class ChatComponent implements OnInit {
         chatID: Number(chatID__2),
     };
     console.log(dto);
-    return this.ChatService.PunishUser(Admin__, dto).subscribe({next: (data)=> console.log(data), error: (err)=> console.log(err)});
+    this.ChatService.PunishUser(Admin__, dto);
+    // return this.ChatService.PunishUser(Admin__, dto).subscribe({next: (data)=> console.log(data), error: (err)=> console.log(err)});
   }
 }
