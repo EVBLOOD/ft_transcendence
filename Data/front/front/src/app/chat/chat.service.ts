@@ -51,8 +51,12 @@ export class ChatService {
   private currentUser: string = "ali";
   private message: string = "";
   private sock: Socket;
+  private PunishmentSock: Socket;
   constructor(private httpClient: HttpClient
   ) {
+    this.PunishmentSock = io(URL + "/punishment", {
+      withCredentials: true,
+    });
     this.sock = io('http://localhost:3000/chat', {
       withCredentials: true,
     });
@@ -67,6 +71,10 @@ export class ChatService {
     );
     this.sock.on("kickUser", (data)=> {
       console.log("kicked user: " + data.userName);
+    });
+    this.PunishmentSock.on("gotBanned", (data, punishment) => {
+      console.log(data);
+      console.log(punishment);
     })
    }
   getChatrooms(name: string) {
@@ -117,10 +125,14 @@ export class ChatService {
   updateChatroom(id: number, user: string, dto: UpdateChatroomDTO) {
     return this.httpClient.put<UpdateChatroomDTO>(URL + `/chat/update/${id}/admin/${user}`, dto);
   }
+  // PunishUser(admin: string, dto: CreatePunishmentDto) {
+  //   console.log("dto: ", dto);
+  //   return this.httpClient.post<CreatePunishmentDto>(
+  //     URL + `/chat/${dto.chatID}/admin/${admin}/punishment`, dto
+  //   )
+  // }
   PunishUser(admin: string, dto: CreatePunishmentDto) {
     console.log("dto: ", dto);
-    return this.httpClient.post<CreatePunishmentDto>(
-      URL + `/chat/${dto.chatID}/admin/${admin}/punishment`, dto
-    )
+    this.PunishmentSock.emit("chatBan", dto, admin);
   }
 }
