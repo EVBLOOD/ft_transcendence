@@ -85,4 +85,7 @@ export class ChatComponent implements OnInit {
     this.ChatService.PunishUser(Admin__, dto);
     // return this.ChatService.PunishUser(Admin__, dto).subscribe({next: (data)=> console.log(data), error: (err)=> console.log(err)});
   }
+  checkPunishment(id: string, user: string, type: string) {
+    return this.ChatService.checkPunishment(Number(id), user, type).subscribe({next: (data) => console.log(data), error: (err)=> console.log(err)});
+  }
 }

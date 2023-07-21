@@ -72,9 +72,8 @@ export class ChatService {
     this.sock.on("kickUser", (data)=> {
       console.log("kicked user: " + data.userName);
     });
-    this.PunishmentSock.on("gotBanned", (data, punishment) => {
+    this.PunishmentSock.on("gotBanned", (data) => {
       console.log(data);
-      console.log(punishment);
     })
    }
   getChatrooms(name: string) {
@@ -135,4 +134,8 @@ export class ChatService {
     console.log("dto: ", dto);
     this.PunishmentSock.emit("chatBan", dto, admin);
   }
+  checkPunishment(id: number, user: string, type: string) {
+    return this.httpClient.get(URL + `/punishment/chat/${id}/user/${user}/${type}`)
+  }
+
 }

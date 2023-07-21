@@ -45,7 +45,7 @@ export class ChatService {
         admin: true,
         message: {
           userId: true,
-        }
+        },
       },
       where: {
         member: {
@@ -67,7 +67,7 @@ export class ChatService {
           id: true,
         },
       },
-      cache: true,
+      //cache: true,
     });
     return chatroom;
   }
@@ -97,7 +97,7 @@ export class ChatService {
         admin: true,
         member: true,
       },
-      cache: true,
+      //cache: true,
     });
     if (chatRoom) return chatRoom;
     throw new HttpException('ChatRoom Not Found', HttpStatus.NOT_FOUND);
@@ -457,7 +457,7 @@ export class ChatService {
       order: {
         id: 'asc',
       },
-      cache: true,
+      //cache: true,
     });
     return chatrooms;
   }

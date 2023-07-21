@@ -88,4 +88,12 @@
 	<button (click)="PunishUser(chatID__2.value, Admin__.value, penaltyType.value, user11.value)">Submit</button>
 </div>
 
+<div>
+	<label >check Punishment</label>
+	<input type="text" #user$$ name="user$$" placeholder="user">
+	<input type="text" #chat$ID name="chat$ID" placeholder="chat$ID">
+	<input type="text" #type__ name="type__" placeholder="type__">
+	<button (click)="checkPunishment(chat$ID.value, user$$.value, type__.value)">Submit</button>
+</div>
+
 <button (click)="getUser()">getUsers</button><br />

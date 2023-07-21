@@ -21,8 +21,11 @@ export class PunishmentGateway {
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly PunishmentService: PunishmentService,
-    @Inject(forwardRef(() => ChatService)) private readonly chatService: ChatService) {}
+  constructor(
+    private readonly PunishmentService: PunishmentService,
+    @Inject(forwardRef(() => ChatService))
+    private readonly chatService: ChatService,
+  ) {}
 
   @SubscribeMessage('userState')
   async joinChat(client: Socket, chatID: number) {
@@ -32,11 +35,28 @@ export class PunishmentGateway {
   @SubscribeMessage('chatBan')
   async checkBan(client: Socket, dto: createPunishmentDTO) {
     try {
-      console.log("called!!")
-      console.log("dto: ", dto[0]);
-      console.log("admin: ",dto[1]);
-      const punishment = await this.chatService.createPunishment(dto.chatID, dto[1], dto[0]);
+      console.log('called~~');
+      console.log(dto[1], '=====', dto[0]);
+      const punishment = await this.chatService.createPunishment(
+        dto.chatID,
+        dto[1],
+        dto[0],
+      );
       this.server.emit('gotBanned', `Banned user ${dto[0].user}`, punishment);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  @SubscribeMessage('chatMute')
+  async checkMute(client: Socket, dto: createPunishmentDTO) {
+    try {
+      const punishment = await this.chatService.createPunishment(
+        dto.chatID,
+        dto[1],
+        dto[0],
+      );
+      this.server.emit('gotMuted', `Banned user ${dto[0].user}`, punishment);
     } catch (err) {
       console.log(err);
     }

@@ -132,10 +132,11 @@ export class ChatUtils {
         HttpStatus.FORBIDDEN,
       );
     }
-    if (
-      (await this.checkForOwnerRoll(chatID, punishmentDTO.user)) == true
-    ) {
-      throw new HttpException('Cannot Punishment the chatroom owner', HttpStatus.FORBIDDEN);
+    if ((await this.checkForOwnerRoll(chatID, punishmentDTO.user)) == true) {
+      throw new HttpException(
+        'Cannot Punishment the chatroom owner',
+        HttpStatus.FORBIDDEN,
+      );
     }
     return true;
   }

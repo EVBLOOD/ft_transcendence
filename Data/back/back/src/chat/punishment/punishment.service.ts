@@ -55,7 +55,7 @@ export class PunishmentService {
           id: chatID,
         },
       },
-      cache: true,
+      //cache: true,
     });
     return users;
   }
@@ -182,14 +182,14 @@ export class PunishmentService {
     }
     return false;
   }
-  async getPunishmentOlderThan5Min(): Promise<Punishment[]> {
-    const dateFiveMinAgo = new Date(Date.now() - 1000 * (60 * 5));
+  async getPunishmentOlderThan1H(): Promise<Punishment[]> {
+    const date1hAgo = new Date(Date.now() - 1000 * (60 * 60));
     const Punishments = await this.PunishmentRepo.find({
       order: {
         time: 'ASC',
       },
       where: {
-        time: LessThanOrEqual(dateFiveMinAgo),
+        time: LessThanOrEqual(date1hAgo),
       },
     });
     return Punishments;
@@ -204,7 +204,7 @@ export class PunishmentService {
   }
 
   async clearOldPunishments() {
-    const Punishments = await this.getPunishmentOlderThan5Min();
+    const Punishments = await this.getPunishmentOlderThan1H();
     if (Object.keys(Punishments).length !== 0) {
       for (const pun of Punishments) {
         this.deletePunishment(pun.id);
@@ -212,9 +212,9 @@ export class PunishmentService {
     }
   }
 
-  @Cron('*/15 * * * *')
+  @Cron('0 * * * *') // runs every hour
   async scheduledPunishmentEraser() {
-    console.log('Punishments cleared');
+    console.log('*\n*\n*\n*\n*\n*\nPunishments cleared\n*\n*\n*\n*\n*\n*\n');
     await this.clearOldPunishments();
   }
 
