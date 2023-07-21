@@ -50,7 +50,7 @@ export class MessageService {
         },
         value: true,
       },
-      cache: true, // store resoltes in memory for future use
+      //cache: true, // store resoltes in memory for future use
     });
     if (message.length !== 0) {
       return message;
@@ -84,7 +84,7 @@ export class MessageService {
       order: {
         id: 'asc',
       },
-      cache: true,
+      //cache: true,
     });
     return messages;
   }
@@ -121,7 +121,7 @@ export class MessageService {
         },
         value: true,
       },
-      cache: true,
+      //cache: true,
     });
     return messages;
   }
@@ -154,7 +154,7 @@ export class MessageService {
   //       },
   //       value: true,
   //     },
-  //     cache: true,
+  //     //cache: true,
   //   })
   //   return messages;
   // }
