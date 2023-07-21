@@ -52,6 +52,10 @@ export class AppBodyComponent implements OnInit, OnDestroy {
   getcurrentPath() {
     return this.route.url;
   }
+
+  getStarterPath(path: string) {
+    return this.route.url.startsWith(path);
+  }
   onclick() {
     this.dropDown = !this.dropDown
   }

@@ -11,6 +11,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 import { GameModule } from './game/game.module';
 import { MatchModule } from './match/match.module';
+import { MessageModule } from './message/message.module';
+import { ChatModule } from './chat/chat.module';
+import { PunishmentModule } from './chat/punishment/punishment.module';
 
 @Module({
   imports: [
@@ -20,6 +23,9 @@ import { MatchModule } from './match/match.module';
     AuthenticatorModule,
     GameModule,
     MatchModule,
+    MessageModule,
+    ChatModule,
+    PunishmentModule,
     PassportModule.register({ session: true }),
     ConfigModule.forRoot({ isGlobal: true }),
     JwtModule.register({

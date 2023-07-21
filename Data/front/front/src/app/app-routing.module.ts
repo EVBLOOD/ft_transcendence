@@ -7,7 +7,7 @@ import { authGuard } from './login/guards/auth.guard';
 import { twoFacGuard } from './login/guards/two-fac.guard';
 import { TwoFactoryComponent } from './login/two-factory/two-factory.component';
 import { PlayComponent } from './play/play.component';
-import { ChatComponent } from './chat/chat.component';
+// import { ChatComponent } from './chat/chat/chat.component';
 import { LeaderbordComponent } from './leaderbord/leaderbord.component';
 import { SettingsComponent } from './profile/settings/settings.component';
 import { ActivatetwoComponent } from './profile/settings/activatetwo/activatetwo.component';
@@ -17,6 +17,7 @@ import { GameComponent } from './play/game/game.component';
 import { isgamingGuard } from './play/game/isgaming.guard';
 import { ConfigChannelComponent } from './config-channel/config-channel.component';
 import { CreateChannelComponent } from './create-channel/create-channel.component';
+import { ChatComponent } from './chat/chat.component';
 
 const routes: Routes =
   [
@@ -33,7 +34,7 @@ const routes: Routes =
         { path: 'chat', component: ChatComponent, canActivate: [authGuard] },
         { path: 'leaderboard', component: LeaderbordComponent, canActivate: [authGuard] },
         { path: 'profile/:username', component: ProfileComponent, canActivate: [authGuard] },
-        { path: 'channelSetting', component: ConfigChannelComponent, canActivate: [authGuard] },
+        { path: 'channelSetting/:id', component: ConfigChannelComponent, canActivate: [authGuard] },
         { path: 'channelCreating', component: CreateChannelComponent, canActivate: [authGuard] }
       ]
     },
