@@ -1,6 +1,7 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ChatService } from '../chat.service';
 
 @Component({
   selector: 'app-messages-mdl',
@@ -34,13 +35,13 @@ export class MessagesMdlComponent {
     }
   }
   id !: string;
-  constructor(private readonly route: ActivatedRoute, private readonly chatService: chatService) {
+  constructor(private readonly route: ActivatedRoute, private readonly chatService: ChatService) {
 
     this.id = this.route.snapshot.params['id'];
     console.log("alo oui?")
     console.log(this.chatInfos)
 
-    getThisChatMsgs
+    // getThisChatMsgs
 
   }
 
