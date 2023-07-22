@@ -1,6 +1,6 @@
 <div class="sendMessage">
-    <input type="text" class="textbox message" placeholder="Message">
-    <a class="buttonSend">
+    <input [formControl]="msgText" type="text" class="textbox message" placeholder="Message">
+    <a class="buttonSend" (click)="sending()">
         <p>Send</p>
         <img src="/assets/icons/send.svg">
     </a>

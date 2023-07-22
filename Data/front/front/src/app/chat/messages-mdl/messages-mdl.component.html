@@ -31,28 +31,7 @@
     </div>
 
     <div class="conversation">
-        <app-message-in *ngFor="let msg of this.chatInfos?.message" [value]="msg" />
-        <app-message-out />
-        <app-message-in />
-        <app-message-out />
-        <app-message-in />
-        <app-message-in />
-        <app-message-in />
-        <app-message-in />
-        <app-message-in />
-        <app-message-in />
-        <app-message-in />
-        <app-message-in />
-        <app-message-in />
-        <app-message-in />
-        <app-message-in />
-        <app-message-in />
-        <app-message-in />
-        <app-message-in />
-        <app-message-in />
-        <app-message-in />
-        <app-message-in />
-        <app-message-out />
+        <app-message *ngFor="let msg of (msgs$|async)" [value]="msg" />
     </div>
-    <app-send-msg />
+    <app-send-msg [chatId]="this.chatInfos?.id" />
 </div>

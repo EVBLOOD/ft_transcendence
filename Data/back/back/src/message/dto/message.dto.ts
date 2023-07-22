@@ -1,8 +1,6 @@
 import { IsNotEmpty, MinLength, MaxLength } from 'class-validator';
 
 export class CreateMessage {
-  @IsNotEmpty()
-  userName!: number;
 
   @IsNotEmpty()
   @MinLength(1, {

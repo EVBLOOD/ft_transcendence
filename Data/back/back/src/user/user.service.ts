@@ -121,4 +121,8 @@ export class UserService {
     if (!this.currentstate.has(id)) return null;
     this.currentstate.delete(id);
   }
+
+  async findUsersByUserName(username: string) {
+    return await this.UserRepo.find({ where: { username: username } })
+  }
 }

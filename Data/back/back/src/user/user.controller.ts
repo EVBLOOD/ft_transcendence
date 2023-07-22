@@ -68,6 +68,14 @@ export class UserController {
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
+  @Get('getUsers/:username')
+  async findUsers(@Param('username') username: string) {
+    const replay = await this.userService.findUsersByUserName(username);
+    if (replay) return replay;
+    throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+  }
+
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('updateAll')
   async update(@Req() req, @Body() updateUserDto: UpdateUserDto) {
     try {

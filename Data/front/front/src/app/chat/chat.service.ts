@@ -30,7 +30,7 @@ export type CreatePunishmentDto = {
 }
 
 export type sendMessageDTO = {
-  userName: string;
+  // userName: string;
   value: string;
   charRoomId: number;
 };
@@ -62,11 +62,11 @@ export class ChatService {
     });
     this.sock.on(
       'recMessage', (data) => {
-        this.message = data.value;
-        console.log("user: ", data.userId.userName);
-        if (this.currentUser !== data.userId.userName)
-          console.log(data.userId.userName + ": " + this.message);
-        // console.log(data.value)
+        // this.message = data.value;
+        // console.log("user: ", data.userId.userName);
+        // if (this.currentUser !== data.userId.userName)
+        //   console.log(data.userId.userName + ": " + this.message);
+        console.log(data)
       }
     );
     this.sock.on("kickUser", (data) => {
@@ -99,7 +99,7 @@ export class ChatService {
   }
 
   sendMessage(message: sendMessageDTO) {
-    console.log("message DTO", message);
+    // console.log("message DTO", message);
     this.sock.emit("sendMessage", message);
   }
   getChatroomMessages(id: number) {
@@ -156,6 +156,10 @@ export class ChatService {
   }
   checkPunishment(id: number, user: string, type: string) {
     return this.httpClient.get(URL + `/punishment/chat/${id}/user/${user}/${type}`, { withCredentials: true, })
+  }
+
+  getChatroomMessagesnyName(chatname: string) {
+    return this.httpClient.get(URL + `/punishment/chat/all/${chatname}`, { withCredentials: true, })
   }
 
 }

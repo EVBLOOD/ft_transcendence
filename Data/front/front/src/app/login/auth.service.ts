@@ -8,6 +8,7 @@ import { EMPTY, Observable, catchError } from 'rxjs';
 export class AuthService {
 
   private twofactor: boolean = false;
+  private id !: number;
 
   constructor(private http: HttpClient) {
   }
@@ -16,6 +17,13 @@ export class AuthService {
   }
   public getTwoFactorSatat(): boolean {
     return this.twofactor;
+  }
+  public setId(id: number) {
+    this.id = id;
+  }
+
+  public getId() {
+    return this.id;
   }
 
   public setTwoFactorSatat(param: boolean) {

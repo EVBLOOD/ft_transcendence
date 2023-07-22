@@ -5,7 +5,7 @@
 <!-- </div> -->
 <div *ngIf="index > 3" class="column rankNumber">{{index}}</div>
 <div class="imgAndName column">
-    <img style="border-radius: 50%; height: 44px; width: 44px;" [src]="data.user.avatar" alt="user" />
+    <img style="border-radius: 50%; height: 44px; width: 44px;" [src]="avataring(data.user.avatar)" alt="user" />
     <p class="usernameHiding">{{data.user.username}}</p>
 </div>
 <div class="column col">{{data.matchPlayed}}</div>

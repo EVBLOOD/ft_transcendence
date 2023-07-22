@@ -132,20 +132,20 @@ export class ChatService {
     throw new HttpException("Can't create Chatroom!", HttpStatus.BAD_REQUEST);
   }
 
-  async postToChatroom(messageDTO: CreateMessage): Promise<Message> {
+  async postToChatroom(messageDTO: CreateMessage, id: number): Promise<Message> {
     this.chatPunishment.clearOldPunishments();
     if (
       (await this.chatHelpers.checkForMemberRoll(
         messageDTO.charRoomId,
-        messageDTO.userName,
+        id,
       )) == true &&
       (await this.chatPunishment.isMutedInChatroom(
         messageDTO.charRoomId,
-        messageDTO.userName,
+        id,
       )) == false
     ) {
       const chatRoom = await this.GetChatRoomByID(messageDTO.charRoomId);
-      const user = await this.chatHelpers.getUser(messageDTO.userName);
+      const user = await this.chatHelpers.getUser(id);
       return await this.messageService.create(messageDTO, chatRoom, user);
     }
     throw new HttpException("Can't send messages here", HttpStatus.FORBIDDEN);

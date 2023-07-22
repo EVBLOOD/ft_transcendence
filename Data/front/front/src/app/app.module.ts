@@ -32,8 +32,7 @@ import { ConfigChannelComponent } from './config-channel/config-channel.componen
 import { PopupToBeSureComponent } from './popup-to-be-sure/popup-to-be-sure.component';
 import { DMsComponent } from './chat/dms/dms.component';
 import { ChannelsComponent } from './chat/channels/channels.component';
-import { MessageInComponent } from './chat/message-in/message-in.component';
-import { MessageOutComponent } from './chat/message-out/message-out.component';
+import { MessageComponent } from './chat/messages/message.component';
 import { SendMsgComponent } from './chat/send-msg/send-msg.component';
 import { MessagesMdlComponent } from './chat/messages-mdl/messages-mdl.component';
 import { ChatInfoComponent } from './chat/chat-info/chat-info.component';
@@ -68,8 +67,7 @@ import { ChatContentComponent } from './chat/chat-content/chat-content.component
     PopupToBeSureComponent,
     DMsComponent,
     ChannelsComponent,
-    MessageInComponent,
-    MessageOutComponent,
+    MessageComponent,
     SendMsgComponent,
     MessagesMdlComponent,
     ChatInfoComponent,

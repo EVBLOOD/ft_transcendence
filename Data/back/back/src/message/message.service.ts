@@ -115,7 +115,8 @@ export class MessageService {
       select: {
         userId: {
           id: true,
-          username: true,
+          name: true,
+          // username: true,
           avatar: true,
         },
         chatRoomId: {

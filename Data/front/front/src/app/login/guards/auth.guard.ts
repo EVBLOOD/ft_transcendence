@@ -14,7 +14,6 @@ export const authGuard: CanActivateFn = async (route, state) => {
         replay = { statusCode: 403 }
     }
     if (replay?.statusCode && replay.statusCode == 403) {
-        console.log("?????")
         if (route.url.toString() == "login")
             return true;
         switchRoute.navigateByUrl('login');
@@ -24,6 +23,7 @@ export const authGuard: CanActivateFn = async (route, state) => {
         switchRoute.navigateByUrl('twoFactor');
         return false;
     }
+    authService.setId(replay.sub);
     if (route.url.toString() == 'login')
         switchRoute.navigateByUrl('');
     return true;

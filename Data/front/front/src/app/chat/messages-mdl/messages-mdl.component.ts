@@ -1,7 +1,8 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ChatService } from '../chat.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-messages-mdl',
@@ -14,9 +15,10 @@ import { ChatService } from '../chat.service';
     ])
   ]
 })
-export class MessagesMdlComponent {
-  @Input() toggle!: boolean; // switched to type chat
+export class MessagesMdlComponent implements OnChanges {
+  @Input() id!: number; // switched to type chat
   @Input() chatInfos: any;
+  msgs$ !: Observable<any>;
   @ViewChild('dropDownChannelRef') dropDownChannelRef !: ElementRef;
   @ViewChild('dropDownChannelRef_') dropDownChannelRef_ !: ElementRef;
   @ViewChild('dropDownChannelRef__') dropDownChannelRef__ !: ElementRef;
@@ -31,18 +33,14 @@ export class MessagesMdlComponent {
     if (clickedElement !== this.dropDownChannelRef?.nativeElement && clickedElement !== this.dropDownChannelRef_?.nativeElement
       && clickedElement !== this.dropDownChannelRef__?.nativeElement) {// && clickedElement !== this.dropDownUserRef?.nativeElement) {
       this.dropDownChannel = false;
-      // this.dropDownUser = false;
     }
   }
-  id !: string;
   constructor(private readonly route: ActivatedRoute, private readonly chatService: ChatService) {
 
-    this.id = this.route.snapshot.params['id'];
-    console.log("alo oui?")
-    console.log(this.chatInfos)
 
-    // getThisChatMsgs
-
+  }
+  ngOnChanges(): void {
+    this.msgs$ = this.chatService.getChatroomMessages(this.id)
   }
 
 }

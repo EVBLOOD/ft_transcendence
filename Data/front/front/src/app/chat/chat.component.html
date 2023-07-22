@@ -10,14 +10,18 @@
                 <p>Channels</p>
             </a>
         </div>
-        <input class="textbox search" type="text" placeholder="Search" *ngIf="toggle" />
-        <input class="textbox search" type="text" placeholder="Search" *ngIf="!toggle" />
+        <input [formControl]="newText" class="textbox search" type="text" placeholder="Search"
+            (focusout)="FindextraUsers()" />
         <div class="friendsonline" *ngIf="toggle">
             <!-- friendList -->
-            <app-dms *ngFor="let item of (ChatDMs$|async)" />
+            <!-- {{ChatDMs$|async|json}} -->
+
+            <app-dms *ngFor="let item of (ChatDMs$|async)" [user]="item" />
+            <!-- <app-dms *ngFor="let item of (ChatDMs$|async)" /> -->
         </div>
         <div class="channels" *ngIf="!toggle">
             <!-- channels -->
+            <!-- {{ChatRooms$|async|json}} -->
             <app-channels *ngFor="let item of (ChatRooms$|async)" [channel]="item" />
         </div>
         <a routerLink="/channelCreating" class="button-create-channel" *ngIf="!toggle">Create channel</a>

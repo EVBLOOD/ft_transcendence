@@ -141,4 +141,8 @@ export class FriendshipService {
   isFriend(id: string) {
     return this.http.get('http://10.13.4.8:3000/friendship/find/' + id, { withCredentials: true, })
   }
+
+  findthem(userName: string) {
+    return this.http.get('http://10.13.4.8:3000/user/getUsers/' + userName, { withCredentials: true, })
+  }
 }

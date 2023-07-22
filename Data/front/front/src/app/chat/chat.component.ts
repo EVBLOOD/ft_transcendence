@@ -3,6 +3,9 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 import { ChatService } from './chat.service';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { ProfileService } from '../profile/profile.service';
+import { FormControl, Validators } from '@angular/forms';
+import { FriendshipService } from '../profile/friendship.service';
 
 @Component({
   selector: 'app-chat',
@@ -20,9 +23,12 @@ export class ChatComponent {
 
   ChatRooms$ !: Observable<any>;
   ChatDMs$ !: Observable<any>;
+  listUser$ !: Observable<any>;
   // constructor(private readonly chatService : ChatService) {}
 
-  constructor(private readonly chatService: ChatService, private route: Router) {
+  newText = new FormControl('', [Validators.required,]);
+
+  constructor(private readonly chatService: ChatService, private route: Router, private listUsers: FriendshipService) {
     this.ChatRooms$ = this.chatService.getChatrooms();
     this.chatService.getChatrooms().subscribe({
       next: (data) => {
@@ -110,4 +116,18 @@ export class ChatComponent {
       password: '', user: 'admin', otherUser: ''
     }).subscribe({ next: (data) => { console.log(data) } });
   }
+  FindextraUsers() {
+    if (this.newText.value?.length && this.toggle)
+      this.ChatDMs$ = this.listUsers.findthem(this.newText.value);
+    else if (this.toggle && !this.newText.value?.length)
+      this.ChatDMs$ = this.chatService.getChatDM();
+    else if (this.newText.value?.length)
+      this.ChatRooms$ = this.chatService.getChatroomMessagesnyName(this.newText.value)
+    else
+      this.ChatRooms$ = this.chatService.getChatrooms();
+
+
+  }
+
+
 }
