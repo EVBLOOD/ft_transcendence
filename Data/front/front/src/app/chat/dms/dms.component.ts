@@ -17,7 +17,8 @@ export class DMsComponent {
 
   }
   onClickFriend() {
-    this.switchRouter.navigateByUrl('/chat/firstone')
+    // if () // no chats ->
+    this.switchRouter.navigateByUrl('/chat/')
     this.clickFriend = !this.clickFriend;
   }
 
