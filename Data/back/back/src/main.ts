@@ -9,7 +9,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // const app = await NestFactory.create(AppModule, {
   // cors: {
-  //   origin: 'http://10.13.7.3:4200',
+  //   origin: 'http://10.13.4.8:4200',
   //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   //   allowedHeaders: 'Content-Type, Accept',
   //   exposedHeaders: 'Content-Range, X-Content-Range',

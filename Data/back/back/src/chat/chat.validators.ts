@@ -63,22 +63,22 @@ export function createChatroomEntity(
   return chatroom;
 }
 
-export function deleteUser(chatRoom: Chat, user: string): Chat {
+export function deleteUser(chatRoom: Chat, user: number): Chat {
   chatRoom.member = chatRoom.member.filter((u: User) => {
-    return u.username !== user;
+    return u.id !== user;
   });
   chatRoom.admin = chatRoom.admin.filter((u: User) => {
-    return u.username !== user;
+    return u.id !== user;
   });
   return chatRoom;
 }
 
-export function removeAdminStatus(chat: Chat, user: string): Chat {
+export function removeAdminStatus(chat: Chat, user: number): Chat {
   chat.admin = chat.admin.filter((u: User) => {
-    return u.username !== user;
+    return u.id !== user;
   });
   chat.member = chat.member.filter((u: User) => {
-    return u.username !== user;
+    return u.id !== user;
   });
   return chat;
 }

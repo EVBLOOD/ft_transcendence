@@ -18,6 +18,7 @@ import { isgamingGuard } from './play/game/isgaming.guard';
 import { ConfigChannelComponent } from './config-channel/config-channel.component';
 import { CreateChannelComponent } from './create-channel/create-channel.component';
 import { ChatComponent } from './chat/chat.component';
+import { ChatContentComponent } from './chat/chat-content/chat-content.component';
 
 const routes: Routes =
   [
@@ -31,7 +32,12 @@ const routes: Routes =
         { path: 'settings', component: SettingsComponent, canActivate: [authGuard] },
         { path: 'acticatetwo', component: ActivatetwoComponent, canActivate: [authGuard] },
         { path: 'activatetwof', component: ActivatetwoComponent, canActivate: [authGuard] },
-        { path: 'chat', component: ChatComponent, canActivate: [authGuard] },
+        {
+          path: 'chat', component: ChatComponent, canActivate: [authGuard],
+          children: [
+            { path: ':id', component: ChatContentComponent, canActivate: [authGuard] }
+          ]
+        },
         { path: 'leaderboard', component: LeaderbordComponent, canActivate: [authGuard] },
         { path: 'profile/:username', component: ProfileComponent, canActivate: [authGuard] },
         { path: 'channelSetting/:id', component: ConfigChannelComponent, canActivate: [authGuard] },

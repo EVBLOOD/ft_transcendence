@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ChatService } from '../chat/chat.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, Validators } from '@angular/forms';
@@ -19,7 +19,7 @@ export class ConfigChannelComponent {
 
   constructor(private readonly chatService: ChatService, private readonly switchRouter: Router, private route: ActivatedRoute,) {
     this.channelId = route.snapshot.params['id'];
-    if (!this.channelId.match(/^[0-9]*$/))
+    if (this.channelId && !this.channelId?.match(/^[0-9]*$/))
       this.switchRouter.navigateByUrl('/chat')
   }
 

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Socket, io } from 'socket.io-client';
 
-const URL = "http://10.13.7.3:3000";
+const URL = "http://10.13.4.8:3000";
 
 export type createChatroom = {
   type: string;
@@ -57,7 +57,7 @@ export class ChatService {
     this.PunishmentSock = io(URL + "/punishment", {
       withCredentials: true,
     });
-    this.sock = io('http://10.13.7.3:3000/chat', {
+    this.sock = io('http://10.13.4.8:3000/chat', {
       withCredentials: true,
     });
     this.sock.on(
@@ -76,11 +76,26 @@ export class ChatService {
       console.log(data);
     })
   }
-  getChatrooms(name: string) {
-    return this.httpClient.get<string>(`http://10.13.7.3:3000/chat/user/${name}`, { withCredentials: true, })
+
+  getThisChat(id: number) {
+    return this.httpClient.get(`http://10.13.4.8:3000/chat/find/` + id, { withCredentials: true, })
+
+  }
+
+  getThisChatMsgs(id: number) {
+    return this.httpClient.get(`http://10.13.4.8:3000/message/for` + id, { withCredentials: true, })
+
+  }
+
+  getChatrooms() {
+    return this.httpClient.get(`http://10.13.4.8:3000/chat/user`, { withCredentials: true, })
+  }
+
+  getChatDM() {
+    return this.httpClient.get(`http://10.13.4.8:3000/chat/DM`, { withCredentials: true, })
   }
   joinChatroom(chat: createChatroom) {
-    return this.httpClient.post(`http://10.13.7.3:3000/chat/create`, chat, { withCredentials: true, });
+    return this.httpClient.post(`http://10.13.4.8:3000/chat/create`, chat, { withCredentials: true, });
   }
 
   sendMessage(message: sendMessageDTO) {
@@ -91,10 +106,10 @@ export class ChatService {
     return this.httpClient.get<number>(URL + `/chat/${id}/messages`, { withCredentials: true, });
   }
   addUser(user: addUserDTO) {
-    return this.httpClient.post<addUserDTO>(`http://10.13.7.3:3000/user`, user, { withCredentials: true, });
+    return this.httpClient.post<addUserDTO>(`http://10.13.4.8:3000/user`, user, { withCredentials: true, });
   }
   getUser() {
-    return this.httpClient.get("http://10.13.7.3:3000/user", { withCredentials: true, })
+    return this.httpClient.get("http://10.13.4.8:3000/user", { withCredentials: true, })
   }
   addUserToChatRoom(id: string, user: string, password: string) {
     const dto: createMemberDTO = {
@@ -102,7 +117,7 @@ export class ChatService {
       password: password,
     }
     console.log("dto", dto, "id == ", id);
-    return this.httpClient.put<string>(`http://10.13.7.3:3000/chat/${id}/add/member`, dto, { withCredentials: true, });
+    return this.httpClient.put<string>(`http://10.13.4.8:3000/chat/${id}/add/member`, dto, { withCredentials: true, });
   }
   addAdminToChatRoom(id: string, admin: string, user: string) {
     const dto: createAdminDTO = {
@@ -110,7 +125,7 @@ export class ChatService {
       roleReceiver: user,
     }
     console.log("dto", dto, "id == ", id);
-    return this.httpClient.put<string>(`http://10.13.7.3:3000/chat/${id}/add/admin`, dto, { withCredentials: true, });
+    return this.httpClient.put<string>(`http://10.13.4.8:3000/chat/${id}/add/admin`, dto, { withCredentials: true, });
   }
   getUserMessages(user: string) {
     return this.httpClient.get<string>(URL + `/message/user/${user}`);

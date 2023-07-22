@@ -1,0 +1,17 @@
+<div>
+    <div (click)="onclickDropDownClick()" #dropDownUserRef class="friend"
+        [ngClass]="{'friend-selected' : dropDownUser}">
+        <div class="friend-profile">
+            <img src="/assets/img/profile.jpeg">
+            <div class="statusCircle Online"></div>
+            <!-- <div *ngIf="!item.status" class="statusCircle Offline"></div> -->
+        </div>
+        <p class="name-friend">Karim Idbouhouch</p>
+        <img class="listbox-member" src="/assets/icons/3points.svg">
+    </div>
+    <ul *ngIf="dropDownUser" @inOut class="dropdown-user">
+        <li>View Profile</li>
+        <li>Kick</li>
+        <li>Ban</li>
+    </ul>
+</div>

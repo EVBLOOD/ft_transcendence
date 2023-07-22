@@ -21,7 +21,7 @@ export class MessageService {
     private readonly messageRepo: Repository<Message>,
   ) { }
 
-  async getMessageByUserId(userName: string) {
+  async getMessageByUserId(userName: number) {
     const message = await this.messageRepo.find({
       order: {
         // get messages in ascending order
@@ -35,7 +35,7 @@ export class MessageService {
       where: {
         // only care bout the with the passed ID
         userId: {
-          username: userName,
+          id: userName,
         },
       },
       select: {
@@ -100,7 +100,8 @@ export class MessageService {
     const message = createNewMessage(messageDTO.value, chatRoom, user);
     return this.messageRepo.save(message);
   }
-  async getMessagesByChatID(chatID: number): Promise<Message[]> {
+  async getMessagesByChatID(chatID: number, id?: number): Promise<Message[]> {
+    // check if this Id is allowed to see. TODO: ALI
     const messages = await this.messageRepo.find({
       where: {
         chatRoomId: {
@@ -113,7 +114,9 @@ export class MessageService {
       },
       select: {
         userId: {
+          id: true,
           username: true,
+          avatar: true,
         },
         chatRoomId: {
           id: true,

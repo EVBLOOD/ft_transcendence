@@ -1,5 +1,8 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChatService } from './chat.service';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-chat',
@@ -15,6 +18,29 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } fro
 
 export class ChatComponent {
 
+  ChatRooms$ !: Observable<any>;
+  ChatDMs$ !: Observable<any>;
+  // constructor(private readonly chatService : ChatService) {}
+
+  constructor(private readonly chatService: ChatService, private route: Router) {
+    this.ChatRooms$ = this.chatService.getChatrooms();
+    this.chatService.getChatrooms().subscribe({
+      next: (data) => {
+        console.log("ChatRooms")
+        console.log(data);
+      }
+    });
+    this.ChatDMs$ = this.chatService.getChatDM();
+    this.chatService.getChatDM().subscribe({
+      next: (data) => {
+        console.log("Chat Dms")
+        console.log(data);
+      }
+    });
+  }
+  getStarterPath(path: string) {
+    return this.route.url.startsWith(path);
+  }
   @ViewChild('dropDownChannelRef') dropDownChannelRef !: ElementRef;
   @ViewChild('dropDownChannelRef_') dropDownChannelRef_ !: ElementRef;
   @ViewChild('dropDownChannelRef__') dropDownChannelRef__ !: ElementRef;
@@ -78,4 +104,10 @@ export class ChatComponent {
     this.clickFriend = !this.clickFriend;
   }
 
+  createDM() {
+    this.chatService.joinChatroom({
+      type: 'DM', chatroomName: '',
+      password: '', user: 'admin', otherUser: ''
+    }).subscribe({ next: (data) => { console.log(data) } });
+  }
 }

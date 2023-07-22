@@ -1,9 +1,14 @@
-.chat{
+.chat {
     display: grid;
-    grid-template-columns: 25% 50% 25%;
+    grid-template-columns: 25% 75%;
 }
 
-.grid1{
+.griding {
+    display: grid;
+    grid-template-columns: 70% 30%;
+}
+
+.grid1 {
     display: block;
     border-right: 1px solid #184E77;
     padding: 20px;
@@ -12,7 +17,7 @@
     grid-template-rows: auto auto 1fr auto;
 }
 
-.grid1 .toggle{
+.grid1 .toggle {
     color: #EEEEEE;
     background-color: #184E77;
     border-radius: 10px;
@@ -22,7 +27,7 @@
     gap: 6px;
 }
 
-.grid1 .toggle .button{
+.grid1 .toggle .button {
     transition: 0.3s;
     cursor: pointer;
     font-size: 13px;
@@ -36,17 +41,17 @@
     align-items: center;
 }
 
-.button:hover{
+.button:hover {
     background-color: #99D98C;
     color: #184E77;
 }
 
-.activeButton{
+.activeButton {
     background-color: #99D98C;
     color: #184E77;
 }
 
-.grid1 .toggle img{
+.grid1 .toggle img {
     height: 18px;
     width: 18px;
 }
@@ -83,31 +88,31 @@
     height: 50px;
 }
 
-.friend-profile img{
+.friend-profile img {
     border-radius: 50%;
     width: 100%;
     height: 100%;
 }
 
-.statusCircle{
+.statusCircle {
     position: absolute;
     border: 3px solid #103959;
     width: 12px;
-    height: 12px;  
+    height: 12px;
     border-radius: 50%;
     bottom: 0;
-    right: 0;  
+    right: 0;
 }
 
-.Online{
+.Online {
     background-color: #6EDB3F;
 }
 
-.Offline{
+.Offline {
     background-color: #8F8D8D;
 }
 
-.nb-messages{
+.nb-messages {
     height: 16px;
     width: 16px;
     font-size: 11px;
@@ -119,7 +124,7 @@
     padding: 2px;
 }
 
-.friend{
+.friend {
     position: relative;
     transition: 0.3s;
     display: grid;
@@ -131,7 +136,7 @@
     cursor: pointer;
 }
 
-.channel{
+.channel {
     transition: 0.3s;
     display: grid;
     grid-template-columns: min-content auto min-content;
@@ -142,28 +147,28 @@
     cursor: pointer;
 }
 
-.channel:hover{
+.channel:hover {
     background-color: #184E77;
     border-radius: 10px;
 }
 
-.friend:hover{
+.friend:hover {
     background-color: #184E77;
     border-radius: 10px;
 }
 
-.friendsonline{
+.friendsonline {
     // display: grid;
     // overflow-y: auto;
     // gap: 4px;
 
-    overflow-y:auto; 
-    position:relative;
+    overflow-y: auto;
+    position: relative;
     height: 760px;
     // max-height: fit-content;
 }
 
-.friend-selected{
+.friend-selected {
     background-color: #184E77;
     border-radius: 10px;
 }
@@ -173,9 +178,9 @@
     width: 33px;
 }
 
-.channels{
-    overflow-y:auto; 
-    position:relative;
+.channels {
+    overflow-y: auto;
+    position: relative;
     height: 650px;
 }
 
@@ -192,21 +197,21 @@
     background: #1A759F;
 }
 
-.grid2{
+.grid2 {
     display: block;
     border-right: 1px solid #184E77;
     display: grid;
     grid-template-rows: min-content auto min-content;
 }
 
-.header-chat{
+.header-chat {
     display: flex;
     border-bottom: 1px solid #184E77;
     padding: 25px;
     gap: 7px;
 }
 
-.header-chat-channel{
+.header-chat-channel {
     display: grid;
     grid-template-columns: 1fr min-content;
     border-bottom: 1px solid #184E77;
@@ -214,7 +219,7 @@
     align-items: center;
 }
 
-.dropdown-profile{
+.dropdown-profile {
     display: block;
     position: absolute;
     z-index: 1;
@@ -242,7 +247,7 @@
 }
 
 
-.dropdown-user{
+.dropdown-user {
     display: block;
     position: absolute;
     z-index: 1;
@@ -274,13 +279,13 @@
     gap: 7px;
 }
 
-.header-chat img{
+.header-chat img {
     width: 58px;
     height: 58px;
     border-radius: 50%;
 }
 
-.name-status{
+.name-status {
     font-size: 19px;
     align-content: center;
     display: flex;
@@ -288,19 +293,19 @@
     justify-content: center;
 }
 
-.header-chat .status{
+.header-chat .status {
     font-size: 13px;
     font-weight: 600;
     color: #6EDB3F;
 }
 
-.nb-members-channel{
+.nb-members-channel {
     font-size: 13px;
     font-weight: 600;
     color: #D8D8D8;
 }
 
-.threedotschannel{
+.threedotschannel {
     cursor: pointer;
     position: relative;
 }
@@ -315,18 +320,18 @@
     flex-direction: column-reverse;
 }
 
-.conversation img{
+.conversation img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
 }
 
-.receiver{
+.receiver {
     display: flex;
     gap: 8px;
 }
 
-.sender{
+.sender {
     display: flex;
     flex-direction: row-reverse;
     gap: 8px;
@@ -341,7 +346,7 @@
     margin-bottom: 8px;
 }
 
-.receiver .time{
+.receiver .time {
     color: #A5A5A5;
     font-size: 11px;
     font-weight: 600;
@@ -364,7 +369,7 @@
     margin-bottom: 8px;
 }
 
-.sender .time{
+.sender .time {
     color: #A5A5A5;
     font-size: 11px;
     font-weight: 600;
@@ -377,18 +382,18 @@
     border-radius: 20px 0px 20px 20px;
 }
 
-.sendMessage{
+.sendMessage {
     display: flex;
     gap: 5px;
     padding: 25px;
 }
 
-.message{
+.message {
     width: 100%;
     height: 38px;
 }
 
-.buttonSend{
+.buttonSend {
     display: flex;
     gap: 3px;
     align-items: center;
@@ -404,11 +409,11 @@
     transition: 0.3;
 }
 
-.buttonSend:hover{
-    opacity: 70%; 
+.buttonSend:hover {
+    opacity: 70%;
 }
 
-.button-create-channel{
+.button-create-channel {
     display: flex;
     gap: 3px;
     align-items: center;
@@ -427,11 +432,11 @@
     justify-content: center;
 }
 
-.button-create-channel:hover{
+.button-create-channel:hover {
     opacity: 70%;
 }
 
-.profile{
+.profile {
     display: flex;
     flex-direction: column;
     padding: 40px 20px;
@@ -439,7 +444,7 @@
     gap: 20px;
 }
 
-.img-profile{
+.img-profile {
     width: 166px;
     height: 166px;
     object-fit: cover;
@@ -451,7 +456,7 @@
     gap: 12px;
 }
 
-.buttonsProfile .btn{
+.buttonsProfile .btn {
     cursor: pointer;
     transition: 0.3s;
     font-size: 11px;
@@ -461,11 +466,11 @@
     align-items: center;
 }
 
-.buttonsProfile .btn:hover{
+.buttonsProfile .btn:hover {
     opacity: 70%;
 }
 
-.buttonsProfile .btn div{
+.buttonsProfile .btn div {
     background-color: #1E6091;
     width: 38px;
     height: 38px;
@@ -475,49 +480,52 @@
     border-radius: 50%;
 }
 
-.buttonsProfile img{   
+.buttonsProfile img {
     width: 22px;
     height: 22px;
 }
 
-.MembersChannel{
+.MembersChannel {
     padding: 20px 13px;
-    overflow-y:auto; 
-    position:relative;
+    overflow-y: auto;
+    position: relative;
     height: 830px;
 }
 
-.NameRole{
+.NameRole {
     color: #7FABCC;
     font-weight: 600;
     font-size: 13px;
 }
 
-.listbox-member{
+.listbox-member {
     width: 4px;
 }
 
-.grid3{
+.grid3 {
     display: block;
 }
 
 @media only screen and (max-width: 900px) {
-    .chat{
+    .chat {
         display: grid;
         grid-template-columns: auto auto;
     }
-    .grid3{
+
+    .grid3 {
         display: none;
     }
 }
 
 
 @media only screen and (max-width: 600px) {
-    .chat{
+    .chat {
         display: grid;
         grid-template-columns: auto;
     }
-    .grid3, .grid1{
+
+    .grid3,
+    .grid1 {
         display: none;
     }
 }
