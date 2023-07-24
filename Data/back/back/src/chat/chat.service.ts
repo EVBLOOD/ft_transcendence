@@ -30,12 +30,15 @@ export class ChatService {
   constructor(
     @InjectRepository(Chat)
     private readonly chatRoomRepo: Repository<Chat>,
+    @InjectRepository(Message)
+    private readonly messageRepo: Repository<Message>,
+    // private readonly MessgafRoomRepo: Repository<Chat>,
     private readonly chatPunishment: PunishmentService,
     private readonly chatHelpers: ChatUtils,
     private readonly messageService: MessageService,
   ) { }
 
-  async getChatRoomOfUsers(id: number): Promise<Chat[]> {
+  async getChatRoomOfUsers(id: number) {
     const chatroom = await this.chatRoomRepo.find({
       order: {
         id: 'desc',
@@ -48,11 +51,26 @@ export class ChatService {
           userId: true,
         },
       },
-      where: {
-        member: {
-          id: id,
+      where: [
+        {
+          member: {
+            id: id,
+          },
+          type: 'public'
         },
-      },
+        {
+          member: {
+            id: id,
+          },
+          type: 'private'
+        },
+        {
+          member: {
+            id: id,
+          },
+          type: 'password'
+        }
+      ],
       select: {
         id: true,
         chatRoomName: true,
@@ -77,7 +95,7 @@ export class ChatService {
     return chatroom;
   }
 
-  async GetChatRoomByID(id: number): Promise<Chat> {
+  async GetChatRoomByID(id: number) {
     const chatRoom = await this.chatRoomRepo.findOne({
       where: {
         id: id,
@@ -113,7 +131,7 @@ export class ChatService {
     throw new HttpException('ChatRoom Not Found', HttpStatus.NOT_FOUND);
   }
 
-  async createChatroom(userId: number, chatroomDTO: createChatroomDTO): Promise<Chat> {
+  async createChatroom(userId: number, chatroomDTO: createChatroomDTO) {
     if (validateChatDTO(chatroomDTO) === true) {
       const user = await this.chatHelpers.getUser(userId);
       let secondUser: User | undefined = undefined;
@@ -132,7 +150,74 @@ export class ChatService {
     throw new HttpException("Can't create Chatroom!", HttpStatus.BAD_REQUEST);
   }
 
-  async postToChatroom(messageDTO: CreateMessage, id: number): Promise<Message> {
+  async postToDM(messageDTO: CreateMessage, current: number) {
+    let chatroom: any = (await this.betweenDMAndChannel(messageDTO.charRoomId, current));
+    if (!chatroom || !chatroom.length) {
+      chatroom = await this.createChatroom(current, { type: 'DM', chatroomName: 'abc', password: '' })
+      if (chatroom)
+        await this.addMemberToChatroom(chatroom.id, { member: messageDTO.charRoomId, password: '' });
+    }
+    if (chatroom.length)
+      return await this.postToDms({ charRoomId: chatroom[0].id, value: messageDTO.value }, current);
+    return await this.postToDms({ charRoomId: chatroom.id, value: messageDTO.value }, current);
+
+  }
+
+  async betweenDMAndChannel(id: number, id2: number) {
+    const replaying = await this.chatRoomRepo
+      .createQueryBuilder('chats').leftJoinAndSelect('chats.member', 'members').leftJoinAndSelect('chats.message', 'messages')
+      .where('members.id = :Userid AND members.id = :Userid1 AND chats.type = :type', { Userid: id, Userid1: id2, type: 'DM' }).getMany();
+    return replaying;
+  }
+
+  async betweenDM(id: number, id2: number) {
+    console.log("JE RE")
+    let replaying = await this.chatRoomRepo
+      .createQueryBuilder('chats').leftJoinAndSelect('chats.member', 'members').leftJoinAndSelect('chats.message', 'messages').leftJoinAndSelect('messages.userId', 'Theuser').groupBy('chats.id, members.id, messages.messageID, Theuser.id').where('members.id = ANY(:Ids) AND chats.type = :type', { Ids: [id, id2], type: 'DM' }).getMany();
+    // .where('members.id = :Userid AND members.id = :Userid1 AND chats.type = :type', { Userid: id, Userid1: id2, type: 'DM' }).getOne();
+    console.log(replaying)
+    replaying.map((chat) => {
+      console.log(chat)
+    })
+    return replaying[0].message
+  }
+
+
+  async postToDms(messageDTO: CreateMessage, id: number) {
+    const chatRoom = await this.GetChatRoomByID(messageDTO.charRoomId);
+    if (!chatRoom)
+      return {}
+    const user = await this.chatHelpers.getUser(id);
+    if (!user)
+      return {}
+    const newMessage = new Message();
+    newMessage.chatRoomId = chatRoom;
+    newMessage.value = messageDTO.value;
+    newMessage.userId = user;
+    return await this.messageRepo.save(newMessage)
+  }
+
+  async findDM(id: number) {
+    return await this.chatRoomRepo.find({
+      relations: {
+        member: true,
+      },
+      where: {
+        type: 'DM',
+        member: {
+          id: id,
+        },
+      },
+      select: {
+        member: {
+          avatar: true,
+          id: true,
+          name: true,
+        },
+      },
+    });
+  }
+  async postToChatroom(messageDTO: CreateMessage, id: number) { // TODO: throw's exeptions -
     this.chatPunishment.clearOldPunishments();
     if (
       (await this.chatHelpers.checkForMemberRoll(
@@ -148,29 +233,28 @@ export class ChatService {
       const user = await this.chatHelpers.getUser(id);
       return await this.messageService.create(messageDTO, chatRoom, user);
     }
-    throw new HttpException("Can't send messages here", HttpStatus.FORBIDDEN);
+    return {}
   }
 
-  async findDMChatrooms(id: number): Promise<Chat[]> {
-    return await this.chatRoomRepo.find({
-      relations: {
-        member: true,
-      },
-      where: {
-        type: 'DM',
-        member: {
-          id: id,
-        },
-      },
-      select: {
-        member: {
-          username: true,
-        },
-      },
-    });
+  async findDMChatrooms(id: number) {
+    console.log('                    -chatDms                               ')
+    let data: Array<any> = [];
+    const chatDms = await this.chatRoomRepo
+      .createQueryBuilder('chats').leftJoinAndSelect('chats.member', 'members').leftJoinAndSelect('chats.message', 'messages').leftJoinAndSelect('messages.userId', 'Theuser').getMany()
+    console.log(chatDms)
+    chatDms.map((item) => {
+      if (item.type == 'DM') {
+        if (item.member.length == 1 || item.member[1].id == id) {
+          data.push({ name: item.member[0].name, id: item.member[0].id, avatar: item.member[0].avatar });
+        }
+        else
+          data.push({ name: item.member[1].name, id: item.member[1].id, avatar: item.member[1].avatar });
+      }
+    })
+    return data;
   }
 
-  async findDMChatroom(user1: number, user2: number): Promise<Chat | null> {
+  async findDMChatroom(user1: number, user2: number) {
     const user1ListOfChatrooms = await this.chatRoomRepo.find({
       relations: {
         member: true,
@@ -217,19 +301,19 @@ export class ChatService {
     throw new HttpException("Can't find DM", HttpStatus.NOT_FOUND);
   }
 
-  async checkForAdminRoll(chatID: number, id: number): Promise<boolean> {
+  async checkForAdminRoll(chatID: number, id: number) {
     return this.chatHelpers.checkForAdminRoll(chatID, id);
   }
 
-  async checkForOwnerRoll(chatID: number, id: number): Promise<boolean> {
+  async checkForOwnerRoll(chatID: number, id: number) {
     return this.chatHelpers.checkForOwnerRoll(chatID, id);
   }
 
-  async checkForMemberRoll(chatID: number, id: number): Promise<boolean> {
+  async checkForMemberRoll(chatID: number, id: number) {
     return this.chatHelpers.checkForMemberRoll(chatID, id);
   }
 
-  async getChatroomPassword(id: number): Promise<string> {
+  async getChatroomPassword(id: number) {
     const chatRoom = await this.chatRoomRepo.findOne({
       where: {
         id: id,
@@ -250,7 +334,7 @@ export class ChatService {
   async addMemberToChatroom(
     chatID: number,
     memberDTO: createMemberDTO,
-  ): Promise<Chat> {
+  ) {
     const chatroom = await this.GetChatRoomByID(chatID);
     if (chatroom.type === 'password') {
       const password = await this.getChatroomPassword(chatID);
@@ -288,7 +372,7 @@ export class ChatService {
   async addAdminToChatroom(
     chatID: number,
     adminDTO: createAdminDTO,
-  ): Promise<Chat> {
+  ) {
     const chatroom = await this.GetChatRoomByID(chatID);
     if (
       (await this.chatHelpers.checkForAdminRoll(chatID, adminDTO.roleGiver)) ==
@@ -321,7 +405,7 @@ export class ChatService {
   async changeOwnerOfChatroom(
     chatID: number,
     swapDTO: SwapOwnerDTO,
-  ): Promise<Chat | undefined> {
+  ) {
     const chatroom = await this.GetChatRoomByID(chatID);
     if (
       (await this.chatHelpers.checkForAdminRoll(chatID, swapDTO.roleReciver)) ==
@@ -349,7 +433,7 @@ export class ChatService {
     chatID: number,
     adminUserName: number,
     userUserName: number,
-  ): Promise<Chat | undefined> {
+  ) {
     const chatroom = await this.GetChatRoomByID(chatID);
     if ((await this.checkForAdminRoll(chatID, adminUserName)) == true) {
       if ((await this.checkForOwnerRoll(chatID, userUserName)) == false) {
@@ -373,7 +457,7 @@ export class ChatService {
     );
   }
 
-  async deleteChat(chatID: number): Promise<void> {
+  async deleteChat(chatID: number) {
     await this.chatRoomRepo
       .createQueryBuilder('chatroom')
       .delete()
@@ -386,7 +470,7 @@ export class ChatService {
     chatID: number,
     adminUserName: number,
     userUserName: number,
-  ): Promise<Chat | undefined> {
+  ) {
     console.log('chat id : ', chatID);
     console.log('adminUserName : ', adminUserName);
     console.log('userUserName : ', userUserName);
@@ -406,7 +490,7 @@ export class ChatService {
     }
   }
 
-  async leaveChat(chatID: number, user: number): Promise<Chat | string> {
+  async leaveChat(chatID: number, user: number) {
     const chatroom = await this.GetChatRoomByID(chatID);
     if ((await this.chatHelpers.onlyOneUserInChatroom(chatID)) == true) {
       this.deleteChat(chatID);
@@ -441,7 +525,7 @@ export class ChatService {
     chatID: number,
     adminName: number,
     updateDTO: UpdateChatroomDTO,
-  ): Promise<Chat | undefined> {
+  ) {
     console.log(adminName)
     const chatroom = await this.GetChatRoomByID(chatID);
     if (chatroom.type === 'DM') {
@@ -469,7 +553,7 @@ export class ChatService {
     );
   }
 
-  async getChatroomsByType(type: string): Promise<Chat[]> {
+  async getChatroomsByType(type: string) {
     const chatrooms = await this.chatRoomRepo.find({
       where: {
         type: type,
@@ -492,17 +576,17 @@ export class ChatService {
     });
     return chatrooms;
   }
-  async getMessagesByChatID(chatID: number): Promise<Message[]> {
+  async getMessagesByChatID(chatID: number) {
     return this.messageService.getMessagesByChatID(chatID);
   }
-  async getChatroomPunishments(chatID: number): Promise<Punishment[]> {
+  async getChatroomPunishments(chatID: number) {
     return this.chatPunishment.getChatroomPunishments(chatID);
   }
 
   async deleteUserFromChatroom(
     chatroomId: number,
     user: number,
-  ): Promise<Chat> {
+  ) {
     const chatroom = await this.GetChatRoomByID(chatroomId);
     if (await this.chatHelpers.checkForOwnerRoll(chatroomId, user)) {
       throw new HttpException(
@@ -518,7 +602,7 @@ export class ChatService {
     chatID: number,
     id: number,
     punishmentDTO: createPunishmentDTO,
-  ): Promise<Punishment> {
+  ) {
     if (
       (await this.chatHelpers.canBePunished(chatID, id, punishmentDTO)) ==
       true
@@ -559,7 +643,7 @@ export class ChatService {
   async getUserMessagesInChatroom(
     id: number,
     idUser: number,
-  ): Promise<Message[]> {
+  ) {
     const messages = await this.messageService.getMessagesByChatroomID(id);
     // TODO: get blocked users and filter there messages befor returning
     return messages;

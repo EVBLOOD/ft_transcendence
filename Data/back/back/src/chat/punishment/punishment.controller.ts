@@ -9,14 +9,14 @@ export class PunishmentController {
   async checkIfUserBanned(
     @Param('chatID', ParseIntPipe) chatID: number,
     @Param('userName') userName: number,
-  ): Promise<boolean> {
+  ) {
     return this.punishmentService.checkIfUserBanned(chatID, userName);
   }
   @Get('/chat/:chatID/user/:userName/mute')
   async checkIfUserMuted(
     @Param('chatID', ParseIntPipe) chatID: number,
     @Param('userName') userName: number,
-  ): Promise<boolean> {
+  ) {
     return this.punishmentService.checkIfUserMuted(chatID, userName);
   }
 }

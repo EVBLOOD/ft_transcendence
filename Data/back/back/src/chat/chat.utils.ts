@@ -16,14 +16,15 @@ export class ChatUtils {
     private readonly userService: UserService,
   ) { }
 
-  async getUser(id: number): Promise<User | undefined> {
+  async getUser(id: number) {
     if (id) {
       const user = await this.userService.findOne(id);
       if (user) return user;
+      return null;
     }
-    throw new HttpException(`User ${id} Not Found`, HttpStatus.NOT_FOUND);
+    // throw new HttpException(`User ${id} Not Found`, HttpStatus.NOT_FOUND);
   }
-  async checkForAdminRoll(chatID: number, id: number): Promise<boolean> {
+  async checkForAdminRoll(chatID: number, id: number) {
     console.log(id)
     const admin = await this.chatRoomRepo.findOne({
       relations: {
@@ -48,7 +49,7 @@ export class ChatUtils {
     return false;
   }
 
-  async checkForMemberRoll(chatID: number, id: number): Promise<boolean> {
+  async checkForMemberRoll(chatID: number, id: number) {
     const chatroom = await this.chatRoomRepo.findOne({
       relations: {
         member: true,
@@ -72,7 +73,7 @@ export class ChatUtils {
     return false;
   }
 
-  async checkForOwnerRoll(chatID: number, id: number): Promise<boolean> {
+  async checkForOwnerRoll(chatID: number, id: number) {
     const owner = await this.chatRoomRepo.findOne({
       relations: {
         owner: true,
@@ -87,7 +88,7 @@ export class ChatUtils {
     if (owner) return true;
     return false;
   }
-  async isMoreThenOneAdminInChatroom(chatID: number): Promise<boolean> {
+  async isMoreThenOneAdminInChatroom(chatID: number) {
     const chatroom = await this.chatRoomRepo.findOne({
       where: {
         id: chatID,
@@ -104,7 +105,7 @@ export class ChatUtils {
     return false;
   }
 
-  async isMoreThenOneMemberInChatroom(chatID: number): Promise<boolean> {
+  async isMoreThenOneMemberInChatroom(chatID: number) {
     const chatroom = await this.chatRoomRepo.findOne({
       where: {
         id: chatID,
@@ -120,7 +121,7 @@ export class ChatUtils {
     }
     return false;
   }
-  async onlyOneUserInChatroom(chatID: number): Promise<boolean> {
+  async onlyOneUserInChatroom(chatID: number) {
     if (
       (await this.isMoreThenOneAdminInChatroom(chatID)) == true ||
       (await this.isMoreThenOneMemberInChatroom(chatID)) == true
@@ -133,7 +134,7 @@ export class ChatUtils {
     chatID: number,
     id: number,
     punishmentDTO: createPunishmentDTO,
-  ): Promise<boolean> {
+  ) {
     if ((await this.checkForAdminRoll(chatID, id)) == false) {
       console.log('admin', id);
       console.log('chatid', chatID);

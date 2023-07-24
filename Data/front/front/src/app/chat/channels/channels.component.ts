@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,10 +8,7 @@ import { Router } from '@angular/router';
 })
 export class ChannelsComponent {
   @Input() channel: any;
-  // id !: number;
   constructor(private readonly switchRoute: Router) {
-    console.log(this.channel);
-    // this.id = this.channel?.id;
   }
   openChat(id: number) {
     this.switchRoute.navigateByUrl("/chat/" + id)

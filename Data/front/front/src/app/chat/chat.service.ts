@@ -30,7 +30,6 @@ export type CreatePunishmentDto = {
 }
 
 export type sendMessageDTO = {
-  // userName: string;
   value: string;
   charRoomId: number;
 };
@@ -82,6 +81,10 @@ export class ChatService {
 
   }
 
+  getDmMessages(id: number) {
+    return this.httpClient.get<any>(URL + `/chat/${id}/Dms`, { withCredentials: true, });
+  }
+
   getThisChatMsgs(id: number) {
     return this.httpClient.get(`http://10.13.4.8:3000/message/for` + id, { withCredentials: true, })
 
@@ -98,9 +101,9 @@ export class ChatService {
     return this.httpClient.post(`http://10.13.4.8:3000/chat/create`, chat, { withCredentials: true, });
   }
 
-  sendMessage(message: sendMessageDTO) {
+  sendMessage(message: sendMessageDTO, type: boolean) {
     // console.log("message DTO", message);
-    this.sock.emit("sendMessage", message);
+    this.sock.emit("sendMessage", { type: type, message: message });
   }
   getChatroomMessages(id: number) {
     return this.httpClient.get<number>(URL + `/chat/${id}/messages`, { withCredentials: true, });

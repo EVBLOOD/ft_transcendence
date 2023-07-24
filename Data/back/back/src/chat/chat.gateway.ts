@@ -57,7 +57,7 @@ export class ChatGateway
     return true;
   }
   @SubscribeMessage('sendMessage')
-  async sendMessage(client: Socket, payload: CreateMessage) {
+  async sendMessage(client: Socket, payload: any) {
     const cookie = client.handshake.headers?.cookie
       ?.split('; ')
       ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
@@ -82,9 +82,19 @@ export class ChatGateway
       return false;
     }
     try {
-      const message = await this.chatService.postToChatroom(payload, xyz.sub);
-      console.log(message)
-      this.server.emit('recMessage', { sender: xyz.sub, mgs: message });
+      console.log(payload)
+      if (payload?.type !== null && payload?.type !== undefined
+        && payload?.message !== null && payload?.message !== undefined) {
+        let message = {};
+        if (payload?.type) {
+          console.log("Channel?")
+          message = await this.chatService.postToChatroom(payload?.message, xyz.sub);
+        }
+        else
+          message = await this.chatService.postToDM(payload?.message, xyz.sub);
+        console.log(message)
+        this.server.emit('recMessage', { sender: xyz.sub, mgs: message });
+      }
     } catch (err) {
       console.log(err);
     }

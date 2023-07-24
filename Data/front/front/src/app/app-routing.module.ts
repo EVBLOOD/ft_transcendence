@@ -35,7 +35,8 @@ const routes: Routes =
         {
           path: 'chat', component: ChatComponent, canActivate: [authGuard],
           children: [
-            { path: ':id', component: ChatContentComponent, canActivate: [authGuard] }
+            { path: ':id', component: ChatContentComponent, canActivate: [authGuard] },
+            { path: 'dm/:username', component: ChatContentComponent, canActivate: [authGuard] }
           ]
         },
         { path: 'leaderboard', component: LeaderbordComponent, canActivate: [authGuard] },

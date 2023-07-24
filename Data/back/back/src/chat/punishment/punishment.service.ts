@@ -21,7 +21,7 @@ export class PunishmentService {
     private readonly PunishmentRepo: Repository<Punishment>,
   ) { }
 
-  async isMutedInChatroom(chatID: number, id: number): Promise<boolean> {
+  async isMutedInChatroom(chatID: number, id: number) {
     const mutedUsers = await this.getMutedUsers(chatID, id);
     if (mutedUsers) {
       for (const i of mutedUsers) {
@@ -42,7 +42,7 @@ export class PunishmentService {
   async getMutedUsers(
     chatID: number,
     id: number,
-  ): Promise<Punishment[] | null> {
+  ) {
     const users = await this.PunishmentRepo.find({
       relations: {
         user: true,
@@ -65,7 +65,7 @@ export class PunishmentService {
   async getBannedUsers(
     chatID: number,
     user: number,
-  ): Promise<Punishment[] | null> {
+  ) {
     const users = await this.PunishmentRepo.find({
       relations: {
         user: true,
@@ -96,7 +96,7 @@ export class PunishmentService {
     return users;
   }
 
-  async isBannedInChatroom(chatID: number, user: number): Promise<boolean> {
+  async isBannedInChatroom(chatID: number, user: number) {
     const bannedUsers = await this.getBannedUsers(chatID, user);
     if (bannedUsers) {
       for (const i of bannedUsers) {
@@ -113,7 +113,7 @@ export class PunishmentService {
     }
     return false;
   }
-  async getChatroomPunishments(chatID: number): Promise<Punishment[]> {
+  async getChatroomPunishments(chatID: number) {
     const punishments = this.PunishmentRepo.find({
       where: {
         chat: {
@@ -144,7 +144,7 @@ export class PunishmentService {
     chat: Chat,
     user: User,
     punishmentDTO: createPunishmentDTO,
-  ): Promise<Punishment> {
+  ) {
     if (validatePunishmentDto(punishmentDTO) == true) {
       const newPunishment = createPunishmenEntity(chat, user, punishmentDTO);
       return await this.PunishmentRepo.save(newPunishment);
@@ -154,7 +154,7 @@ export class PunishmentService {
       HttpStatus.BAD_REQUEST,
     );
   }
-  async checkIfUserBanned(chatID: number, userName: number): Promise<boolean> {
+  async checkIfUserBanned(chatID: number, userName: number) {
     const users = await this.getBannedUsers(chatID, userName);
     if (users.length !== 0) {
       for (const i of users) {
@@ -169,7 +169,7 @@ export class PunishmentService {
     }
     return false;
   }
-  async checkIfUserMuted(chatID: number, userName: number): Promise<boolean> {
+  async checkIfUserMuted(chatID: number, userName: number) {
     const users = await this.getMutedUsers(chatID, userName);
     if (users.length !== 0) {
       for (const i of users) {
@@ -184,7 +184,7 @@ export class PunishmentService {
     }
     return false;
   }
-  async getPunishmentOlderThan1H(): Promise<Punishment[]> {
+  async getPunishmentOlderThan1H() {
     const date1hAgo = new Date(Date.now() - 1000 * (60 * 60));
     const Punishments = await this.PunishmentRepo.find({
       order: {

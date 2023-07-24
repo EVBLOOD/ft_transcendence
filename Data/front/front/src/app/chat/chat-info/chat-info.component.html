@@ -1,4 +1,4 @@
-<div class="grid3" *ngIf="toggle">
+<div class="grid3" *ngIf="!isRoom">
     <div class="profile">
         <img class="img-profile" src="/assets/img/profile.jpeg">
         <div class="buttonsProfile">
@@ -17,27 +17,13 @@
         </div>
     </div>
 </div>
-<div class="grid3" *ngIf="!toggle">
+<div class="grid3" *ngIf="isRoom">
     <div class="MembersChannel">
         <p class="NameRole">Operators</p>
         <div>
             <app-part-chat />
         </div>
-
-
         <p class="NameRole">Members</p>
         <app-part-chat />
-
-        <!-- <div>
-            <div *ngFor="let item of friends" class="friend">
-                <div class="friend-profile">
-                    <img src="{{item.avatar}}" >
-                    <div *ngIf="item.status" class="statusCircle Online"></div>
-                    <div *ngIf="!item.status" class="statusCircle Offline"></div>
-                </div>
-                <p class="name-friend">{{item.name}}</p>
-                <img class="listbox-member" src="/assets/icons/3points.svg">
-            </div>
-        </div> -->
     </div>
 </div>

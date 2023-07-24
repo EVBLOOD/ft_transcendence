@@ -1,8 +1,9 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, ElementRef, HostListener, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+// import { ActivatedRoute } from '@angular/router';
 import { ChatService } from '../chat.service';
 import { Observable } from 'rxjs';
+import { ProfileService } from 'src/app/profile/profile.service';
 
 @Component({
   selector: 'app-messages-mdl',
@@ -16,9 +17,11 @@ import { Observable } from 'rxjs';
   ]
 })
 export class MessagesMdlComponent implements OnChanges {
+  @Input() isRoom: boolean = false;
   @Input() id!: number; // switched to type chat
   @Input() chatInfos: any;
   msgs$ !: Observable<any>;
+  user$ !: Observable<any>;
   @ViewChild('dropDownChannelRef') dropDownChannelRef !: ElementRef;
   @ViewChild('dropDownChannelRef_') dropDownChannelRef_ !: ElementRef;
   @ViewChild('dropDownChannelRef__') dropDownChannelRef__ !: ElementRef;
@@ -31,16 +34,23 @@ export class MessagesMdlComponent implements OnChanges {
   documentClick(event: MouseEvent): void {
     const clickedElement = event.target as HTMLElement;
     if (clickedElement !== this.dropDownChannelRef?.nativeElement && clickedElement !== this.dropDownChannelRef_?.nativeElement
-      && clickedElement !== this.dropDownChannelRef__?.nativeElement) {// && clickedElement !== this.dropDownUserRef?.nativeElement) {
+      && clickedElement !== this.dropDownChannelRef__?.nativeElement) {
       this.dropDownChannel = false;
     }
   }
-  constructor(private readonly route: ActivatedRoute, private readonly chatService: ChatService) {
+  constructor(private readonly chatService: ChatService, private readonly profileUser: ProfileService) { }
 
-
+  avatring(url: string) {
+    return this.profileUser.getUserAvatarPath(url);
   }
+
   ngOnChanges(): void {
-    this.msgs$ = this.chatService.getChatroomMessages(this.id)
+    if (this.id && this.isRoom)
+      this.msgs$ = this.chatService.getChatroomMessages(this.id)
+    else if (!this.isRoom && this.id) {
+      this.user$ = this.profileUser.getUserData(this.id.toString())
+      this.msgs$ = this.chatService.getDmMessages(this.id);
+    }
   }
 
 }

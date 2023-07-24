@@ -1,23 +1,18 @@
 <div class="grid2">
-    <div class="header-chat" *ngIf="this.chatInfos?.type == 'DM'">
-        <img src="/assets/img/profile.jpeg">
+    <div class="header-chat" *ngIf="!isRoom">
+        <img [src]="avatring((user$|async)?.avatar)">
         <div class="name-status">
-            <div class="name">Karim Idbouhouch</div>
+            <div class="name">{{(user$|async)?.name}}</div>
             <div class="status">Online</div>
         </div>
     </div>
-    <!-- {{this.chatInfos|json}} -->
-    <!-- "id": 1, "type": "public", "chatRoomName": "DMS", "message": [], "owner": { "id": 98933, "username": "aabdou",
-    "avatar": "https://cdn.intra.42.fr/users/a61724ae411ca4bd306799375cda04cb/aabdou.jpg" }, "admin": [ { "id": 98933,
-    "username": "aabdou", "avatar": "https://cdn.intra.42.fr/users/a61724ae411ca4bd306799375cda04cb/aabdou.jpg" } ],
-    "member": [ { "id": 98933, "username": "aabdou", "avatar":
-    "https://cdn.intra.42.fr/users/a61724ae411ca4bd306799375cda04cb/aabdou.jpg" } ] } -->
-    <div class="header-chat-channel" *ngIf="this.chatInfos?.type != 'DM'">
+    <div class="header-chat-channel" *ngIf="isRoom">
         <div class="icon-name-channel">
             <img src="/assets/icons/hashtag.svg">
             <div class="name-status">
                 <div class="name">{{this.chatInfos?.chatRoomName}}</div>
-                <div class="nb-members-channel">{{this.chatInfos?.member?.length}} Members</div>
+                <div class="nb-members-channel">{{this.chatInfos?.member?.length ? this.chatInfos?.member?.length +
+                    'Members' : ''}} </div>
             </div>
         </div>
         <div #dropDownChannelRef__ class="threedotschannel">
@@ -31,7 +26,8 @@
     </div>
 
     <div class="conversation">
-        <app-message *ngFor="let msg of (msgs$|async)" [value]="msg" />
+        {{((msgs$|async)|json)}}
+        <app-message *ngFor="let msg of (msgs$|async) " [value]="msg" />
     </div>
-    <app-send-msg [chatId]="this.chatInfos?.id" />
+    <app-send-msg [isRoom]="isRoom" [chatId]="this.chatInfos?.id" [userId]="id" />
 </div>

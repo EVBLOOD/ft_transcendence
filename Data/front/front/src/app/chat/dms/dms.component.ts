@@ -10,7 +10,7 @@ import { ProfileService } from 'src/app/profile/profile.service';
 })
 export class DMsComponent {
   clickFriend = false;
-  userFriend$!: Observable<any>;
+  // userFriend$!: Observable<any>;
   id !: number;
   @Input() user: any = null;
   constructor(private readonly switchRouter: Router, private readonly profile: ProfileService) {
@@ -18,7 +18,7 @@ export class DMsComponent {
   }
   onClickFriend() {
     // if () // no chats ->
-    this.switchRouter.navigateByUrl('/chat/')
+    this.switchRouter.navigateByUrl('/chat/dm/' + this.user.id)
     this.clickFriend = !this.clickFriend;
   }
 

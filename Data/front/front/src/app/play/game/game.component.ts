@@ -27,6 +27,35 @@ export type Score = { player1: number, player2: number };
 
 const RESOLUTION = { width: 1428, height: 700 };
 const TARGET_FPS = 60;
+const CONFIG: Phaser.Types.Core.GameConfig = {
+  type: Phaser.AUTO,
+  width: RESOLUTION.width,
+  height: RESOLUTION.height,
+  backgroundColor: '#103960',
+  parent: 'game-container',
+  physics: {
+    default: 'arcade',
+    arcade: {
+    }
+  },
+  fps: {
+    min: TARGET_FPS,
+    target: TARGET_FPS,
+    deltaHistory: 10,
+    smoothStep: true,
+  },
+  scale: {
+    mode: Phaser.Scale.WIDTH_CONTROLS_HEIGHT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+    parent: 'game-container',
+  },
+  scene:
+    [],
+  audio: {
+    noAudio: true,
+    disableWebAudio: true,
+  },
+};
 
 @Component({
   selector: 'app-game',
@@ -46,7 +75,6 @@ export class GameComponent implements OnDestroy, OnInit {
   public auth$ !: Observable<any>;
   public players: any = undefined;
   private game!: Phaser.Game;
-  private config: Phaser.Types.Core.GameConfig;
   private gameScene!: GameScene;
   private gameStateSub!: Subscription;
   lastTime: boolean = true;
@@ -59,35 +87,6 @@ export class GameComponent implements OnDestroy, OnInit {
     private auth: AuthService, public friends: FriendshipService, private status: StatusService, public statistics: AboutGamesService) {
 
     this.auth$ = this.auth.getCurrentUser()
-    this.config = {
-      type: Phaser.AUTO,
-      width: RESOLUTION.width,
-      height: RESOLUTION.height,
-      backgroundColor: '#103960',
-      parent: 'game-container',
-      physics: {
-        default: 'arcade',
-        arcade: {
-        }
-      },
-      fps: {
-        min: TARGET_FPS,
-        target: TARGET_FPS,
-        deltaHistory: 10,
-        smoothStep: true,
-      },
-      scale: {
-        mode: Phaser.Scale.WIDTH_CONTROLS_HEIGHT,
-        autoCenter: Phaser.Scale.CENTER_BOTH,
-        parent: 'game-container',
-      },
-      scene:
-        [],
-      audio: {
-        noAudio: true,
-        disableWebAudio: true,
-      },
-    };
     // gameService.
     this.players = this.gameService.Players;
     this.Fplayer$ = this.profile.getUserData(this.players.Fplayer)
@@ -129,7 +128,7 @@ export class GameComponent implements OnDestroy, OnInit {
   ngOnInit(): void {
     this.status.inPlay();
     // setTimeout(() => {
-    this.game = new Phaser.Game(this.config);
+    this.game = new Phaser.Game(CONFIG);
     // })
     this.gameStateSub = this.gameService.getState()
       .subscribe((payload: string) => {

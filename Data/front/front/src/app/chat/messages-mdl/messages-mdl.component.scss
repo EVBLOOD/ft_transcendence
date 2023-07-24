@@ -1,8 +1,8 @@
 .grid2 {
-    display: block;
     border-right: 1px solid #184E77;
     display: grid;
     grid-template-rows: min-content auto min-content;
+    // height: 100%;
 }
 
 .header-chat {
@@ -90,7 +90,8 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    overflow-y: scroll;
+    overflow-y: auto;
+    // height: 95%;
     height: 650px;
     flex-direction: column-reverse;
 }

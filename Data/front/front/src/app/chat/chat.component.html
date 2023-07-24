@@ -14,14 +14,11 @@
             (focusout)="FindextraUsers()" />
         <div class="friendsonline" *ngIf="toggle">
             <!-- friendList -->
-            <!-- {{ChatDMs$|async|json}} -->
-
             <app-dms *ngFor="let item of (ChatDMs$|async)" [user]="item" />
-            <!-- <app-dms *ngFor="let item of (ChatDMs$|async)" /> -->
         </div>
         <div class="channels" *ngIf="!toggle">
+
             <!-- channels -->
-            <!-- {{ChatRooms$|async|json}} -->
             <app-channels *ngFor="let item of (ChatRooms$|async)" [channel]="item" />
         </div>
         <a routerLink="/channelCreating" class="button-create-channel" *ngIf="!toggle">Create channel</a>

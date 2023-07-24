@@ -52,7 +52,6 @@ export class GameGateway
   }
   @SubscribeMessage('createGame')
   async create(client: Socket, payload?: number) {
-    console.log("ONLY ONCE")
     const cookie = client.handshake.headers?.cookie
       ?.split('; ')
       ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
@@ -76,7 +75,6 @@ export class GameGateway
       client.disconnect();
       return false;
     }
-    console.log("auth end")
     if (!payload)
       this.gameService.createGame(client, { id1: xyz.sub });
     else

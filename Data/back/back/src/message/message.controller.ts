@@ -9,7 +9,7 @@ export class MessageController {
   @Get('user/:userName')
   async getMessageBy(
     @Param('userName', ParseIntPipe) userName: number,
-  ): Promise<Message[] | undefined> {
+  ) {
     try {
       return this.messageService.getMessageByUserId(userName);
     } catch (err) {
@@ -21,7 +21,7 @@ export class MessageController {
   async getMessageById(
     @Param('userName', ParseIntPipe) userName: number,
     @Req() req: any
-  ): Promise<Message[] | undefined> {
+  ) {
     try {
       return this.messageService.getMessagesByChatID(userName, req.user_name.sub);
     } catch (err) {

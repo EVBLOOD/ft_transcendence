@@ -24,46 +24,30 @@ import { createPunishmentDTO } from './punishment/dto/createPunishment.dto';
 import { CommandStartedEvent } from 'typeorm';
 import { JwtAuthGuard } from 'src/authenticator/jwtauth.guard';
 import { UserService } from 'src/user/user.service';
+import { MessageService } from 'src/message/message.service';
 
 
 @UseGuards(JwtAuthGuard)
 @Controller('chat')
 export class ChatController {
-  constructor(private readonly chatRoomSevice: ChatService, private readonly userService: UserService) { }
 
-  // @Get(':id')
-  // async getChatRoomByID(@Param('id', ParseIntPipe) id: number): Promise<Chat> {
-  //   return this.chatRoomSevice.GetChatRoomByID(id);
-  // }
+  constructor(private readonly chatRoomSevice: ChatService, private readonly messageService: MessageService,) { }
+
 
   @Get('find/:id')
-  async getChatRoomByID(@Param('id', ParseIntPipe) id: number): Promise<Chat> {
+  async getChatRoomByID(@Param('id', ParseIntPipe) id: number) {
     return this.chatRoomSevice.GetChatRoomByID(id);
   }
-  // returns empty array if no chatrooms are found for the given user
-  // @Get('user')
-  // async getChatRoomsOfUser(@Req() req): Promise<Chat[]> {
-  //   return this.chatRoomSevice.getChatRoomOfUsers((await this.userService.findOne(req.new_user.sub)).username); // can return empty array !!
-  // }
-
   @Get('user')
-  async getChatRoomsOfUser(@Req() req): Promise<Chat[]> {
+  async getChatRoomsOfUser(@Req() req) {
     return this.chatRoomSevice.getChatRoomOfUsers(req.new_user.sub); // can return empty array !!
   }
-
-  // @Get('DM/:secondUser')
-  // async findDMChatroom(
-  //   @Req() req,
-  //   @Param('secondUser') user2: string,
-  // ): Promise<Chat> {
-  //   return this.chatRoomSevice.findDMChatroom((await this.userService.findOne(req.new_user.sub)).username, user2);
-  // }
 
 
   @Get('DM')
   async findDMChatrooms(
     @Req() req,
-  ): Promise<Chat[]> {
+  ) {
     return this.chatRoomSevice.findDMChatrooms(req.new_user.sub);
   }
 
@@ -71,95 +55,70 @@ export class ChatController {
   async findDMChatroom(
     @Req() req,
     @Param('secondUser', ParseIntPipe) user2: number,
-  ): Promise<Chat> {
+  ) {
     return this.chatRoomSevice.findDMChatroom(req.new_user.sub, user2);
   }
 
-
-  // @Get(':chatID/isAdmin/:userName')
-  // async checkForAdminRoll(
-  //   @Param('chatID', ParseIntPipe) chatID: number,
-  //   @Param('userName') userName: string,
-  // ): Promise<boolean> {
-  //   return this.chatRoomSevice.checkForAdminRoll(chatID, userName);
-  // }
 
   @Get(':chatID/isAdmin/')
   async checkForAdminRoll(
     @Req() req: any,
     @Param('chatID', ParseIntPipe) chatID: number,
-  ): Promise<boolean> {
+  ) {
     return this.chatRoomSevice.checkForAdminRoll(chatID, req.new_user.sub);
   }
-
-  // @Get(':chatID/isMember/:userName')
-  // async checkForMemberRoll(
-  //   @Param('chatID', ParseIntPipe) chatID: number,
-  //   @Param('userName') userName: string,
-  // ): Promise<boolean> {
-  //   return this.chatRoomSevice.checkForMemberRoll(chatID, userName);
-  // }
 
   @Get(':chatID/isMember')
   async checkForMemberRoll(
     @Req() req: any,
     @Param('chatID', ParseIntPipe) chatID: number
-  ): Promise<boolean> {
+  ) {
     return this.chatRoomSevice.checkForMemberRoll(chatID, req.new_user.sub);
   }
-
-  // @Get(':chatID/isOwner/:userName')
-  // async checkForOwnerRoll(
-  //   @Param('chatID', ParseIntPipe) chatID: number,
-  //   @Param('userName') userName: string,
-  // ): Promise<boolean> {
-  //   return this.chatRoomSevice.checkForOwnerRoll(chatID, userName);
-  // }
 
   @Get(':chatID/isOwner')
   async checkForOwnerRoll(
     @Req() req: any,
     @Param('chatID', ParseIntPipe) chatID: number,
-  ): Promise<boolean> {
+  ) {
     return this.chatRoomSevice.checkForOwnerRoll(chatID, req.new_user.sub);
   }
 
   @Get('type/:type')
-  async getChatroomsByType(@Param('type') type: string): Promise<Chat[]> {
+  async getChatroomsByType(@Param('type') type: string) {
     return this.chatRoomSevice.getChatroomsByType(type);
   }
   @Get(':chatID/messages')
   async getMessagesByChatID(
     @Param('chatID', ParseIntPipe) chatID: number,
-  ): Promise<Message[]> {
+  ) {
     return this.chatRoomSevice.getMessagesByChatID(chatID);
   }
+  @Get(':chatID/Dms')
+  async getDmsMessagesByUserID(@Req() req: any,
+    @Param('chatID', ParseIntPipe) chatID: number,
+  ) {
+    return this.chatRoomSevice.betweenDM(chatID, req.new_user.sub)
+  }
 
-  // @Get(':chatID/user/:userName/messages')
-  // async getUserMessagesInChatroom(
-  //   @Param('chatID', ParseIntPipe) chatID: number,
-  //   @Param('userName') userName: string,
-  // ): Promise<Message[]> {
-  //   return this.chatRoomSevice.getUserMessagesInChatroom(chatID, userName);
-  // }
   @Get(':chatID/user/:userName/messages')
   async getUserMessagesInChatroom(
     @Param('chatID', ParseIntPipe) chatID: number,
     @Param('userName', ParseIntPipe) userName: number,
-  ): Promise<Message[]> {
+  ) {
     return this.chatRoomSevice.getUserMessagesInChatroom(chatID, userName);
   }
   @Get(':chatID/punishments')
   async getChatroomPunishments(
     @Param('chatID', ParseIntPipe) chatID: number,
-  ): Promise<Punishment[]> {
+  ) {
     return this.chatRoomSevice.getChatroomPunishments(chatID);
   }
 
 
 
   @Post('create')
-  async createChatRoom(@Req() req, @Body() chatroom: createChatroomDTO): Promise<Chat> {
+  async createChatRoom(@Req() req, @Body() chatroom: createChatroomDTO) {
     return this.chatRoomSevice.createChatroom(req.new_user.sub, chatroom);
   }
 
@@ -168,7 +127,7 @@ export class ChatController {
     @Param('chatID', ParseIntPipe) chatID: number,
     @Param('adminName', ParseIntPipe) userName: number,
     @Body() punishmentsDTO: createPunishmentDTO,
-  ): Promise<Punishment> {
+  ) {
     try {
       return await this.chatRoomSevice.createPunishment(
         chatID,
@@ -199,7 +158,7 @@ export class ChatController {
   async addMemberToChatRoom(
     @Param('chatID', ParseIntPipe) chatID: number,
     @Body() memberDTO: createMemberDTO,
-  ): Promise<Chat | null> {
+  ) {
     console.log('adding member: ' + memberDTO.member);
     try {
       return this.chatRoomSevice.addMemberToChatroom(chatID, memberDTO);
@@ -213,7 +172,7 @@ export class ChatController {
   async addAdminToChatRoom(
     @Param('chatID', ParseIntPipe) chatID: number,
     @Body() adminDTO: createAdminDTO,
-  ): Promise<Chat | null> {
+  ) {
     try {
       return this.chatRoomSevice.addAdminToChatroom(chatID, adminDTO);
     } catch (err) {
@@ -226,7 +185,7 @@ export class ChatController {
   async changeOwnerOfChatroom(
     @Param('chatID') chatID: number,
     @Body() swapOwnerDto: SwapOwnerDTO,
-  ): Promise<Chat | undefined> {
+  ) {
     try {
       return this.chatRoomSevice.changeOwnerOfChatroom(chatID, swapOwnerDto);
     } catch (err) {
@@ -239,7 +198,7 @@ export class ChatController {
     @Param('chatID') chatID: number,
     @Param('adminUserName') adminName: number,
     @Body() updateChatDTO: UpdateChatroomDTO,
-  ): Promise<Chat | null> {
+  ) {
     try {
       ValidateUpdateDTO(updateChatDTO);
       return this.chatRoomSevice.updateChatroom(
@@ -258,7 +217,7 @@ export class ChatController {
     @Param('chatID') chatID: number,
     @Req() req: any,
     @Body() updateChatDTO: UpdateChatroomDTO,
-  ): Promise<Chat | null> {
+  ) {
     try {
       ValidateUpdateDTO(updateChatDTO);
       return this.chatRoomSevice.updateChatroom(
@@ -289,28 +248,11 @@ export class ChatController {
     }
   }
 
-  // @Delete('delete/:chatroomID/admin/:adminUserName/admin/:userToKick')
-  // async removeAdminFromChatroom(
-  //   @Param('chatroomID') chatroomID: number,
-  //   @Param('adminUserName') adminUserName: string,
-  //   @Param('userToKick') userToKick: string,
-  // ) {
-  //   try {
-  //     return this.chatRoomSevice.removeAdminFromChatroom(
-  //       chatroomID,
-  //       adminUserName,
-  //       userToKick,
-  //     );
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
-
   @Delete('leave/:chatroomID/user/:userName')
   async leaveChat(
     @Param('chatroomID') chatroomID: number,
     @Param('userName') userName: number,
-  ): Promise<Chat | undefined | string> {
+  ) {
     try {
       return this.chatRoomSevice.leaveChat(chatroomID, userName);
     } catch (err) {

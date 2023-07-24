@@ -56,10 +56,11 @@ export class MessageService {
     if (message.length !== 0) {
       return message;
     }
-    throw new NotFoundException(`No messages found for user ${userName}`);
+    // throw new NotFoundException(`No messages found for user ${userName}`);
+    return [];
   }
 
-  async getMessagesByChatroomID(chatID: number): Promise<Message[]> {
+  async getMessagesByChatroomID(chatID: number) {
     const messages = await this.messageRepo.find({
       where: {
         chatRoomId: {
@@ -94,13 +95,14 @@ export class MessageService {
     messageDTO: CreateMessage,
     chatRoom: Chat,
     user: User,
-  ): Promise<Message> {
+  ) {
     if (validateMessage(messageDTO.value) == false)
-      throw new BadRequestException('connot send empty message');
+      return [];
+    // throw new BadRequestException('connot send empty message');
     const message = createNewMessage(messageDTO.value, chatRoom, user);
     return this.messageRepo.save(message);
   }
-  async getMessagesByChatID(chatID: number, id?: number): Promise<Message[]> {
+  async getMessagesByChatID(chatID: number, id?: number) {
     // check if this Id is allowed to see. TODO: ALI
     const messages = await this.messageRepo.find({
       where: {
@@ -111,6 +113,61 @@ export class MessageService {
       relations: {
         chatRoomId: true,
         userId: true,
+      },
+      select: {
+        userId: {
+          id: true,
+          name: true,
+          // username: true,
+          avatar: true,
+        },
+        chatRoomId: {
+          id: true,
+          chatRoomName: true,
+          type: true,
+        },
+        value: true,
+      },
+      //cache: true,
+    });
+    return messages;
+  }
+
+  async getDmsMessagesByUserID(chatID: number, id?: number) {
+    const messages = await this.messageRepo
+      .createQueryBuilder('message')
+      .leftJoinAndSelect('message.chatRoomId', 'chat')
+      .leftJoinAndSelect('chat.member', 'member')
+      .where('(member.id = :userA AND member.id = :userB) AND chat.type = :chatType', { userA: chatID, userB: id, chatType: 'DM' })
+      .getMany();
+    // check if this Id is allowed to see. TODO: ALI
+    // const messages = await this.messageRepo.createQueryBuilder('messages').leftJoinAndSelect('messages.chatRoomIdId', 'chat').leftJoinAndSelect('chat.userIdId', 'Users').
+    //   leftJoinAndSelect('messages.userIdId', 'Users').leftJoinAndSelect('chat.messages', 'user').where('user.id = :id1 and (user.id = :id2 or user.id = :id1)', { id1: chatID, id2: chatID }).getMany();
+    console.log('messages')
+    const messages = await this.messageRepo
+      .createQueryBuilder('message')
+      .leftJoinAndSelect('message.chatRoomId', 'chat')
+      .leftJoinAndSelect('chat.member', 'member')
+      .where('(member.id = :userA AND member.id = :userB) AND chat.type = :chatType', { userA: chatID, userB: id, chatType: 'DM' })
+      .getMany();
+    // const messages = await this.messageRepo.createQueryBuilder('messages').leftJoinAndSelect('messages.chatRoomId', 'Chat').leftJoinAndSelect('Chat.chatRoomMember', 'member')
+    //   .where('member.id = :userId1 AND member.id = :userId2', { userId1: chatID, userId2: id }).getMany();
+    console.log(messages)
+    console.log('message')
+    return messages;
+  }
+
+  async getMessagesForDms(id1: number, id2: number) {
+    // check if this Id is allowed to see. TODO: ALI
+    const messages = await this.messageRepo.find({
+      relations: {
+        chatRoomId: true,
+        userId: true,
+      },
+      where: {
+        userId: {
+          id: id1
+        }
       },
       select: {
         userId: {

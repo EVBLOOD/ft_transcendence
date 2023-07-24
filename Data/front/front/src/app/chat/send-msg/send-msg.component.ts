@@ -9,16 +9,18 @@ import { FormControl, Validators } from '@angular/forms';
 })
 export class SendMsgComponent {
   @Input() chatId !: number;
+  @Input() isRoom !: boolean;
+  @Input() userId !: number;
+
   msgText = new FormControl('', [Validators.required,]);
 
   constructor(private readonly sendMsg: ChatService) {
-    // value: string;
-    // charRoomId: number;
-
   }
   sending() {
-    if (this.msgText.value?.trim()?.length)
-      this.sendMsg.sendMessage({ value: this.msgText.value.trim(), charRoomId: this.chatId });
+    if (this.msgText.value?.trim()?.length && this.isRoom)
+      this.sendMsg.sendMessage({ value: this.msgText.value.trim(), charRoomId: this.chatId }, true);
+    if (this.msgText.value?.trim()?.length && !this.isRoom)
+      this.sendMsg.sendMessage({ value: this.msgText.value.trim(), charRoomId: this.userId }, false);
     this.msgText.setValue('');
   }
 }
