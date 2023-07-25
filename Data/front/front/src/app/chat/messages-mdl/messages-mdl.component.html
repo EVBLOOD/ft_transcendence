@@ -3,7 +3,10 @@
         <img [src]="avatring((user$|async)?.avatar)">
         <div class="name-status">
             <div class="name">{{(user$|async)?.name}}</div>
-            <div class="status">Online</div>
+            {{statusLoading((user$|async)?.id)}}
+            <div
+                [ngClass]="status == 'Online' ? 'status Online' : status == 'Offline' ? 'status Offline': 'status InGame'">
+                {{status}}</div>
         </div>
     </div>
     <div class="header-chat-channel" *ngIf="isRoom">

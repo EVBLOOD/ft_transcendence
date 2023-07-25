@@ -4,6 +4,7 @@ import { Component, ElementRef, HostListener, Input, OnChanges, OnInit, ViewChil
 import { ChatService } from '../chat.service';
 import { Observable } from 'rxjs';
 import { ProfileService } from 'src/app/profile/profile.service';
+import { StatusService } from 'src/app/status.service';
 
 @Component({
   selector: 'app-messages-mdl',
@@ -40,9 +41,20 @@ export class MessagesMdlComponent implements OnChanges {
       this.dropDownChannel = false;
     }
   }
-  constructor(private readonly chatService: ChatService, private readonly profileUser: ProfileService) {
+  constructor(private readonly chatService: ChatService, private readonly profileUser: ProfileService, private readonly state: StatusService) {
   }
+  replay: any;
+  status: string = 'Offline';
 
+  statusLoading(id: any) {
+    this.replay = this.state.current_status.subscribe((curr: any) => {
+      const newone = curr.find((obj: any) => { if (obj.id == id) return obj; });
+      if (newone)
+        return this.status = newone.status;
+      else
+        this.status = 'Offline'
+    });
+  }
   avatring(url: string) {
     return this.profileUser.getUserAvatarPath(url);
   }

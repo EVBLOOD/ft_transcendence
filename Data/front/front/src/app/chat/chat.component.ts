@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { ProfileService } from '../profile/profile.service';
 import { FormControl, Validators } from '@angular/forms';
 import { FriendshipService } from '../profile/friendship.service';
+import { StatusService } from '../status.service';
 
 @Component({
   selector: 'app-chat',
@@ -24,11 +25,13 @@ export class ChatComponent {
   ChatRooms$ !: Observable<any>;
   ChatDMs$ !: Observable<any>;
   listUser$ !: Observable<any>;
+  replay: any;
+  status: string = 'Offline';
   // constructor(private readonly chatService : ChatService) {}
 
   newText = new FormControl('', [Validators.required,]);
 
-  constructor(private readonly chatService: ChatService, private route: Router, private listUsers: FriendshipService) {
+  constructor(private readonly chatService: ChatService, private route: Router, private listUsers: FriendshipService, private readonly state: StatusService) {
     this.ChatRooms$ = this.chatService.getChatrooms();
     this.chatService.getChatrooms().subscribe({
       next: (data) => {
@@ -43,7 +46,20 @@ export class ChatComponent {
         console.log(data);
       }
     });
+
   }
+  // replay: any;
+  // status: string = 'Offline';
+  // , private readonly state: StatusService
+  // statusLoading(id: any) {
+  //   this.replay = this.state.current_status.subscribe((curr) => {
+  //     const newone = curr.find((obj: any) => { if (obj.id == id) return obj; });
+  //     if (newone)
+  //       return this.status = newone.status;
+  //     else
+  //       this.status = 'Offline'
+  //   });
+  // }
   getStarterPath(path: string) {
     return this.route.url.startsWith(path);
   }

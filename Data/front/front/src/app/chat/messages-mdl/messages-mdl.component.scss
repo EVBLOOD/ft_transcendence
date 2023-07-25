@@ -31,7 +31,18 @@
 .header-chat .status {
     font-size: 13px;
     font-weight: 600;
+}
+
+.Online {
     color: #6EDB3F;
+}
+
+.Offline {
+    color: #8F8D8D;
+}
+
+.InGame {
+    color: #FFA45E;
 }
 
 .header-chat img {

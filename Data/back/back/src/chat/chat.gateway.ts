@@ -63,7 +63,7 @@ export class ChatGateway {
       themOut = new Set<string>();
     themOut.add(client.id)
     this.everything.set(xyz.sub, themOut);
-    client.join(xyz.sub); // for private messages
+    client.join(xyz.sub);
     return true;
   }
 
@@ -130,64 +130,16 @@ export class ChatGateway {
 
   @SubscribeMessage('join-room')
   async joinRoom(client: Socket, payload: string) {
-    console.log("WAAA HYA");
-    console.log(payload)
     client.join(payload);
     return {}
   }
 
   @SubscribeMessage('leave-room')
   async leaveRoom(client: Socket, payload: string) {
-    console.log("WAAA HYA NAAARY");
     client.leave(payload);
     return {}
   }
-  // @SubscribeMessage('sendMessage')
-  // async sendMessage(client: Socket, payload: any) {
-  //   const cookie = client.handshake.headers?.cookie
-  //     ?.split('; ')
-  //     ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
-  //     ?.split('=')[1];
-  //   if (
-  //     !cookie
-  //   ) {
-  //     client.disconnect();
-  //     return false;
-  //   }
-  //   const xyz: any = this.serviceJWt.decode(
-  //     cookie,
-  //   );
-  //   if (
-  //     !xyz ||
-  //     (await this.serviceToken.IsSame(
-  //       xyz.sub || '',
-  //       cookie,
-  //     )) == false
-  //   ) {
-  //     client.disconnect();
-  //     return false;
-  //   }
-  //   try {
-  //     if (payload?.type !== null && payload?.type !== undefined
-  //       && payload?.message !== null && payload?.message !== undefined) {
-  //       let message = {};
-  //       if (payload?.type) {
-  //         message = await this.chatService.postToChatroom(payload?.message, xyz.sub);
-  //       }
-  //       else {
-  //         message = await this.chatService.postToDM(payload?.message, xyz.sub);
-  //       }
-  //       console.log(message)
-  //       this.server.emit('recMessage', { sender: xyz.sub, mgs: message });
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
 
-  // afterInit(server: Socket) {
-  //   // console.log('Init: ', server);
-  // }
   // async handleDisconnect(client: Socket) {
   //   const cookie = client.handshake.headers?.cookie
   //     ?.split('; ')
