@@ -131,7 +131,7 @@ export class MessageService {
       },
       //cache: true,
     });
-    return messages.sort((item1, item2) => { return item2.id - item1.id });
+    return messages.sort((item1, item2) => { return item1.id - item2.id });
   }
 
   // async getDmsMessagesByUserID(chatID: number, id?: number) {

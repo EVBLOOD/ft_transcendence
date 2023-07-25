@@ -59,11 +59,11 @@ export class MessagesMdlComponent implements OnChanges {
   // }
   ngOnChanges(): void {
     console.log(this.messages)
-    // this.messages = new Array();
     if (this.id && this.isRoom)
       this.msgs$ = this.chatService.getChatroomMessages(this.id)
 
     else if (!this.isRoom && this.id) {
+      // this.messages = new Array();
       this.user$ = this.profileUser.getUserData(this.id.toString())
       this.msgs$ = this.chatService.getDmMessages(this.id);
       // this.chatService.

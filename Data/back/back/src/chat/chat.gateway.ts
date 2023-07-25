@@ -26,8 +26,10 @@ export class ChatGateway {
   // implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   whatItcosts: Map<string, number> = new Map<string, number>();
   everything: Map<number, Set<string>> = new Map<number, Set<string>>();
+
   @WebSocketServer()
   server: Server;
+
   constructor(
     @Inject(forwardRef(() => ChatService))
     private readonly chatService: ChatService, private readonly serviceJWt: JwtService, private readonly serviceToken: AuthenticatorService,
@@ -95,8 +97,9 @@ export class ChatGateway {
     this.server.in(xyz.sub).emit("privateMessage", { sender: xyz.sub, mgs: message });
   }
 
-  @SubscribeMessage('sendMessage')
-  async sendMessage(client: Socket, payload: any) {
+
+  @SubscribeMessage('ChannelMessages')
+  async ChannelMessages(client: Socket, payload: any) {
     const cookie = client.handshake.headers?.cookie
       ?.split('; ')
       ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
@@ -120,45 +123,92 @@ export class ChatGateway {
       client.disconnect();
       return false;
     }
-    try {
-      if (payload?.type !== null && payload?.type !== undefined
-        && payload?.message !== null && payload?.message !== undefined) {
-        let message = {};
-        if (payload?.type) {
-          message = await this.chatService.postToChatroom(payload?.message, xyz.sub);
-        }
-        else {
-          message = await this.chatService.postToDM(payload?.message, xyz.sub);
-        }
-        console.log(message)
-        this.server.emit('recMessage', { sender: xyz.sub, mgs: message });
-      }
-    } catch (err) {
-      console.log(err);
-    }
+    const message: any = await this.chatService.postToChatroom(payload?.message, xyz.sub);
+    console.log(message?.chatRoomId?.id)
+    // console.log(payload?.Message)
+    // console.log(payload)
+    this.server.in(message.chatRoomId.id.toString()).emit("ChannelMessages", { sender: xyz.sub, mgs: message });
+    // this.server.emit("ChannelMessages", { sender: xyz.sub, mgs: message });
   }
 
-  afterInit(server: Socket) {
-    // console.log('Init: ', server);
+  @SubscribeMessage('join-room')
+  async joinRoom(client: Socket, payload: string) {
+    console.log("WAAA HYA");
+    console.log(payload)
+    client.join(payload);
+    return {}
   }
-  async handleDisconnect(client: Socket) {
-    const cookie = client.handshake.headers?.cookie
-      ?.split('; ')
-      ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
-      ?.split('=')[1];
-    const xyz: any = this.serviceJWt.decode(
-      cookie,
-    );
-    if (
-      !xyz ||
-      (await this.serviceToken.IsSame(
-        xyz.sub || '',
-        cookie,
-      )) == false
-    ) {
-      client.disconnect();
-      return false;
-    }
-    this.everything.delete(xyz.sub);
+
+  @SubscribeMessage('leave-room')
+  async leaveRoom(client: Socket, payload: string) {
+    console.log("WAAA HYA NAAARY");
+    client.leave(payload);
+    return {}
   }
+  // @SubscribeMessage('sendMessage')
+  // async sendMessage(client: Socket, payload: any) {
+  //   const cookie = client.handshake.headers?.cookie
+  //     ?.split('; ')
+  //     ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
+  //     ?.split('=')[1];
+  //   if (
+  //     !cookie
+  //   ) {
+  //     client.disconnect();
+  //     return false;
+  //   }
+  //   const xyz: any = this.serviceJWt.decode(
+  //     cookie,
+  //   );
+  //   if (
+  //     !xyz ||
+  //     (await this.serviceToken.IsSame(
+  //       xyz.sub || '',
+  //       cookie,
+  //     )) == false
+  //   ) {
+  //     client.disconnect();
+  //     return false;
+  //   }
+  //   try {
+  //     if (payload?.type !== null && payload?.type !== undefined
+  //       && payload?.message !== null && payload?.message !== undefined) {
+  //       let message = {};
+  //       if (payload?.type) {
+  //         message = await this.chatService.postToChatroom(payload?.message, xyz.sub);
+  //       }
+  //       else {
+  //         message = await this.chatService.postToDM(payload?.message, xyz.sub);
+  //       }
+  //       console.log(message)
+  //       this.server.emit('recMessage', { sender: xyz.sub, mgs: message });
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }
+
+  // afterInit(server: Socket) {
+  //   // console.log('Init: ', server);
+  // }
+  // async handleDisconnect(client: Socket) {
+  //   const cookie = client.handshake.headers?.cookie
+  //     ?.split('; ')
+  //     ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
+  //     ?.split('=')[1];
+  //   const xyz: any = this.serviceJWt.decode(
+  //     cookie,
+  //   );
+  //   if (
+  //     !xyz ||
+  //     (await this.serviceToken.IsSame(
+  //       xyz.sub || '',
+  //       cookie,
+  //     )) == false
+  //   ) {
+  //     client.disconnect();
+  //     return false;
+  //   }
+  //   this.everything.delete(xyz.sub);
+  // }
 }

@@ -69,23 +69,35 @@ export class ChatService {
     //     // console.log(data)
     //   }
     // );
+    this.sock.on('ChannelMessages', (data) => {
+      console.log('this is channel message!')
+      this.update.next(data)
+    })
+
     this.sock.on(
       'privateMessage', (data) => {
+        console.log('this is private message!')
         this.update.next(data)
-        // this.message = data.value;
-        // console.log("user: ", data.userId.userName);
-        // if (this.currentUser !== data.userId.userName)
-        //   console.log(data.userId.userName + ": " + this.message);
-        // console.log(data)
       }
     );
+
     this.sock.on("kickUser", (data) => {
       console.log("kicked user: " + data.userName);
     });
+
     this.PunishmentSock.on("gotBanned", (data) => {
       console.log(data);
     })
   }
+
+  joinSocket(channel: string) {
+    this.sock.emit('join-room', channel)
+  }
+
+  leaveSocket(channel: string) {
+    this.sock.emit('leave-room', channel)
+  }
+
   getUpdate(): Observable<any> {
     return this.update;
   }
@@ -122,7 +134,7 @@ export class ChatService {
   sendMessage(message: sendMessageDTO, type: boolean) {
     // console.log("message DTO", message);
     if (type)
-      this.sock.emit("sendMessage", { type: type, message: message });
+      this.sock.emit("ChannelMessages", { type: type, message: message });
     else
       this.sock.emit("privateMessage", { type: type, message: message });
   }
