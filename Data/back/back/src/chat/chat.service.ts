@@ -27,7 +27,7 @@ import { User } from 'src/user/entities/user.entity';
 import { map } from 'rxjs';
 export type UserInfo = {
   role: string;
-  userID: number;
+  userID: User;
   chatID: number;
 };
 
@@ -81,11 +81,13 @@ export class ChatService {
           id: true,
           username: true,
           avatar: true,
+          name: true
         },
         member: {
           id: true,
           username: true,
           avatar: true,
+          name: true
         },
         message: {
           value: true,
@@ -115,7 +117,7 @@ export class ChatService {
         const tmp: UserInfo = {
           chatID: chatrooms[i].id,
           role: role,
-          userID: chatrooms[i].member[j].id,
+          userID: chatrooms[i].member[j],
         };
         chatroomUsers.push(tmp);
       }
@@ -243,6 +245,10 @@ export class ChatService {
         chatId = item.id;
     })
     return chatId;
+  }
+
+  async getChatRoomMembers(userId: number, channelId: number) {
+    return (await this.getChatRoomOfUsersANDRooles(userId)).userInfo.find((chat) => { return chat.find((item) => { return item.chatID == channelId }) })
   }
 
   async postToDM(messageDTO: CreateMessage, current: number) {

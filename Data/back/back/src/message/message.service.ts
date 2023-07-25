@@ -115,6 +115,7 @@ export class MessageService {
         userId: true,
       },
       select: {
+        id: true,
         userId: {
           id: true,
           name: true,
@@ -130,7 +131,7 @@ export class MessageService {
       },
       //cache: true,
     });
-    return messages;
+    return messages.sort((item1, item2) => { return item2.id - item1.id });
   }
 
   // async getDmsMessagesByUserID(chatID: number, id?: number) {

@@ -1,5 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
+import { ProfileService } from 'src/app/profile/profile.service';
 
 @Component({
   selector: 'app-part-chat',
@@ -13,6 +14,16 @@ import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
   ]
 })
 export class PartChatComponent {
+  @Input() filter!: string;
+  @Input() user!: any;
+  @Input() idChat !: number;
+
+  constructor(private readonly profile: ProfileService) {
+
+  }
+  avataring(url: string) {
+    return this.profile.getUserAvatarPath(url)
+  }
   @ViewChild('dropDownUserRef') dropDownUserRef !: ElementRef;
   @HostListener('document:click', ['$event'])
   documentClick(event: MouseEvent): void {

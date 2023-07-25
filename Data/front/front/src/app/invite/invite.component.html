@@ -1,16 +1,23 @@
 <app-popup>
-    <div class="CloseBtnPop">
+    <div (click)="close()" class="CloseBtnPop">
         <button></button>
     </div>
     <h2 class="popTitle">Invite friends to #general</h2>
-
-    <div class="boxInviteFriends">
-        <div class="friend">
-            <img class="friendImg" src="/assets/images/profile.jpg">
-            <p class="friendName">Karim Idbouhouch</p>
-            <a class="buttonInvite" *ngIf="!invited" (click)="onClickInvite()">Invite</a>
-            <a class="buttonInvited" *ngIf="invited" (click)="onClickInvite()">Invited</a>
-        </div>
+    <div *ngIf="profiles$|async as users">
+        <div *ngIf="users.statusCode; else listall" class="popTitle"
+            style="font-size: medium; display: flex; justify-content: center; width: 100%;">You
+            have No friends to
+            invite</div>
+        <ng-template #listall>
+            <div class="boxInviteFriends" *ngFor="let user of users">
+                <div class="friend">
+                    <img class="friendImg" [src]="user.avatar" />
+                    <p class="friendName">{{user.name}}</p>
+                    <a class="buttonInvite" *ngIf="!invited" (click)="onClickInvite(user.id)">Invite</a>
+                    <a class="buttonInvited" *ngIf="invited" (click)="onClickInvite(user.id)">Invited</a>
+                </div>
+            </div>
+        </ng-template>
     </div>
 
 </app-popup>

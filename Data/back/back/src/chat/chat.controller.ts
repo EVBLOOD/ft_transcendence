@@ -53,12 +53,16 @@ export class ChatController {
 
   @Get('DM/:secondUser')
   async findDMChatroom(
-    @Req() req,
+    @Req() req: any,
     @Param('secondUser', ParseIntPipe) user2: number,
   ) {
     return this.chatRoomSevice.findDMChatroom(req.new_user.sub, user2);
   }
 
+  @Get('membersFor/:id')
+  getMembers(@Req() req: any, @Param('id', ParseIntPipe) id: number) {
+    return this.chatRoomSevice.getChatRoomMembers(req.new_user.sub, id);
+  }
 
   @Get(':chatID/isAdmin/')
   async checkForAdminRoll(

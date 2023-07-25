@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Socket, io } from 'socket.io-client';
 
 const URL = "http://10.13.4.8:3000";
@@ -47,10 +48,10 @@ type createMemberDTO = {
   providedIn: 'root'
 })
 export class ChatService {
-  private currentUser: string = "ali";
-  private message: string = "";
   private sock: Socket;
   private PunishmentSock: Socket;
+  private update: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  // private update : BehaviorSubject<number> = new BehaviorSubject<number>(0); 
   constructor(private httpClient: HttpClient
   ) {
     this.PunishmentSock = io(URL + "/punishment", {
@@ -59,13 +60,23 @@ export class ChatService {
     this.sock = io('http://10.13.4.8:3000/chat', {
       withCredentials: true,
     });
+    // this.sock.on(
+    //   'recMessage', (data) => {
+    //     // this.message = data.value;
+    //     // console.log("user: ", data.userId.userName);
+    //     // if (this.currentUser !== data.userId.userName)
+    //     //   console.log(data.userId.userName + ": " + this.message);
+    //     // console.log(data)
+    //   }
+    // );
     this.sock.on(
-      'recMessage', (data) => {
+      'privateMessage', (data) => {
+        this.update.next(data)
         // this.message = data.value;
         // console.log("user: ", data.userId.userName);
         // if (this.currentUser !== data.userId.userName)
         //   console.log(data.userId.userName + ": " + this.message);
-        console.log(data)
+        // console.log(data)
       }
     );
     this.sock.on("kickUser", (data) => {
@@ -75,10 +86,15 @@ export class ChatService {
       console.log(data);
     })
   }
+  getUpdate(): Observable<any> {
+    return this.update;
+  }
+  getGroupMembers(id: number) {
+    return this.httpClient.get(`http://10.13.4.8:3000/chat/membersFor/` + id, { withCredentials: true, })
+  }
 
   getThisChat(id: number) {
     return this.httpClient.get(`http://10.13.4.8:3000/chat/find/` + id, { withCredentials: true, })
-
   }
 
   getDmMessages(id: number) {
@@ -105,7 +121,10 @@ export class ChatService {
 
   sendMessage(message: sendMessageDTO, type: boolean) {
     // console.log("message DTO", message);
-    this.sock.emit("sendMessage", { type: type, message: message });
+    if (type)
+      this.sock.emit("sendMessage", { type: type, message: message });
+    else
+      this.sock.emit("privateMessage", { type: type, message: message });
   }
   getChatroomMessages(id: number) {
     return this.httpClient.get<number>(URL + `/chat/${id}/messages`, { withCredentials: true, });

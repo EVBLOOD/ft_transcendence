@@ -17,9 +17,8 @@ export class ChatContentComponent implements OnInit {
   chatMsgs$ !: Observable<any>;
   chatMembers$ !: Observable<any>;
   chatInfos$ !: Observable<any>;
-
+  messages: Array<any> = new Array<any>();
   constructor(private readonly switchRoute: Router, private readonly route: ActivatedRoute, private readonly chatService: ChatService, private readonly authService: AuthService) {
-
   }
 
   ngOnInit(): void {
@@ -33,6 +32,11 @@ export class ChatContentComponent implements OnInit {
       }
       else
         this.setupComponent(params['username'])
+    })
+    this.chatService.getUpdate().subscribe((data) => {
+      if (data?.mgs?.chatRoomId?.type == 'DM' && (data?.mgs?.userId?.id == data.sender || data?.mgs?.userId?.id == this.id)) {
+        this.messages.push(data.mgs)
+      }
     })
   }
   setupComponent(someParam: any) {

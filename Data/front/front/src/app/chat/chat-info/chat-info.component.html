@@ -1,16 +1,16 @@
 <div class="grid3" *ngIf="!isRoom">
-    <div class="profile">
-        <img class="img-profile" src="/assets/img/profile.jpeg">
+    <div class="profile" *ngIf="(user$|async) as user">
+        <img class="img-profile" [src]="avataring(user?.avatar)">
         <div class="buttonsProfile">
-            <a class="btn">
+            <a *ngIf="thisUSer != user?.id" class="btn" (click)="blocking()">
                 <div><img src="/assets/icons/block.svg" /></div>
                 <p>Block</p>
             </a>
-            <a class="btn">
+            <a class="btn" (click)="viewPro()">
                 <div><img src="/assets/icons/viewprofile.svg" /></div>
                 <p>View profile</p>
             </a>
-            <a class="btn">
+            <a *ngIf="thisUSer != user?.id" class="btn" (click)="playing()">
                 <div><img src="/assets/icons/play.svg" /></div>
                 <p>Play</p>
             </a>
@@ -18,12 +18,12 @@
     </div>
 </div>
 <div class="grid3" *ngIf="isRoom">
-    <div class="MembersChannel">
-        <p class="NameRole">Operators</p>
-        <div>
-            <app-part-chat />
-        </div>
-        <p class="NameRole">Members</p>
-        <app-part-chat />
+    <div *ngIf="Members$|async as members" class="MembersChannel">
+        <p class="NameRole" *ngIf="countMembers(members, 'owner')">Owner</p>
+        <app-part-chat *ngFor="let play of members" [filter]="'owner'" [user]="play" />
+        <p class="NameRole" *ngIf="countMembers(members, 'admin')">Operators</p>
+        <app-part-chat *ngFor="let play of members" [filter]="'admin'" [user]="play" />
+        <p class="NameRole" *ngIf="countMembers(members, 'member')">Members</p>
+        <app-part-chat *ngFor="let play of members" [filter]="'member'" [user]="play" />
     </div>
 </div>

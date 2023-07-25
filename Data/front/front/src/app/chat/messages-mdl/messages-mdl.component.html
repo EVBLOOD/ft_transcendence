@@ -26,7 +26,8 @@
     </div>
 
     <div class="conversation">
-        {{((msgs$|async)|json)}}
+        <!-- {{messages}} -->
+        <app-message *ngFor="let msg of messages " [value]="msg" />
         <app-message *ngFor="let msg of (msgs$|async) " [value]="msg" />
     </div>
     <app-send-msg [isRoom]="isRoom" [chatId]="this.chatInfos?.id" [userId]="id" />

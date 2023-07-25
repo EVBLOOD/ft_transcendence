@@ -12,6 +12,7 @@ export class MessageComponent {
   @Input() value !: any;
   whoIs$ !: Observable<any>;
   constructor(private readonly serviceProfile: ProfileService, private readonly serviceAuth: AuthService) {
+    // console.log(this.value)
     // this.whoIs$ = this.serviceAuth.getCurrentUser();
   }
 
