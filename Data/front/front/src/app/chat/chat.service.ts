@@ -82,7 +82,8 @@ export class ChatService {
   }
 
   getDmMessages(id: number) {
-    return this.httpClient.get<any>(URL + `/chat/${id}/Dms`, { withCredentials: true, });
+    console.log('alo fin')
+    return this.httpClient.get<any>(URL + `/chat/DM/${id}`, { withCredentials: true, });
   }
 
   getThisChatMsgs(id: number) {
@@ -97,6 +98,7 @@ export class ChatService {
   getChatDM() {
     return this.httpClient.get(`http://10.13.4.8:3000/chat/DM`, { withCredentials: true, })
   }
+
   joinChatroom(chat: createChatroom) {
     return this.httpClient.post(`http://10.13.4.8:3000/chat/create`, chat, { withCredentials: true, });
   }

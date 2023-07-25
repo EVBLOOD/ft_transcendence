@@ -17,8 +17,6 @@
             <app-dms *ngFor="let item of (ChatDMs$|async)" [user]="item" />
         </div>
         <div class="channels" *ngIf="!toggle">
-
-            <!-- channels -->
             <app-channels *ngFor="let item of (ChatRooms$|async)" [channel]="item" />
         </div>
         <a routerLink="/channelCreating" class="button-create-channel" *ngIf="!toggle">Create channel</a>

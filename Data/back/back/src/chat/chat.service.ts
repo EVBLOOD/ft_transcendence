@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { Chat } from './chat.entity';
 import { CreateMessage } from 'src/message/dto/message.dto';
 import { Message } from 'src/message/message.entity';
@@ -24,6 +24,12 @@ import { Punishment } from './punishment/punishment.entity';
 import { createPunishmentDTO } from './punishment/dto/createPunishment.dto';
 import { triggerAsyncId } from 'async_hooks';
 import { User } from 'src/user/entities/user.entity';
+import { map } from 'rxjs';
+export type UserInfo = {
+  role: string;
+  userID: number;
+  chatID: number;
+};
 
 @Injectable()
 export class ChatService {
@@ -39,7 +45,17 @@ export class ChatService {
   ) { }
 
   async getChatRoomOfUsers(id: number) {
-    const chatroom = await this.chatRoomRepo.find({
+
+    const result = (await this.getChatRoomOfUsersANDRooles(id)).chatrooms;
+    if (result && Array.isArray(result))
+      return result;
+    return []
+  }
+  async getChatRoomOfUsersANDRooles(id: number): Promise<{
+    userInfo: UserInfo[][];
+    chatrooms: Chat[];
+  }> {
+    let chatrooms = await this.chatRoomRepo.find({
       order: {
         id: 'desc',
       },
@@ -51,26 +67,12 @@ export class ChatService {
           userId: true,
         },
       },
-      where: [
-        {
-          member: {
-            id: id,
-          },
-          type: 'public'
+      where: {
+        type: Not('DM'),
+        member: {
+          id: id,
         },
-        {
-          member: {
-            id: id,
-          },
-          type: 'private'
-        },
-        {
-          member: {
-            id: id,
-          },
-          type: 'password'
-        }
-      ],
+      },
       select: {
         id: true,
         chatRoomName: true,
@@ -90,10 +92,93 @@ export class ChatService {
           id: true,
         },
       },
-      //cache: true,
+      cache: true,
     });
-    return chatroom;
+    for (const chat of chatrooms) {
+      if (!chat.member.some((u) => u.id === id)) {
+        chatrooms = chatrooms.filter((ID) => ID.id !== chat.id);
+      }
+    }
+    const userInfo: UserInfo[][] = [];
+    for (let i = 0; i < chatrooms.length; i++) {
+      const chatroomUsers: UserInfo[] = [];
+      for (let j = 0; j < chatrooms[i].member.length; j++) {
+        let user = chatrooms[i].member[j].id;
+        let role;
+        if (user === chatrooms[i].owner.id) {
+          role = 'owner';
+        } else if (chatrooms[i].admin.findIndex((u) => u.id === user) != -1) {
+          role = 'admin';
+        } else {
+          role = 'member';
+        }
+        const tmp: UserInfo = {
+          chatID: chatrooms[i].id,
+          role: role,
+          userID: chatrooms[i].member[j].id,
+        };
+        chatroomUsers.push(tmp);
+      }
+      userInfo.push(chatroomUsers);
+    }
+    return { userInfo, chatrooms };
   }
+  // async getChatRoomOfUsers(id: number) {
+  //   const chatroom = await this.chatRoomRepo.find({
+  //     order: {
+  //       id: 'desc',
+  //     },
+  //     relations: {
+  //       owner: true,
+  //       member: true,
+  //       admin: true,
+  //       message: {
+  //         userId: true,
+  //       },
+  //     },
+  //     where: [
+  //       {
+  //         member: {
+  //           id: id,
+  //         },
+  //         type: 'public'
+  //       },
+  //       {
+  //         member: {
+  //           id: id,
+  //         },
+  //         type: 'private'
+  //       },
+  //       {
+  //         member: {
+  //           id: id,
+  //         },
+  //         type: 'password'
+  //       }
+  //     ],
+  //     select: {
+  //       id: true,
+  //       chatRoomName: true,
+  //       type: true,
+  //       owner: {
+  //         id: true,
+  //         username: true,
+  //         avatar: true,
+  //       },
+  //       member: {
+  //         id: true,
+  //         username: true,
+  //         avatar: true,
+  //       },
+  //       message: {
+  //         value: true,
+  //         id: true,
+  //       },
+  //     },
+  //     //cache: true,
+  //   });
+  //   return chatroom;
+  // }
 
   async GetChatRoomByID(id: number) {
     const chatRoom = await this.chatRoomRepo.findOne({
@@ -150,16 +235,26 @@ export class ChatService {
     throw new HttpException("Can't create Chatroom!", HttpStatus.BAD_REQUEST);
   }
 
+  async findDMChatroomId(user1: number, user2: number) {
+    let user1ListOfChatrooms = await this.findDMChatroomsANDmsgs(user1);
+    let chatId: number = -1;
+    user1ListOfChatrooms.filter((item: Chat) => {
+      if ((item.member.length == 1 && user1 == user2) || (user2 != user1 && item.member.length == 2 && (item.member[1].id == user2 || item.member[0].id == user2)))
+        chatId = item.id;
+    })
+    return chatId;
+  }
+
   async postToDM(messageDTO: CreateMessage, current: number) {
-    let chatroom: any = (await this.betweenDMAndChannel(messageDTO.charRoomId, current));
-    if (!chatroom || !chatroom.length) {
+    const channelId = await this.findDMChatroomId(messageDTO.charRoomId, current);
+    let chatroom: any = [];
+    if (channelId < 0) {
       chatroom = await this.createChatroom(current, { type: 'DM', chatroomName: 'abc', password: '' })
       if (chatroom)
         await this.addMemberToChatroom(chatroom.id, { member: messageDTO.charRoomId, password: '' });
+      return await this.postToDms({ charRoomId: chatroom.id, value: messageDTO.value }, current);
     }
-    if (chatroom.length)
-      return await this.postToDms({ charRoomId: chatroom[0].id, value: messageDTO.value }, current);
-    return await this.postToDms({ charRoomId: chatroom.id, value: messageDTO.value }, current);
+    return await this.postToDms({ charRoomId: channelId, value: messageDTO.value }, current);
 
   }
 
@@ -171,15 +266,16 @@ export class ChatService {
   }
 
   async betweenDM(id: number, id2: number) {
-    console.log("JE RE")
-    let replaying = await this.chatRoomRepo
-      .createQueryBuilder('chats').leftJoinAndSelect('chats.member', 'members').leftJoinAndSelect('chats.message', 'messages').leftJoinAndSelect('messages.userId', 'Theuser').groupBy('chats.id, members.id, messages.messageID, Theuser.id').where('members.id = ANY(:Ids) AND chats.type = :type', { Ids: [id, id2], type: 'DM' }).getMany();
-    // .where('members.id = :Userid AND members.id = :Userid1 AND chats.type = :type', { Userid: id, Userid1: id2, type: 'DM' }).getOne();
-    console.log(replaying)
-    replaying.map((chat) => {
-      console.log(chat)
-    })
-    return replaying[0].message
+    // console.log("JE RE")
+    // let replaying = await this.chatRoomRepo
+    //   .createQueryBuilder('chats').leftJoinAndSelect('chats.member', 'members').leftJoinAndSelect('chats.message', 'messages').leftJoinAndSelect('messages.userId', 'Theuser').groupBy('chats.id, members.id, messages.messageID, Theuser.id').where('members.id = ANY(:Ids) AND chats.type = :type', { Ids: [id, id2], type: 'DM' }).getMany();
+    // // .where('members.id = :Userid AND members.id = :Userid1 AND chats.type = :type', { Userid: id, Userid1: id2, type: 'DM' }).getOne();
+    // console.log(replaying)
+    // replaying.map((chat) => {
+    //   console.log(chat)
+    // })
+    // return replaying[0].message
+    // findDMChatrooms(id)
   }
 
 
@@ -236,69 +332,130 @@ export class ChatService {
     return {}
   }
 
+  // async findDMChatrooms(id: number) {
+  // console.log('                    -chatDms                               ')
+  // let data: Array<any> = [];
+  // const chatDms = await this.chatRoomRepo
+  //   .createQueryBuilder('chats').leftJoinAndSelect('chats.member', 'members').leftJoinAndSelect('chats.message', 'messages').leftJoinAndSelect('messages.userId', 'Theuser').getMany()
+  // console.log(chatDms)
+  // chatDms.map((item) => {
+  //   if (item.type == 'DM') {
+  //     if (item.member.length == 1 || item.member[1].id == id) {
+  //       data.push({ name: item.member[0].name, id: item.member[0].id, avatar: item.member[0].avatar });
+  //     }
+  //     else
+  //       data.push({ name: item.member[1].name, id: item.member[1].id, avatar: item.member[1].avatar });
+  //   }
+  // })
+  // return data;
+  // }
   async findDMChatrooms(id: number) {
-    console.log('                    -chatDms                               ')
-    let data: Array<any> = [];
-    const chatDms = await this.chatRoomRepo
-      .createQueryBuilder('chats').leftJoinAndSelect('chats.member', 'members').leftJoinAndSelect('chats.message', 'messages').leftJoinAndSelect('messages.userId', 'Theuser').getMany()
-    console.log(chatDms)
-    chatDms.map((item) => {
-      if (item.type == 'DM') {
-        if (item.member.length == 1 || item.member[1].id == id) {
-          data.push({ name: item.member[0].name, id: item.member[0].id, avatar: item.member[0].avatar });
-        }
-        else
-          data.push({ name: item.member[1].name, id: item.member[1].id, avatar: item.member[1].avatar });
-      }
+    let vrbl: Map<number, any> = new Map<number, any>();
+    let replay: any = await this.findDMChatroomsANDmsgs(id);
+    // TODO: date adding - >
+    // replay.sort((item1: Chat, item2: Chat) => { return item1.message[item1.message.length - 1].date > item2.message[item2.message.length - 1].date ? item1 : item2 })
+    replay.map((item: any) => {
+      if (item.member.length == 1 || item.member[1].id == id)
+        vrbl.set(item.member[0].id, item.member[0]);
+      else
+        vrbl.set(item.member[1].id, item.member[1]);
     })
-    return data;
+    return Array.from(vrbl.values());
   }
-
-  async findDMChatroom(user1: number, user2: number) {
-    const user1ListOfChatrooms = await this.chatRoomRepo.find({
+  async findDMChatroomsANDmsgs(id: number): Promise<Chat[]> {
+    // returns all chat dms in the database
+    let DMS = await this.chatRoomRepo.find({
       relations: {
         member: true,
+        message: true,
       },
       where: {
         type: 'DM',
-        member: {
-
-          id: user1,
-        },
-      },
-      select: {
-        member: {
-          id: true,
-        },
-      },
-    });
-    const user2ListOfChatrooms = await this.chatRoomRepo.find({
-      relations: {
-        member: true,
-      },
-      where: {
-        type: 'DM',
-        member: {
-          id: user2,
-        },
       },
       select: {
         member: {
           username: true,
+          id: true,
+          avatar: true,
+          name: true
+        },
+        message: {
+          // get the message and the name and id of the sender
+          value: true,
+          userId: {
+            id: true,
+            username: true,
+          },
         },
       },
     });
-    if (user1ListOfChatrooms && user2ListOfChatrooms) {
-      for (const user1_Iterator of user1ListOfChatrooms) {
-        for (const user2_Iterator of user2ListOfChatrooms) {
-          if (user1_Iterator.id == user2_Iterator.id) {
-            return user1_Iterator;
-          }
-        }
+    // filters the array for the wanted dms
+    for (const dm of DMS) {
+      if (!dm.member.some((u) => u.id === id)) {
+        DMS = DMS.filter((ID) => ID.id !== dm.id);
       }
     }
-    // return null;
-    throw new HttpException("Can't find DM", HttpStatus.NOT_FOUND);
+    return DMS;
+  }
+
+  // async findDMChatroom(user1: number, user2: number) {
+  //   const user1ListOfChatrooms = await this.chatRoomRepo.find({
+  //     relations: {
+  //       member: true,
+  //     },
+  //     where: {
+  //       type: 'DM',
+  //       member: {
+
+  //         id: user1,
+  //       },
+  //     },
+  //     select: {
+  //       member: {
+  //         id: true,
+  //       },
+  //     },
+  //   });
+  //   const user2ListOfChatrooms = await this.chatRoomRepo.find({
+  //     relations: {
+  //       member: true,
+  //     },
+  //     where: {
+  //       type: 'DM',
+  //       member: {
+  //         id: user2,
+  //       },
+  //     },
+  //     select: {
+  //       member: {
+  //         username: true,
+  //       },
+  //     },
+  //   });
+  //   if (user1ListOfChatrooms && user2ListOfChatrooms) {
+  //     for (const user1_Iterator of user1ListOfChatrooms) {
+  //       for (const user2_Iterator of user2ListOfChatrooms) {
+  //         if (user1_Iterator.id == user2_Iterator.id) {
+  //           return user1_Iterator;
+  //         }
+  //       }
+  //     }
+  //   }
+  //   // return null;
+  //   throw new HttpException("Can't find DM", HttpStatus.NOT_FOUND);
+  // }
+
+
+  async findDMChatroom(user1: number, user2: number) {
+    let user1ListOfChatrooms = await this.findDMChatroomsANDmsgs(user1);
+    let chatId: number = -1;
+    user1ListOfChatrooms.filter((item: Chat) => {
+      if ((item.member.length == 1 && user1 == user2) || (user2 != user1 && item.member.length == 2 && (item.member[1].id == user2 || item.member[0].id == user2)))
+        chatId = item.id;
+    })
+    if (chatId > 0)
+      return await this.getMessagesByChatID(chatId)
+    return [];
   }
 
   async checkForAdminRoll(chatID: number, id: number) {
