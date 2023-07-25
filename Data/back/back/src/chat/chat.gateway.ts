@@ -94,7 +94,8 @@ export class ChatGateway {
     }
     const message = await this.chatService.postToDM(payload?.message, xyz.sub);
     this.server.in(payload?.message?.charRoomId).emit("privateMessage", { sender: xyz.sub, mgs: message });
-    this.server.in(xyz.sub).emit("privateMessage", { sender: xyz.sub, mgs: message });
+    if (xyz.sub != payload?.message?.charRoomId)
+      this.server.in(xyz.sub).emit("privateMessage", { sender: payload?.message?.charRoomId, mgs: message });
   }
 
 
@@ -124,11 +125,7 @@ export class ChatGateway {
       return false;
     }
     const message: any = await this.chatService.postToChatroom(payload?.message, xyz.sub);
-    console.log(message?.chatRoomId?.id)
-    // console.log(payload?.Message)
-    // console.log(payload)
     this.server.in(message.chatRoomId.id.toString()).emit("ChannelMessages", { sender: xyz.sub, mgs: message });
-    // this.server.emit("ChannelMessages", { sender: xyz.sub, mgs: message });
   }
 
   @SubscribeMessage('join-room')

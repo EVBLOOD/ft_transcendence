@@ -17,15 +17,10 @@ export class SendMsgComponent {
   constructor(private readonly sendMsg: ChatService) {
   }
   sending() {
-    if (this.msgText.value?.trim()?.length)
+    if (this.msgText.value?.trim()?.length && this.isRoom)
       this.sendMsg.sendMessage({ value: this.msgText.value.trim(), charRoomId: this.chatId }, this.isRoom);
-    // if (this.msgText.value?.trim()?.length)
-    // {
-    // if (!this.isRoom)
-    // this.sendMsg.sendMessage({ value: this.msgText.value.trim(), charRoomId: this.userId }, false);
-    // else
-    // this.sendMsg.send
-    // }
+    else if (this.msgText.value?.trim()?.length && !this.isRoom)
+      this.sendMsg.sendMessage({ value: this.msgText.value.trim(), charRoomId: this.userId }, this.isRoom);
     this.msgText.setValue('');
   }
 }

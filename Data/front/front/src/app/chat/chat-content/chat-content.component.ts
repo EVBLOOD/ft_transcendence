@@ -10,20 +10,21 @@ import { AuthService } from 'src/app/login/auth.service';
   styleUrls: ['./chat-content.component.scss'],
 
 })
-export class ChatContentComponent implements OnInit, OnChanges {
+export class ChatContentComponent implements OnInit, OnChanges, OnDestroy {
   // @Input() toggle: boolean = false;
   id !: number;
   isRoom: boolean = true;
   chatMsgs$ !: Observable<any>;
   chatMembers$ !: Observable<any>;
   chatInfos$ !: Observable<any>;
-  messages: Array<any> = new Array<any>();
+  messages: Array<any> = [];
   constructor(private readonly switchRoute: Router, private readonly route: ActivatedRoute, private readonly chatService: ChatService, private readonly authService: AuthService) {
   }
 
   ngOnInit(): void {
-
+    this.messages = []
     this.route.params.subscribe(params => {
+      this.messages = []
       if (params['id']) {
         this.setupComponent(params['id']);
         this.chatService.joinSocket(params['id']);
@@ -37,7 +38,12 @@ export class ChatContentComponent implements OnInit, OnChanges {
     })
     this.chatService.getUpdate().subscribe((data) => {
       console.log(data)
-      if (data?.mgs?.chatRoomId?.type == 'DM' && ((data?.mgs?.userId?.id == data.sender) || data?.mgs?.userId?.id == this.id)) {
+      console.log(data.sender)
+      if (data?.mgs?.chatRoomId?.type == 'DM' && data.sender == this.id) {
+        if (data?.mgs?.userId?.id == data.sender)
+          console.log("One")
+        else
+          console.log("Two")
         this.messages.push(data.mgs)
       }
       else if (this.id == data?.mgs?.chatRoomId?.id) {
@@ -53,10 +59,14 @@ export class ChatContentComponent implements OnInit, OnChanges {
     this.id = parseInt(someParam)
     this.chatInfos$ = this.chatService.getThisChat(this.id);
     this.chatMsgs$ = this.chatService.getChatroomMessages(this.id);
-    // this.chatMembers$ = getmembers
+    this.messages = []
   }
   ngOnChanges(): void {
-    this.messages = new Array();
+    this.messages = [];
+  }
+  ngOnDestroy(): void {
+    console.log("END")
+    this.messages = []
   }
 
 }

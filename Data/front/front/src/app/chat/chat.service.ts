@@ -110,7 +110,6 @@ export class ChatService {
   }
 
   getDmMessages(id: number) {
-    console.log('alo fin')
     return this.httpClient.get<any>(URL + `/chat/DM/${id}`, { withCredentials: true, });
   }
 
