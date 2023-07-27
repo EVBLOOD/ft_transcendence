@@ -10,6 +10,7 @@ import { CreateChannelComponent } from './create-channel/create-channel.componen
 import { InviteComponent } from './invite/invite.component';
 import { ConfigChannelComponent } from './config-channel/config-channel.component';
 import { PopupToBeSureComponent } from './popup-to-be-sure/popup-to-be-sure.component';
+import { JoinToChannelComponent } from './join-to-channel/join-to-channel.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { PopupToBeSureComponent } from './popup-to-be-sure/popup-to-be-sure.comp
     CreateChannelComponent,
     InviteComponent,
     ConfigChannelComponent,
-    PopupToBeSureComponent
+    PopupToBeSureComponent,
+    JoinToChannelComponent
   ],
   imports: [
     BrowserModule,

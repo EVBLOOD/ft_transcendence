@@ -40,8 +40,11 @@
                 <div *ngIf="item.notifs" class="nb-messages">{{item.notifs}}</div>
             </div>
         </div>
-        <a routerLink="create-channel" class="button-create-channel" *ngIf="!toggle">Create channel</a>
-
+        <div class="create-join-channel">
+            <div routerLink="create-channel" class="button-create-channel" *ngIf="!toggle">Create channel</div>
+            <div routerLink="jointochannel" class="button-create-channel join-channel" *ngIf="!toggle">Join to channel</div>
+        </div>
+        
     </div>
     <div class="grid2">
         <div class="header-chat" *ngIf="toggle">

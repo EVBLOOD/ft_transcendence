@@ -408,6 +408,12 @@
     opacity: 70%; 
 }
 
+.create-join-channel{
+    display: grid;
+    grid-template-columns: auto auto; 
+    gap: 7px;
+}
+
 .button-create-channel{
     display: flex;
     gap: 3px;
@@ -425,6 +431,10 @@
     // height: 100%;
     height: 38px;
     justify-content: center;
+}
+
+.join-channel{
+    background: #7FABCC;
 }
 
 .button-create-channel:hover{
