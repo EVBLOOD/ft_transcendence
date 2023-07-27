@@ -17,7 +17,7 @@ import { StatusService } from 'src/app/status.service';
     ])
   ]
 })
-export class MessagesMdlComponent implements OnChanges {
+export class MessagesMdlComponent implements OnChanges, OnInit {
   @Input() isRoom: boolean = false;
   @Input() id!: number; // switched to type chat
   @Input() chatInfos: any;
@@ -27,6 +27,7 @@ export class MessagesMdlComponent implements OnChanges {
   @ViewChild('dropDownChannelRef') dropDownChannelRef !: ElementRef;
   @ViewChild('dropDownChannelRef_') dropDownChannelRef_ !: ElementRef;
   @ViewChild('dropDownChannelRef__') dropDownChannelRef__ !: ElementRef;
+  // @ViewChild('scrolling') scrolling!: ElementRef;
   dropDownChannel = false;
   // messages !: Array<any>;
 
@@ -58,7 +59,12 @@ export class MessagesMdlComponent implements OnChanges {
   avatring(url: string) {
     return this.profileUser.getUserAvatarPath(url);
   }
-  // ngOnInit(): void {
+  ngOnInit(): void {
+    // this.scroll.nativeElement.scrollTop = this.scroll?.nativeElement.scrollHeight;
+    // this.scrolling.nativeElement.scroll({ bottom: this.scrolling.nativeElement.scrollHeight, left: 0, behavior: 'smooth' })
+    // setTimeout(this.scrolling.nativeElement.scroll({ top: this.scrolling.nativeElement.scrollHeight, left: 0, behavior: 'smooth' }))
+
+  }
 
   // this.chatService.getUpdate().subscribe((data) => {
   //   if (data?.mgs?.chatRoomId?.type == 'DM' && (this.id == data.sender || data?.mgs?.userId?.id == this.id)) {
@@ -70,7 +76,12 @@ export class MessagesMdlComponent implements OnChanges {
   // })
   // }
   ngOnChanges(): void {
+
+    // this.scroll.nativeElement.scrollTop = this.scroll?.nativeElement.scrollHeight;
+    // this.scroll.nativeElement.scrollTo(this.scroll.nativeElement.scrollHeight, 0);
+
     console.log(this.messages)
+    // this.scrolling.nativeElement.scroll({ top: this.scrolling.nativeElement.scrollHeight, left: 0, behavior: 'smooth' })
     if (this.id && this.isRoom)
       this.msgs$ = this.chatService.getChatroomMessages(this.id)
 
@@ -80,6 +91,7 @@ export class MessagesMdlComponent implements OnChanges {
       this.msgs$ = this.chatService.getDmMessages(this.id);
       // this.chatService.
     }
+    // setTimeout(this.scrolling.nativeElement.scroll({ bottom: this.scrolling.nativeElement.scrollHeight, left: 0, behavior: 'smooth' }))
     // this.chatService
   }
 

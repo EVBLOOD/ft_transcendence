@@ -11,9 +11,4 @@ export class createChatroomDTO {
   chatroomName!: string;
 
   password!: string;
-
-  // @IsNotEmpty()
-  // user!: string;
-
-  // otherUser?: string;
 }

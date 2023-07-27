@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ChatService } from '../chat/chat.service';
 
 @Component({
   selector: 'app-popup-to-be-sure',
@@ -6,5 +8,20 @@ import { Component } from '@angular/core';
   styleUrls: ['./popup-to-be-sure.component.scss']
 })
 export class PopupToBeSureComponent {
+  constructor(private readonly switchRouter: Router, private readonly chatServ: ChatService, private readonly now: ActivatedRoute) {
 
+  }
+  close() {
+    this.switchRouter.navigateByUrl('chat/' + this.now.snapshot.params['id']);
+  }
+  submit() {
+    this.chatServ.leaveChatroom(this.now.snapshot.params['id']).subscribe((data: any) => {
+      if (data?.statusCode) {
+        console.log(data)
+        console.log('Ha lghder bda')
+      }
+      else
+        this.switchRouter.navigateByUrl('chat')
+    });
+  }
 }

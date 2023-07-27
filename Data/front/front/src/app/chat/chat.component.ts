@@ -26,8 +26,6 @@ export class ChatComponent {
   ChatDMs$ !: Observable<any>;
   listUser$ !: Observable<any>;
   replay: any;
-  status: string = 'Offline';
-  // constructor(private readonly chatService : ChatService) {}
 
   newText = new FormControl('', [Validators.required,]);
 
@@ -48,18 +46,7 @@ export class ChatComponent {
     });
 
   }
-  // replay: any;
-  // status: string = 'Offline';
-  // , private readonly state: StatusService
-  // statusLoading(id: any) {
-  //   this.replay = this.state.current_status.subscribe((curr) => {
-  //     const newone = curr.find((obj: any) => { if (obj.id == id) return obj; });
-  //     if (newone)
-  //       return this.status = newone.status;
-  //     else
-  //       this.status = 'Offline'
-  //   });
-  // }
+
   getStarterPath(path: string) {
     return this.route.url.startsWith(path);
   }
@@ -93,34 +80,6 @@ export class ChatComponent {
     this.dropDownUser = !this.dropDownUser;
   }
 
-  friends = [
-    { name: 'karim idbouhouch', avatar: '/assets/img/profile.jpeg', status: true, notifs: '5' },
-    { name: 'karim idbouhouch', avatar: '/assets/img/profile.jpeg', status: true, notifs: '5' },
-    { name: 'karim idbouhouch', avatar: '/assets/img/profile.jpeg', status: true, notifs: '5' },
-    { name: 'karim idbouhouch', avatar: '/assets/img/profile.jpeg', status: true, notifs: '5' },
-    { name: 'karim idbouhouch', avatar: '/assets/img/profile.jpeg', status: true, notifs: '5' },
-    { name: 'karim idbouhouch', avatar: '/assets/img/profile.jpeg', status: false },
-    { name: 'karim idbouhouch', avatar: '/assets/img/profile.jpeg', status: false },
-    { name: 'karim idbouhouch', avatar: '/assets/img/profile.jpeg', status: false },
-    { name: 'karim idbouhouch', avatar: '/assets/img/profile.jpeg', status: false },
-    { name: 'karim idbouhouch', avatar: '/assets/img/profile.jpeg', status: false },
-    { name: 'karim idbouhouch', avatar: '/assets/img/profile.jpeg', status: false },
-    { name: 'karim idbouhouch', avatar: '/assets/img/profile.jpeg', status: false },
-    { name: 'karim idbouhouch', avatar: '/assets/img/profile.jpeg', status: false, notifs: '5' },
-    { name: 'karim idbouhouch', avatar: '/assets/img/profile.jpeg', status: false },
-    { name: 'karim idbouhouch', avatar: '/assets/img/profile.jpeg', status: false },
-    { name: 'karim idbouhouch', avatar: '/assets/img/profile.jpeg', status: false },
-    { name: 'karim idbouhouch', avatar: '/assets/img/profile.jpeg', status: false, notifs: '5' },
-  ]
-
-  channels = [
-    { name: 'Annoncement', notifs: '4' },
-    { name: 'General', notifs: '9' },
-    { name: 'Music', notifs: '8' },
-    { name: 'Random', notifs: '40' },
-  ]
-
-
   clickFriend = false;
   onClickFriend() {
     this.clickFriend = !this.clickFriend;
@@ -132,13 +91,16 @@ export class ChatComponent {
       password: '', user: 'admin', otherUser: ''
     }).subscribe({ next: (data) => { console.log(data) } });
   }
+  finding = 0;
   FindextraUsers() {
-    if (this.newText.value?.length && this.toggle)
+    if (this.newText.value?.length && this.toggle) {
+      this.finding = 1;
       this.ChatDMs$ = this.listUsers.findthem(this.newText.value);
-    else if (this.toggle && !this.newText.value?.length)
+    }
+    else if (this.toggle && !this.newText.value?.length) {
+      this.finding = 0;
       this.ChatDMs$ = this.chatService.getChatDM();
-    else if (this.newText.value?.length)
-      this.ChatRooms$ = this.chatService.getChatroomMessagesnyName(this.newText.value)
+    }
     else
       this.ChatRooms$ = this.chatService.getChatrooms();
 

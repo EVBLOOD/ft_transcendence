@@ -1,19 +1,19 @@
 <div *ngIf="user.role == filter">
     <div (click)="onclickDropDownClick()" #dropDownUserRef class="friend"
         [ngClass]="{'friend-selected' : dropDownUser}">
-        {{statusLoading(user.userID.id)}}
+        {{statusLoading(user.user.id)}}
         <div class="friend-profile">
-            <img [src]="avataring(user.userID.avatar)">
+            <img [src]="avataring(user.user.avatar)">
             <div
                 [ngClass]="status == 'Online' ? 'statusCircle Online' : status == 'Offline' ? 'statusCircle Offline' : 'statusCircle InGame'">
             </div>
         </div>
-        <p class="name-friend">{{user.userID.name}}</p>
+        <p class="name-friend">{{user.user.name}}</p>
         <img class="listbox-member" src="/assets/icons/3points.svg">
     </div>
     <ul *ngIf="dropDownUser" @inOut class="dropdown-user">
-        <li [routerLink]="'/Profile/' + user.userID.id">View Profile</li>
-        <li *ngIf="filter != 'member'">Kick</li> <!-- TODO -->
-        <li *ngIf="filter != 'member'">Ban</li>
+        <li [routerLink]="'/profile/' + user.user.id">View Profile</li>
+        <li *ngIf="filter != 'member' && user.user.id != id">Kick</li> <!-- TODO -->
+        <li *ngIf="filter != 'member' && user.user.id != id">Ban</li>
     </ul>
 </div>

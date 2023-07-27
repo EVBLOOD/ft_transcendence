@@ -1,12 +1,12 @@
 <app-popup>
-    <div class="CloseBtnPop">
+    <div class="CloseBtnPop" (click)="close()">
         <button></button>
     </div>
     <div class="contentPopup">
         <h2 class="popTitle">Are you sure to leave #general ?</h2>
         <div class="buttons">
-            <a class="cancel">No</a>
-            <a class="createChannel">Yes</a>
+            <a class="cancel" (click)="close()">No</a>
+            <a class="createChannel" (click)="submit()">Yes</a>
         </div>
     </div>
 </app-popup>

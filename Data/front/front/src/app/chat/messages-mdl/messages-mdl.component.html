@@ -13,25 +13,24 @@
         <div class="icon-name-channel">
             <img src="/assets/icons/hashtag.svg">
             <div class="name-status">
-                <div class="name">{{this.chatInfos?.chatRoomName}}</div>
-                <div class="nb-members-channel">{{this.chatInfos?.member?.length ? this.chatInfos?.member?.length +
-                    'Members' : ''}} </div>
+                <div class="name">{{this.chatInfos?.rooms?.chat?.name}}</div>
+                <div class="nb-members-channel">{{this.chatInfos?.count ? this.chatInfos?.count +
+                    ' Members' : ''}} </div>
             </div>
         </div>
         <div #dropDownChannelRef__ class="threedotschannel">
             <img (click)="onclickThreePointChannel()" #dropDownChannelRef_ src="/assets/icons/3points.svg">
             <ul *ngIf="dropDownChannel" @inOut #dropDownChannelRef class="dropdown-profile">
-                <li [routerLink]="'/confirm/'+this.chatInfos?.id">Leave</li>
-                <li [routerLink]="'/invite/'+this.chatInfos?.id">Invite</li>
-                <li [routerLink]="'/channelSetting/' + this.chatInfos?.id">Settings</li>
+                <li [routerLink]="'/confirm/'+this.chatInfos?.rooms?.chat?.id">Leave</li>
+                <li [routerLink]="'/invite/'+this.chatInfos?.rooms?.chat?.id">Invite</li>
+                <li [routerLink]="'/channelSetting/' + this.chatInfos?.rooms?.chat?.id">Settings</li>
             </ul>
         </div>
     </div>
 
     <div class="conversation">
-        <!-- {{messages}} -->
         <app-message *ngFor="let msg of (msgs$|async) " [value]="msg" />
         <app-message *ngFor="let msg of messages " [value]="msg" />
     </div>
-    <app-send-msg [isRoom]="isRoom" [chatId]="this.chatInfos?.id" [userId]="id" />
+    <app-send-msg [isRoom]="isRoom" [chatId]="this.chatInfos?.rooms?.chat?.id" [userId]="id" />
 </div>

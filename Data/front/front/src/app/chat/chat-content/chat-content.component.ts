@@ -33,23 +33,25 @@ export class ChatContentComponent implements OnInit, OnChanges, OnDestroy {
         this.setupComponent(params['username'])
         this.isRoom = false;
       }
-      else
-        this.setupComponent(params['username'])
+      // else
+      //   this.setupComponent('0')
     })
     this.chatService.getUpdate().subscribe((data) => {
-      console.log(data)
-      console.log(data.sender)
-      if (data?.mgs?.chatRoomId?.type == 'DM' && data.sender == this.id) {
-        if (data?.mgs?.userId?.id == data.sender)
-          console.log("One")
-        else
-          console.log("Two")
-        this.messages.push(data.mgs)
-      }
-      else if (this.id == data?.mgs?.chatRoomId?.id) {
-        this.messages.push(data.mgs)
+      if (this.id)
+        if (data.type == 'direct' && data.sender == this.id) {
+          if (data?.mgs?.sender == data.sender)
+            console.log("One")
+          else
+            console.log("Two")
+          data.mgs.sender = data?.profile;
+          this.messages.push(data.mgs)
+        }
+        else if (this.id == data?.mgs?.chat_id) {
 
-      }
+          data.mgs.sender = data?.profile;
+          this.messages.push(data.mgs)
+
+        }
     })
   }
   setupComponent(someParam: any) { // TODO : messages deleting once the work is done 

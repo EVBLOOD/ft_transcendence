@@ -1,5 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
+import { AuthService } from 'src/app/login/auth.service';
 import { ProfileService } from 'src/app/profile/profile.service';
 import { StatusService } from 'src/app/status.service';
 
@@ -18,9 +19,9 @@ export class PartChatComponent {
   @Input() filter!: string;
   @Input() user!: any;
   @Input() idChat !: number;
-
-  constructor(private readonly profile: ProfileService, private readonly state: StatusService) {
-
+  id !: number;
+  constructor(private readonly profile: ProfileService, private readonly state: StatusService, private readonly authSer: AuthService) {
+    this.id = this.authSer.getId();
   }
   avataring(url: string) {
     return this.profile.getUserAvatarPath(url)

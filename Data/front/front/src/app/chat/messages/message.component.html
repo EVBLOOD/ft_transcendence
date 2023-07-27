@@ -1,10 +1,10 @@
-<div [ngClass]="myId() != value?.userId?.id ? 'receiver' : 'sender' ">
-    <img [src]="imageLink(value?.userId?.avatar)">
+<div [ngClass]="myId() != value?.sender?.id ? 'receiver' : 'sender' ">
+    <img [src]="imageLink(value?.sender?.avatar)">
     <div>
         <div class="infos">
-            <p class="name">{{myId() != value?.userId?.id ? value?.userId?.name : 'You'}}</p>
+            <p class="name">{{myId() != value?.sender?.id ? value?.sender?.name : 'You'}}</p>
             <p class="time">14:00</p>
         </div>
-        <div class="msg">{{value?.value}}</div>
+        <div class="msg">{{value?.content}}</div>
     </div>
 </div>

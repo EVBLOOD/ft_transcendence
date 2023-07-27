@@ -1,10 +1,10 @@
 import { Exclude } from 'class-transformer';
 import { IsBoolean, IsEmail, Matches, isNumber } from 'class-validator';
-import { Chat } from 'src/chat/chat.entity';
-import { Punishment } from 'src/chat/punishment/punishment.entity';
+import { Messages } from 'src/chat/entities/Messages.entity';
+import { Chat } from 'src/chat/entities/chat.entity';
+// import { Punishment } from 'src/chat/punishment/punishment.entity';
 import { Match } from 'src/match/entities/match.entity';
-import { Message } from 'src/message/message.entity';
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, PrimaryColumn, Unique } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn, } from 'typeorm';
 
 @Entity({ name: 'Users' })
 export class User {
@@ -46,31 +46,7 @@ export class User {
   @OneToMany(() => Match, match => match.winner)
   wonMatches: Match[];
 
-  // chat
-  @OneToMany(
-    () => Message,
-    (message: Message) => {
-      message.userId;
-    },
-  )
-  @JoinColumn()
-  messages!: Message[];
-
-  @ManyToMany(() => Chat, (chatRoom: Chat) => chatRoom.member)
-  @JoinTable()
-  chatRoomMember!: Chat[];
-
-  @OneToMany(() => Chat, (chatRoom: Chat) => chatRoom.owner)
-  @JoinColumn()
-  chatRoomOwner!: Chat[];
-
-  @ManyToMany(() => Chat, (chatRoom: Chat) => chatRoom.admin)
-  @JoinTable()
-  chatRoomAdnim!: Chat[];
-
-  @OneToMany(() => Punishment, (punishment: Punishment) => punishment.user)
-  @JoinColumn()
-  punishment!: Punishment[];
+  messages: Messages;
 
   constructor(partial: Partial<User>) {
     Object.assign(this, partial);

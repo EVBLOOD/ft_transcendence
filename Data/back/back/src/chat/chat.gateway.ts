@@ -10,10 +10,11 @@ import {
 import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
 import { Inject } from '@nestjs/common';
-import { CreateMessage } from 'src/message/dto/message.dto';
+// import { CreateMessage } from 'src/message/dto/message.dto';
 import { hostSocket } from 'src/app.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthenticatorService } from 'src/authenticator/authenticator.service';
+import { UserService } from 'src/user/user.service';
 
 @WebSocketGateway({
   namespace: 'chat',
@@ -32,7 +33,7 @@ export class ChatGateway {
 
   constructor(
     @Inject(forwardRef(() => ChatService))
-    private readonly chatService: ChatService, private readonly serviceJWt: JwtService, private readonly serviceToken: AuthenticatorService,
+    private readonly chatService: ChatService, private readonly serviceJWt: JwtService, private readonly serviceToken: AuthenticatorService, private readonly User: UserService
   ) { }
   async handleConnection(client: Socket, ...args: any[]) {
     const cookie = client.handshake.headers?.cookie
@@ -93,9 +94,11 @@ export class ChatGateway {
       return false;
     }
     const message = await this.chatService.postToDM(payload?.message, xyz.sub);
-    this.server.in(payload?.message?.charRoomId).emit("privateMessage", { sender: xyz.sub, mgs: message });
-    if (xyz.sub != payload?.message?.charRoomId)
-      this.server.in(xyz.sub).emit("privateMessage", { sender: payload?.message?.charRoomId, mgs: message });
+    const sender = await this.User.findOne(xyz.sub);
+    this.server.in(payload?.message?.charRoomId).emit("privateMessage", { sender: xyz.sub, mgs: message, type: 'direct', profile: sender });
+    if (xyz.sub != payload?.message?.charRoomId) {
+      this.server.in(xyz.sub).emit("privateMessage", { sender: payload?.message?.charRoomId, mgs: message, type: 'direct', profile: sender });
+    }
   }
 
 
@@ -125,7 +128,10 @@ export class ChatGateway {
       return false;
     }
     const message: any = await this.chatService.postToChatroom(payload?.message, xyz.sub);
-    this.server.in(message.chatRoomId.id.toString()).emit("ChannelMessages", { sender: xyz.sub, mgs: message });
+    console.log(message)
+    const sender = await this.User.findOne(xyz.sub);
+    if (message)
+      this.server.in(message.chat_id.toString()).emit("ChannelMessages", { sender: xyz.sub, mgs: message, type: 'none', profile: sender });
   }
 
   @SubscribeMessage('join-room')

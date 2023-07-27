@@ -91,7 +91,13 @@ export class ChatService {
   }
 
   joinSocket(channel: string) {
+    // console.log("JOKE?")
+    // console.log(channel)
     this.sock.emit('join-room', channel)
+  }
+
+  sendIntv(channelID: string, UserId: number) {
+    // this.httpClient.post(, {})
   }
 
   leaveSocket(channel: string) {
@@ -113,6 +119,9 @@ export class ChatService {
     return this.httpClient.get<any>(URL + `/chat/DM/${id}`, { withCredentials: true, });
   }
 
+  leaveChatroom(id: string) {
+    return this.httpClient.delete(URL + `/chat/leave/${id}`, { withCredentials: true, })
+  }
   getThisChatMsgs(id: number) {
     return this.httpClient.get(`http://10.13.4.8:3000/message/for` + id, { withCredentials: true, })
 
@@ -167,9 +176,6 @@ export class ChatService {
   }
   kickuser(chatID: number, admin: string, user: string) {
     return this.httpClient.delete(URL + `/chat/delete/${chatID}/admin/${admin}/user/${user}`, { withCredentials: true, });
-  }
-  leaveChatroom(id: number, name: string) {
-    return this.httpClient.delete(URL + `/chat/leave/${id}/user/${name}`)
   }
   // update/:chatID/admin
   updateChatroom_(id: number, user: string, dto: UpdateChatroomDTO) {
