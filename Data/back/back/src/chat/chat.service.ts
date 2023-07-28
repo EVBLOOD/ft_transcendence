@@ -89,7 +89,7 @@ export class ChatService {
     switch (chatRoomType) {
       case 'public':
         return true;
-      case 'password':
+      case 'protected':
         return true;
       case 'private':
         return true;
@@ -109,16 +109,37 @@ export class ChatService {
 
 
   validateChatDTO(chatDTO: createChatroomDTO): boolean {
-    this.validateChatName(chatDTO.chatroomName);
-    this.validateChatType(chatDTO.type);
-    if (chatDTO.type === 'password') {
-      this.validateChatPassword(chatDTO.password);
+    return this.validateChatName(chatDTO.chatroomName) && this.validateChatType(chatDTO.type)
+      && chatDTO.type == 'protected' ? this.validateChatPassword(chatDTO.password) : true;
+  }
+  async isMemberbyName(userId: number, channelName: string) {
+    const rooms = await this.MembersRepo.createQueryBuilder('Members')
+      .leftJoinAndSelect("Members.chat", "chatID")
+      .leftJoinAndSelect("Members.user", "Userid").select(["Userid", "Members"])
+      .where("chatID.type != :type AND chatID.name = :channelId AND Members.state = :active AND Userid.id = :userId", { type: 'direct', channelId: channelName, active: 1, userId })
+      .getMany();
+    return rooms;
+  }
+
+  async JoinChatroom(userId: number, chatroomDTO: createChatroomDTO) {
+    if ((await this.isMemberbyName(userId, chatroomDTO.chatroomName)).length)
+      return {};
+    const room = await this.ChatRepo.createQueryBuilder('chat').where("chat.name = :name", { name: chatroomDTO.chatroomName }).getOne();
+    if (!room)
+      return {};
+    const findUser = await this.users.findOne(userId);
+    if (!findUser)
+      return {};
+    if (room.type == 'protected') {
+      if (await bcrypt.compare(chatroomDTO.password, room.password) == false)
+        return {}
+      return this.MembersRepo.save({ chatID: room.id, role: 'none', state: 1, Userid: userId });
     }
-    return true;
+    return this.MembersRepo.save({ chatID: room.id, role: 'none', state: 1, Userid: userId });
   }
 
   async createChatroom(userId: number, chatroomDTO: createChatroomDTO) {
-    if (this.validateChatDTO(chatroomDTO) === false)
+    if (!this.validateChatDTO(chatroomDTO))
       return undefined;
     if (chatroomDTO.type == 'DM') {
       chatroomDTO.type = 'direct';
@@ -126,7 +147,8 @@ export class ChatService {
       if (!user)
         return undefined;
     }
-    if (chatroomDTO.type === 'password') {
+    if (chatroomDTO.type === 'protected') {
+      console.log("welcome!")
       const passwordHash = await bcrypt.hash(chatroomDTO.password, 10);
       chatroomDTO.password = passwordHash;
     }
@@ -220,8 +242,27 @@ export class ChatService {
       .getMany();
     return rooms;
   }
+  async MyOwnRole(userId: number, channelId: number) {
+    if (!(await this.isMember(userId, channelId)).length)
+      return [];
+    const rooms = await this.MembersRepo.createQueryBuilder('Members')
+      .leftJoinAndSelect("Members.chat", "chatID")
+      .leftJoinAndSelect("Members.user", "Userid").select(["Userid", "Members"])
+      .where("chatID.type != :type AND chatID.id = :channelId AND Userid.id = :id", { type: 'direct', channelId: channelId, id: userId })
+      .getOne();
+    // console.log('1312', rooms)
+    return rooms;
+  }
   async getChatRoomMembers(userId: number, channelId: number) {
-    return await this.isMember(userId, channelId);
+    if (!(await this.isMember(userId, channelId)).length)
+      return [];
+    const rooms = await this.MembersRepo.createQueryBuilder('Members')
+      .leftJoinAndSelect("Members.chat", "chatID")
+      .leftJoinAndSelect("Members.user", "Userid").select(["Userid", "Members"])
+      .where("chatID.type != :type AND chatID.id = :channelId", { type: 'direct', channelId: channelId, })
+      .getMany();
+    console.log("Room's Memebers", rooms)
+    return rooms;
   }
   async getMessagesByChatID(userId: number, channelId: number) {
     if (await this.isMember(userId, channelId)) {
@@ -294,6 +335,14 @@ export class ChatService {
     if (await this.checkInviteExists(channelId, currentUser))
       return await this.MembersRepo.delete({ chatID: channelId, Userid: currentUser, });
     return {};
+  }
+
+  async getInvites(id: number) {
+    return await this.MembersRepo.createQueryBuilder('Members')
+      .leftJoinAndSelect("Members.chat", "chatID")
+      .leftJoinAndSelect("Members.user", "Userid")
+      .where("Userid.id = :userId AND chatID.type != :type AND Members.state = :active",
+        { userId: id, type: 'direct', active: 2, }).getMany();
   }
 
   async checkforRole(channelId: number, currentUser: number, role: any[]) {

@@ -139,6 +139,9 @@ export class ChatService {
     return this.httpClient.post(`http://10.13.4.8:3000/chat/create`, chat, { withCredentials: true, });
   }
 
+  JoiningChatRoom(chat: createChatroom) {
+    return this.httpClient.post(`http://10.13.4.8:3000/chat/JoinRoom`, chat, { withCredentials: true, });
+  }
   sendMessage(message: sendMessageDTO, type: boolean) {
     // console.log("message DTO", message);
     if (type)
@@ -203,4 +206,10 @@ export class ChatService {
     return this.httpClient.get(URL + `/punishment/chat/all/${chatname}`, { withCredentials: true, })
   }
 
+  getInvitesForMe() {
+    return this.httpClient.get(URL + `/punishment/chat/invites`, { withCredentials: true, })
+  }
+  myRole(id: number) {
+    return this.httpClient.get(URL + `/chat/myRole/${id}`, { withCredentials: true, })
+  }
 }

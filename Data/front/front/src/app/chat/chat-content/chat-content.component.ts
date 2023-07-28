@@ -27,7 +27,7 @@ export class ChatContentComponent implements OnInit, OnChanges, OnDestroy {
       this.messages = []
       if (params['id']) {
         this.setupComponent(params['id']);
-        this.chatService.joinSocket(params['id']);
+        this.chatService.joinSocket(params['id']); // leave before joinig!
       }
       else if (params['username']) {
         this.setupComponent(params['username'])

@@ -31,10 +31,10 @@ export class CreateChannelComponent {
   submiting() {
     let type = 'public';
     if (this.privateToggle.value && this.secretToggle.value)
-      type = 'password'
+      type = 'protected'
     else if (this.privateToggle.value)
       type = 'private'
-    if (this.channelName.value?.length && (type != 'password' || this.password.value?.length)) {
+    if (this.channelName.value?.length && (type != 'protected' || this.password.value?.length)) {
       this.chatService.joinChatroom({
         type, chatroomName: this.channelName.value,
         password: this.password.value, user: 'admin', otherUser: ''

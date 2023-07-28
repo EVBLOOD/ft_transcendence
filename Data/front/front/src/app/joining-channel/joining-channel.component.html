@@ -12,9 +12,10 @@
                 </div>
             </div>
             <div class="formJoiningChannel">
-                <input class="textbox" type="text" placeholder="Channel name" />
-                <input *ngIf="secretToggle" class="textbox" type="text" placeholder="Password" />
-                <a class="buttonJoin">Join</a>
+                <input [formControl]="ChannelName" class="textbox" type="text" placeholder="Channel name" />
+                <input [formControl]="ChannelPassword" *ngIf="secretToggle" class="textbox" type="text"
+                    placeholder="Password" />
+                <a (click)="JoinIt()" class="buttonJoin">Join</a>
             </div>
         </div>
         <div class="inviteChannels">

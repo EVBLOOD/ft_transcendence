@@ -20,6 +20,7 @@ export class ChatInfoComponent implements OnChanges {
 
   Members$ !: Observable<any>;
   user$ !: Observable<any>;
+  role$  !: Observable<any>;
   // Members$ !: Observable<any>;
   // id !: number;
   thisUSer!: number;
@@ -33,6 +34,7 @@ export class ChatInfoComponent implements OnChanges {
   ngOnChanges(): void {
     if (this.id && this.isRoom) {
       this.Members$ = this.chatService.getGroupMembers(this.id);
+      this.role$ = this.chatService.myRole(this.id);
     }
     else if (this.id && !this.isRoom) {
       this.user$ = this.profileService.getUserData(this.id.toString());

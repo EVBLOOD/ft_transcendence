@@ -19,6 +19,7 @@ export class PartChatComponent {
   @Input() filter!: string;
   @Input() user!: any;
   @Input() idChat !: number;
+  @Input() myrole !: string;
   id !: number;
   constructor(private readonly profile: ProfileService, private readonly state: StatusService, private readonly authSer: AuthService) {
     this.id = this.authSer.getId();

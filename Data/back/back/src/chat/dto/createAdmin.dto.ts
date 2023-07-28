@@ -7,3 +7,11 @@ export class createAdminDTO {
   @IsNotEmpty()
   roleReceiver!: number;
 }
+
+export class invitesDTO {
+  @IsNotEmpty()
+  chatID: number;
+
+  @IsNotEmpty()
+  UserId: number;
+}

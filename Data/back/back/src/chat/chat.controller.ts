@@ -13,7 +13,7 @@ import {
 import { ChatService } from './chat.service';
 import { createChatroomDTO } from './dto/createChatroom.dto';
 import { createMemberDTO } from './dto/createMember.dto';
-import { createAdminDTO } from './dto/createAdmin.dto';
+import { createAdminDTO, invitesDTO } from './dto/createAdmin.dto';
 import { SwapOwnerDTO } from './dto/SwapOwner.dto';
 import { UpdateChatroomDTO } from './dto/updateChatroom.dto';
 // import { ValidateUpdateDTO } from './chat.validators';
@@ -31,6 +31,27 @@ import { UserService } from 'src/user/user.service';
 export class ChatController {
 
   constructor(private readonly chatRoomSevice: ChatService) { }
+
+  @Get('invites')
+  async GetInvites(@Req() req: any) {
+    return await this.chatRoomSevice.getInvites(req.new_user.sub);
+  }
+
+  @Post('invites')
+  async SendInvites(@Req() req: any, @Body() invitesDTO: invitesDTO) {
+    return await this.chatRoomSevice.sendAnInvite(invitesDTO.chatID, req.new_user.sub, invitesDTO.UserId);
+  }
+
+  @Post('AcceptInvite')
+  async AcceptInvites(@Req() req: any, @Body() invitesDTO: invitesDTO) {
+    return await this.chatRoomSevice.AcceptAnInvite(invitesDTO.chatID, req.new_user.sub);
+  }
+
+
+  @Post('RemoveInvite')
+  async RemoveInvites(@Req() req: any, @Body() invitesDTO: invitesDTO) {
+    return await this.chatRoomSevice.DeleteAnInvite(invitesDTO.chatID, req.new_user.sub);
+  }
 
 
   @Get('find/:id')
@@ -64,6 +85,11 @@ export class ChatController {
     return this.chatRoomSevice.getChatRoomMembers(req.new_user.sub, id);
   }
 
+
+  @Get('myRole/:id')
+  GetMyRole(@Req() req: any, @Param('id', ParseIntPipe) id: number) {
+    return this.chatRoomSevice.MyOwnRole(req.new_user.sub, id);
+  }
   @Get(':chatID/messages')
   async getMessagesByChatID(
     @Req() req: any,
@@ -73,8 +99,13 @@ export class ChatController {
   }
 
   @Post('create')
-  async createChatRoom(@Req() req, @Body() chatroom: createChatroomDTO) {
+  async createChatRoom(@Req() req: any, @Body() chatroom: createChatroomDTO) {
     return this.chatRoomSevice.createChatroom(req.new_user.sub, chatroom);
+  }
+
+  @Post('JoinRoom')
+  async joinRoom(@Req() req, @Body() chatroom: createChatroomDTO) {
+    return this.chatRoomSevice.JoinChatroom(req.new_user.sub, chatroom);
   }
   @Put('update/:chatID/admin')
   async updateChatroom_(
