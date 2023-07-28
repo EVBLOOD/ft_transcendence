@@ -121,6 +121,38 @@ export class ChatService {
     return rooms;
   }
 
+  async setAsAdmin(userId: number, channelId: number, userTarget: number) {
+    if (!(await this.checkforRole(channelId, userId, ['admin', 'owner'])) || await this.checkforRole(channelId, userTarget, ['owner']))
+      return {};
+    if (!(await this.isMember(userTarget, channelId)))
+      return {};
+    return this.MembersRepo.save({ chatID: channelId, role: 'admin', Userid: userTarget });
+  }
+
+  async removeAdminRole(userId: number, channelId: number, userTarget: number) {
+    if (!(await this.checkforRole(channelId, userId, ['admin', 'owner'])) || await this.checkforRole(channelId, userTarget, ['owner']))
+      return {};
+    if (!(await this.isMember(userTarget, channelId)))
+      return {};
+    return this.MembersRepo.save({ chatID: channelId, role: 'none', Userid: userTarget });
+  }
+
+  async banFromChannel(userId: number, channelId: number, userTarget: number) {
+    if (!(await this.checkforRole(channelId, userId, ['admin', 'owner'])) || await this.checkforRole(channelId, userTarget, ['owner']))
+      return {};
+    if (!(await this.isMember(userTarget, channelId)))
+      return {};
+    return this.MembersRepo.save({ chatID: channelId, role: 'none', Userid: userTarget, state: 0 });
+  }
+
+  async removeBanFromChannel(userId: number, channelId: number, userTarget: number) {
+    if (!(await this.checkforRole(channelId, userId, ['admin', 'owner'])) || await this.checkforRole(channelId, userTarget, ['owner']))
+      return {};
+    if (!(await this.isMember(userTarget, channelId)))
+      return {};
+    return this.MembersRepo.save({ chatID: channelId, Userid: userTarget, state: 1 });
+  }
+
   async JoinChatroom(userId: number, chatroomDTO: createChatroomDTO) {
     if ((await this.isMemberbyName(userId, chatroomDTO.chatroomName)).length)
       return {};
@@ -230,7 +262,7 @@ export class ChatService {
       return []
     const messages = await this.MessagesRepo.createQueryBuilder("messages").leftJoinAndSelect('messages.chat_id', 'chat')
       .leftJoinAndSelect('messages.sender', 'user')
-      .where("chat.id = :chatID", { chatID: roomDM.chat.id }).getMany();
+      .where("chat.id = :chatID", { chatID: roomDM.chat.id }).orderBy('messages.time', 'DESC').getMany();
     return messages;
 
   }

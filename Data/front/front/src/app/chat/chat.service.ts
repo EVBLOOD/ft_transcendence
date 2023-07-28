@@ -91,14 +91,9 @@ export class ChatService {
   }
 
   joinSocket(channel: string) {
-    // console.log("JOKE?")
-    // console.log(channel)
     this.sock.emit('join-room', channel)
   }
 
-  sendIntv(channelID: string, UserId: number) {
-    // this.httpClient.post(, {})
-  }
 
   leaveSocket(channel: string) {
     this.sock.emit('leave-room', channel)
@@ -114,7 +109,47 @@ export class ChatService {
   getThisChat(id: number) {
     return this.httpClient.get(`http://10.13.4.8:3000/chat/find/` + id, { withCredentials: true, })
   }
+  // invites
+  Sendinvite(channelID: string, UserId: number) {
+    return this.httpClient.post(`http://10.13.4.8:3000/chat/invites`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+  }
 
+  Acceptinvite(channelID: string, UserId: number) {
+
+    return this.httpClient.post(`http://10.13.4.8:3000/chat/AcceptInvite`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+  }
+
+  Listinvites() {
+    return this.httpClient.get(`http://10.13.4.8:3000/chat/invites`, { withCredentials: true })
+  }
+
+  Cancelinvite(channelID: string, UserId: number) {
+    return this.httpClient.post(`http://10.13.4.8:3000/chat/RemoveInvite`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+  }
+  // done
+  // kick
+  KickThisOne(channelID: string, UserId: number) {
+    return this.httpClient.post(`http://10.13.4.8:3000/chat/kickUser`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+  }
+  // done
+  // remove OPER
+  RemoveRole(channelID: string, UserId: number) {
+    return this.httpClient.post(`http://10.13.4.8:3000/chat/RemoveRole`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+  }
+
+  CreateRole(channelID: string, UserId: number) {
+    return this.httpClient.post(`http://10.13.4.8:3000/chat/CreateRole`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+  }
+  // done
+  // Ban User:
+  banUser(channelID: string, UserId: number) {
+    return this.httpClient.post(`http://10.13.4.8:3000/chat/banUser`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+  }
+
+  banUserRemoval(channelID: string, UserId: number) {
+    return this.httpClient.post(`http://10.13.4.8:3000/chat/banUserRemoval`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+  }
+  // Done
   getDmMessages(id: number) {
     return this.httpClient.get<any>(URL + `/chat/DM/${id}`, { withCredentials: true, });
   }

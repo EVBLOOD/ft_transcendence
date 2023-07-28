@@ -15,3 +15,10 @@ export class invitesDTO {
   @IsNotEmpty()
   UserId: number;
 }
+export class CreateBanDTO {
+  @IsNotEmpty()
+  chatID: number;
+
+  @IsNotEmpty()
+  UserId: number;
+}
