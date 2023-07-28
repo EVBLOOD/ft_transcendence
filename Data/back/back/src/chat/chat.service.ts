@@ -296,7 +296,7 @@ export class ChatService {
         chatroom.chat.type = updateDTO.newType;
       else
         chatroom.chat.type = 'direct';
-      if (updateDTO.newType === 'password') {
+      if (updateDTO.newType === 'protected') {
         const passwordHash = await bcrypt.hash(updateDTO.newPassword, 10);
         chatroom.chat.password = passwordHash;
       }

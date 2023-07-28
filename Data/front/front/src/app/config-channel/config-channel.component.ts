@@ -38,10 +38,11 @@ export class ConfigChannelComponent {
   submiting() {
     let type = 'public';
     if (this.privateToggle.value && this.secretToggle.value)
-      type = 'password'
+      type = 'protected'
     else if (this.privateToggle.value)
       type = 'private'
-    if (this.channelName.value?.length && (type != 'password' || this.password.value?.length)) {
+    if (this.channelName.value?.length && (type != 'protected' || this.password.value?.length)) {
+      console.log(this.password.value)
       this.chatService.updateChatroom(parseInt(this.channelId),
         {
           newType: type,
