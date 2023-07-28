@@ -6,5 +6,19 @@ import { Component } from '@angular/core';
   styleUrls: ['./joining-channel.component.scss']
 })
 export class JoiningChannelComponent {
+  secretToggle = false;
+  clickSecretChannel() {
+    this.secretToggle = !this.secretToggle;
+  }
+
+  invited = false;
+  onClickInvite() {
+    this.invited = !this.invited;
+  }
+
+  cancel = false;
+  onClickCancel() {
+    this.cancel = !this.cancel;
+  }
 
 }

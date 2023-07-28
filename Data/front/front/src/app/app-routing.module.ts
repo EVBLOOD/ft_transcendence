@@ -21,6 +21,7 @@ import { ChatComponent } from './chat/chat.component';
 import { ChatContentComponent } from './chat/chat-content/chat-content.component';
 import { InviteComponent } from './invite/invite.component';
 import { PopupToBeSureComponent } from './popup-to-be-sure/popup-to-be-sure.component';
+import { JoiningChannelComponent } from './joining-channel/joining-channel.component';
 
 const routes: Routes =
   [
@@ -46,7 +47,8 @@ const routes: Routes =
         { path: 'channelSetting/:id', component: ConfigChannelComponent, canActivate: [authGuard] },
         { path: 'confirm/:id', component: PopupToBeSureComponent, canActivate: [authGuard] },
         { path: 'invite/:id', component: InviteComponent, canActivate: [authGuard] },
-        { path: 'channelCreating', component: CreateChannelComponent, canActivate: [authGuard] }
+        { path: 'channelCreating', component: CreateChannelComponent, canActivate: [authGuard] },
+        { path: 'joinChannel', component: JoiningChannelComponent, canActivate: [authGuard] }
       ]
     },
     { path: '**', component: PageNotFoundComponent, canActivate: [authGuard] },

@@ -13,7 +13,7 @@
         </div>
         <div class="rowToggle" *ngIf="privateToggle.value">
             <p class="title">Secret Channel</p>
-            <div class="toggle" [ngClass]="{'toggleChecked' : !secretToggle.value}" (click)="clickSecretChannel()">
+            <div class="toggle" [ngClass]="{'circleChecked' : !secretToggle.value}" (click)="clickSecretChannel()">
                 <div class="circle" [ngClass]="{'circleChecked' : !secretToggle.value}"></div>
             </div>
         </div>

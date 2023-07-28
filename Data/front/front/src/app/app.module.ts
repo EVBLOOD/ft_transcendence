@@ -38,7 +38,6 @@ import { MessagesMdlComponent } from './chat/messages-mdl/messages-mdl.component
 import { ChatInfoComponent } from './chat/chat-info/chat-info.component';
 import { PartChatComponent } from './chat/chat-info/part-chat/part-chat.component';
 import { ChatContentComponent } from './chat/chat-content/chat-content.component';
-import { InvitedIntoComponent } from './invited-into/invited-into.component';
 import { JoiningChannelComponent } from './joining-channel/joining-channel.component';
 
 @NgModule({
@@ -75,8 +74,7 @@ import { JoiningChannelComponent } from './joining-channel/joining-channel.compo
     ChatInfoComponent,
     PartChatComponent,
     ChatContentComponent,
-    InvitedIntoComponent,
-    JoiningChannelComponent
+    JoiningChannelComponent,
   ],
   imports: [
     BrowserModule,
