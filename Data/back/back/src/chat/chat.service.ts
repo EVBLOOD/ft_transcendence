@@ -133,9 +133,9 @@ export class ChatService {
     if (room.type == 'protected') {
       if (await bcrypt.compare(chatroomDTO.password, room.password) == false)
         return {}
-      return this.MembersRepo.save({ chatID: room.id, role: 'none', state: 1, Userid: userId });
+      return this.MembersRepo.save({ chatID: room.id, role: 'none', state: 1, Userid: userId, });
     }
-    return this.MembersRepo.save({ chatID: room.id, role: 'none', state: 1, Userid: userId });
+    return this.MembersRepo.save({ chatID: room.id, role: 'none', state: 1, Userid: userId, });
   }
 
   async createChatroom(userId: number, chatroomDTO: createChatroomDTO) {
@@ -267,7 +267,7 @@ export class ChatService {
   async getMessagesByChatID(userId: number, channelId: number) {
     if (await this.isMember(userId, channelId)) {
       return await this.MessagesRepo.createQueryBuilder("messages").leftJoinAndSelect('messages.chat_id', 'chat')
-        .leftJoinAndSelect('messages.sender', 'user').where("chat.id = :channelId", { channelId }).getMany();
+        .leftJoinAndSelect('messages.sender', 'user').where("chat.id = :channelId", { channelId }).orderBy('messages.time', 'DESC').getMany();
     }
     return {};
   }
@@ -356,7 +356,7 @@ export class ChatService {
   async kickUser(channelId: number, currentUser: number, theOneToKick: number) {
     if (!(await this.checkforRole(channelId, currentUser, ['owner', 'admin'])) || !(await this.checkforRole(channelId, currentUser, ['admin', 'none'])))
       return {}
-    return await this.MembersRepo.softDelete({ chatID: channelId, Userid: theOneToKick, });
+    return await this.MembersRepo.delete({ chatID: channelId, Userid: theOneToKick, });
   }
   async LeaveChannel(channelId: number, currentUser: number) {
     if (await this.checkforRole(channelId, currentUser, ['admin', 'none']))
@@ -371,7 +371,7 @@ export class ChatService {
           .leftJoinAndSelect("Members.user", "Userid").where("chatID.id = :channelId AND Members.role = :admin AND Members.state = :active", { channelId: channelId, admin: 'none', active: 1 }).getOne();
       if (nextOwner) {
         await this.MembersRepo.save({ chatID: channelId, Userid: nextOwner.Userid, role: 'owner', state: 1 })
-        return await this.MembersRepo.softDelete({ chatID: channelId, Userid: currentUser, });
+        return await this.MembersRepo.delete({ chatID: channelId, Userid: currentUser, });
       }
       await this.MembersRepo.delete({ chatID: channelId, Userid: currentUser, });
       await this.MessagesRepo.delete({ chat_id: channelId, });

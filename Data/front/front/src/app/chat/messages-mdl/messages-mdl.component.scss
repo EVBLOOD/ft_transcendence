@@ -99,8 +99,8 @@
 .conversation {
     padding: 25px;
     display: flex;
-    // flex-direction: column-reverse;
-    flex-direction: column;
+    flex-direction: column-reverse;
+    // flex-direction: column;
     gap: 20px;
     overflow-y: auto;
     // height: 95%;

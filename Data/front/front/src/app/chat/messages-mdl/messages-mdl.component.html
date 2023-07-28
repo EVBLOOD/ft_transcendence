@@ -29,8 +29,10 @@
     </div>
 
     <div class="conversation">
+        <div style="display: flex; flex-direction: column;">
+            <app-message *ngFor="let msg of messages " [value]="msg" />
+        </div>
         <app-message *ngFor="let msg of (msgs$|async) " [value]="msg" />
-        <app-message *ngFor="let msg of messages " [value]="msg" />
     </div>
     <app-send-msg [isRoom]="isRoom" [chatId]="this.chatInfos?.rooms?.chat?.id" [userId]="id" />
 </div>
