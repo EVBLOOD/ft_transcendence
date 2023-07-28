@@ -13,14 +13,16 @@
     </div>
     <ul *ngIf="dropDownUser" @inOut class="dropdown-user">
         <li [routerLink]="'/profile/' + user.user.id">View Profile</li>
-        <li *ngIf="user.user.id != id && (myrole == 'admin' || myrole == 'owner') && filter != 'owner'">
+        <li (click)="kickUser()"
+            *ngIf="user.user.id != id && (myrole == 'admin' || myrole == 'owner') && filter != 'owner'">
             Kick</li> <!-- TODO -->
-        <li *ngIf="user.user.id != id && (myrole == 'admin' || myrole == 'owner') && filter != 'owner'">
+        <li (click)="BanUser"
+            *ngIf="user.user.id != id && (myrole == 'admin' || myrole == 'owner') && filter != 'owner'">
             Ban</li>
-        <li
+        <li (click)="AddRole()"
             *ngIf="user.user.id != id && (myrole == 'admin' || myrole == 'owner') && filter != 'owner' && filter != 'admin'">
             Set admin</li>
-        <li *ngIf="myrole == 'admin'  && filter != 'owner'">
+        <li (click)="RemoveRole()" *ngIf="(filter == 'admin') && (myrole == 'admin' || myrole == 'owner')">
             remove role</li>
     </ul>
 </div>

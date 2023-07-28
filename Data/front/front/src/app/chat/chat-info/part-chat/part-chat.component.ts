@@ -3,6 +3,7 @@ import { Component, ElementRef, HostListener, Input, ViewChild } from '@angular/
 import { AuthService } from 'src/app/login/auth.service';
 import { ProfileService } from 'src/app/profile/profile.service';
 import { StatusService } from 'src/app/status.service';
+import { ChatService } from '../../chat.service';
 
 @Component({
   selector: 'app-part-chat',
@@ -21,7 +22,7 @@ export class PartChatComponent {
   @Input() idChat !: number;
   @Input() myrole !: string;
   id !: number;
-  constructor(private readonly profile: ProfileService, private readonly state: StatusService, private readonly authSer: AuthService) {
+  constructor(private readonly profile: ProfileService, private readonly state: StatusService, private readonly authSer: AuthService, private readonly ChatService: ChatService) {
     this.id = this.authSer.getId();
   }
   avataring(url: string) {
@@ -52,5 +53,31 @@ export class PartChatComponent {
   onclickDropDownClick() {
     this.dropDownUser = !this.dropDownUser;
   }
+
+
+  kickUser() {
+    if (this.user?.user?.id)
+      this.ChatService.KickThisOne(this.idChat.toString(), this.user?.user?.id).subscribe((data) => { console.log(data) })
+  }
+
+  RemoveRole() {
+    if (this.user?.user?.id)
+      this.ChatService.RemoveRole(this.idChat.toString(), this.user?.user?.id).subscribe((data) => { console.log(data) })
+  }
+
+  AddRole() {
+    if (this.user?.user?.id)
+      this.ChatService.CreateRole(this.idChat.toString(), this.user?.user?.id).subscribe((data) => { console.log(data) })
+  }
+
+  BanUser() {
+    if (this.user?.user?.id)
+      this.ChatService.banUser(this.idChat.toString(), this.user?.user?.id).subscribe((data) => { console.log(data) })
+  }
+  unBanUser() {
+    if (this.user?.user?.id)
+      this.ChatService.banUserRemoval(this.idChat.toString(), this.user?.user?.id).subscribe((data) => { console.log(data) })
+  }
+
 
 }

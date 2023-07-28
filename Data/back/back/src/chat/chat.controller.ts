@@ -129,23 +129,23 @@ export class ChatController {
   }
 
   @Post('banUser')
-  async banChannelMemeber(@Req() req: any, @Body() CreateBan: CreateBanDTO) {
+  banChannelMemeber(@Req() req: any, @Body() CreateBan: CreateBanDTO) {
     return this.chatRoomSevice.banFromChannel(req.new_user.sub, CreateBan.chatID, CreateBan.UserId);
   }
 
   @Post('banUserRemoval')
-  async banChannelMemeberRemoval(@Req() req: any, @Body() RemoveBan: CreateBanDTO) {
+  banChannelMemeberRemoval(@Req() req: any, @Body() RemoveBan: CreateBanDTO) {
     return this.chatRoomSevice.removeBanFromChannel(req.new_user.sub, RemoveBan.chatID, RemoveBan.UserId);
   }
 
   @Post('RemoveRole')
-  async RemoveRole(@Req() req: any, @Body() RemoveRole: CreateBanDTO) {
-    this.chatRoomSevice.removeAdminRole(req.new_user.sub, RemoveRole.chatID, RemoveRole.UserId);
+  RemoveRole(@Req() req: any, @Body() RemoveRole: CreateBanDTO) {
+    return this.chatRoomSevice.removeAdminRole(req.new_user.sub, RemoveRole.chatID, RemoveRole.UserId);
   }
 
   @Post('CreateRole')
-  async CreateeRole(@Req() req: any, @Body() CreateRole: CreateBanDTO) {
-    this.chatRoomSevice.setAsAdmin(req.new_user.sub, CreateRole.chatID, CreateRole.UserId);
+  CreateeRole(@Req() req: any, @Body() CreateRole: CreateBanDTO) {
+    return this.chatRoomSevice.setAsAdmin(req.new_user.sub, CreateRole.chatID, CreateRole.UserId);
   }
   @Post('kickUser')
   kickingOut(@Req() req: any, @Body() KickOut: CreateBanDTO) {

@@ -124,17 +124,21 @@ export class ChatService {
   async setAsAdmin(userId: number, channelId: number, userTarget: number) {
     if (!(await this.checkforRole(channelId, userId, ['admin', 'owner'])) || await this.checkforRole(channelId, userTarget, ['owner']))
       return {};
-    if (!(await this.isMember(userTarget, channelId)))
-      return {};
-    return this.MembersRepo.save({ chatID: channelId, role: 'admin', Userid: userTarget });
+    let Membership = await this.isMember(userTarget, channelId);
+    if (!Membership || !Membership.length)
+      return {}
+    Membership[0].role = 'admin';
+    return await this.MembersRepo.save(Membership[0]);
   }
 
   async removeAdminRole(userId: number, channelId: number, userTarget: number) {
     if (!(await this.checkforRole(channelId, userId, ['admin', 'owner'])) || await this.checkforRole(channelId, userTarget, ['owner']))
       return {};
-    if (!(await this.isMember(userTarget, channelId)))
-      return {};
-    return this.MembersRepo.save({ chatID: channelId, role: 'none', Userid: userTarget });
+    let Membership = await this.isMember(userTarget, channelId);
+    if (!Membership || !Membership.length)
+      return {}
+    Membership[0].role = 'none';
+    return await this.MembersRepo.save(Membership[0]);
   }
 
   async banFromChannel(userId: number, channelId: number, userTarget: number) {
@@ -142,7 +146,7 @@ export class ChatService {
       return {};
     if (!(await this.isMember(userTarget, channelId)))
       return {};
-    return this.MembersRepo.save({ chatID: channelId, role: 'none', Userid: userTarget, state: 0 });
+    return await this.MembersRepo.save({ chatID: channelId, role: 'none', Userid: userTarget, state: 0 });
   }
 
   async removeBanFromChannel(userId: number, channelId: number, userTarget: number) {
@@ -150,7 +154,7 @@ export class ChatService {
       return {};
     if (!(await this.isMember(userTarget, channelId)))
       return {};
-    return this.MembersRepo.save({ chatID: channelId, Userid: userTarget, state: 1 });
+    return await this.MembersRepo.save({ chatID: channelId, Userid: userTarget, state: 1 });
   }
 
   async JoinChatroom(userId: number, chatroomDTO: createChatroomDTO) {
@@ -165,9 +169,9 @@ export class ChatService {
     if (room.type == 'protected') {
       if (await bcrypt.compare(chatroomDTO.password, room.password) == false)
         return {}
-      return this.MembersRepo.save({ chatID: room.id, role: 'none', state: 1, Userid: userId, });
+      return await this.MembersRepo.save({ chatID: room.id, role: 'none', state: 1, Userid: userId, });
     }
-    return this.MembersRepo.save({ chatID: room.id, role: 'none', state: 1, Userid: userId, });
+    return await this.MembersRepo.save({ chatID: room.id, role: 'none', state: 1, Userid: userId, });
   }
 
   async createChatroom(userId: number, chatroomDTO: createChatroomDTO) {
@@ -386,7 +390,7 @@ export class ChatService {
   }
 
   async kickUser(channelId: number, currentUser: number, theOneToKick: number) {
-    if (!(await this.checkforRole(channelId, currentUser, ['owner', 'admin'])) || !(await this.checkforRole(channelId, currentUser, ['admin', 'none'])))
+    if (!(await this.checkforRole(channelId, currentUser, ['owner', 'admin'])) || !(await this.checkforRole(channelId, theOneToKick, ['admin', 'none'])))
       return {}
     return await this.MembersRepo.delete({ chatID: channelId, Userid: theOneToKick, });
   }
