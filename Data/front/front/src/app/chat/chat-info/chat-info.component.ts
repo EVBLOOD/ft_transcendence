@@ -61,7 +61,13 @@ export class ChatInfoComponent implements OnChanges {
 
   countMembers(array: any[], filter: string): boolean {
     return array.find((value: any) => {
-      return value.role == filter
+      return value.role == filter && value.state == 1
+    })
+  }
+
+  banedMembers(array: any[]): boolean {
+    return array.find((value: any) => {
+      return value.state == 0
     })
   }
 }

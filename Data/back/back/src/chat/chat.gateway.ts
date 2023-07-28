@@ -3,14 +3,10 @@ import {
   WebSocketServer,
   WebSocketGateway,
   SubscribeMessage,
-  OnGatewayInit,
-  OnGatewayConnection,
-  OnGatewayDisconnect,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
 import { Inject } from '@nestjs/common';
-// import { CreateMessage } from 'src/message/dto/message.dto';
 import { hostSocket } from 'src/app.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthenticatorService } from 'src/authenticator/authenticator.service';
@@ -24,7 +20,6 @@ import { UserService } from 'src/user/user.service';
   },
 })
 export class ChatGateway {
-  // implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   whatItcosts: Map<string, number> = new Map<string, number>();
   everything: Map<number, Set<string>> = new Map<number, Set<string>>();
 
@@ -136,7 +131,31 @@ export class ChatGateway {
 
   @SubscribeMessage('join-room')
   async joinRoom(client: Socket, payload: string) {
-    client.join(payload);
+    const cookie = client.handshake.headers?.cookie
+      ?.split('; ')
+      ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
+      ?.split('=')[1];
+    if (
+      !cookie
+    ) {
+      client.disconnect();
+      return false;
+    }
+    const xyz: any = this.serviceJWt.decode(
+      cookie,
+    );
+    if (
+      !xyz ||
+      (await this.serviceToken.IsSame(
+        xyz.sub || '',
+        cookie,
+      )) == false
+    ) {
+      client.disconnect();
+      return false;
+    }
+    if (!(await this.chatService.isBanned(xyz.sub, parseInt(payload))))
+      client.join(payload);
     return {}
   }
 
@@ -145,6 +164,7 @@ export class ChatGateway {
     client.leave(payload);
     return {}
   }
+
 
   // async handleDisconnect(client: Socket) {
   //   const cookie = client.handshake.headers?.cookie

@@ -1,4 +1,5 @@
-<div *ngIf="user.role == filter">
+<div [ngClass]="user.state == 0 ? 'ban' : ''"
+    *ngIf="(filter == 'banned' && user.state == 0 && user.role == 'none') || (user.role == filter && user.state == 1)">
     <div (click)="onclickDropDownClick()" #dropDownUserRef class="friend"
         [ngClass]="{'friend-selected' : dropDownUser}">
         {{statusLoading(user.user.id)}}
@@ -11,12 +12,16 @@
         <p class="name-friend">{{user.user.name}}</p>
         <img class="listbox-member" src="/assets/icons/3points.svg">
     </div>
-    <ul *ngIf="dropDownUser" @inOut class="dropdown-user">
+    <ul *ngIf="dropDownUser && filter == 'banned'" @inOut class="dropdown-user">
+        <li (click)="unBanUser()" *ngIf="(myrole == 'admin' || myrole == 'owner')">
+            Unban</li>
+    </ul>
+    <ul *ngIf="dropDownUser && filter != 'banned'" @inOut class="dropdown-user">
         <li [routerLink]="'/profile/' + user.user.id">View Profile</li>
         <li (click)="kickUser()"
             *ngIf="user.user.id != id && (myrole == 'admin' || myrole == 'owner') && filter != 'owner'">
             Kick</li> <!-- TODO -->
-        <li (click)="BanUser"
+        <li (click)="BanUser()"
             *ngIf="user.user.id != id && (myrole == 'admin' || myrole == 'owner') && filter != 'owner'">
             Ban</li>
         <li (click)="AddRole()"

@@ -28,5 +28,8 @@
         <p class="NameRole" *ngIf="countMembers(members, 'none')">Members</p>
         <app-part-chat [idChat]="id" *ngFor="let play of members" [filter]="'none'" [user]="play"
             [myrole]="(role$|async)?.role" />
+        <p class="NameRole" *ngIf="banedMembers(members)">Banned</p>
+        <app-part-chat [idChat]="id" *ngFor="let play of members" [filter]="'banned'" [user]="play"
+            [myrole]="(role$|async)?.role" />
     </div>
 </div>
