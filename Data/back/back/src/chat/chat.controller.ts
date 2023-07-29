@@ -61,7 +61,7 @@ export class ChatController {
 
   @Get('user')
   async getChatRoomsOfUser(@Req() req: any) {
-    return this.chatRoomSevice.getChatRoomOfUsers(req.new_user.sub); // can return empty array !!
+    return this.chatRoomSevice.getChatRoomOfUsers(req.new_user.sub);
   }
 
 
@@ -78,6 +78,13 @@ export class ChatController {
     @Param('secondUser', ParseIntPipe) user2: number,
   ) {
     return this.chatRoomSevice.findDMChatroom(req.new_user.sub, user2);
+  }
+
+
+  @Get('MyCount/:secondUser')
+  getMyCount(@Req() req: any,
+    @Param('secondUser', ParseIntPipe) user2: number,) {
+    return this.chatRoomSevice.findDMChatNotSeen(req.new_user.sub, user2);
   }
 
   @Get('membersFor/:id')
@@ -151,4 +158,5 @@ export class ChatController {
   kickingOut(@Req() req: any, @Body() KickOut: CreateBanDTO) {
     return this.chatRoomSevice.kickUser(KickOut.chatID, req.new_user.sub, KickOut.UserId)
   }
+
 } // end of ChatController class

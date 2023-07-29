@@ -23,9 +23,7 @@ import { ChatModule } from './chat/chat.module';
     AuthenticatorModule,
     GameModule,
     MatchModule,
-    // MessageModule,
     ChatModule,
-    // PunishmentModule,
     PassportModule.register({ session: true }),
     ConfigModule.forRoot({ isGlobal: true }),
     JwtModule.register({

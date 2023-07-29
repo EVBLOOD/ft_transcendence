@@ -93,6 +93,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     else {
       this.MyerrorAvatar = false;
       this.serviceUser.update();
+      this.router.navigateByUrl('');
     }
     this.update.unsubscribe();
   }

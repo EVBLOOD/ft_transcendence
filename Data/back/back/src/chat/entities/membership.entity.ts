@@ -19,6 +19,9 @@ export class Members {
     @Column({ nullable: true })
     mute: Date; // should be the date and time when mute ends
 
+    @Column({ nullable: true })
+    notSeen: number;
+
     @ManyToOne(() => User)
     @JoinColumn({ name: 'Userid' })
     user: User;

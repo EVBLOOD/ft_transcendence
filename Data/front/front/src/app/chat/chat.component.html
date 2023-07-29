@@ -18,7 +18,7 @@
         </div>
         <div class="channels" *ngIf="!toggle">
             <!-- {{(ChatRooms$|async|json)}} -->
-            <app-channels *ngFor="let item of (ChatRooms$|async)" [channel]="item?.chat" />
+            <app-channels *ngFor="let item of (ChatRooms$|async)" [channel]="item" />
         </div>
         <div class="create-join-channel">
             <div routerLink="/channelCreating" class="button-create-channel" *ngIf="!toggle">Create channel</div>

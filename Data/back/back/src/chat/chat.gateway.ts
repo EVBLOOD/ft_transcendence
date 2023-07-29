@@ -90,6 +90,8 @@ export class ChatGateway {
     }
     const message = await this.chatService.postToDM(payload?.message, xyz.sub);
     const sender = await this.User.findOne(xyz.sub);
+    this.chatService.SeenForDM(xyz.sub, parseInt(payload?.message?.charRoomId), 1)
+    this.chatService.SeenForDM(xyz.sub, parseInt(payload?.message?.charRoomId), 0)
     this.server.in(payload?.message?.charRoomId).emit("privateMessage", { sender: xyz.sub, mgs: message, type: 'direct', profile: sender });
     if (xyz.sub != payload?.message?.charRoomId) {
       this.server.in(xyz.sub).emit("privateMessage", { sender: payload?.message?.charRoomId, mgs: message, type: 'direct', profile: sender });
@@ -122,9 +124,14 @@ export class ChatGateway {
       client.disconnect();
       return false;
     }
+    const isBanned = await this.chatService.isBanned(xyz.sub, parseInt(payload?.message?.charRoomId));
+    if (isBanned.length)
+      return; // will be removed and added in an other place
     const message: any = await this.chatService.postToChatroom(payload?.message, xyz.sub);
     console.log(message)
     const sender = await this.User.findOne(xyz.sub);
+    this.chatService.seenForChannel(xyz.sub, message.chat_id, 1)
+    this.chatService.seenForChannel(xyz.sub, message.chat_id, 0)
     if (message)
       this.server.in(message.chat_id.toString()).emit("ChannelMessages", { sender: xyz.sub, mgs: message, type: 'none', profile: sender });
   }
@@ -154,7 +161,8 @@ export class ChatGateway {
       client.disconnect();
       return false;
     }
-    if (!(await this.chatService.isBanned(xyz.sub, parseInt(payload))))
+    const isBanned = await this.chatService.isBanned(xyz.sub, parseInt(payload));
+    if (!isBanned.length)
       client.join(payload);
     return {}
   }

@@ -247,4 +247,8 @@ export class ChatService {
   myRole(id: number) {
     return this.httpClient.get(URL + `/chat/myRole/${id}`, { withCredentials: true, })
   }
+
+  getSeenCount(id: number) {
+    return this.httpClient.get(URL + `/chat/MyCount/${id}`, { withCredentials: true, })
+  }
 }

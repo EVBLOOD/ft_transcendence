@@ -10,6 +10,7 @@ import { ProfileService } from 'src/app/profile/profile.service';
 })
 export class MessageComponent {
   @Input() value !: any;
+  today: number = Date.now();
   whoIs$ !: Observable<any>;
   constructor(private readonly serviceProfile: ProfileService, private readonly serviceAuth: AuthService) {
     // console.log(this.value)
