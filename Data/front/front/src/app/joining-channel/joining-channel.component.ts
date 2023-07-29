@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ChatService } from '../chat/chat.service';
 import { FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-joining-channel',
@@ -14,7 +15,7 @@ export class JoiningChannelComponent {
   ChannelPassword = new FormControl('', [Validators.required,]);
 
   invites$!: Observable<any>;
-  constructor(private readonly ChannelService: ChatService) {
+  constructor(private readonly ChannelService: ChatService, private readonly switchRoute: Router) {
     this.invites$ = this.ChannelService.getInvitesForMe();
   }
 
@@ -23,14 +24,8 @@ export class JoiningChannelComponent {
     this.secretToggle = !this.secretToggle;
   }
 
-  invited = false;
-  onClickInvite() {
-    this.invited = !this.invited;
-  }
-
-  cancel = false;
-  onClickCancel() {
-    this.cancel = !this.cancel;
+  close() {
+    this.switchRoute.navigateByUrl('/chat');
   }
 
   JoinIt() {
@@ -52,6 +47,6 @@ export class JoiningChannelComponent {
       }
       console.log('this is a secret channel')
     }
+    this.switchRoute.navigateByUrl('/chat');
   }
-
 }

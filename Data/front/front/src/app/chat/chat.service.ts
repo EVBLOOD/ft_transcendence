@@ -242,7 +242,7 @@ export class ChatService {
   }
 
   getInvitesForMe() {
-    return this.httpClient.get(URL + `/punishment/chat/invites`, { withCredentials: true, })
+    return this.httpClient.get(URL + `/chat/invites`, { withCredentials: true, })
   }
   myRole(id: number) {
     return this.httpClient.get(URL + `/chat/myRole/${id}`, { withCredentials: true, })

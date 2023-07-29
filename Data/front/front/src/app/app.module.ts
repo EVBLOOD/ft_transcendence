@@ -39,6 +39,8 @@ import { ChatInfoComponent } from './chat/chat-info/chat-info.component';
 import { PartChatComponent } from './chat/chat-info/part-chat/part-chat.component';
 import { ChatContentComponent } from './chat/chat-content/chat-content.component';
 import { JoiningChannelComponent } from './joining-channel/joining-channel.component';
+import { InvitedFriendComponent } from './joining-channel/invited-friend/invited-friend.component';
+import { InviteLinesComponent } from './invite/invite-lines/invite-lines.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +77,8 @@ import { JoiningChannelComponent } from './joining-channel/joining-channel.compo
     PartChatComponent,
     ChatContentComponent,
     JoiningChannelComponent,
+    InvitedFriendComponent,
+    InviteLinesComponent,
   ],
   imports: [
     BrowserModule,

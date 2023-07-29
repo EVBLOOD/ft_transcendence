@@ -1,5 +1,5 @@
 <app-popup>
-    <div class="CloseBtnPop">
+    <div (click)="close()" class="CloseBtnPop">
         <button></button>
     </div>
     <div class="allContent">
@@ -21,51 +21,7 @@
         <div class="inviteChannels">
             <h2 class="popTitle">Join to channels who invite you</h2>
             <div class="boxInvites">
-                <div class="channel" *ngIf="!cancel"
-                    [ngStyle]="{'grid-template-columns': invited ? 'auto min-content' : 'auto min-content min-content'}">
-                    <div class="channelName">
-                        <p>#General</p>
-                        <p>by sakllam</p>
-                    </div>
-                    <a class="buttonInvite" *ngIf="!invited" (click)="onClickInvite()">Accept</a>
-                    <img class="cancelInvite" (click)="onClickCancel()" src="/assets/icons/closeImg.svg" />
-                </div>
-                <div class="channel" *ngIf="!cancel"
-                    [ngStyle]="{'grid-template-columns': invited ? 'auto min-content' : 'auto min-content min-content'}">
-                    <div class="channelName">
-                        <p>#General</p>
-                        <p>by sakllam</p>
-                    </div>
-                    <a class="buttonInvite" *ngIf="!invited" (click)="onClickInvite()">Accept</a>
-                    <img class="cancelInvite" (click)="onClickCancel()" src="/assets/icons/closeImg.svg" />
-                </div>
-                <div class="channel" *ngIf="!cancel"
-                    [ngStyle]="{'grid-template-columns': invited ? 'auto min-content' : 'auto min-content min-content'}">
-                    <div class="channelName">
-                        <p>#General</p>
-                        <p>by sakllam</p>
-                    </div>
-                    <a class="buttonInvite" *ngIf="!invited" (click)="onClickInvite()">Accept</a>
-                    <img class="cancelInvite" (click)="onClickCancel()" src="/assets/icons/closeImg.svg" />
-                </div>
-                <div class="channel" *ngIf="!cancel"
-                    [ngStyle]="{'grid-template-columns': invited ? 'auto min-content' : 'auto min-content min-content'}">
-                    <div class="channelName">
-                        <p>#General</p>
-                        <p>by sakllam</p>
-                    </div>
-                    <a class="buttonInvite" *ngIf="!invited" (click)="onClickInvite()">Accept</a>
-                    <img class="cancelInvite" (click)="onClickCancel()" src="/assets/icons/closeImg.svg" />
-                </div>
-                <div class="channel" *ngIf="!cancel"
-                    [ngStyle]="{'grid-template-columns': invited ? 'auto min-content' : 'auto min-content min-content'}">
-                    <div class="channelName">
-                        <p>#General</p>
-                        <p>by sakllam</p>
-                    </div>
-                    <a class="buttonInvite" *ngIf="!invited" (click)="onClickInvite()">Accept</a>
-                    <img class="cancelInvite" (click)="onClickCancel()" src="/assets/icons/closeImg.svg" />
-                </div>
+                <app-invited-friend *ngFor="let invite of invites$|async" [invite]="invite" />
             </div>
         </div>
     </div>

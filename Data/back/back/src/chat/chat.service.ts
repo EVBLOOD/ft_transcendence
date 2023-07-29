@@ -381,28 +381,34 @@ export class ChatService {
   }
 
   async sendAnInvite(channelId: number, currentUser: number, theInvitedOne: number) {
-    if (!(await this.isMember(currentUser, channelId)) || (await this.isMember(theInvitedOne, channelId)))
+    if (!(await this.isMember(currentUser, channelId))?.length || (await this.isMember(theInvitedOne, channelId))?.length)
       return {}
     return await this.MembersRepo.save({ chatID: channelId, role: 'none', Userid: theInvitedOne, state: 2, notSeen: 0 });
   }
 
   async checkInviteExists(channelId: number, currentUser: number) {
-    return await this.MembersRepo.createQueryBuilder('Members')
+    const x = await this.MembersRepo.createQueryBuilder('Members')
       .leftJoinAndSelect("Members.chat", "chatID")
       .leftJoinAndSelect("Members.user", "Userid")
       .where("Userid.id = :userId AND chatID.id = :channelId AND chatID.type != :type AND Members.state = :active",
         { userId: currentUser, type: 'direct', channelId, active: 2 }).getOne();
+    return x;
   }
 
   async AcceptAnInvite(channelId: number, currentUser: number) {
-    if (await this.checkInviteExists(channelId, currentUser))
-      return await this.MembersRepo.save({ chatID: channelId, Userid: currentUser, state: 0, notSeen: 0 });
+    const x = await this.checkInviteExists(channelId, currentUser);
+    if (x) {
+      x.state = 1;
+      console.log(x)
+      return await this.MembersRepo.save(x);
+    }
     return {};
   }
 
   async DeleteAnInvite(channelId: number, currentUser: number) {
-    if (await this.checkInviteExists(channelId, currentUser))
+    if (await this.checkInviteExists(channelId, currentUser)) {
       return await this.MembersRepo.delete({ chatID: channelId, Userid: currentUser, });
+    }
     return {};
   }
 
@@ -442,7 +448,7 @@ export class ChatService {
         await this.MembersRepo.save({ chatID: channelId, Userid: nextOwner.Userid, role: 'owner', state: 1 })
         return await this.MembersRepo.delete({ chatID: channelId, Userid: currentUser, });
       }
-      await this.MembersRepo.delete({ chatID: channelId, Userid: currentUser, });
+      await this.MembersRepo.delete({ chatID: channelId });
       await this.MessagesRepo.delete({ chat_id: channelId, });
       return await this.ChatRepo.delete({ id: channelId });
     }

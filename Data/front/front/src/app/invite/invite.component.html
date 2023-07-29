@@ -10,12 +10,7 @@
             invite</div>
         <ng-template #listall>
             <div class="boxInviteFriends" *ngFor="let user of users">
-                <div class="friend">
-                    <img class="friendImg" [src]="user.avatar" />
-                    <p class="friendName">{{user.name}}</p>
-                    <a class="buttonInvite" *ngIf="!invited" (click)="onClickInvite(user.id)">Invite</a>
-                    <a class="buttonInvited" *ngIf="invited" (click)="onClickInvite(user.id)">Invited</a>
-                </div>
+                <app-invite-lines *ngFor="let user of users" [user]="user" />
             </div>
         </ng-template>
     </div>

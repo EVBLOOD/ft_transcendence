@@ -29,9 +29,6 @@ export class InviteComponent implements OnInit {
     return this.profile.getUserAvatarPath(url);
   }
   close() {
-    // setTimeout((UserId) => {
-    // this.We_are_inviting_you.map(this.invites.sendIntv(this.activeOne.snapshot.params['id'], UserId));
-    // })
     this.routeSwitcher.navigateByUrl('/chat/' + this.activeOne.snapshot.params['id'])
   }
 }
