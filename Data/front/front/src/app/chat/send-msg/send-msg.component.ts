@@ -23,4 +23,8 @@ export class SendMsgComponent {
       this.sendMsg.sendMessage({ value: this.msgText.value.trim(), charRoomId: this.userId }, this.isRoom);
     this.msgText.setValue('');
   }
+  keyClick($event: KeyboardEvent) {
+    if ($event.code == 'Enter')
+      this.sending()
+  }
 }

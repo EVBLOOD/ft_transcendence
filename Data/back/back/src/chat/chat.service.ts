@@ -429,7 +429,7 @@ export class ChatService {
   }
   async LeaveChannel(channelId: number, currentUser: number) {
     if (await this.checkforRole(channelId, currentUser, ['admin', 'none']))
-      return await this.kickUser(channelId, currentUser, currentUser)
+      return await this.MembersRepo.delete({ chatID: channelId, Userid: currentUser, });
     if (await this.checkforRole(channelId, currentUser, ['owner'])) {
       let nextOwner = await this.MembersRepo.createQueryBuilder('Members')
         .leftJoinAndSelect("Members.chat", "chatID")

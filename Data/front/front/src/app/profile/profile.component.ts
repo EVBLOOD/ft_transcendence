@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/
 import { ProfileService } from './profile.service';
 import { Observable, firstValueFrom, tap } from 'rxjs';
 import { AuthService } from '../login/auth.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { StatusService } from '../status.service';
 import { FriendshipService } from './friendship.service';
 import { GameService } from '../play/game/game.service';
@@ -43,7 +43,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   constructor(public profileService: ProfileService, private authService: AuthService,
     private route: ActivatedRoute, private state: StatusService,
-    private friendship: FriendshipService, private gameStats: AboutGamesService) {
+    private friendship: FriendshipService, private gameStats: AboutGamesService, private readonly switchRoute: Router) {
     this.username = this.route.snapshot.params["username"];
   }
   ngOnInit(): void {
@@ -171,5 +171,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
       skip -= 10;
       this.updating(type);
     }
+  }
+  GoChat() {
+    this.switchRoute.navigateByUrl('chat/dm/' + this.username);
   }
 }

@@ -1,5 +1,6 @@
 <div class="sendMessage">
-    <input [formControl]="msgText" type="text" class="textbox message" placeholder="Message">
+    <input (keypress)="keyClick($event)" [formControl]="msgText" type="text" class="textbox message"
+        placeholder="Message">
     <a class="buttonSend" (click)="sending()">
         <p>Send</p>
         <img src="/assets/icons/send.svg">
