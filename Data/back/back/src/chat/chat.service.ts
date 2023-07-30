@@ -36,14 +36,21 @@ export class ChatService {
       .where("Userid.id = :userId AND chatID.type = :type", { userId, type: 'direct' }).getRawMany()
     if (!roomsIds || roomsIds.length == 0)
       return [];
-    console.log(roomsIds)
     const ret = roomsIds.map((item) => { return item.chatID_id })
     const rooms = await this.MembersRepo.createQueryBuilder('Members')
       .leftJoinAndSelect("Members.chat", "chatID")
       .leftJoinAndSelect("Members.user", "Userid")
       .where("chatID.id IN (:...ids) AND Userid.id != :Userid", { ids: ret, Userid: userId }).getMany()
-    console.log(rooms)
-    return rooms;
+    const users = await this.Friendship.blockOneEach(userId);
+    if (!users.length)
+      return rooms;
+    const z = rooms.map((room) => {
+      if (users.map((user) => { return user.sender != room.user.id && user.receiver != room.user.id }))
+        return room;
+    })
+    console.log(z)
+    return z;
+    // return rooms;
   }
   async findDMChatroomId(user1: number, user2: number) {
     const room = await this.MembersRepo.createQueryBuilder('Members')
@@ -72,6 +79,12 @@ export class ChatService {
     if (rooms)
       return rooms.chat.id;
     return -1;
+  }
+  async getChatRoomsbyName(id: number, name: string) {
+    return await this.MembersRepo.createQueryBuilder('Members')
+      .leftJoinAndSelect("Members.chat", "chatID")
+      .leftJoinAndSelect("Members.user", "Userid")
+      .where('Userid.id = :id AND chatID.name LIKE :name', { id: id, name: `${name}%` }).getMany();
   }
   validateChatName(chatRoomName: string): boolean {
     if (chatRoomName == null || !(chatRoomName && chatRoomName.trim())) {
@@ -218,9 +231,10 @@ export class ChatService {
     const counter = await this.MembersRepo.createQueryBuilder('Members')
       .leftJoinAndSelect("Members.chat", "chatID")
       .leftJoinAndSelect("Members.user", "Userid")
-      .where("chatID.id = :id", { id }).getCount();
+      .where("chatID.id = :id AND Members.state = 1", { id }).getCount();
     return { rooms: await this.GetChatRoomByID(id), count: counter }
   }
+
   async GetChatRoomByID(id: number) {
     const rooms = await this.MembersRepo.createQueryBuilder('Members')
       .leftJoinAndSelect("Members.chat", "chatID")
@@ -406,7 +420,9 @@ export class ChatService {
   }
 
   async DeleteAnInvite(channelId: number, currentUser: number) {
-    if (await this.checkInviteExists(channelId, currentUser)) {
+    const x = await this.checkInviteExists(channelId, currentUser);
+    console.log(x)
+    if (x) {
       return await this.MembersRepo.delete({ chatID: channelId, Userid: currentUser, });
     }
     return {};
@@ -418,6 +434,13 @@ export class ChatService {
       .leftJoinAndSelect("Members.user", "Userid")
       .where("Userid.id = :userId AND chatID.type != :type AND Members.state = :active",
         { userId: id, type: 'direct', active: 2, }).getMany();
+  }
+
+  async invitedOnce(idUser: number, idChannel: number) {
+    return await this.MembersRepo.createQueryBuilder('Members')
+      .leftJoinAndSelect("Members.chat", "chatID")
+      .leftJoinAndSelect("Members.user", "Userid")
+      .where('chatID.id = :idChannel AND Userid.id = :idUser AND Members.state = 2', { idUser, idChannel }).getMany()
   }
 
   async checkforRole(channelId: number, currentUser: number, role: any[]) {

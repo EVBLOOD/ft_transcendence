@@ -101,7 +101,14 @@ export class FriendshipService {
         return { status: 'you are accepted' };
     }
   }
-
+  async blockOneEach(id: number) {
+    return await this.FriendShipRepo.find({
+      where: [
+        { sender: id },
+        { receiver: id },
+      ],
+    });
+  }
   async blocklist(id: number, skip: number, take: number) {
     if (!(await this.UserRepo.findOneBy({ id: id }))) return undefined;
     let blocklist = await this.FriendShipRepo.find({

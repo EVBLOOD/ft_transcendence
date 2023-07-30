@@ -126,6 +126,10 @@ export class ChatService {
   Cancelinvite(channelID: string, UserId: number) {
     return this.httpClient.post(`http://10.13.4.8:3000/chat/RemoveInvite`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
   }
+
+  removeInvite(channelID: string, UserId: number) {
+    return this.httpClient.post(`http://10.13.4.8:3000/chat/CancelInvite`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+  }
   // done
   // kick
   KickThisOne(channelID: string, UserId: number) {
@@ -250,5 +254,12 @@ export class ChatService {
 
   getSeenCount(id: number) {
     return this.httpClient.get(URL + `/chat/MyCount/${id}`, { withCredentials: true, })
+  }
+  getChatroomsByname(ChannelName: string) {
+    return this.httpClient.get(URL + `/chat/findbyName/${ChannelName}`, { withCredentials: true, })
+  }
+
+  getInvitedFriends(id: number, userid: number) {
+    return this.httpClient.get(URL + `/chat/findingInvitedonce/${id}/${userid}`, { withCredentials: true });
   }
 }

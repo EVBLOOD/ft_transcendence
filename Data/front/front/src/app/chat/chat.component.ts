@@ -92,7 +92,9 @@ export class ChatComponent {
     }).subscribe({ next: (data) => { console.log(data) } });
   }
   finding = 0;
-  FindextraUsers() {
+  FindextraUsers($event: KeyboardEvent) {
+    if ($event.code != 'Enter' && $event.code != 'NumpadEnter')
+      return;
     if (this.newText.value?.length && this.toggle) {
       this.finding = 1;
       this.ChatDMs$ = this.listUsers.findthem(this.newText.value);
@@ -101,8 +103,11 @@ export class ChatComponent {
       this.finding = 0;
       this.ChatDMs$ = this.chatService.getChatDM();
     }
+    else if (this.newText.value?.length)
+      this.ChatRooms$ = this.chatService.getChatroomsByname(this.newText.value);
     else
       this.ChatRooms$ = this.chatService.getChatrooms();
+
 
 
   }

@@ -24,7 +24,7 @@ export class SendMsgComponent {
     this.msgText.setValue('');
   }
   keyClick($event: KeyboardEvent) {
-    if ($event.code == 'Enter')
+    if ($event.code == 'Enter' || $event.code == 'NumpadEnter')
       this.sending()
   }
 }

@@ -12,18 +12,9 @@ import {
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { createChatroomDTO } from './dto/createChatroom.dto';
-import { createMemberDTO } from './dto/createMember.dto';
 import { CreateBanDTO, createAdminDTO, invitesDTO } from './dto/createAdmin.dto';
-import { SwapOwnerDTO } from './dto/SwapOwner.dto';
 import { UpdateChatroomDTO } from './dto/updateChatroom.dto';
-// import { ValidateUpdateDTO } from './chat.validators';
-// import { Message } from 'src/message/message.entity';
-// import { Punishment } from './punishment/punishment.entity';
-// import { createPunishmentDTO } from './punishment/dto/createPunishment.dto';
-import { CommandStartedEvent } from 'typeorm';
 import { JwtAuthGuard } from 'src/authenticator/jwtauth.guard';
-import { UserService } from 'src/user/user.service';
-// import { MessageService } from 'src/message/message.service';
 
 
 @UseGuards(JwtAuthGuard)
@@ -53,7 +44,15 @@ export class ChatController {
     return await this.chatRoomSevice.DeleteAnInvite(invitesDTO.chatID, req.new_user.sub);
   }
 
+  @Post('CancelInvite')
+  async CancelInvites(@Body() invitesDTO: invitesDTO) {
+    return await this.chatRoomSevice.DeleteAnInvite(invitesDTO.chatID, invitesDTO.UserId);
+  }
 
+  @Get('findingInvitedonce/:idChannel/:idUser')
+  async invitedOnce(@Param('idChannel', ParseIntPipe) idChannel: number, @Param('idUser', ParseIntPipe) idUser: number) {
+    return await this.chatRoomSevice.invitedOnce(idUser, idChannel);
+  }
   @Get('find/:id')
   async getChatRoomByID(@Param('id', ParseIntPipe) id: number) {
     return this.chatRoomSevice.GetChatRoomByID_(id);
@@ -62,6 +61,10 @@ export class ChatController {
   @Get('user')
   async getChatRoomsOfUser(@Req() req: any) {
     return this.chatRoomSevice.getChatRoomOfUsers(req.new_user.sub);
+  }
+  @Get('findbyName/:name')
+  async getChatRoomsbyName(@Req() req: any, @Param('name') name: string) {
+    return this.chatRoomSevice.getChatRoomsbyName(req.new_user.sub, name);
   }
 
 

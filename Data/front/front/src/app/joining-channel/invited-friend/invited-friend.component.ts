@@ -22,6 +22,5 @@ export class InvitedFriendComponent {
   onClickCancel() {
     this.cancel = !this.cancel;
     this.chatService.Cancelinvite(this.invite.chat.id, this.invite.user.id).subscribe((data) => { console.log(data) });
-
   }
 }

@@ -11,13 +11,12 @@
             </a>
         </div>
         <input [formControl]="newText" class="textbox search" type="text" placeholder="Search"
-            (focusout)="FindextraUsers()" />
+            (keypress)="FindextraUsers($event)" />
         <div class="friendsonline" *ngIf="toggle">
             <!-- friendList -->
             <app-dms *ngFor="let item of (ChatDMs$|async)" [user]="!finding ? item?.user : item" />
         </div>
         <div class="channels" *ngIf="!toggle">
-            <!-- {{(ChatRooms$|async|json)}} -->
             <app-channels *ngFor="let item of (ChatRooms$|async)" [channel]="item" />
         </div>
         <div class="create-join-channel">

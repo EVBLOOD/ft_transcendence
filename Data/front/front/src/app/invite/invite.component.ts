@@ -31,4 +31,5 @@ export class InviteComponent implements OnInit {
   close() {
     this.routeSwitcher.navigateByUrl('/chat/' + this.activeOne.snapshot.params['id'])
   }
+
 }

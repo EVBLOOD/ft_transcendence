@@ -10,7 +10,7 @@ export class GameInstance {
   private runner!: Matter.Runner;
   private paddle1: Matter.Body;
   private paddle2: Matter.Body;
-  private ball: Matter.Body;
+  private ball: Matter.Body;// = new Matter.Body();
   private player1Ready: boolean = false;
   private player2Ready: boolean = false;
   public score: { player1: number; player2: number; } = { player1: 0, player2: 0 };
@@ -22,9 +22,16 @@ export class GameInstance {
 
 
 
-  constructor(private player1: Socket, private player2: Socket) {
+  constructor(public player1: Socket, public player2: Socket) {
     console.log("game is created (start)");
     this.engine = Engine.create();
+    let engine2 = Engine.create();
+
+    if (this.engine == engine2) {
+      console.log("[DEBUG] the same ref");
+    } else {
+      console.log("[DEBUG] not the same ref");
+    }
     this.world = this.engine.world;
 
     this.engine.gravity.x = 0;
@@ -157,57 +164,59 @@ export class GameInstance {
     World.remove(this.world, [this.paddle1, this.paddle2, this.ball]);
     World.clear(this.world, false);
     Engine.clear(this.engine);
-    if (this.runner)
-      Runner.stop(this.runner);
+    // if (this.runner)
+    //   Runner.stop(this.runner);
 
-    this.player1.off('sendMyPaddleState', (state) => {
-      const position = JSON.parse(state);
-      Body.setPosition(this.paddle1, position);
-      this.player2.emit('updateOpponentPaddle', JSON.stringify({ x: this.paddle1.position.x, y: this.paddle1.position.y }));
-    });
+    this.player1.removeAllListeners();
+    this.player2.removeAllListeners();
+    // this.player1.off('sendMyPaddleState', (state) => {
+    //   const position = JSON.parse(state);
+    //   Body.setPosition(this.paddle1, position);
+    //   this.player2.emit('updateOpponentPaddle', JSON.stringify({ x: this.paddle1.position.x, y: this.paddle1.position.y }));
+    // });
 
-    this.player2.off('sendMyPaddleState', (state) => {
-      const position = JSON.parse(state);
-      Body.setPosition(this.paddle2, position);
-      this.player1.emit('updateOpponentPaddle', JSON.stringify({ x: this.paddle2.position.x, y: this.paddle2.position.y }));
-    });
-    this.player1.off('disconnect', () => {
-      this.player2.emit('changeState', JSON.stringify({ gameState: 'Finished', isWin: true }));
-      this.score.player1 = 0;
-      this.score.player2 = 1;
-      // I mean why req
-      this.stopGame();
-    });
+    // this.player2.off('sendMyPaddleState', (state) => {
+    //   const position = JSON.parse(state);
+    //   Body.setPosition(this.paddle2, position);
+    //   this.player1.emit('updateOpponentPaddle', JSON.stringify({ x: this.paddle2.position.x, y: this.paddle2.position.y }));
+    // });
+    // this.player1.off('disconnect', () => {
+    //   this.player2.emit('changeState', JSON.stringify({ gameState: 'Finished', isWin: true }));
+    //   this.score.player1 = 0;
+    //   this.score.player2 = 1;
+    //   // I mean why req
+    //   this.stopGame();
+    // });
 
-    this.player2.off('disconnect', () => {
-      this.player1.emit('changeState', JSON.stringify({ gameState: 'Finished', isWin: true }));
-      this.score.player1 = 1;
-      this.score.player2 = 0;
-      // I mean why req
-      this.stopGame();
-    });
+    // this.player2.off('disconnect', () => {
+    //   this.player1.emit('changeState', JSON.stringify({ gameState: 'Finished', isWin: true }));
+    //   this.score.player1 = 1;
+    //   this.score.player2 = 0;
+    //   // I mean why req
+    //   this.stopGame();
+    // });
 
-    this.player1.off('playerIsReady', () => {
-      console.log('player1 is ready');
-      this.player1Ready = true;
+    // this.player1.off('playerIsReady', () => {
+    //   console.log('player1 is ready');
+    //   this.player1Ready = true;
 
-      if (this.player2Ready) {
-        this.startGame();
-      } else {
-        this.player1.emit('waitingForOpponent');
-      }
-    });
+    //   if (this.player2Ready) {
+    //     this.startGame();
+    //   } else {
+    //     this.player1.emit('waitingForOpponent');
+    //   }
+    // });
 
-    this.player2.off('playerIsReady', () => {
-      console.log('player2 is ready');
-      this.player2Ready = true;
+    // this.player2.off('playerIsReady', () => {
+    //   console.log('player2 is ready');
+    //   this.player2Ready = true;
 
-      if (this.player1Ready) {
-        this.startGame();
-      } else {
-        this.player2.emit('waitingForOpponent');
-      }
-    });
+    //   if (this.player1Ready) {
+    //     this.startGame();
+    //   } else {
+    //     this.player2.emit('waitingForOpponent');
+    //   }
+    // });
 
     this.inactive = true;
 

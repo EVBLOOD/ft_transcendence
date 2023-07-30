@@ -18,7 +18,6 @@ export class GameGateway
   constructor(private gameService: GameService, private readonly serviceJWt: JwtService, private readonly serviceToken: AuthenticatorService,) { }
 
   async handleConnection(client: Socket, ...args: any[]) {
-    console.log("Hello world");
     const cookie = client.handshake.headers?.cookie
       ?.split('; ')
       ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
@@ -106,9 +105,9 @@ export class GameGateway
       return false;
     }
     let userSockets = this.gameService.onlineUsers.get(xyz.sub);
-    // if (!userSockets)
     //   userSockets = new Set<Socket>();
-    userSockets.delete(client);
+    if (userSockets)
+      userSockets.delete(client);
     if (userSockets.size)
       this.gameService.onlineUsers.set(xyz.sub, userSockets)
     else

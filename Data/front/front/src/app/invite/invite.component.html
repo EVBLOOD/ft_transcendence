@@ -9,7 +9,7 @@
             have No friends to
             invite</div>
         <ng-template #listall>
-            <div class="boxInviteFriends" *ngFor="let user of users">
+            <div class="boxInviteFriends">
                 <app-invite-lines *ngFor="let user of users" [user]="user" />
             </div>
         </ng-template>

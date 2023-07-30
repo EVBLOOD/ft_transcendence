@@ -39,9 +39,9 @@ export class GameService {
       // console.log("current players :", this.currentPlayers.map(_ => _.id));
       // console.log("ONLINE USERS", this.onlineUsers.map(_ => _.id));
       // console.log("queue :", this.queue.length);
-      // console.log("active game instances :", this.activeGameInstances.length);
+      // console.log("active game instances :", this.activeGameInstances);
       // console.log("current players :", this.currentPlayers.length);
-      // console.log("ONLINE USERS", this.onlineUsers.length);
+      // console.log("ONLINE USERS", this.onlineUsers.size);
       Object.entries(this.activeGameInstances).forEach(([key, value]) => {
         if (value.inactive) {
           const player1Id: number = parseInt(key.split(',')[0]);
