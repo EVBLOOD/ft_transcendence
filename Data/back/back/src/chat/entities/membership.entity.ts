@@ -11,7 +11,7 @@ export class Members {
     chatID: number;
 
     @Column()
-    state: number; // active 1 - blocked 0 - invited 2
+    state: number; // active 1 - blocked 0 - invited 2 - muted 3
 
     @Column({ type: 'enum', enum: ["none", "admin", "owner"] })
     role: string;

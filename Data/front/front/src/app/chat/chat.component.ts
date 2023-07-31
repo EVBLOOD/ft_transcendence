@@ -20,31 +20,37 @@ import { StatusService } from '../status.service';
   ]
 })
 
-export class ChatComponent {
+export class ChatComponent implements OnDestroy {
 
   ChatRooms$ !: Observable<any>;
   ChatDMs$ !: Observable<any>;
   listUser$ !: Observable<any>;
   replay: any;
-
+  // subsc
+  private removesubsc: any;
+  private removesubsc_: any;
+  private removesubsc__: any;
+  ngOnDestroy() {
+    if (this.removesubsc)
+      this.removesubsc.unsubscribe()
+    if (this.removesubsc_)
+      this.removesubsc_.unsubscribe()
+  }
   newText = new FormControl('', [Validators.required,]);
 
-  constructor(private readonly chatService: ChatService, private route: Router, private listUsers: FriendshipService, private readonly state: StatusService) {
+  constructor(private readonly chatService: ChatService, private route: Router, private listUsers: FriendshipService) {
     this.ChatRooms$ = this.chatService.getChatrooms();
-    this.chatService.getChatrooms().subscribe({
-      next: (data) => {
-        console.log("ChatRooms")
-        console.log(data);
-      }
-    });
     this.ChatDMs$ = this.chatService.getChatDM();
-    this.chatService.getChatDM().subscribe({
-      next: (data) => {
-        console.log("Chat Dms")
-        console.log(data);
+    this.removesubsc = this.chatService.updatePrivates.subscribe(() => {
+      if (!this.newText.value?.length) {
+        this.finding = 0;
+        this.ChatDMs$ = this.chatService.getChatDM();
       }
     });
-
+    this.removesubsc_ = this.chatService.updateChannels.subscribe(() => {
+      if (!this.newText.value?.length)
+        this.ChatRooms$ = this.chatService.getChatrooms();
+    });
   }
 
   getStarterPath(path: string) {
@@ -86,10 +92,10 @@ export class ChatComponent {
   }
 
   createDM() {
-    this.chatService.joinChatroom({
+    this.removesubsc__ = this.chatService.joinChatroom({
       type: 'DM', chatroomName: '',
       password: '', user: 'admin', otherUser: ''
-    }).subscribe({ next: (data) => { console.log(data) } });
+    }).subscribe({ next: () => { this.removesubsc__.unsubscribe() } });
   }
   finding = 0;
   FindextraUsers($event: KeyboardEvent) {
@@ -107,9 +113,6 @@ export class ChatComponent {
       this.ChatRooms$ = this.chatService.getChatroomsByname(this.newText.value);
     else
       this.ChatRooms$ = this.chatService.getChatrooms();
-
-
-
   }
 
 

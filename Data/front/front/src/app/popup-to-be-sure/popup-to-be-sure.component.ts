@@ -8,20 +8,18 @@ import { ChatService } from '../chat/chat.service';
   styleUrls: ['./popup-to-be-sure.component.scss']
 })
 export class PopupToBeSureComponent {
+  replay: any;
   constructor(private readonly switchRouter: Router, private readonly chatServ: ChatService, private readonly now: ActivatedRoute) {
-
   }
   close() {
     this.switchRouter.navigateByUrl('chat/' + this.now.snapshot.params['id']);
   }
   submit() {
-    this.chatServ.leaveChatroom(this.now.snapshot.params['id']).subscribe((data: any) => {
-      if (data?.statusCode) {
-        console.log(data)
-        console.log('Ha lghder bda')
-      }
-      else
+    this.replay = this.chatServ.leaveChatroom(this.now.snapshot.params['id']).subscribe((data: any) => {
+      if (!data?.statusCode) {
+        this.replay.unsubscribe()
         this.switchRouter.navigateByUrl('chat')
+      }
     });
   }
 }

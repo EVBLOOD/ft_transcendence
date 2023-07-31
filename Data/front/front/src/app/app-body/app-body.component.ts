@@ -24,14 +24,16 @@ export class AppBodyComponent implements OnInit, OnDestroy {
   public profileSub$ !: Observable<any>;
   public profile$ !: Observable<any>;
   // public profile$ !: Subject<any>;
+  notLogged: boolean = true;
+  dropDown = false;
+  profilepic: string = '';
+  // subscr
+  private _subreplay: any;
+  private __subreplay: any;
   private replay: any;
   private replay_: any;
   private replay__: any;
   private replay___: any;
-  notLogged: boolean = true;
-  dropDown = false;
-  profilepic: string = '';
-
 
   @ViewChild('dropDownContent') dropDownContent !: ElementRef;
   @ViewChild('dropDownContent_') dropDownContent_ !: ElementRef;
@@ -39,8 +41,8 @@ export class AppBodyComponent implements OnInit, OnDestroy {
   constructor(public profileService: ProfileService, private route: Router,
     private status: StatusService, private friendship: FriendshipService, private gameService: GameService) {
 
-    this.gameService.gameIsCreated$.subscribe(
-      (data) => {
+    this._subreplay = this.gameService.gameIsCreated$.subscribe(
+      (data: any) => {
         if (data) {
           route.navigateByUrl('/game')
         }
@@ -83,7 +85,7 @@ export class AppBodyComponent implements OnInit, OnDestroy {
         this.showPopup(data.senderId)
       }
     })
-    this.gameService.gameRequest.asObservable().subscribe((data) => {
+    this.__subreplay = this.gameService.gameRequest.asObservable().subscribe((data) => {
       // console.log(data)
       if (data)
         this.showPopupGame(data.toString());
@@ -128,6 +130,8 @@ export class AppBodyComponent implements OnInit, OnDestroy {
       this.replay__.unsubscribe()
     if (this.replay___)
       this.replay___.unsubscribe();
+    if (this._subreplay)
+      this._subreplay.unsubscribe()
   }
 
   @HostListener('document:click', ['$event'])
@@ -142,7 +146,7 @@ export class AppBodyComponent implements OnInit, OnDestroy {
     this.ngOnInit();
   }
   logout() {
-    this.replay___ = this.profileService.logout().subscribe({ next: (data) => { this.route.navigateByUrl('login'); this.notLogged = true; } })
+    this.replay___ = this.profileService.logout().subscribe({ next: (data: any) => { this.route.navigateByUrl('login'); this.notLogged = true; } })
     this.status.Offline();
   }
 

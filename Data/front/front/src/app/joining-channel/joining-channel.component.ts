@@ -28,22 +28,24 @@ export class JoiningChannelComponent {
     this.switchRoute.navigateByUrl('/chat');
   }
 
+  // subscr
+  replay: any;
   JoinIt() {
     if (!this.ChannelName.value || !this.ChannelName.value?.length)
       return;
     if (!this.secretToggle) {
-      this.ChannelService.JoiningChatRoom({
+      this.replay = this.ChannelService.JoiningChatRoom({
         type: 'public', chatroomName: this.ChannelName.value,
         password: '', user: '', otherUser: ''
-      }).subscribe({ next: (data: any) => { console.log(data) } });
+      }).subscribe({ next: () => { this.replay.unsubscribe() } });
       console.log('this is a public channel')
     }
     else {
       if (this.ChannelPassword.value?.length) {
-        this.ChannelService.JoiningChatRoom({
+        this.replay = this.ChannelService.JoiningChatRoom({
           type: 'protected', chatroomName: this.ChannelName.value,
           password: this.ChannelPassword.value, user: '', otherUser: ''
-        }).subscribe({ next: (data: any) => { console.log(data) } });
+        }).subscribe({ next: () => { this.replay.unsubscribe() } });
       }
       console.log('this is a secret channel')
     }

@@ -18,6 +18,9 @@ export class CreateChannelComponent {
   privateToggle = new FormControl(false);
   secretToggle = new FormControl(false);
 
+  // subscribe
+  replay: any;
+
   clickPrivateChannel() {
     this.privateToggle.setValue(!this.privateToggle.value);
   }
@@ -35,11 +38,10 @@ export class CreateChannelComponent {
     else if (this.privateToggle.value)
       type = 'private'
     if (this.channelName.value?.length && (type != 'protected' || this.password.value?.length)) {
-      this.chatService.joinChatroom({
+      this.replay = this.chatService.joinChatroom({
         type, chatroomName: this.channelName.value,
         password: this.password.value, user: 'admin', otherUser: ''
-      }).subscribe({ next: (data) => { console.log(data) } });
-      // TODO: check data and errors
+      }).subscribe({ next: () => { this.replay.unsubscribe() } });
       this.close()
     }
   }

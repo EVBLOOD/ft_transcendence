@@ -1,5 +1,5 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnDestroy, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/login/auth.service';
 import { ProfileService } from 'src/app/profile/profile.service';
 import { StatusService } from 'src/app/status.service';
@@ -16,13 +16,14 @@ import { ChatService } from '../../chat.service';
     ])
   ]
 })
-export class PartChatComponent {
+export class PartChatComponent implements OnDestroy {
   @Input() filter!: string;
   @Input() user!: any;
   @Input() idChat !: number;
   @Input() myrole !: string;
   id !: number;
-  constructor(private readonly profile: ProfileService, private readonly state: StatusService, private readonly authSer: AuthService, private readonly ChatService: ChatService) {
+  constructor(private readonly profile: ProfileService, private readonly state: StatusService,
+    private readonly authSer: AuthService, private readonly ChatService: ChatService) {
     this.id = this.authSer.getId();
   }
   avataring(url: string) {
@@ -36,8 +37,10 @@ export class PartChatComponent {
       this.dropDownUser = false;
     }
   }
-  replay: any;
   status: string = 'Offline';
+  // subscr
+  private replay: any;
+  private replay_: any;
 
   statusLoading(id: any) {
     this.replay = this.state.current_status.subscribe((curr: any) => {
@@ -49,6 +52,11 @@ export class PartChatComponent {
     });
   }
 
+  ngOnDestroy(): void {
+    if (this.replay)
+      this.replay.unsubscribe();
+  }
+
   dropDownUser = false;
   onclickDropDownClick() {
     this.dropDownUser = !this.dropDownUser;
@@ -57,27 +65,29 @@ export class PartChatComponent {
 
   kickUser() {
     if (this.user?.user?.id)
-      this.ChatService.KickThisOne(this.idChat.toString(), this.user?.user?.id).subscribe((data) => { console.log(data) })
+      this.replay_ = this.ChatService.KickThisOne(this.idChat.toString(), this.user?.user?.id).subscribe((data: any) => { this.replay_.unsubscribe() })
   }
 
   RemoveRole() {
     if (this.user?.user?.id)
-      this.ChatService.RemoveRole(this.idChat.toString(), this.user?.user?.id).subscribe((data) => { console.log(data) })
+      this.replay_ = this.ChatService.RemoveRole(this.idChat.toString(), this.user?.user?.id).subscribe((data: any) => { this.replay_.unsubscribe() })
   }
 
   AddRole() {
     if (this.user?.user?.id)
-      this.ChatService.CreateRole(this.idChat.toString(), this.user?.user?.id).subscribe((data) => { console.log(data) })
+      this.replay_ = this.ChatService.CreateRole(this.idChat.toString(), this.user?.user?.id).subscribe((data: any) => { this.replay_.unsubscribe() })
   }
 
   BanUser() {
     if (this.user?.user?.id)
-      this.ChatService.banUser(this.idChat.toString(), this.user?.user?.id).subscribe((data) => { console.log(data) })
+      this.replay_ = this.ChatService.banUser(this.idChat.toString(), this.user?.user?.id).subscribe((data: any) => { this.replay_.unsubscribe() })
   }
   unBanUser() {
     if (this.user?.user?.id)
-      this.ChatService.banUserRemoval(this.idChat.toString(), this.user?.user?.id).subscribe((data) => { console.log(data) })
+      this.replay_ = this.ChatService.banUserRemoval(this.idChat.toString(), this.user?.user?.id).subscribe((data: any) => { this.replay_.unsubscribe() })
   }
-
+  mute() {
+    const rep = this.ChatService.LetsSilenceHim(this.user.Userid, this.idChat).subscribe((data) => { console.log(data); rep.unsubscribe() });
+  }
 
 }

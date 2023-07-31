@@ -12,15 +12,16 @@ export class InvitedFriendComponent {
   constructor(private readonly chatService: ChatService) { }
 
   invited = false;
+  replay: any;
   onClickInvite() {
     this.invited = !this.invited;
     this.cancel = !this.cancel;
-    this.chatService.Acceptinvite(this.invite.chat.id, this.invite.user.id).subscribe((data) => { console.log(data) });
+    this.replay = this.chatService.Acceptinvite(this.invite.chat.id, this.invite.user.id).subscribe(() => { this.replay.unsubscribe() });
   }
 
   cancel = false;
   onClickCancel() {
     this.cancel = !this.cancel;
-    this.chatService.Cancelinvite(this.invite.chat.id, this.invite.user.id).subscribe((data) => { console.log(data) });
+    this.replay = this.chatService.Cancelinvite(this.invite.chat.id, this.invite.user.id).subscribe(() => { this.replay.unsubscribe() });
   }
 }

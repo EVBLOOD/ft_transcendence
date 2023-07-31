@@ -22,6 +22,8 @@ import { ChatContentComponent } from './chat/chat-content/chat-content.component
 import { InviteComponent } from './invite/invite.component';
 import { PopupToBeSureComponent } from './popup-to-be-sure/popup-to-be-sure.component';
 import { JoiningChannelComponent } from './joining-channel/joining-channel.component';
+import { noACCESSGuard } from './chat/no-access.guard';
+import { dMACCESSGuard } from './chat/dm-access.guard';
 
 const routes: Routes =
   [
@@ -38,8 +40,8 @@ const routes: Routes =
         {
           path: 'chat', component: ChatComponent, canActivate: [authGuard],
           children: [
-            { path: ':id', component: ChatContentComponent, canActivate: [authGuard] },
-            { path: 'dm/:username', component: ChatContentComponent, canActivate: [authGuard] }
+            { path: ':id', component: ChatContentComponent, canActivate: [authGuard, noACCESSGuard] },
+            { path: 'dm/:username', component: ChatContentComponent, canActivate: [authGuard, dMACCESSGuard] }
           ]
         },
         { path: 'leaderboard', component: LeaderbordComponent, canActivate: [authGuard] },

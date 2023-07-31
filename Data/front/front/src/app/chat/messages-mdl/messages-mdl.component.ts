@@ -1,5 +1,5 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, ElementRef, HostListener, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
 // import { ActivatedRoute } from '@angular/router';
 import { ChatService } from '../chat.service';
 import { Observable } from 'rxjs';
@@ -17,7 +17,7 @@ import { StatusService } from 'src/app/status.service';
     ])
   ]
 })
-export class MessagesMdlComponent implements OnChanges, OnInit {
+export class MessagesMdlComponent implements OnChanges, OnInit, OnDestroy {
   @Input() isRoom: boolean = false;
   @Input() id!: number; // switched to type chat
   @Input() chatInfos: any;
@@ -27,9 +27,7 @@ export class MessagesMdlComponent implements OnChanges, OnInit {
   @ViewChild('dropDownChannelRef') dropDownChannelRef !: ElementRef;
   @ViewChild('dropDownChannelRef_') dropDownChannelRef_ !: ElementRef;
   @ViewChild('dropDownChannelRef__') dropDownChannelRef__ !: ElementRef;
-  // @ViewChild('scrolling') scrolling!: ElementRef;
   dropDownChannel = false;
-  // messages !: Array<any>;
 
   onclickThreePointChannel() {
     this.dropDownChannel = !this.dropDownChannel
@@ -44,8 +42,10 @@ export class MessagesMdlComponent implements OnChanges, OnInit {
   }
   constructor(private readonly chatService: ChatService, private readonly profileUser: ProfileService, private readonly state: StatusService) {
   }
-  replay: any;
+
   status: string = 'Offline';
+  // unsubscribe
+  private replay: any;
 
   statusLoading(id: any) {
     this.replay = this.state.current_status.subscribe((curr: any) => {
@@ -60,39 +60,22 @@ export class MessagesMdlComponent implements OnChanges, OnInit {
     return this.profileUser.getUserAvatarPath(url);
   }
   ngOnInit(): void {
-    // this.scroll.nativeElement.scrollTop = this.scroll?.nativeElement.scrollHeight;
-    // this.scrolling.nativeElement.scroll({ bottom: this.scrolling.nativeElement.scrollHeight, left: 0, behavior: 'smooth' })
-    // setTimeout(this.scrolling.nativeElement.scroll({ top: this.scrolling.nativeElement.scrollHeight, left: 0, behavior: 'smooth' }))
-
   }
 
-  // this.chatService.getUpdate().subscribe((data) => {
-  //   if (data?.mgs?.chatRoomId?.type == 'DM' && (this.id == data.sender || data?.mgs?.userId?.id == this.id)) {
-  //     console.log(data)
-  //     console.log("LOL")
-  //     console.log(data.msg)
-  //     this.messages.push(data.msg)
-  //   }
-  // })
-  // }
+
   ngOnChanges(): void {
-
-    // this.scroll.nativeElement.scrollTop = this.scroll?.nativeElement.scrollHeight;
-    // this.scroll.nativeElement.scrollTo(this.scroll.nativeElement.scrollHeight, 0);
-
-    console.log(this.messages)
-    // this.scrolling.nativeElement.scroll({ top: this.scrolling.nativeElement.scrollHeight, left: 0, behavior: 'smooth' })
     if (this.id && this.isRoom)
       this.msgs$ = this.chatService.getChatroomMessages(this.id)
 
     else if (!this.isRoom && this.id) {
-      // this.messages = new Array();
       this.user$ = this.profileUser.getUserData(this.id.toString())
       this.msgs$ = this.chatService.getDmMessages(this.id);
-      // this.chatService.
     }
-    // setTimeout(this.scrolling.nativeElement.scroll({ bottom: this.scrolling.nativeElement.scrollHeight, left: 0, behavior: 'smooth' }))
-    // this.chatService
+  }
+  ngOnDestroy(): void {
+    this.messages = []
+    if (this.replay)
+      this.replay.unsubscribe()
   }
 
 }

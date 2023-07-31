@@ -104,8 +104,8 @@ export class FriendshipService {
   async blockOneEach(id: number) {
     return await this.FriendShipRepo.find({
       where: [
-        { sender: id },
-        { receiver: id },
+        { sender: id, blocked: true },
+        { receiver: id, blocked: true },
       ],
     });
   }

@@ -15,6 +15,8 @@ export class ConfigChannelComponent {
   privateToggle = new FormControl(false);
   secretToggle = new FormControl(false);
   channelId !: string;
+  // subscribe
+  replay: any;
 
 
   constructor(private readonly chatService: ChatService, private readonly switchRouter: Router, private route: ActivatedRoute,) {
@@ -42,13 +44,11 @@ export class ConfigChannelComponent {
     else if (this.privateToggle.value)
       type = 'private'
     if (this.channelName.value?.length && (type != 'protected' || this.password.value?.length)) {
-      console.log(this.password.value)
-      this.chatService.updateChatroom(parseInt(this.channelId),
+      this.replay = this.chatService.updateChatroom(parseInt(this.channelId),
         {
           newType: type,
           newPassword: this.password.value || '', newChatroomName: this.channelName.value
-        }).subscribe({ next: (data) => { console.log(data) } });
-      // TODO: check data and errors
+        }).subscribe({ next: () => { this.replay.unsubscribe() } });
       this.close()
     }
   }

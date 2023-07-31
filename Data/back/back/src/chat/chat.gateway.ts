@@ -11,6 +11,7 @@ import { hostSocket } from 'src/app.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthenticatorService } from 'src/authenticator/authenticator.service';
 import { UserService } from 'src/user/user.service';
+import { CreateBanDTO } from './dto/createAdmin.dto';
 
 @WebSocketGateway({
   namespace: 'chat',
@@ -124,6 +125,8 @@ export class ChatGateway {
       client.disconnect();
       return false;
     }
+    if (await this.chatService.isMute(xyz.sub, parseInt(payload?.message?.charRoomId)))
+      return {}
     const isBanned = await this.chatService.isBanned(xyz.sub, parseInt(payload?.message?.charRoomId));
     if (isBanned.length)
       return; // will be removed and added in an other place
@@ -173,6 +176,36 @@ export class ChatGateway {
     return {}
   }
 
+  @SubscribeMessage("updateMembersTime")
+  async updateMembersTime(client: Socket, payload: CreateBanDTO) {
+    this.server.in(payload.chatID.toString()).emit('GoPlay', payload);
+  }
+
+  @SubscribeMessage('ping-leave')
+  async showSelf(client: Socket, payload: CreateBanDTO) {
+    this.server.in(payload.chatID.toString()).emit('force-leave', payload);
+    return {}
+  }
+
+  @SubscribeMessage('force-leave')
+  async getOut(client: Socket, chatID: string) {
+    if (chatID)
+      client.leave(chatID.toString());
+    return {}
+  }
+
+
+  // messages updating showing !
+  // @SubscribeMessage('leave-room')
+
+
+  // members update showing !
+
+
+  // users update kicking and banning
+
+
+  // 
 
   // async handleDisconnect(client: Socket) {
   //   const cookie = client.handshake.headers?.cookie

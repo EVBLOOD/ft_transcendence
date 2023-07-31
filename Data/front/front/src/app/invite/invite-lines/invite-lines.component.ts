@@ -14,6 +14,8 @@ export class InviteLinesComponent implements OnInit {
   invited: number = 0;
   areyouHere$ !: Observable<any>;
   @Input() user: any;
+  // unsubscr
+  replay: any;
 
   constructor(private readonly profile: ProfileService, private readonly activeOne: ActivatedRoute, private readonly chatService: ChatService) {
   }
@@ -24,11 +26,11 @@ export class InviteLinesComponent implements OnInit {
 
   onClickInvite(id: number) {
     this.invited = 1;
-    this.chatService.Sendinvite(this.activeOne.snapshot.params['id'], this.user.id).subscribe((data) => { console.log(data) });
+    this.replay = this.chatService.Sendinvite(this.activeOne.snapshot.params['id'], this.user.id).subscribe(() => { this.replay.unsubscribe() });
   }
   onClickInviteCancel(id: number) {
     this.invited = 2;
-    this.chatService.removeInvite(this.activeOne.snapshot.params['id'], this.user.id).subscribe((data) => { console.log(data) });
+    this.replay = this.chatService.removeInvite(this.activeOne.snapshot.params['id'], this.user.id).subscribe(() => { this.replay.unsubscribe() });
   }
   avataring(url: string) {
     return this.profile.getUserAvatarPath(url);

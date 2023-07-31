@@ -25,7 +25,7 @@ export class ChatService {
     const rooms = await this.MembersRepo.createQueryBuilder('Members')
       .leftJoinAndSelect("Members.chat", "chatID")
       .leftJoinAndSelect("Members.user", "Userid")
-      .where("Userid.id = :userId AND chatID.type != :type AND Members.state = :active", { userId, type: 'direct', active: 1 }).getMany();
+      .where("Userid.id = :userId AND chatID.type != :type AND Members.state IN (1, 3)", { userId, type: 'direct' }).getMany();
     return rooms;
   }
 
@@ -52,6 +52,7 @@ export class ChatService {
     return z;
     // return rooms;
   }
+
   async findDMChatroomId(user1: number, user2: number) {
     const room = await this.MembersRepo.createQueryBuilder('Members')
       .leftJoinAndSelect("Members.chat", "chatID")
@@ -80,12 +81,14 @@ export class ChatService {
       return rooms.chat.id;
     return -1;
   }
+
   async getChatRoomsbyName(id: number, name: string) {
     return await this.MembersRepo.createQueryBuilder('Members')
       .leftJoinAndSelect("Members.chat", "chatID")
       .leftJoinAndSelect("Members.user", "Userid")
-      .where('Userid.id = :id AND chatID.name LIKE :name', { id: id, name: `${name}%` }).getMany();
+      .where('Userid.id = :id AND chatID.name LIKE :name AND Members.state IN (1, 3)', { id: id, name: `${name}%` }).getMany();
   }
+
   validateChatName(chatRoomName: string): boolean {
     if (chatRoomName == null || !(chatRoomName && chatRoomName.trim())) {
       return false;
@@ -120,11 +123,12 @@ export class ChatService {
     return this.validateChatName(chatDTO.chatroomName) && this.validateChatType(chatDTO.type)
       && chatDTO.type == 'protected' ? this.validateChatPassword(chatDTO.password) : true;
   }
+
   async isMemberbyName(userId: number, channelName: string) {
     const rooms = await this.MembersRepo.createQueryBuilder('Members')
       .leftJoinAndSelect("Members.chat", "chatID")
       .leftJoinAndSelect("Members.user", "Userid").select(["Userid", "Members"])
-      .where("chatID.type != :type AND chatID.name = :channelId AND Members.state = :active AND Userid.id = :userId", { type: 'direct', channelId: channelName, active: 1, userId })
+      .where("chatID.type != :type AND chatID.name = :channelId AND Members.state IN (:...active) AND Userid.id = :userId", { type: 'direct', channelId: channelName, active: [1, 0, 3], userId })
       .getMany();
     return rooms;
   }
@@ -231,8 +235,29 @@ export class ChatService {
     const counter = await this.MembersRepo.createQueryBuilder('Members')
       .leftJoinAndSelect("Members.chat", "chatID")
       .leftJoinAndSelect("Members.user", "Userid")
-      .where("chatID.id = :id AND Members.state = 1", { id }).getCount();
+      .where("chatID.id = :id AND Members.state IN (1, 3)", { id }).getCount();
     return { rooms: await this.GetChatRoomByID(id), count: counter }
+  }
+
+  async accessToDM(UserID: number) {
+    const rep = await this.Friendship.blockOneEach(UserID);
+    if (rep.length)
+      return false;
+    const exists = await this.users.findOne(UserID);
+    if (!exists)
+      return false;
+    return true;
+  }
+
+
+  async accessToChat(UserID: number, ChatID: number) {
+    const ret = await this.MembersRepo.createQueryBuilder('Members')
+      .leftJoinAndSelect("Members.chat", "chatID")
+      .leftJoinAndSelect("Members.user", "Userid")
+      .where("chatID.type != 'direct' AND chatID.id = :id AND Members.state IN (1, 3) AND Userid.id = :UserId", { id: ChatID, UserId: UserID }).getCount();
+    if (ret)
+      return true;
+    return false;
   }
 
   async GetChatRoomByID(id: number) {
@@ -244,6 +269,7 @@ export class ChatService {
     return rooms;
   }
 
+  // posting sould be conditionel
   async postToDms(messageDTO: CreateMessage, id: number) {
     const chatRoom = await this.GetChatRoomByID(messageDTO.charRoomId);
     if (!chatRoom)
@@ -293,6 +319,33 @@ export class ChatService {
     return messages;
   }
 
+  async MuteHim(current: number, id: number, chatID: number) {
+    console.log(current, id, chatID)
+    if (!(await this.checkforRole(chatID, current, ['admin', 'owner'])) || await this.checkforRole(chatID, id, ['owner']))
+      return {};
+    const x = await this.MembersRepo.findOne({ where: { chatID: chatID, Userid: id, state: 1 } });
+    // const x = await this.MembersRepo.createQueryBuilder('Members').where('Members.Userid = :id AND Members.chatId = :chatID AND Members.state = 1', { id: id, chatID: chatID }).getOne();
+    if (x && x.role == 'none') {
+      const now = new Date();
+      x.state = 3;
+      x.mute = new Date(now.getTime() + now.getMinutes() * 60000);
+      return await this.MembersRepo.save(x);
+    }
+    return {};
+  }
+
+  async isMute(id: number, chatID: number) {
+    const x = await this.MembersRepo.findOne({ where: { chatID: chatID, Userid: id, state: 3 } });
+    if (!x)
+      return false;
+    if (x.mute > (new Date()))
+      return true;
+    x.state = 1;
+    this.MembersRepo.save(x);
+    return false;
+  }
+
+
   async findDMChatNotSeen(user2: number, user1: number) {
     const roomsIds = await this.MembersRepo.createQueryBuilder('Members')
       .leftJoinAndSelect("Members.chat", "chatID")
@@ -321,7 +374,7 @@ export class ChatService {
     const rooms = await this.MembersRepo.createQueryBuilder('Members')
       .leftJoinAndSelect("Members.chat", "chatID")
       .leftJoinAndSelect("Members.user", "Userid").select(["Userid", "Members"])
-      .where("chatID.type != :type AND chatID.id = :channelId AND Members.state = :active AND Userid.id = :userId", { type: 'direct', channelId: channelId, active: 1, userId })
+      .where("chatID.type != :type AND chatID.id = :channelId AND Members.state IN (1, 3) AND Userid.id = :userId", { type: 'direct', channelId: channelId, userId })
       .getMany();
     return rooms;
   }
@@ -447,8 +500,8 @@ export class ChatService {
     return await this.MembersRepo.createQueryBuilder('Members')
       .leftJoinAndSelect("Members.chat", "chatID")
       .leftJoinAndSelect("Members.user", "Userid")
-      .where("Userid.id = :userId AND chatID.id = :channelId AND chatID.type != :type AND Members.state = :active AND Members.role IN (:...roles)",
-        { userId: currentUser, type: 'direct', channelId, active: 1, roles: role }).getOne();
+      .where("Userid.id = :userId AND chatID.id = :channelId AND chatID.type != :type AND Members.state IN (1, 3) AND Members.role IN (:...roles)",
+        { userId: currentUser, type: 'direct', channelId, roles: role }).getOne();
   }
 
   async kickUser(channelId: number, currentUser: number, theOneToKick: number) {
@@ -462,11 +515,11 @@ export class ChatService {
     if (await this.checkforRole(channelId, currentUser, ['owner'])) {
       let nextOwner = await this.MembersRepo.createQueryBuilder('Members')
         .leftJoinAndSelect("Members.chat", "chatID")
-        .leftJoinAndSelect("Members.user", "Userid").where("chatID.id = :channelId AND Members.role = :admin AND Members.state = :active", { channelId: channelId, admin: 'admin', active: 1 }).getOne();
+        .leftJoinAndSelect("Members.user", "Userid").where("chatID.id = :channelId AND Members.role = :admin AND Members.state IN (1, 3)", { channelId: channelId, admin: 'admin' }).getOne();
       if (!nextOwner)
         nextOwner = await this.MembersRepo.createQueryBuilder('Members')
           .leftJoinAndSelect("Members.chat", "chatID")
-          .leftJoinAndSelect("Members.user", "Userid").where("chatID.id = :channelId AND Members.role = :admin AND Members.state = :active", { channelId: channelId, admin: 'none', active: 1 }).getOne();
+          .leftJoinAndSelect("Members.user", "Userid").where("chatID.id = :channelId AND Members.role = :admin AND Members.state IN (1, 3)", { channelId: channelId, admin: 'none' }).getOne();
       if (nextOwner) {
         await this.MembersRepo.save({ chatID: channelId, Userid: nextOwner.Userid, role: 'owner', state: 1 })
         return await this.MembersRepo.delete({ chatID: channelId, Userid: currentUser, });

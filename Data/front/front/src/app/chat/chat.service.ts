@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Socket, io } from 'socket.io-client';
+import { AuthService } from '../login/auth.service';
 
 const URL = "http://10.13.4.8:3000";
 
@@ -49,47 +50,59 @@ type createMemberDTO = {
 })
 export class ChatService {
   private sock: Socket;
-  private PunishmentSock: Socket;
   private update: BehaviorSubject<any> = new BehaviorSubject<any>({});
-  // private update : BehaviorSubject<number> = new BehaviorSubject<number>(0); 
-  constructor(private httpClient: HttpClient
+  private closeIt: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  public updateChannels: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  public updatePrivates: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  public updateMembership: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  constructor(private httpClient: HttpClient, private mySelf: AuthService
   ) {
-    this.PunishmentSock = io(URL + "/punishment", {
-      withCredentials: true,
-    });
     this.sock = io('http://10.13.4.8:3000/chat', {
       withCredentials: true,
     });
-    // this.sock.on(
-    //   'recMessage', (data) => {
-    //     // this.message = data.value;
-    //     // console.log("user: ", data.userId.userName);
-    //     // if (this.currentUser !== data.userId.userName)
-    //     //   console.log(data.userId.userName + ": " + this.message);
-    //     // console.log(data)
-    //   }
-    // );
+
     this.sock.on('ChannelMessages', (data) => {
-      console.log('this is channel message!')
-      this.update.next(data)
+      this.update.next(data);
+      this.update.next({});
+      this.updateChannels.next(data);
+      this.updateChannels.next({});
+      data = {}
     })
 
     this.sock.on(
       'privateMessage', (data) => {
-        console.log('this is private message!')
         this.update.next(data)
+        this.update.next({});
+        this.updatePrivates.next(data);
+        this.updatePrivates.next({});
       }
     );
 
-    this.sock.on("kickUser", (data) => {
-      console.log("kicked user: " + data.userName);
+    this.sock.on("force-leave", (data: any) => {
+      if (mySelf.getId() == data?.UserId) {
+        this.closeIt.next(data);
+        this.closeIt.next({});
+        this.sock.emit('force-leave', data.chatID)
+      }
     });
-
-    this.PunishmentSock.on("gotBanned", (data) => {
-      console.log(data);
+    this.sock.on("GoPlay", (data) => {
+      console.log("PLAY: ", data);
+      this.updateMembership.next(data);
+      this.updateMembership.next({});
     })
+
+  }
+  hasAccessToChannel(id: string) {
+    return this.httpClient.get(URL + '/chat/accessToChat/' + id, { withCredentials: true }); // here we are
   }
 
+  hasAccessToDM(id: string) {
+    return this.httpClient.get(URL + '/chat/accessToDM/' + id, { withCredentials: true });
+  }
+
+  getCloseOrNot(): Observable<any> {
+    return this.closeIt.asObservable();
+  }
   joinSocket(channel: string) {
     this.sock.emit('join-room', channel)
   }
@@ -115,7 +128,7 @@ export class ChatService {
   }
 
   Acceptinvite(channelID: string, UserId: number) {
-
+    this.sock.emit("updateMembersTime", { chatID: channelID, UserId: UserId });
     return this.httpClient.post(`http://10.13.4.8:3000/chat/AcceptInvite`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
   }
 
@@ -133,24 +146,31 @@ export class ChatService {
   // done
   // kick
   KickThisOne(channelID: string, UserId: number) {
+    this.sock.emit("updateMembersTime", { chatID: channelID, UserId: UserId });
+    this.sock.emit('ping-leave', { chatID: channelID, UserId: UserId })
     return this.httpClient.post(`http://10.13.4.8:3000/chat/kickUser`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
   }
   // done
   // remove OPER
   RemoveRole(channelID: string, UserId: number) {
+    this.sock.emit("updateMembersTime", { chatID: channelID, UserId: UserId });
     return this.httpClient.post(`http://10.13.4.8:3000/chat/RemoveRole`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
   }
 
   CreateRole(channelID: string, UserId: number) {
+    this.sock.emit("updateMembersTime", { chatID: channelID, UserId: UserId });
     return this.httpClient.post(`http://10.13.4.8:3000/chat/CreateRole`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
   }
   // done
   // Ban User:
   banUser(channelID: string, UserId: number) {
+    this.sock.emit("updateMembersTime", { chatID: channelID, UserId: UserId });
+    this.sock.emit('ping-leave', { chatID: channelID, UserId: UserId })
     return this.httpClient.post(`http://10.13.4.8:3000/chat/banUser`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
   }
 
   banUserRemoval(channelID: string, UserId: number) {
+    this.sock.emit("updateMembersTime", { chatID: channelID, UserId: UserId });
     return this.httpClient.post(`http://10.13.4.8:3000/chat/banUserRemoval`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
   }
   // Done
@@ -158,7 +178,13 @@ export class ChatService {
     return this.httpClient.get<any>(URL + `/chat/DM/${id}`, { withCredentials: true, });
   }
 
+  LetsSilenceHim(user: number, Chausertid: number) {
+    this.sock.emit("updateMembersTime", { chatID: Chausertid, UserId: user });
+    return this.httpClient.post(URL + '/chat/Mute', { UserId: user, chatID: Chausertid }, { withCredentials: true });
+  }
+
   leaveChatroom(id: string) {
+    this.sock.emit("updateMembersTime", { chatID: id });
     return this.httpClient.delete(URL + `/chat/leave/${id}`, { withCredentials: true, })
   }
   getThisChatMsgs(id: number) {
@@ -179,6 +205,7 @@ export class ChatService {
   }
 
   JoiningChatRoom(chat: createChatroom) {
+    this.sock.emit("updateMembersTime", { chatID: chat });
     return this.httpClient.post(`http://10.13.4.8:3000/chat/JoinRoom`, chat, { withCredentials: true, });
   }
   sendMessage(message: sendMessageDTO, type: boolean) {
@@ -198,6 +225,7 @@ export class ChatService {
     return this.httpClient.get("http://10.13.4.8:3000/user", { withCredentials: true, })
   }
   addUserToChatRoom(id: string, user: string, password: string) {
+    this.sock.emit("updateMembersTime", { chatID: id, UserId: user });
     const dto: createMemberDTO = {
       member: user,
       password: password,
@@ -206,6 +234,7 @@ export class ChatService {
     return this.httpClient.put<string>(`http://10.13.4.8:3000/chat/${id}/add/member`, dto, { withCredentials: true, });
   }
   addAdminToChatRoom(id: string, admin: string, user: string) {
+    this.sock.emit("updateMembersTime", { chatID: id, UserId: user });
     const dto: createAdminDTO = {
       roleGiver: admin,
       roleReceiver: user,
@@ -226,16 +255,6 @@ export class ChatService {
 
   updateChatroom(id: number, dto: UpdateChatroomDTO) {
     return this.httpClient.put<UpdateChatroomDTO>(URL + `/chat/update/${id}/admin`, dto, { withCredentials: true, });
-  }
-  // PunishUser(admin: string, dto: CreatePunishmentDto) {
-  //   console.log("dto: ", dto);
-  //   return this.httpClient.post<CreatePunishmentDto>(
-  //     URL + `/chat/${dto.chatID}/admin/${admin}/punishment`, dto
-  //   )
-  // }
-  PunishUser(admin: string, dto: CreatePunishmentDto) {
-    console.log("dto: ", dto);
-    this.PunishmentSock.emit("chatBan", dto, admin);
   }
   checkPunishment(id: number, user: string, type: string) {
     return this.httpClient.get(URL + `/punishment/chat/${id}/user/${user}/${type}`, { withCredentials: true, })

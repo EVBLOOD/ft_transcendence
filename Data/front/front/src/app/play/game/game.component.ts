@@ -83,53 +83,56 @@ export class GameComponent implements OnDestroy, OnInit {
   hideInv: boolean = false;
   color = [Color.White, Color.Green, Color.Blue]
   themeIndx: number = 1;
+  replay: any;
+  replay_: any;
+  replay__: any;
   constructor(private gameService: GameService, public profile: ProfileService, private switchRoute: Router,
     private auth: AuthService, public friends: FriendshipService, private status: StatusService, public statistics: AboutGamesService) {
 
-    this.auth$ = this.auth.getCurrentUser()
-    // gameService.
+    this.auth$ = this.auth.getCurrentUser();
     this.players = this.gameService.Players;
     this.Fplayer$ = this.profile.getUserData(this.players.Fplayer)
     this.Splayer$ = this.profile.getUserData(this.players.Splayer)
-    console.log(this.players)
-    this.WinnerNumber1$ = this.statistics.playerWinns(this.players.Splayer); //  I'm the winner
-    this.LostNumber1$ = this.statistics.playerLost(this.players.Fplayer); // I'm the loser
+    this.WinnerNumber1$ = this.statistics.playerWinns(this.players.Splayer);
+    this.LostNumber1$ = this.statistics.playerLost(this.players.Fplayer);
     this.WinnerNumber2$ = this.statistics.playerWinns(this.players.Fplayer);
     this.LostNumber2$ = this.statistics.playerLost(this.players.Splayer);
-    this.profile.getUserData(this.players.Fplayer).subscribe((data: any) => { // to free
+    this.replay = this.profile.getUserData(this.players.Fplayer).subscribe((data: any) => {
       if (data) {
         this.test_$ = this.friends.isFriend(data.id.toString());
         this.id = data.id;
       }
     })
-    this.profile.getUserData(this.players.Splayer).subscribe((data: any) => {// to free
+    this.replay_ = this.profile.getUserData(this.players.Splayer).subscribe((data: any) => {// to free
       if (data) {
         this.test$ = this.friends.isFriend(data.id.toString());
         this.id_ = data.id;
       }
     })
-    this.profile.getMyObservData().subscribe((data: any) => {// to free
+    this.replay__ = this.profile.getMyObservData().subscribe((data: any) => {// to free
       this.themeIndx = data.theme;
     })
   }
 
   // profiles
   ngOnDestroy(): void {
+    if (this.replay)
+      this.replay.unsubscribe()
+    if (this.replay_)
+      this.replay_.unsubscribe()
+    if (this.replay__)
+      this.replay__.unsubscribe()
     this.gameService.gameEnd()
     this.game?.scene?.remove('GameScene');
-    if (this.gameScene) {
+    if (this.gameScene)
       this.gameScene?.destroy();
-    }
     this.gameStateSub?.unsubscribe();
     this.game?.destroy(true);
     this.status.online();
-    // this.game.destroy(true);
   }
   ngOnInit(): void {
     this.status.inPlay();
-    // setTimeout(() => {
     this.game = new Phaser.Game(CONFIG);
-    // })
     this.gameStateSub = this.gameService.getState()
       .subscribe((payload: string) => {
         const state: { gameState: GameStateType, playerNumber: Player, isWin: boolean, color: Color } = JSON.parse(payload);
@@ -144,7 +147,6 @@ export class GameComponent implements OnDestroy, OnInit {
           }
         } else if (state.gameState == GameStateType.Finished) {
           if (this.gameScene) {
-            console.log("game Finished")
             this.gameScene?.win?.setVisible(true);
             this.gameScene?.winText?.setText(state.isWin ? "WON" : "LOST");
             this.gameScene?.winText?.setStyle({ fontFamily: 'Montserrat', fontWeight: 800 })
@@ -153,48 +155,9 @@ export class GameComponent implements OnDestroy, OnInit {
               this.switchRoute.navigateByUrl('/play')
             }, 3000)
           } else {
-            console.log("ABORT")
           }
         }
-        else {
-          console.log("HERE WE GO!")
-
-        }
-        // switch (state.gameState) {
-        //   case GameStateType.Playing: {
-        //     console.log("HERE WE GOO")
-        //     if (!this.gameScene) {
-        //       // setTimeout(() => {
-        //       this.gameScene = new GameScene(this.gameService, state.playerNumber, state.color ?? Color.White);
-        //       this.game.scene.add('GameScene', this.gameScene);
-        //       this.gameScene.scene.start();
-        //       this.gameService.playerIsReady();
-        //       // }, 0);
-        //       // setTimeout(() => {
-        //       // }, 0);
-        //     }
-        //     break;
-        //   }
-        //   case GameStateType.Finished: {
-        //     if (this.gameScene) {
-        //       console.log("game Finished")
-        //       this.gameScene.win.setVisible(true);
-        //       this.gameScene.winText.setText(state.isWin ? "WON" : "LOST");
-        //       this.gameScene.physics.pause();
-        //     } else {
-        //       console.log("ABORT")
-        //     }
-        //     break;
-        //   }
-        //   default: {
-        //     break;
-        //   }
-        // }
       })
-    // }
-    // })
-    // setTimeout(() => {
-    // });
 
   }
   addfriend() {
@@ -206,15 +169,5 @@ export class GameComponent implements OnDestroy, OnInit {
     this.friends.addFriend(this.id_);
     this.hideInv = true;
   }
-  // preloading() {
-  // console.log("hello hello")
-  // }
-  //   this.gameService.getState()
-  //   .subscribe((payload: string) => {
-  //   const state: { gameState: GameStateType, playerNumber: Player, isWin: boolean, color: Color } = JSON.parse(payload);
-  //   this.gameScene = new GameScene(this.gameService, state.playerNumber, state.color ?? Color.White);
-  //   this.game.scene.add('GameScene', this.gameScene);});
-  // }
-  // ngOnInit() {
-  // }
+
 }

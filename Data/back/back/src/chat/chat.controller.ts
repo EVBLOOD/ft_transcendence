@@ -83,6 +83,27 @@ export class ChatController {
     return this.chatRoomSevice.findDMChatroom(req.new_user.sub, user2);
   }
 
+  @Get('accessToDM/:secondUser')
+  async accessToDM(
+    @Param('secondUser', ParseIntPipe) user2: number,
+  ) {
+    return await this.chatRoomSevice.accessToDM(user2);
+  }
+
+  @Post('Mute')
+  mute(@Req() req: any, @Body() muteHim: CreateBanDTO) {
+    return this.chatRoomSevice.MuteHim(req.new_user.sub, muteHim.UserId, muteHim.chatID);
+  }
+
+  @Get('accessToChat/:id')
+  async accessToChat(
+    @Req() req: any,
+    @Param('id', ParseIntPipe) chatID: number,
+  ) {
+    return await this.chatRoomSevice.accessToChat(req.new_user.sub, chatID);
+  }
+
+
 
   @Get('MyCount/:secondUser')
   getMyCount(@Req() req: any,
@@ -100,6 +121,7 @@ export class ChatController {
   GetMyRole(@Req() req: any, @Param('id', ParseIntPipe) id: number) {
     return this.chatRoomSevice.MyOwnRole(req.new_user.sub, id);
   }
+
   @Get(':chatID/messages')
   async getMessagesByChatID(
     @Req() req: any,
@@ -117,6 +139,7 @@ export class ChatController {
   async joinRoom(@Req() req, @Body() chatroom: createChatroomDTO) {
     return this.chatRoomSevice.JoinChatroom(req.new_user.sub, chatroom);
   }
+
   @Put('update/:chatID/admin')
   async updateChatroom_(
     @Param('chatID') chatID: number,
@@ -130,6 +153,7 @@ export class ChatController {
       updateChatDTO,
     );
   }
+
   @Delete('leave/:chatroomID')
   async leaveChat(
     @Param('chatroomID', ParseIntPipe) chatroomID: number,
