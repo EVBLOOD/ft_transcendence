@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { ProfileService } from './profile.service';
-import { Observable, firstValueFrom, tap } from 'rxjs';
+import { Observable, } from 'rxjs';
 import { AuthService } from '../login/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StatusService } from '../status.service';
@@ -36,10 +36,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
   blockListSkip: number = 0;
   History$!: Observable<any>;
 
-  // to unsubscribe subscribed Observables
-  replay !: any;
-  replay_ !: any;
-  replay__ !: any;
+  // subsc
+  private removesubsc: any;
+  private SubArray: Array<any> = new Array<any>();
 
   constructor(public profileService: ProfileService, private authService: AuthService,
     private route: ActivatedRoute, private state: StatusService,
@@ -51,35 +50,37 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.sameDataEveryDayHelpMe$ = this.gameStats.Ilead();
       this.History$ = this.gameStats.getPlayersHistory();
       this.profileSubject$ = this.profileService.getMyData();
-      this.replay_ = this.profileSubject$.subscribe({
+      this.removesubsc = this.profileSubject$.subscribe({
         next: (data: Observable<any>) => {
           this.profile$ = data;
         }
       });
+      this.SubArray.push(this.removesubsc)
       this.friendRequest$ = this.friendship.requestsList(this.friendRequestSkip, 10)
       this.blockedList$ = this.friendship.blocklist(this.blockListSkip, 10)
       this.friendList$ = this.friendship.friendList(this.friendListSkip, 10)
       // socket :
-      this.replay__ = this.friendship.friendRealTimeStatus().subscribe((data: any) => {
+      this.removesubsc = this.friendship.friendRealTimeStatus().subscribe((data: any) => {
         if (data) {
           this.friendList$ = this.friendship.friendList(this.friendListSkip, 10);
           this.friendRequest$ = this.friendship.requestsList(this.friendRequestSkip, 10);
           this.blockedList$ = this.friendship.blocklist(this.blockListSkip, 10);
         }
       });
-
+      this.SubArray.push(this.removesubsc)
     }
     else {
       this.profile$ = this.profileService.getUserData(this.username);
       this.History$ = this.gameStats.APlayersHistory(this.username);
       this.sameDataEveryDayHelpMe$ = this.gameStats.leader(this.username);
       // socket
-      this.replay_ = this.friendship.friendRealTimeStatus().subscribe((state) => {
+      this.removesubsc = this.friendship.friendRealTimeStatus().subscribe((state) => {
         if (state?.senderId && state.senderId == this.username)
           this.type = state.type;
       })
+      this.SubArray.push(this.removesubsc)
       // socket
-      this.replay__ = this.friendship.friendStatus(this.username).subscribe((data: any) => {
+      this.removesubsc = this.friendship.friendStatus(this.username).subscribe((data: any) => {
         if (data) {
           if (!data.status)
             this.type = 0; // not friends
@@ -97,31 +98,32 @@ export class ProfileComponent implements OnInit, OnDestroy {
         else
           this.type = 0;
       });
+      this.SubArray.push(this.removesubsc)
     }
     this.auth$ = this.authService.getCurrentUser();
   }
+
   ngOnDestroy(): void {
-    if (this.replay)
-      this.replay.unsubscribe();
-    if (this.replay_)
-      this.replay_.unsubscribe();
-    if (this.replay__)
-      this.replay__.unsubscribe();
+    this.SubArray.forEach((element) => { element?.unsubscribe() })
   }
+
   sameDataEveryDay = [
     { path: "/assets/RankIcon.svg", name: "Rank" },
     { path: "/assets/MatchsIcon.svg", name: "Played" },
     { path: "/assets/WinsIcon.svg", name: "Wins" },
     { path: "/assets/ScoresIcon.svg", name: "Score" }]
+
   statusLoading(id: any) {
-    this.replay = this.state.current_status.subscribe((curr) => {
+    this.removesubsc = this.state.current_status.subscribe((curr) => {
       const newone = curr.find((obj: any) => { if (obj.id == id) return obj; });
       if (newone)
         this.status = newone.status;
       else
         this.status = 'Offline'
     });
+    this.SubArray.push(this.removesubsc)
   }
+
   hideIt = () => { this.displayRespondingWay = !this.displayRespondingWay }
 
 
@@ -133,22 +135,28 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.displayRespondingWay = false;
     this.friendship.cancelFriendRequest(Number.parseInt(this.username));
   }
+
   async respondAcceptFriend() {
     this.displayRespondingWay = false;
     this.friendship.acceptRequest(Number.parseInt(this.username));
   }
+
   async unFriend() {
     this.friendship.unfriendUser(Number.parseInt(this.username));
   }
+
   async blockUser() {
     this.friendship.blockUser(Number.parseInt(this.username));
   }
+
   async unBlock() {
     this.friendship.unblockUser(Number.parseInt(this.username));
   }
+
   changeMode() {
     this.YourBodyChoosen = !this.YourBodyChoosen;
   }
+
   isObject(value: any): boolean {
     return Array.isArray(value)
   }
@@ -161,6 +169,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     else
       this.blockedList$ = this.friendship.blocklist(this.blockListSkip, 10);
   }
+
   up(skip: number, type: number) {
     skip += 10;
     this.updating(type);
@@ -172,6 +181,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.updating(type);
     }
   }
+
   GoChat() {
     this.switchRoute.navigateByUrl('chat/dm/' + this.username);
   }

@@ -23,22 +23,27 @@ export class SettingsComponent implements OnInit, OnDestroy {
   twoFactorInit: boolean = false;
 
   public profile$ !: Observable<any>;
-  private update: any = null;
   private submet_this: any = { avatar: '' };
 
-
   public data = { title: "Settings", subtitle: "profile", action: "Update" }
+
+  // subsc
+  private removesubsc: any;
+  private SubArray: Array<any> = new Array<any>();
+
   constructor(public serviceUser: ProfileService, private router: Router) { }
-  private replay_: any;
 
   ngOnInit() {
+
     this.profileSubject$ = this.serviceUser.getMyData();
-    this.replay_ = this.profileSubject$.subscribe({
+    this.removesubsc = this.profileSubject$.subscribe({
       next: (data: Observable<any>) => {
         this.profile$ = data;
       }
     });
-    this.replay = this.profile$.subscribe({
+
+    this.SubArray.push(this.removesubsc)
+    this.removesubsc = this.profile$.subscribe({
       next: (data) => {
         if (data.statusCode)
           this.router.navigateByUrl('');
@@ -51,12 +56,14 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.twoFactorInit = data.TwoFAenabled;
       },
     });
+    this.SubArray.push(this.removesubsc)
+
   }
+
   ngOnDestroy(): void {
-    if (this.replay)
-      this.replay.unsubscribe();
-    if (this.replay_)
-      this.replay_.unsubscribe();
+    this.SubArray.forEach(element => {
+      element?.unsubscribe()
+    });
   }
 
   canceltwofactor() {
@@ -75,6 +82,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   choosePlay(index: number) {
     this.PlayTheme = index;
   }
+
   handleResponse(data: any) {
     if (data.statusCode)
       this.Myerror = true;
@@ -82,11 +90,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
       this.serviceUser.update();
       this.router.navigateByUrl('');
     }
-    this.update.unsubscribe();
   }
+
   funct(file: any) {
     this.file = file.target.files[0];
   }
+
   handleResponseone(data: any) {
     if (data.statusCode && data.statusCode != 202)
       this.MyerrorAvatar = true;
@@ -95,16 +104,20 @@ export class SettingsComponent implements OnInit, OnDestroy {
       this.serviceUser.update();
       this.router.navigateByUrl('');
     }
-    this.update.unsubscribe();
   }
 
   async validateInput() {
+
     if (this.userName.errors || this.fullName.errors)
       return;
-    if (this.file)
-      this.update = this.serviceUser.setUserAvatar(this.file).subscribe({ next: (data) => { this.handleResponseone(data) } })
-    if (!this.fullName.pristine || !this.userName.pristine || this.PlayTheme != this.PlayThemeInit || this.twoFactor != this.twoFactorInit)
-      this.update = this.serviceUser.updateUserInfos({
+
+    if (this.file) {
+      this.removesubsc = this.serviceUser.setUserAvatar(this.file).subscribe({ next: (data) => { this.handleResponseone(data) } })
+      this.SubArray.push(this.removesubsc)
+    }
+
+    if (!this.fullName.pristine || !this.userName.pristine || this.PlayTheme != this.PlayThemeInit || this.twoFactor != this.twoFactorInit) {
+      this.removesubsc = this.serviceUser.updateUserInfos({
         username: this.userName.value,
         name: this.fullName.value,
         avatar: this.submet_this.avatar,
@@ -113,6 +126,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
       }).subscribe(
         { next: (data) => { this.handleResponse(data) }, }
       );
+      this.SubArray.push(this.removesubsc)
+    }
   }
 
   close() {

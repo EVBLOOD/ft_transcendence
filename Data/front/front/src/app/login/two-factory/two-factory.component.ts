@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -9,51 +9,46 @@ import { FormControl, Validators } from '@angular/forms';
   templateUrl: './two-factory.component.html',
   styleUrls: ['./two-factory.component.scss']
 })
-export class TwoFactoryComponent {
-  
-  constructor(private authSer : AuthService, private router: Router) {}
-  private replay : any;
+export class TwoFactoryComponent implements OnDestroy {
+
+  constructor(private authSer: AuthService, private router: Router) { }
   private errorState = 'none';
-  token  = new FormControl('', [Validators.required, Validators.pattern(/^\d+$/), Validators.maxLength(6),  Validators.minLength(6)]);
-  letsgo()
-  {
-    try
-    {
+  token = new FormControl('', [Validators.required, Validators.pattern(/^\d+$/), Validators.maxLength(6), Validators.minLength(6)]);
+  // subsc
+  private removesubsc: any;
+  private SubArray: Array<any> = new Array<any>();
+
+  letsgo() {
+    try {
       if (!this.token.value || this.token.errors || this.token.pristine)
         return;
-      this.replay = this.authSer.gowild(this.token.value).subscribe(
-        {next: (data) => {this.handleResponseLetsgo(data)},});
+      this.removesubsc = this.authSer.gowild(this.token.value).subscribe(
+        { next: (data) => { this.handleResponseLetsgo(data) }, });
+      this.SubArray.push(this.removesubsc);
     }
-    catch (err)
-    {
+    catch (err) {
       console.log("tpo is not valid");
     }
   }
 
+  ngOnDestroy(): void {
+    this.SubArray.forEach((element) => { element?.unsubscribe() })
+  }
 
-  getError()
-  {
+  getError() {
     return this.errorState;
   }
-  handleResponseLetsgo(data: any)
-  {
+
+  handleResponseLetsgo(data: any) {
     if (data.statusCode)
       this.errorState = 'block';
     else
-    {
-      this.replay.unsubscribe();
       this.router.navigateByUrl('');
-    }
-    this.replay.unsubscribe();
   }
-  justCancel()
-  {
-    this.replay = this.authSer.logout().subscribe({next: (data) => {this.router.navigateByUrl('login');}, complete: () => {this.replay.unsubscribe()}});
+
+  justCancel() {
+    this.removesubsc = this.authSer.logout().subscribe({ next: (data) => { this.router.navigateByUrl('login'); }, complete: () => { } });
+    this.SubArray.push(this.removesubsc)
   }
 }
 
-/*
-to Improve this:
-- clear input in error case
--  change the input design
-*/

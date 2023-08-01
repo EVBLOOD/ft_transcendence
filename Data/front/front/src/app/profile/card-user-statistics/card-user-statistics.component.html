@@ -2,7 +2,6 @@
     <img [src]=data.path alt="">
     <div class="cardUserStatisticsInfos">
         <div class="cardUserStatisticsTitle">{{ data.name }}</div>
-        <!-- rank: i, matchPlayed: info.total, win: info.win, score: info.score -->
         <div *ngIf="data.name == 'Rank'" class="cardUserStatisticsValue">{{ helps?.rank }}</div>
         <div *ngIf="data.name == 'Played'" class="cardUserStatisticsValue">{{ helps?.matchPlayed }}
         </div>

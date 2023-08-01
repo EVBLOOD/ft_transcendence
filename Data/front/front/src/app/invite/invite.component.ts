@@ -16,9 +16,14 @@ export class InviteComponent implements OnInit {
   profiles$ !: Observable<any>;
   invited = false;
   We_are_inviting_you: Array<number> = [];
+  channelInfos$ !: Observable<any>;
 
   constructor(private readonly profile: ProfileService, private readonly friendship: FriendshipService,
-    private readonly routeSwitcher: Router, private readonly activeOne: ActivatedRoute, private readonly invites: ChatService) { }
+    private readonly routeSwitcher: Router, private readonly activeOne: ActivatedRoute, private readonly invites: ChatService) {
+    if (this.activeOne.snapshot.params['id'] && !this.activeOne.snapshot.params['id']?.match(/^[0-9]*$/))
+      this.routeSwitcher.navigateByUrl('/chat')
+    this.channelInfos$ = this.invites.getChatroomByID(this.activeOne.snapshot.params['id']);
+  }
   onClickInvite(id: number) {
     this.invited = !this.invited;
   }

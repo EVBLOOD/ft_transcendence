@@ -1,6 +1,6 @@
-.moreFriendships {
-    height: 15px;
-}
+// .moreFriendships {
+//     height: 15px;
+// }
 
 .friendRequestsCard {
     color: #184E77;
@@ -37,8 +37,7 @@
     margin-top: 2px;
 }
 
-.Displaylist
-{
+.Displaylist {
     background: whitesmoke;
     list-style: none;
     width: 107px;
@@ -57,20 +56,17 @@
     top: 30%;
 }
 
-.Displaylist li
-{
+.Displaylist li {
     display: flex;
     align-items: center;
     padding-left: 10px;
     height: 18px;
 }
 
-.moreFriendships:hover
-{
+.moreFriendships:hover {
     cursor: pointer;
 }
 
-.Displaylist li:hover
-{
+.Displaylist li:hover {
     cursor: pointer;
 }

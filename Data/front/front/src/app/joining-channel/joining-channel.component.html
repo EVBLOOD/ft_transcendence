@@ -17,6 +17,7 @@
                     placeholder="Password" />
                 <a (click)="JoinIt()" class="buttonJoin">Join</a>
             </div>
+            <div *ngIf="error" style="color: red; ">Error while joining</div>
         </div>
         <div class="inviteChannels">
             <h2 class="popTitle">Join to channels who invite you</h2>

@@ -58,6 +58,10 @@ export class ChatController {
     return this.chatRoomSevice.GetChatRoomByID_(id);
   }
 
+  @Get('findbyId/:id')
+  async findChannelbyID(@Param('id', ParseIntPipe) idChat, @Req() req: any) {
+    return await this.chatRoomSevice.findChannelbyId(req.new_user.sub, idChat);
+  }
   @Get('user')
   async getChatRoomsOfUser(@Req() req: any) {
     return this.chatRoomSevice.getChatRoomOfUsers(req.new_user.sub);
@@ -85,9 +89,9 @@ export class ChatController {
 
   @Get('accessToDM/:secondUser')
   async accessToDM(
-    @Param('secondUser', ParseIntPipe) user2: number,
+    @Param('secondUser', ParseIntPipe) user2: number, @Req() req: any
   ) {
-    return await this.chatRoomSevice.accessToDM(user2);
+    return await this.chatRoomSevice.accessToDM(user2, req.new_user.sub);
   }
 
   @Post('Mute')
@@ -132,12 +136,12 @@ export class ChatController {
 
   @Post('create')
   async createChatRoom(@Req() req: any, @Body() chatroom: createChatroomDTO) {
-    return this.chatRoomSevice.createChatroom(req.new_user.sub, chatroom);
+    return await this.chatRoomSevice.createChatroom(req.new_user.sub, chatroom);
   }
 
   @Post('JoinRoom')
   async joinRoom(@Req() req, @Body() chatroom: createChatroomDTO) {
-    return this.chatRoomSevice.JoinChatroom(req.new_user.sub, chatroom);
+    return await this.chatRoomSevice.JoinChatroom(req.new_user.sub, chatroom);
   }
 
   @Put('update/:chatID/admin')

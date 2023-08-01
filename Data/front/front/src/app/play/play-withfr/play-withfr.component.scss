@@ -1,11 +1,11 @@
-.onlinePlayers {
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    margin-top: 15px;
-    margin-bottom: 15px;
-    justify-content: space-between;
-    gap: 15px;
-}
+// .onlinePlayers {
+//     display: grid;
+//     grid-template-columns: repeat(6, minmax(0, 1fr));
+//     margin-top: 15px;
+//     margin-bottom: 15px;
+//     justify-content: space-between;
+//     gap: 15px;
+// }
 
 .onlinePlayer {
     transition: transform .2s;

@@ -21,38 +21,38 @@ export class ChatContentComponent implements OnInit, OnChanges, OnDestroy {
   messages: Array<any> = [];
 
   // subsc
-  private removeSub: any;
-  private removeSub_: any;
-  private removeSub__: any;
+  private removesubsc: any;
+  private SubArray: Array<any> = new Array<any>();
 
-  constructor(private readonly switchRoute: Router, private readonly route: ActivatedRoute, private readonly chatService: ChatService, private readonly authService: AuthService) {
+  constructor(private readonly switchRoute: Router, private readonly route: ActivatedRoute,
+    private readonly chatService: ChatService, private readonly authService: AuthService) {
   }
 
   ngOnInit(): void {
     this.messages = []
-    this.removeSub = this.route.params.subscribe(params => {
+    this.removesubsc = this.route.params.subscribe(params => {
       this.messages = []
       if (params['id']) {
         this.setupComponent(params['id']);
-        if (this.oldStatus.id > 0)
-          this.chatService.leaveChatroom(this.oldStatus.id.toString())
-        this.chatService.joinSocket(params['id']); // leave before joinig!
+        if (this.oldStatus.id > 0 && this.oldStatus.Channel)
+          this.chatService.leaveSocket(this.oldStatus.id.toString())
+        this.chatService.joinSocket(params['id']);
       }
       else if (params['username']) {
         this.setupComponent(params['username'])
-        if (this.oldStatus.id > 0)
-          this.chatService.leaveChatroom(this.oldStatus.id.toString())
+        if (this.oldStatus.id > 0 && this.oldStatus.Channel)
+          this.chatService.leaveSocket(this.oldStatus.id.toString())
         this.isRoom = false;
       }
-      this.chatService.updateMembership.subscribe((data) => {
-        if (this.id == data.chatID) {
-          this.setupComponent(0);
-          this.setupComponent(params['id']);
-        }
+      this.removesubsc = this.chatService.updateMembership.subscribe((data) => {
+        if (this.id == data.chatID && this.isRoom)
+          this.chatInfos$ = this.chatService.getThisChat(this.id);
       })
+      this.SubArray.push(this.removesubsc)
     })
-    this.removeSub_ = this.chatService.getUpdate().subscribe((data: any) => {
-      console.log(data)
+    this.SubArray.push(this.removesubsc)
+
+    this.removesubsc = this.chatService.getUpdate().subscribe((data: any) => {
       if (this.id)
         if (data.type == 'direct' && data.sender == this.id) {
           data.mgs.sender = data?.profile;
@@ -63,11 +63,13 @@ export class ChatContentComponent implements OnInit, OnChanges, OnDestroy {
           this.messages.push(data.mgs)
         }
     })
+    this.SubArray.push(this.removesubsc)
 
-    this.removeSub__ = this.chatService.getCloseOrNot().subscribe((data: any) => {
+    this.removesubsc = this.chatService.getCloseOrNot().subscribe((data: any) => {
       if (data.chatID && data.chatID == this.id && this.isRoom)
         this.switchRoute.navigateByUrl('');
     })
+    this.SubArray.push(this.removesubsc)
   }
   setupComponent(someParam: any) {
     if (someParam && !someParam.match(/^[0-9]*$/))
@@ -84,14 +86,9 @@ export class ChatContentComponent implements OnInit, OnChanges, OnDestroy {
     this.messages = [];
   }
   ngOnDestroy(): void {
-    console.log("END")
-    this.messages = []
-    if (this.removeSub)
-      this.removeSub.unsubscribe()
-    if (this.removeSub_)
-      this.removeSub_.unsubscribe()
-    if (this.removeSub__)
-      this.removeSub__.unsubscribe()
+    this.SubArray.forEach((subsc) => {
+      subsc?.unsubscribe()
+    })
     this.messages = [];
   }
 

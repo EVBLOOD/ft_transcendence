@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProfileService } from '../../profile.service';
 import { Observable } from 'rxjs';
@@ -9,33 +9,44 @@ import { FormControl, Validators } from '@angular/forms';
   templateUrl: './activatetwo.component.html',
   styleUrls: ['./activatetwo.component.scss']
 })
-export class ActivatetwoComponent implements OnInit {
-  replay : any;
-  token  = new FormControl('', [Validators.required, Validators.pattern(/^\d+$/), Validators.maxLength(6),  Validators.minLength(6)]);
+export class ActivatetwoComponent implements OnInit, OnDestroy {
+  token = new FormControl('', [Validators.required, Validators.pattern(/^\d+$/), Validators.maxLength(6), Validators.minLength(6)]);
   isDisplay: boolean = false;
-  public data = {title: "2FA", subtitle: "2fa", action: "Confirm"}
+  public data = { title: "2FA", subtitle: "2fa", action: "Confirm" }
   qrcode$ !: Observable<any>;
-  constructor(public serviceUser : ProfileService, private router: Router) {
-  }
+
+  // subsc
+  private removesubsc: any;
+  private SubArray: Array<any> = new Array<any>();
+
+  constructor(public serviceUser: ProfileService, private router: Router) { }
+
   ngOnInit(): void {
     this.qrcode$ = this.serviceUser.getQrCode();
   }
-  close()
-  {
+
+  close() {
     this.router.navigateByUrl('settings');
   }
-  callit (data : any)
-  {
+
+  callit(data: any) {
     if (data.statusCode)
       this.isDisplay = true;
     else
       this.router.navigateByUrl('settings');
   }
-  validateInput()
-  {
+
+  validateInput() {
     if (this.token.errors || this.token.pristine)
       return;
-    this.replay = this.serviceUser.confirmQrCode(this.token.value).subscribe({next: (data) => { this.callit(data) },
-    complete: () => {this.replay.unsubscribe();}});
+    this.removesubsc = this.serviceUser.confirmQrCode(this.token.value).subscribe({
+      next: (data) => { this.callit(data) },
+      complete: () => { }
+    });
+    this.SubArray.push(this.removesubsc)
+  }
+
+  ngOnDestroy(): void {
+    this.SubArray.forEach((element) => element?.unsubscribe())
   }
 }

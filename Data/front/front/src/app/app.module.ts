@@ -9,7 +9,6 @@ import { TwoFactoryComponent } from './login/two-factory/two-factory.component';
 import { SettingsComponent } from './profile/settings/settings.component';
 import { CardUserStatisticsComponent } from './profile/card-user-statistics/card-user-statistics.component';
 import { UserHistoryRawComponent } from './profile/user-history-raw/user-history-raw.component';
-import { PgbuttonComponent } from './profile/pgbutton/pgbutton.component';
 import { PopupComponent } from './profile/popup/popup.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LeaderbordComponent } from './leaderbord/leaderbord.component';
@@ -51,7 +50,6 @@ import { InviteLinesComponent } from './invite/invite-lines/invite-lines.compone
     SettingsComponent,
     CardUserStatisticsComponent,
     UserHistoryRawComponent,
-    PgbuttonComponent,
     PopupComponent,
     LeaderbordComponent,
     PlayComponent,

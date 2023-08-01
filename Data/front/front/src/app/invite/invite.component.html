@@ -2,7 +2,7 @@
     <div (click)="close()" class="CloseBtnPop">
         <button></button>
     </div>
-    <h2 class="popTitle">Invite friends to #general</h2>
+    <h2 class="popTitle"> {{'Invite friends to #' + (channelInfos$|async)?.name}}</h2>
     <div *ngIf="profiles$|async as users">
         <div *ngIf="users.statusCode; else listall" class="popTitle"
             style="font-size: medium; display: flex; justify-content: center; width: 100%;">You

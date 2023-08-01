@@ -28,13 +28,11 @@ export class ChatComponent implements OnDestroy {
   replay: any;
   // subsc
   private removesubsc: any;
-  private removesubsc_: any;
-  private removesubsc__: any;
+  private SubArray: Array<any> = new Array<any>();
   ngOnDestroy() {
-    if (this.removesubsc)
-      this.removesubsc.unsubscribe()
-    if (this.removesubsc_)
-      this.removesubsc_.unsubscribe()
+    this.SubArray.forEach((sub) => {
+      sub?.unsubscribe();
+    })
   }
   newText = new FormControl('', [Validators.required,]);
 
@@ -47,10 +45,19 @@ export class ChatComponent implements OnDestroy {
         this.ChatDMs$ = this.chatService.getChatDM();
       }
     });
-    this.removesubsc_ = this.chatService.updateChannels.subscribe(() => {
+    this.SubArray.push(this.removesubsc)
+    this.removesubsc = this.chatService.updateChannels.subscribe(() => {
       if (!this.newText.value?.length)
         this.ChatRooms$ = this.chatService.getChatrooms();
     });
+    this.SubArray.push(this.removesubsc)
+    this.removesubsc = this.chatService.updateSeen.asObservable().subscribe((data: any) => {
+      if (data.isRoom)
+        this.ChatRooms$ = this.chatService.getChatrooms();
+      else if (!data.isRoom && data.chatID)
+        this.ChatDMs$ = this.chatService.getChatDM();
+    })
+    this.SubArray.push(this.removesubsc)
   }
 
   getStarterPath(path: string) {
@@ -92,10 +99,11 @@ export class ChatComponent implements OnDestroy {
   }
 
   createDM() {
-    this.removesubsc__ = this.chatService.joinChatroom({
+    this.removesubsc = this.chatService.joinChatroom({
       type: 'DM', chatroomName: '',
       password: '', user: 'admin', otherUser: ''
-    }).subscribe({ next: () => { this.removesubsc__.unsubscribe() } });
+    }).subscribe({ next: () => { } });
+    this.SubArray.push(this.removesubsc)
   }
   finding = 0;
   FindextraUsers($event: KeyboardEvent) {

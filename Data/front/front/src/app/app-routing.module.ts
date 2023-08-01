@@ -7,7 +7,6 @@ import { authGuard } from './login/guards/auth.guard';
 import { twoFacGuard } from './login/guards/two-fac.guard';
 import { TwoFactoryComponent } from './login/two-factory/two-factory.component';
 import { PlayComponent } from './play/play.component';
-// import { ChatComponent } from './chat/chat/chat.component';
 import { LeaderbordComponent } from './leaderbord/leaderbord.component';
 import { SettingsComponent } from './profile/settings/settings.component';
 import { ActivatetwoComponent } from './profile/settings/activatetwo/activatetwo.component';

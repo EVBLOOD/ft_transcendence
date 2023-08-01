@@ -11,7 +11,8 @@ import { hostSocket } from 'src/app.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthenticatorService } from 'src/authenticator/authenticator.service';
 import { UserService } from 'src/user/user.service';
-import { CreateBanDTO } from './dto/createAdmin.dto';
+import { CreateBanDTO, SeenDTO } from './dto/createAdmin.dto';
+import { FriendshipService } from 'src/friendship/friendship.service';
 
 @WebSocketGateway({
   namespace: 'chat',
@@ -29,7 +30,9 @@ export class ChatGateway {
 
   constructor(
     @Inject(forwardRef(() => ChatService))
-    private readonly chatService: ChatService, private readonly serviceJWt: JwtService, private readonly serviceToken: AuthenticatorService, private readonly User: UserService
+    private readonly chatService: ChatService, private readonly serviceJWt: JwtService,
+    private readonly serviceToken: AuthenticatorService, private readonly User: UserService,
+    private readonly serviceFriendShip: FriendshipService
   ) { }
   async handleConnection(client: Socket, ...args: any[]) {
     const cookie = client.handshake.headers?.cookie
@@ -89,6 +92,8 @@ export class ChatGateway {
       client.disconnect();
       return false;
     }
+    if (await this.serviceFriendShip.WeBlockedEachOther(payload?.message?.charRoomId, xyz.sub))
+      return {};
     const message = await this.chatService.postToDM(payload?.message, xyz.sub);
     const sender = await this.User.findOne(xyz.sub);
     this.chatService.SeenForDM(xyz.sub, parseInt(payload?.message?.charRoomId), 1)
@@ -137,6 +142,38 @@ export class ChatGateway {
     this.chatService.seenForChannel(xyz.sub, message.chat_id, 0)
     if (message)
       this.server.in(message.chat_id.toString()).emit("ChannelMessages", { sender: xyz.sub, mgs: message, type: 'none', profile: sender });
+  }
+
+  @SubscribeMessage('Seen')
+  async Seen(client: Socket, payload: SeenDTO) {
+    const cookie = client.handshake.headers?.cookie
+      ?.split('; ')
+      ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
+      ?.split('=')[1];
+    if (
+      !cookie
+    ) {
+      client.disconnect();
+      return false;
+    }
+    const xyz: any = this.serviceJWt.decode(
+      cookie,
+    );
+    if (
+      !xyz ||
+      (await this.serviceToken.IsSame(
+        xyz.sub || '',
+        cookie,
+      )) == false
+    ) {
+      client.disconnect();
+      return false;
+    }
+    if (payload.isRoom)
+      await this.chatService.seenForChannel(xyz.sub, payload.chatID, 0);
+    else
+      await this.chatService.SeenForDM(xyz.sub, payload.chatID, 0)
+    this.server.to(xyz.sub).emit('updateSeen', payload);
   }
 
   @SubscribeMessage('join-room')
@@ -193,19 +230,6 @@ export class ChatGateway {
       client.leave(chatID.toString());
     return {}
   }
-
-
-  // messages updating showing !
-  // @SubscribeMessage('leave-room')
-
-
-  // members update showing !
-
-
-  // users update kicking and banning
-
-
-  // 
 
   // async handleDisconnect(client: Socket) {
   //   const cookie = client.handshake.headers?.cookie

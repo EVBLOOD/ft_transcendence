@@ -109,6 +109,14 @@ export class FriendshipService {
       ],
     });
   }
+  async WeBlockedEachOther(id0: number, id1: number) {
+    return await this.FriendShipRepo.findOne({
+      where: [
+        { sender: id1, receiver: id0, blocked: true },
+        { receiver: id1, sender: id0, blocked: true },
+      ],
+    });
+  }
   async blocklist(id: number, skip: number, take: number) {
     if (!(await this.UserRepo.findOneBy({ id: id }))) return undefined;
     let blocklist = await this.FriendShipRepo.find({
@@ -246,9 +254,9 @@ export class FriendshipService {
       if (element.user1.id == user.id) friends.push(element.user2);
       else friends.push(element.user1);
     });
-    console.log("this is the end that shouldn't be ")
-    console.log(friends);
-    console.log(findList);
+    // console.log("this is the end that shouldn't be ")
+    // console.log(friends);
+    // console.log(findList);
     return friends;
   }
 

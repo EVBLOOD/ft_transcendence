@@ -24,7 +24,6 @@
 }
 
 .popTitle {
-    // margin-top: 15px;
     color: #99D98C;
     font-style: normal;
     font-weight: 700;
@@ -36,8 +35,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    // margin-top: 17px;
-    // margin-bottom: 17px;
 }
 
 .rowToggle .title {
@@ -59,7 +56,6 @@
 
 .circle {
     background-color: #D9E8D6;
-    // margin: 1px;
     width: 18px;
     height: 18px;
     border-radius: 50%;
@@ -82,7 +78,6 @@
     outline: none;
     padding-left: 17px;
     font-weight: 600;
-    // width: 100%;
 }
 
 .textbox::placeholder {
@@ -101,7 +96,6 @@
     cursor: pointer;
     background: #99D98C;
     border-radius: 8px;
-    // padding: 10px 21px;
     height: 100%;
     display: flex;
     align-items: center;
@@ -159,36 +153,34 @@
     font-size: 11px;
 }
 
-.buttonInvite {
-    cursor: pointer;
-    // padding: 10px 21px;
-    padding: 6px 14px;
+// .buttonInvite {
+//     cursor: pointer;
+//     padding: 6px 14px;
+//     background: #184E77;
+//     border-radius: 8px;
+//     box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.25);
+//     font-size: 13px;
+//     color: #7FABCC;
+//     font-weight: 600;
+//     transition: 0.3s;
+// }
 
-    background: #184E77;
-    border-radius: 8px;
-    box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.25);
-    font-size: 13px;
-    color: #7FABCC;
-    font-weight: 600;
-    transition: 0.3s;
-}
+// .buttonInvited {
+//     cursor: pointer;
+//     padding: 6px 14px;
+//     background: #7FABCC;
+//     border-radius: 8px;
+//     box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.25);
+//     font-size: 13px;
+//     color: #184E77;
+//     font-weight: 600;
+//     transition: 0.3s;
+// }
 
-.buttonInvited {
-    cursor: pointer;
-    padding: 6px 14px;
-    background: #7FABCC;
-    border-radius: 8px;
-    box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.25);
-    font-size: 13px;
-    color: #184E77;
-    font-weight: 600;
-    transition: 0.3s;
-}
-
-.buttonInvite:hover {
-    opacity: 70%;
-    transition: 0.3s;
-}
+// .buttonInvite:hover {
+//     opacity: 70%;
+//     transition: 0.3s;
+// }
 
 ::-webkit-scrollbar {
     width: 6px;
@@ -203,12 +195,12 @@
     background: #D9ED92;
 }
 
-.cancelInvite {
-    cursor: pointer;
-    height: 15px;
-    width: 15px;
-    object-fit: cover;
-    padding: 1px;
-    border-radius: 50%;
-    background-color: #184E77;
-}
+// .cancelInvite {
+//     cursor: pointer;
+//     height: 15px;
+//     width: 15px;
+//     object-fit: cover;
+//     padding: 1px;
+//     border-radius: 50%;
+//     background-color: #184E77;
+// }

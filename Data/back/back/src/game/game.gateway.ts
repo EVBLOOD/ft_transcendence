@@ -104,15 +104,16 @@ export class GameGateway
       client.disconnect();
       return false;
     }
+    console.log("Log out", xyz.sub)
+    // this.gameService.handleDisconnect(client);
     let userSockets = this.gameService.onlineUsers.get(xyz.sub);
-    //   userSockets = new Set<Socket>();
     if (userSockets)
       userSockets.delete(client);
-    if (userSockets.size)
+    if (userSockets?.size)
       this.gameService.onlineUsers.set(xyz.sub, userSockets)
     else
       this.gameService.onlineUsers.delete(xyz.sub)
-    // this.gameService.handleDisconnect(socket);
+
   }
 }
 

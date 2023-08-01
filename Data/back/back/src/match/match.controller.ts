@@ -30,6 +30,11 @@ export class MatchController {
     return await this.matchService.getLeadering();
   }
 
+  @Get('leadringFIRST')
+  async leadring_() {
+    return await this.matchService.getLeadering_();
+  }
+
 
   @Get('leader/:id')
   async leadr(@Param('id', ParseIntPipe) id: number) {

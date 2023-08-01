@@ -13,7 +13,7 @@ export class AuthService {
   constructor(private http: HttpClient) {
   }
   public getCurrentUser(): Observable<any> {
-    return this.http.get('http://10.13.4.8:3000/isItLogged', { withCredentials: true }).pipe(catchError((err, caught) => EMPTY))
+    return this.http.get('http://10.13.4.8:3000/isItLogged', { withCredentials: true })
   }
   public getTwoFactorSatat(): boolean {
     return this.twofactor;

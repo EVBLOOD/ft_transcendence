@@ -25,7 +25,7 @@ export class ChatService {
     const rooms = await this.MembersRepo.createQueryBuilder('Members')
       .leftJoinAndSelect("Members.chat", "chatID")
       .leftJoinAndSelect("Members.user", "Userid")
-      .where("Userid.id = :userId AND chatID.type != :type AND Members.state IN (1, 3)", { userId, type: 'direct' }).getMany();
+      .where("Userid.id = :userId AND chatID.type != :type AND Members.state IN (1, 3)", { userId, type: 'direct' }).orderBy('chatID.id').getMany();
     return rooms;
   }
 
@@ -194,7 +194,7 @@ export class ChatService {
       return {};
     if (room.type == 'protected') {
       if (await bcrypt.compare(chatroomDTO.password, room.password) == false)
-        return {}
+        return {};
       return await this.MembersRepo.save({ chatID: room.id, role: 'none', state: 1, Userid: userId, notSeen: 0 });
     }
     return await this.MembersRepo.save({ chatID: room.id, role: 'none', state: 1, Userid: userId, notSeen: 0 });
@@ -239,9 +239,9 @@ export class ChatService {
     return { rooms: await this.GetChatRoomByID(id), count: counter }
   }
 
-  async accessToDM(UserID: number) {
-    const rep = await this.Friendship.blockOneEach(UserID);
-    if (rep.length)
+  async accessToDM(UserID: number, currentID: number) {
+    const rep = await this.Friendship.WeBlockedEachOther(UserID, currentID);
+    if (rep)
       return false;
     const exists = await this.users.findOne(UserID);
     if (!exists)
@@ -575,7 +575,11 @@ export class ChatService {
       }).where("Userid != :UserID AND chatID = :chatID", { UserID: user2, chatID: roomDM.chat.id })
         .execute();
   }
-
+  async findChannelbyId(userID: number, ChannelID: number) {
+    if (!(await this.isMember(userID, ChannelID)).length)
+      return {};
+    return await this.ChatRepo.findOne({ where: { id: ChannelID } });
+  }
   async seenForChannel(userID: number, ChannelID: number, number: number) {
     if (((await this.isMember(userID, ChannelID))?.length)) {
       if (number) {

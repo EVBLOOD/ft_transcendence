@@ -55,6 +55,7 @@ export class ChatService {
   public updateChannels: BehaviorSubject<any> = new BehaviorSubject<any>({});
   public updatePrivates: BehaviorSubject<any> = new BehaviorSubject<any>({});
   public updateMembership: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  public updateSeen: BehaviorSubject<any> = new BehaviorSubject<any>({});
   constructor(private httpClient: HttpClient, private mySelf: AuthService
   ) {
     this.sock = io('http://10.13.4.8:3000/chat', {
@@ -62,6 +63,7 @@ export class ChatService {
     });
 
     this.sock.on('ChannelMessages', (data) => {
+      console.log("HELL=")
       this.update.next(data);
       this.update.next({});
       this.updateChannels.next(data);
@@ -72,6 +74,7 @@ export class ChatService {
     this.sock.on(
       'privateMessage', (data) => {
         this.update.next(data)
+        console.log("HELL==")
         this.update.next({});
         this.updatePrivates.next(data);
         this.updatePrivates.next({});
@@ -80,6 +83,7 @@ export class ChatService {
 
     this.sock.on("force-leave", (data: any) => {
       if (mySelf.getId() == data?.UserId) {
+        console.log("HELL===")
         this.closeIt.next(data);
         this.closeIt.next({});
         this.sock.emit('force-leave', data.chatID)
@@ -87,8 +91,14 @@ export class ChatService {
     });
     this.sock.on("GoPlay", (data) => {
       console.log("PLAY: ", data);
+      console.log("HELL=====")
       this.updateMembership.next(data);
       this.updateMembership.next({});
+    })
+    this.sock.on('updateSeen', (data) => {
+      console.log("HELL======ß")
+      this.updateSeen.next(data);
+      this.updateSeen.next({});
     })
 
   }
@@ -99,7 +109,9 @@ export class ChatService {
   hasAccessToDM(id: string) {
     return this.httpClient.get(URL + '/chat/accessToDM/' + id, { withCredentials: true });
   }
-
+  getChatroomByID(channelId: string) {
+    return this.httpClient.get(URL + '/chat/findbyId/' + channelId, { withCredentials: true });
+  }
   getCloseOrNot(): Observable<any> {
     return this.closeIt.asObservable();
   }
@@ -184,12 +196,10 @@ export class ChatService {
   }
 
   leaveChatroom(id: string) {
-    this.sock.emit("updateMembersTime", { chatID: id });
     return this.httpClient.delete(URL + `/chat/leave/${id}`, { withCredentials: true, })
   }
   getThisChatMsgs(id: number) {
     return this.httpClient.get(`http://10.13.4.8:3000/message/for` + id, { withCredentials: true, })
-
   }
 
   getChatrooms() {
@@ -205,7 +215,6 @@ export class ChatService {
   }
 
   JoiningChatRoom(chat: createChatroom) {
-    this.sock.emit("updateMembersTime", { chatID: chat });
     return this.httpClient.post(`http://10.13.4.8:3000/chat/JoinRoom`, chat, { withCredentials: true, });
   }
   sendMessage(message: sendMessageDTO, type: boolean) {
@@ -280,5 +289,11 @@ export class ChatService {
 
   getInvitedFriends(id: number, userid: number) {
     return this.httpClient.get(URL + `/chat/findingInvitedonce/${id}/${userid}`, { withCredentials: true });
+  }
+  GoForSeen(someId: number, isChat: boolean) {
+    this.sock.emit('Seen', { chatID: someId, isRoom: isChat });
+  }
+  updateMsh(id: number) {
+    this.sock.emit("updateMembersTime", { chatID: id });
   }
 }

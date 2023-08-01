@@ -1,14 +1,17 @@
 import { Injectable, inject } from '@angular/core';
 import { CanActivateFn, Route, Router } from '@angular/router';
 import { AuthService } from '../auth.service';
-import { firstValueFrom } from 'rxjs';
+import { catchError, firstValueFrom, of } from 'rxjs';
 
 export const authGuard: CanActivateFn = async (route, state) => {
     const authService: AuthService = inject(AuthService);
     const switchRoute: Router = inject(Router);
     let replay: any = {};
     try {
-        replay = await firstValueFrom(authService.getCurrentUser());
+        replay = await firstValueFrom(authService.getCurrentUser().pipe(catchError(err => {
+            console.log(err)
+            return of({ statusCode: 403 })
+        })))
     }
     catch (err) {
         replay = { statusCode: 403 }

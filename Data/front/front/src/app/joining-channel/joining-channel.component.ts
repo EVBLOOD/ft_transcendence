@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ChatService } from '../chat/chat.service';
 import { FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   templateUrl: './joining-channel.component.html',
   styleUrls: ['./joining-channel.component.scss']
 })
-export class JoiningChannelComponent {
+export class JoiningChannelComponent implements OnDestroy {
 
   ChannelName = new FormControl('', [Validators.required,]);
   ChannelPassword = new FormControl('', [Validators.required,]);
@@ -28,27 +28,31 @@ export class JoiningChannelComponent {
     this.switchRoute.navigateByUrl('/chat');
   }
 
-  // subscr
-  replay: any;
+  // subsc
+  private removesubsc: any;
+  private SubArray: Array<any> = new Array<any>();
+  error = 0;
   JoinIt() {
     if (!this.ChannelName.value || !this.ChannelName.value?.length)
       return;
     if (!this.secretToggle) {
-      this.replay = this.ChannelService.JoiningChatRoom({
+      this.removesubsc = this.ChannelService.JoiningChatRoom({
         type: 'public', chatroomName: this.ChannelName.value,
         password: '', user: '', otherUser: ''
-      }).subscribe({ next: () => { this.replay.unsubscribe() } });
-      console.log('this is a public channel')
+      }).subscribe((data: any) => { data?.chatID ? (this.switchRoute.navigateByUrl('/chat/' + data?.chatID), this.ChannelService.updateMsh(data?.chatID)) : this.error = 1 });
+      this.SubArray.push(this.removesubsc)
     }
     else {
       if (this.ChannelPassword.value?.length) {
-        this.replay = this.ChannelService.JoiningChatRoom({
+        this.removesubsc = this.ChannelService.JoiningChatRoom({
           type: 'protected', chatroomName: this.ChannelName.value,
           password: this.ChannelPassword.value, user: '', otherUser: ''
-        }).subscribe({ next: () => { this.replay.unsubscribe() } });
+        }).subscribe((data: any) => { data?.chatID ? (this.switchRoute.navigateByUrl('/chat/' + data?.chatID), this.ChannelService.updateMsh(data?.chatID)) : this.error = 1 });
       }
-      console.log('this is a secret channel')
+      this.SubArray.push(this.removesubsc)
     }
-    this.switchRoute.navigateByUrl('/chat');
+  }
+  ngOnDestroy(): void {
+    this.SubArray.forEach((element) => { element?.unsubscribe() })
   }
 }

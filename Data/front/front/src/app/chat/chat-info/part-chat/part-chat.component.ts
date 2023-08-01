@@ -22,6 +22,10 @@ export class PartChatComponent implements OnDestroy {
   @Input() idChat !: number;
   @Input() myrole !: string;
   id !: number;
+  status: string = 'Offline';
+  // subsc
+  private removesubsc: any;
+  private SubArray: Array<any> = new Array<any>();
   constructor(private readonly profile: ProfileService, private readonly state: StatusService,
     private readonly authSer: AuthService, private readonly ChatService: ChatService) {
     this.id = this.authSer.getId();
@@ -37,24 +41,22 @@ export class PartChatComponent implements OnDestroy {
       this.dropDownUser = false;
     }
   }
-  status: string = 'Offline';
-  // subscr
-  private replay: any;
-  private replay_: any;
 
   statusLoading(id: any) {
-    this.replay = this.state.current_status.subscribe((curr: any) => {
+    this.removesubsc = this.state.current_status.subscribe((curr: any) => {
       const newone = curr.find((obj: any) => { if (obj.id == id) return obj; });
       if (newone)
         return this.status = newone.status;
       else
         this.status = 'Offline'
     });
+    this.SubArray.push(this.removesubsc)
   }
 
   ngOnDestroy(): void {
-    if (this.replay)
-      this.replay.unsubscribe();
+    this.SubArray.forEach((subsc) => {
+      subsc?.unsubscribe()
+    })
   }
 
   dropDownUser = false;
@@ -64,30 +66,44 @@ export class PartChatComponent implements OnDestroy {
 
 
   kickUser() {
-    if (this.user?.user?.id)
-      this.replay_ = this.ChatService.KickThisOne(this.idChat.toString(), this.user?.user?.id).subscribe((data: any) => { this.replay_.unsubscribe() })
+    if (this.user?.user?.id) {
+      this.removesubsc = this.ChatService.KickThisOne(this.idChat.toString(), this.user?.user?.id).subscribe((data: any) => { })
+      this.SubArray.push(this.removesubsc)
+    }
   }
 
   RemoveRole() {
-    if (this.user?.user?.id)
-      this.replay_ = this.ChatService.RemoveRole(this.idChat.toString(), this.user?.user?.id).subscribe((data: any) => { this.replay_.unsubscribe() })
+    if (this.user?.user?.id) {
+      this.removesubsc = this.ChatService.RemoveRole(this.idChat.toString(), this.user?.user?.id).subscribe((data: any) => { })
+      this.SubArray.push(this.removesubsc)
+
+    }
   }
 
   AddRole() {
-    if (this.user?.user?.id)
-      this.replay_ = this.ChatService.CreateRole(this.idChat.toString(), this.user?.user?.id).subscribe((data: any) => { this.replay_.unsubscribe() })
+    if (this.user?.user?.id) {
+      this.removesubsc = this.ChatService.CreateRole(this.idChat.toString(), this.user?.user?.id).subscribe((data: any) => { })
+      this.SubArray.push(this.removesubsc)
+    }
   }
 
   BanUser() {
-    if (this.user?.user?.id)
-      this.replay_ = this.ChatService.banUser(this.idChat.toString(), this.user?.user?.id).subscribe((data: any) => { this.replay_.unsubscribe() })
+    if (this.user?.user?.id) {
+      this.removesubsc = this.ChatService.banUser(this.idChat.toString(), this.user?.user?.id).subscribe((data: any) => { })
+      this.SubArray.push(this.removesubsc);
+    }
   }
   unBanUser() {
-    if (this.user?.user?.id)
-      this.replay_ = this.ChatService.banUserRemoval(this.idChat.toString(), this.user?.user?.id).subscribe((data: any) => { this.replay_.unsubscribe() })
+    if (this.user?.user?.id) {
+      this.removesubsc = this.ChatService.banUserRemoval(this.idChat.toString(), this.user?.user?.id).subscribe((data: any) => { })
+      this.SubArray.push(this.removesubsc);
+    }
   }
   mute() {
-    const rep = this.ChatService.LetsSilenceHim(this.user.Userid, this.idChat).subscribe((data) => { console.log(data); rep.unsubscribe() });
+    if (this?.user?.Userid) {
+      this.removesubsc = this.ChatService.LetsSilenceHim(this?.user?.Userid, this.idChat).subscribe((data) => { });
+      this.SubArray.push(this.removesubsc);
+    }
   }
 
 }

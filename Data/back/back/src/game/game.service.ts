@@ -9,7 +9,12 @@ import { Repository } from 'typeorm';
 
 // install flatbuffers and socket io and matter js and class-validator
 // @types/matter-js --dev
-
+// loop: NodeJS.Timer;
+// clearInterval(this.loop);
+// this.loop = setInterval(() => {
+//   Engine.update(this.engine, 1000 / 60);
+// }, 1000 / 60);
+// this.queue = this.queue.filter(player => player.id !== player1Id && player.id !== player2Id);
 export const GAMEWIDTH = 1428;
 export const GAMEHEIGHT = 700;
 export const BALLRADIUS = 10;
@@ -47,6 +52,7 @@ export class GameService {
           const player1Id: number = parseInt(key.split(',')[0]);
           const player2Id: number = parseInt(key.split(',')[1]);
           this.currentPlayers = this.currentPlayers.filter(player => player.id !== player1Id && player.id !== player2Id);
+          this.queue = this.queue.filter(player => player.id !== player1Id && player.id !== player2Id);
           this.matchService.create(
             {
               player1Id,

@@ -24,10 +24,14 @@ export class MessagesMdlComponent implements OnChanges, OnInit, OnDestroy {
   @Input() messages: any = [];
   msgs$ !: Observable<any>;
   user$ !: Observable<any>;
+  status: string = 'Offline';
+  dropDownChannel = false;
+  // subsc
+  private removesubsc: any;
+  private SubArray: Array<any> = new Array<any>();
   @ViewChild('dropDownChannelRef') dropDownChannelRef !: ElementRef;
   @ViewChild('dropDownChannelRef_') dropDownChannelRef_ !: ElementRef;
   @ViewChild('dropDownChannelRef__') dropDownChannelRef__ !: ElementRef;
-  dropDownChannel = false;
 
   onclickThreePointChannel() {
     this.dropDownChannel = !this.dropDownChannel
@@ -43,18 +47,16 @@ export class MessagesMdlComponent implements OnChanges, OnInit, OnDestroy {
   constructor(private readonly chatService: ChatService, private readonly profileUser: ProfileService, private readonly state: StatusService) {
   }
 
-  status: string = 'Offline';
-  // unsubscribe
-  private replay: any;
 
   statusLoading(id: any) {
-    this.replay = this.state.current_status.subscribe((curr: any) => {
+    this.removesubsc = this.state.current_status.subscribe((curr: any) => {
       const newone = curr.find((obj: any) => { if (obj.id == id) return obj; });
       if (newone)
         return this.status = newone.status;
       else
         this.status = 'Offline'
     });
+    this.SubArray.push(this.removesubsc);
   }
   avatring(url: string) {
     return this.profileUser.getUserAvatarPath(url);
@@ -74,8 +76,9 @@ export class MessagesMdlComponent implements OnChanges, OnInit, OnDestroy {
   }
   ngOnDestroy(): void {
     this.messages = []
-    if (this.replay)
-      this.replay.unsubscribe()
+    this.SubArray.forEach(element => {
+      element?.unsubscribe()
+    });
   }
 
 }

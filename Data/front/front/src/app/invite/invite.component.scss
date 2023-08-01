@@ -1,4 +1,3 @@
-
 .CloseBtnPop {
     display: flex;
     justify-content: flex-end;
@@ -14,7 +13,6 @@
 }
 
 .popTitle {
-    // margin-top: 15px;
     color: #99D98C;
     font-style: normal;
     font-weight: 700;
@@ -24,7 +22,7 @@
     margin-bottom: 17px;
 }
 
-.boxInviteFriends{
+.boxInviteFriends {
     width: 100%;
     border-radius: 8px;
     background: #7FABCC;
@@ -32,7 +30,7 @@
     overflow-y: auto;
 }
 
-.friend{
+.friend {
     display: grid;
     grid-template-columns: min-content 1fr min-content;
     gap: 7px;
@@ -40,47 +38,47 @@
     margin: 11px 14px;
 }
 
-.friendImg{
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    object-fit: cover;
-}
+// .friendImg{
+//     width: 48px;
+//     height: 48px;
+//     border-radius: 50%;
+//     object-fit: cover;
+// }
 
-.friendName{
-    color: #184E77;
-    font-size: 18px;
-    font-weight: 600;
-}
+// .friendName{
+//     color: #184E77;
+//     font-size: 18px;
+//     font-weight: 600;
+// }
 
-.buttonInvite{
-    cursor: pointer;
-    padding: 10px 21px;
-    background: #184E77;
-    border-radius: 8px;
-    box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.25);
-    font-size: 13px;
-    color: #7FABCC;
-    font-weight: 600;
-    transition: 0.3s;
-}
+// .buttonInvite{
+//     cursor: pointer;
+//     padding: 10px 21px;
+//     background: #184E77;
+//     border-radius: 8px;
+//     box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.25);
+//     font-size: 13px;
+//     color: #7FABCC;
+//     font-weight: 600;
+//     transition: 0.3s;
+// }
 
-.buttonInvited{
-    cursor: pointer;
-    padding: 10px 21px;
-    background: #7FABCC;
-    border-radius: 8px;
-    box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.25);
-    font-size: 13px;
-    color: #184E77;
-    font-weight: 600;
-    transition: 0.3s;
-}
+// .buttonInvited{
+//     cursor: pointer;
+//     padding: 10px 21px;
+//     background: #7FABCC;
+//     border-radius: 8px;
+//     box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.25);
+//     font-size: 13px;
+//     color: #184E77;
+//     font-weight: 600;
+//     transition: 0.3s;
+// }
 
-.buttonInvite:hover{
-    opacity: 70%;
-    transition: 0.3s;
-}
+// .buttonInvite:hover{
+//     opacity: 70%;
+//     transition: 0.3s;
+// }
 
 ::-webkit-scrollbar {
     width: 6px;

@@ -19,7 +19,7 @@ export class PlayComponent {
   constructor(private gameService: GameService, private friendService: FriendshipService, private gameStats: AboutGamesService, private switchRoute: Router, public profile: ProfileService) {
     this.friendList = this.friendService.friendList(0, 0);
     this.History$ = this.gameStats.getHistory();
-    this.Leaders$ = this.gameStats.Leadring();
+    this.Leaders$ = this.gameStats.Leadring_();
   }
   quickPairing() {
     this.gameService.createGame();

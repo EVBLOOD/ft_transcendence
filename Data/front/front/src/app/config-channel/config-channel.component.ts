@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ChatService } from '../chat/chat.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, Validators } from '@angular/forms';
@@ -8,19 +8,20 @@ import { FormControl, Validators } from '@angular/forms';
   templateUrl: './config-channel.component.html',
   styleUrls: ['./config-channel.component.scss']
 })
-export class ConfigChannelComponent {
+export class ConfigChannelComponent implements OnDestroy {
 
-  channelName = new FormControl('Annoncement', [Validators.required]);
-  password = new FormControl('123456', [Validators.required]);
+  channelName = new FormControl('', [Validators.required]);
+  password = new FormControl('', [Validators.required]);
   privateToggle = new FormControl(false);
   secretToggle = new FormControl(false);
   channelId !: string;
-  // subscribe
-  replay: any;
-
+  channelInfos: any;
+  // subsc
+  private removesubsc: any;
+  private SubArray: Array<any> = new Array<any>();
 
   constructor(private readonly chatService: ChatService, private readonly switchRouter: Router, private route: ActivatedRoute,) {
-    this.channelId = route.snapshot.params['id'];
+    this.channelId = this.route.snapshot.params['id'];
     if (this.channelId && !this.channelId?.match(/^[0-9]*$/))
       this.switchRouter.navigateByUrl('/chat')
   }
@@ -44,13 +45,16 @@ export class ConfigChannelComponent {
     else if (this.privateToggle.value)
       type = 'private'
     if (this.channelName.value?.length && (type != 'protected' || this.password.value?.length)) {
-      this.replay = this.chatService.updateChatroom(parseInt(this.channelId),
+      this.removesubsc = this.chatService.updateChatroom(parseInt(this.channelId),
         {
           newType: type,
           newPassword: this.password.value || '', newChatroomName: this.channelName.value
-        }).subscribe({ next: () => { this.replay.unsubscribe() } });
+        }).subscribe({ next: () => { } });
       this.close()
     }
+  }
+  ngOnDestroy(): void {
+    this.SubArray.forEach((element) => { element?.unsubscribe() })
   }
 }
 

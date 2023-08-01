@@ -127,6 +127,16 @@ export class MatchService {
       })
   }
 
+
+  async getLeadering_() {
+    return (await this.StatasticsRepo.createQueryBuilder('stats')
+      .leftJoinAndSelect('stats.User', 'User').orderBy('stats.score', 'DESC').take(5).getMany()).map((info) => {
+        return {
+          user: { username: info.User.username, avatar: info.User.avatar }, matchPlayed: info.total, win: info.win, ratio: info.score
+        }
+      })
+  }
+
   async getMyLeadering(id: number) {
     let i = 0;
     let ending = {};

@@ -27,27 +27,24 @@ export class AppBodyComponent implements OnInit, OnDestroy {
   notLogged: boolean = true;
   dropDown = false;
   profilepic: string = '';
-  // subscr
-  private _subreplay: any;
-  private __subreplay: any;
-  private replay: any;
-  private replay_: any;
-  private replay__: any;
-  private replay___: any;
 
   @ViewChild('dropDownContent') dropDownContent !: ElementRef;
   @ViewChild('dropDownContent_') dropDownContent_ !: ElementRef;
   @ViewChild('dropDownContent__') dropDownContent__ !: ElementRef;
+  // subsc
+  private removesubsc: any;
+  private SubArray: Array<any> = new Array<any>();
   constructor(public profileService: ProfileService, private route: Router,
     private status: StatusService, private friendship: FriendshipService, private gameService: GameService) {
 
-    this._subreplay = this.gameService.gameIsCreated$.subscribe(
+    this.removesubsc = this.gameService.gameIsCreated$.subscribe(
       (data: any) => {
         if (data) {
           route.navigateByUrl('/game')
         }
       }
     );
+    this.SubArray.push(this.removesubsc)
   }
 
 
@@ -64,9 +61,9 @@ export class AppBodyComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.profileSub$ = this.profileService.getMyData().asObservable();
     // API but can't use await:
-    this.replay = this.profileSub$.subscribe({
+    this.removesubsc = this.profileSub$.subscribe({
       next: (data: Observable<any>) => {
-        this.replay_ = data.subscribe({
+        this.removesubsc = data.subscribe({
           next: (dta: any) => {
             if (dta.statusCode)
               this.notLogged = true;
@@ -76,25 +73,28 @@ export class AppBodyComponent implements OnInit, OnDestroy {
             }
           }
         })
+        this.SubArray.push(this.removesubsc);
         this.profile$ = data;
       },
     });
+    this.SubArray.push(this.removesubsc)
     // socket:
-    this.replay__ = this.friendship.current_status_friend.asObservable().subscribe((data) => {
+    this.removesubsc = this.friendship.current_status_friend.asObservable().subscribe((data) => {
       if (data?.type == 4) {
         this.showPopup(data.senderId)
       }
     })
-    this.__subreplay = this.gameService.gameRequest.asObservable().subscribe((data) => {
-      // console.log(data)
+    this.SubArray.push(this.removesubsc)
+    this.removesubsc = this.gameService.gameRequest.asObservable().subscribe((data) => {
       if (data)
         this.showPopupGame(data.toString());
     })
+    this.SubArray.push(this.removesubsc)
   }
 
 
   async showPopupGame(id: string,) {
-    const user: any = await firstValueFrom(this.profileService.getUserData(id));
+    const user: any = await firstValueFrom(this.profileService.getUserData(id), { defaultValue: { username: 'user', avatar: '', } });
     Swal.fire({
       title: 'Game Request',
       html: `<p class="accept_notif-text" >You have a new game request from ${user.username}!</p>`,
@@ -122,16 +122,7 @@ export class AppBodyComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.replay)
-      this.replay.unsubscribe()
-    if (this.replay_)
-      this.replay_.unsubscribe()
-    if (this.replay__)
-      this.replay__.unsubscribe()
-    if (this.replay___)
-      this.replay___.unsubscribe();
-    if (this._subreplay)
-      this._subreplay.unsubscribe()
+    this.SubArray.forEach((element) => { element?.unsubscribe() })
   }
 
   @HostListener('document:click', ['$event'])
@@ -146,12 +137,13 @@ export class AppBodyComponent implements OnInit, OnDestroy {
     this.ngOnInit();
   }
   logout() {
-    this.replay___ = this.profileService.logout().subscribe({ next: (data: any) => { this.route.navigateByUrl('login'); this.notLogged = true; } })
+    this.removesubsc = this.profileService.logout().subscribe({ next: (data: any) => { this.route.navigateByUrl('login'); this.notLogged = true; } })
+    this.SubArray.push(this.removesubsc)
     this.status.Offline();
   }
 
   async showPopup(id: string,) {
-    const user: any = await firstValueFrom(this.profileService.getUserData(id));
+    const user: any = await firstValueFrom(this.profileService.getUserData(id), { defaultValue: { username: 'user', avatar: '' } });
     Swal.fire({
       title: 'Friend Request',
       html: `<p class="accept_notif-text" >You have a new friend request from ${user.username}!</p>`,

@@ -22,3 +22,10 @@ export class CreateBanDTO {
   @IsNotEmpty()
   UserId: number;
 }
+export class SeenDTO {
+  @IsNotEmpty()
+  isRoom: boolean;
+
+  @IsNotEmpty()
+  chatID: number;
+}

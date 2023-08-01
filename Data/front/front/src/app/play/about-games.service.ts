@@ -25,6 +25,10 @@ export class AboutGamesService {
     return this.client.get('http://10.13.4.8:3000/match/leadring', { withCredentials: true });
   }
 
+  Leadring_() {
+    return this.client.get('http://10.13.4.8:3000/match/leadringFIRST', { withCredentials: true });
+  }
+
   leader(id: string) {
     return this.client.get('http://10.13.4.8:3000/match/leader/' + id, { withCredentials: true });
   }

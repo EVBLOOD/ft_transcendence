@@ -19,31 +19,33 @@ export class DMsComponent implements OnInit, OnDestroy {
   constructor(private readonly switchRouter: Router, private readonly profile: ProfileService, private readonly state: StatusService, private readonly chatService: ChatService) {
   }
   status: string = 'Offline';
-  // unsubscribe
-  replay: any;
-  replay_: any;
+  // subsc
+  private removesubsc: any;
+  private SubArray: Array<any> = new Array<any>();
+
   ngOnDestroy(): void {
-    if (this.replay)
-      this.replay.unsubscribe()
-    if (this.replay_)
-      this.replay_.unsubscribe()
+    this.SubArray.forEach((subc) => {
+      subc?.unsubscribe()
+    })
   }
 
   ngOnInit(): void {
-    this.replay_ = this.chatService.getSeenCount(this.user?.id).subscribe((data: any) => { this.count = data?.notSeen });
+    this.removesubsc = this.chatService.getSeenCount(this.user?.id).subscribe((data: any) => { this.count = data?.notSeen });
+    this.SubArray.push(this.removesubsc)
   }
   statusLoading(id: any) {
-    this.replay = this.state.current_status.subscribe((curr: any) => {
+    this.removesubsc = this.state.current_status.subscribe((curr: any) => {
       const newone = curr.find((obj: any) => { if (obj.id == id) return obj; });
       if (newone)
         return this.status = newone.status;
       else
         this.status = 'Offline'
     });
+    this.SubArray.push(this.removesubsc)
   }
   onClickFriend() {
-    // if () // no chats ->
     this.switchRouter.navigateByUrl('/chat/dm/' + this.user.id)
+    this.chatService.GoForSeen(this.user.id, false);
     this.clickFriend = !this.clickFriend;
   }
 

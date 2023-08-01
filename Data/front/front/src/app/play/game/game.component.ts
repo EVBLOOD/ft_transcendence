@@ -83,9 +83,11 @@ export class GameComponent implements OnDestroy, OnInit {
   hideInv: boolean = false;
   color = [Color.White, Color.Green, Color.Blue]
   themeIndx: number = 1;
-  replay: any;
-  replay_: any;
-  replay__: any;
+
+  // subsc
+  private removesubsc: any;
+  private SubArray: Array<any> = new Array<any>();
+
   constructor(private gameService: GameService, public profile: ProfileService, private switchRoute: Router,
     private auth: AuthService, public friends: FriendshipService, private status: StatusService, public statistics: AboutGamesService) {
 
@@ -97,31 +99,32 @@ export class GameComponent implements OnDestroy, OnInit {
     this.LostNumber1$ = this.statistics.playerLost(this.players.Fplayer);
     this.WinnerNumber2$ = this.statistics.playerWinns(this.players.Fplayer);
     this.LostNumber2$ = this.statistics.playerLost(this.players.Splayer);
-    this.replay = this.profile.getUserData(this.players.Fplayer).subscribe((data: any) => {
+
+    this.removesubsc = this.profile.getUserData(this.players.Fplayer).subscribe((data: any) => {
       if (data) {
         this.test_$ = this.friends.isFriend(data.id.toString());
         this.id = data.id;
       }
     })
-    this.replay_ = this.profile.getUserData(this.players.Splayer).subscribe((data: any) => {// to free
+
+    this.SubArray.push(this.removesubsc)
+    this.removesubsc = this.profile.getUserData(this.players.Splayer).subscribe((data: any) => {
       if (data) {
         this.test$ = this.friends.isFriend(data.id.toString());
         this.id_ = data.id;
       }
     })
-    this.replay__ = this.profile.getMyObservData().subscribe((data: any) => {// to free
+
+    this.SubArray.push(this.removesubsc)
+    this.removesubsc = this.profile.getMyObservData().subscribe((data: any) => {
       this.themeIndx = data.theme;
     })
+    this.SubArray.push(this.removesubsc)
   }
 
-  // profiles
+
   ngOnDestroy(): void {
-    if (this.replay)
-      this.replay.unsubscribe()
-    if (this.replay_)
-      this.replay_.unsubscribe()
-    if (this.replay__)
-      this.replay__.unsubscribe()
+    this.SubArray.forEach((element) => { element?.unsubscribe() })
     this.gameService.gameEnd()
     this.game?.scene?.remove('GameScene');
     if (this.gameScene)
@@ -130,10 +133,11 @@ export class GameComponent implements OnDestroy, OnInit {
     this.game?.destroy(true);
     this.status.online();
   }
+
   ngOnInit(): void {
     this.status.inPlay();
     this.game = new Phaser.Game(CONFIG);
-    this.gameStateSub = this.gameService.getState()
+    this.removesubsc = this.gameService.getState()
       .subscribe((payload: string) => {
         const state: { gameState: GameStateType, playerNumber: Player, isWin: boolean, color: Color } = JSON.parse(payload);
         if (state.gameState == GameStateType.Playing) {
@@ -158,7 +162,7 @@ export class GameComponent implements OnDestroy, OnInit {
           }
         }
       })
-
+    this.SubArray.push(this.removesubsc)
   }
   addfriend() {
     this.friends.addFriend(this.id);

@@ -7,7 +7,7 @@ import { BALLRADIUS, Color, DAMPINGFACTOR, GAMEHEIGHT, GAMEWIDTH, INITALBALLSPEE
 export class GameInstance {
   private engine: Matter.Engine;
   private world: Matter.World;
-  private runner!: Matter.Runner;
+  // private runner!: Matter.Runner;
   private paddle1: Matter.Body;
   private paddle2: Matter.Body;
   private ball: Matter.Body;// = new Matter.Body();
@@ -18,6 +18,7 @@ export class GameInstance {
   private checkBallPaddleColisionInterval: NodeJS.Timer;
   public inactive = false;
   public toRemove = false;
+  loop: NodeJS.Timer;
   // private velocity: Vector = { x: 0, y: 0 };
 
 
@@ -164,6 +165,7 @@ export class GameInstance {
     World.remove(this.world, [this.paddle1, this.paddle2, this.ball]);
     World.clear(this.world, false);
     Engine.clear(this.engine);
+    clearInterval(this.loop);
     // if (this.runner)
     //   Runner.stop(this.runner);
 
@@ -239,7 +241,9 @@ export class GameInstance {
     this.engine.velocityIterations = 10;
     this.engine.positionIterations = 10;
 
-    this.runner = Runner.run(runner, this.engine);
+    this.loop = setInterval(() => {
+      Engine.update(this.engine, 1000 / 60);
+    }, 1000 / 60);
 
     Events.on(this.engine, 'collisionStart', (event) => {
       const pair = event.pairs[0];

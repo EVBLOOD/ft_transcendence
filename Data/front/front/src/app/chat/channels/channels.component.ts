@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ChatService } from '../chat.service';
 
 @Component({
   selector: 'app-channels',
@@ -8,9 +9,10 @@ import { Router } from '@angular/router';
 })
 export class ChannelsComponent {
   @Input() channel: any;
-  constructor(private readonly switchRoute: Router) {
+  constructor(private readonly switchRoute: Router, private readonly chatService: ChatService) {
   }
   openChat(id: number) {
+    this.chatService.GoForSeen(id, true);
     this.switchRoute.navigateByUrl("/chat/" + id)
   }
 }
