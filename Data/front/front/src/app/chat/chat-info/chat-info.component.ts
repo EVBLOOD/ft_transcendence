@@ -61,7 +61,7 @@ export class ChatInfoComponent implements OnChanges {
 
   countMembers(array: any[], filter: string): boolean {
     return array.find((value: any) => {
-      return value.role == filter && value.state == 1
+      return value.role == filter && (value.state == 1 || value.state == 3)
     })
   }
 
