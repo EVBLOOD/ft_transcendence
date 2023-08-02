@@ -18,7 +18,7 @@ export class InviteComponent implements OnInit {
   We_are_inviting_you: Array<number> = [];
   channelInfos$ !: Observable<any>;
 
-  constructor(private readonly profile: ProfileService, private readonly friendship: FriendshipService,
+  constructor(private readonly profile: ProfileService, private readonly chatRoom: ChatService,
     private readonly routeSwitcher: Router, private readonly activeOne: ActivatedRoute, private readonly invites: ChatService) {
     if (this.activeOne.snapshot.params['id'] && !this.activeOne.snapshot.params['id']?.match(/^[0-9]*$/))
       this.routeSwitcher.navigateByUrl('/chat')
@@ -28,7 +28,7 @@ export class InviteComponent implements OnInit {
     this.invited = !this.invited;
   }
   ngOnInit(): void {
-    this.profiles$ = this.friendship.friendList(0, 0);
+    this.profiles$ = this.chatRoom.inviteList(this.activeOne.snapshot.params['id']);
   }
   avataring(url: string) {
     return this.profile.getUserAvatarPath(url);

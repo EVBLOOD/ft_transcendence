@@ -14,7 +14,7 @@
             (keypress)="FindextraUsers($event)" />
         <div class="friendsonline" *ngIf="toggle">
             <!-- friendList -->
-            <app-dms *ngFor="let item of (ChatDMs$|async)" [user]="!finding ? item?.user : item" />
+            <app-dms *ngFor="let item of (ChatDMs$|async)" [user]="item?.user ? item?.user : item" />
         </div>
         <div class="channels" *ngIf="!toggle">
             <app-channels *ngFor="let item of (ChatRooms$|async)" [channel]="item" />

@@ -13,8 +13,6 @@ export class MessageComponent {
   today: number = Date.now();
   whoIs$ !: Observable<any>;
   constructor(private readonly serviceProfile: ProfileService, private readonly serviceAuth: AuthService) {
-    // console.log(this.value)
-    // this.whoIs$ = this.serviceAuth.getCurrentUser();
   }
 
   imageLink(url: string) {
@@ -23,7 +21,4 @@ export class MessageComponent {
   myId() {
     return this.serviceAuth.getId();
   }
-  // constructor() {
-  //   console.log(this.value)
-  // }
 }

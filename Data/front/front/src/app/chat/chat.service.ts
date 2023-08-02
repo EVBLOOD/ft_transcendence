@@ -63,7 +63,6 @@ export class ChatService {
     });
 
     this.sock.on('ChannelMessages', (data) => {
-      console.log("HELL=")
       this.update.next(data);
       this.update.next({});
       this.updateChannels.next(data);
@@ -74,7 +73,6 @@ export class ChatService {
     this.sock.on(
       'privateMessage', (data) => {
         this.update.next(data)
-        console.log("HELL==")
         this.update.next({});
         this.updatePrivates.next(data);
         this.updatePrivates.next({});
@@ -83,25 +81,26 @@ export class ChatService {
 
     this.sock.on("force-leave", (data: any) => {
       if (mySelf.getId() == data?.UserId) {
-        console.log("HELL===")
         this.closeIt.next(data);
         this.closeIt.next({});
         this.sock.emit('force-leave', data.chatID)
       }
     });
     this.sock.on("GoPlay", (data) => {
-      console.log("PLAY: ", data);
-      console.log("HELL=====")
       this.updateMembership.next(data);
       this.updateMembership.next({});
     })
     this.sock.on('updateSeen', (data) => {
-      console.log("HELL======ß")
       this.updateSeen.next(data);
       this.updateSeen.next({});
     })
 
   }
+
+  inviteList(id: string) {
+    return this.httpClient.get(URL + '/chat/Toinvite/' + id, { withCredentials: true });
+  }
+
   hasAccessToChannel(id: string) {
     return this.httpClient.get(URL + '/chat/accessToChat/' + id, { withCredentials: true }); // here we are
   }
@@ -218,7 +217,6 @@ export class ChatService {
     return this.httpClient.post(`http://10.13.4.8:3000/chat/JoinRoom`, chat, { withCredentials: true, });
   }
   sendMessage(message: sendMessageDTO, type: boolean) {
-    // console.log("message DTO", message);
     if (type)
       this.sock.emit("ChannelMessages", { type: type, message: message });
     else
@@ -239,7 +237,6 @@ export class ChatService {
       member: user,
       password: password,
     }
-    console.log("dto", dto, "id == ", id);
     return this.httpClient.put<string>(`http://10.13.4.8:3000/chat/${id}/add/member`, dto, { withCredentials: true, });
   }
   addAdminToChatRoom(id: string, admin: string, user: string) {
@@ -248,7 +245,6 @@ export class ChatService {
       roleGiver: admin,
       roleReceiver: user,
     }
-    console.log("dto", dto, "id == ", id);
     return this.httpClient.put<string>(`http://10.13.4.8:3000/chat/${id}/add/admin`, dto, { withCredentials: true, });
   }
   getUserMessages(user: string) {

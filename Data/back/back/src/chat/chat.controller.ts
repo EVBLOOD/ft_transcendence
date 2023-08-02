@@ -190,4 +190,9 @@ export class ChatController {
     return this.chatRoomSevice.kickUser(KickOut.chatID, req.new_user.sub, KickOut.UserId)
   }
 
+  @Get('Toinvite/:id')
+  async toInvite(@Req() req, @Param('id', ParseIntPipe) id: number) {
+    return await this.chatRoomSevice.ListOfFriendsToInvite(id, req.new_user.sub);
+  }
+
 } // end of ChatController class

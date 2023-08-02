@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChatService } from '../chat/chat.service';
 
@@ -7,7 +7,7 @@ import { ChatService } from '../chat/chat.service';
   templateUrl: './popup-to-be-sure.component.html',
   styleUrls: ['./popup-to-be-sure.component.scss']
 })
-export class PopupToBeSureComponent {
+export class PopupToBeSureComponent implements OnDestroy {
   // subsc
   private removesubsc: any;
 
@@ -25,6 +25,8 @@ export class PopupToBeSureComponent {
         this.switchRouter.navigateByUrl('chat')
       }
     });
-    this.removesubsc.unsubscribe()
+  }
+  ngOnDestroy(): void {
+    this.removesubsc?.unsubscribe()
   }
 }

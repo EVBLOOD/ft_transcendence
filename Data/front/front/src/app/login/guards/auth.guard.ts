@@ -9,7 +9,6 @@ export const authGuard: CanActivateFn = async (route, state) => {
     let replay: any = {};
     try {
         replay = await firstValueFrom(authService.getCurrentUser().pipe(catchError(err => {
-            console.log(err)
             return of({ statusCode: 403 })
         })))
     }

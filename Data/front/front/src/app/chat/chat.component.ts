@@ -41,7 +41,6 @@ export class ChatComponent implements OnDestroy {
     this.ChatDMs$ = this.chatService.getChatDM();
     this.removesubsc = this.chatService.updatePrivates.subscribe(() => {
       if (!this.newText.value?.length) {
-        this.finding = 0;
         this.ChatDMs$ = this.chatService.getChatDM();
       }
     });
@@ -105,16 +104,13 @@ export class ChatComponent implements OnDestroy {
     }).subscribe({ next: () => { } });
     this.SubArray.push(this.removesubsc)
   }
-  finding = 0;
   FindextraUsers($event: KeyboardEvent) {
     if ($event.code != 'Enter' && $event.code != 'NumpadEnter')
       return;
     if (this.newText.value?.length && this.toggle) {
-      this.finding = 1;
       this.ChatDMs$ = this.listUsers.findthem(this.newText.value);
     }
     else if (this.toggle && !this.newText.value?.length) {
-      this.finding = 0;
       this.ChatDMs$ = this.chatService.getChatDM();
     }
     else if (this.newText.value?.length)

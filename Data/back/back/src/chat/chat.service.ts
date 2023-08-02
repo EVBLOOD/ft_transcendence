@@ -11,6 +11,7 @@ import { createChatroomDTO } from './dto/createChatroom.dto';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { UpdateChatroomDTO } from './dto/updateChatroom.dto';
+import { Friendship } from 'src/friendship/entities/friendship.entity';
 
 @Injectable()
 export class ChatService {
@@ -18,6 +19,7 @@ export class ChatService {
     @InjectRepository(Members) private readonly MembersRepo: Repository<Members>,
     @InjectRepository(Messages) private readonly MessagesRepo: Repository<Messages>,
     @InjectRepository(User) private readonly UserRepo: Repository<User>,
+    @InjectRepository(Friendship) private readonly FriendshipRepo: Repository<Friendship>,
     private readonly Friendship: FriendshipService,
     private readonly users: UserService) { }
 
@@ -479,6 +481,39 @@ export class ChatService {
       return await this.MembersRepo.delete({ chatID: channelId, Userid: currentUser, });
     }
     return {};
+  }
+
+  async ListOfFriendsToInvite(channelId: number, currentUser: number) {
+
+    if (!(await this.isMember(currentUser, channelId))?.length)
+      return {}
+
+    const memberFOR = await this.getChatRoomMembers(currentUser, channelId);
+
+    const idsMembers = memberFOR.map((it) => { return it.Userid });
+
+    let findList: any;
+
+    findList = await this.FriendshipRepo.createQueryBuilder('friendship')
+      .leftJoinAndSelect('friendship.user1', 'user1')
+      .leftJoinAndSelect('friendship.user2', 'user2')
+      .where('friendship.receiver = :id', { id: currentUser })
+      .andWhere('friendship.sender NOT IN (:...ids)', { ids: idsMembers })
+      .andWhere('friendship.blocked = :blocked', { blocked: false })
+      .andWhere('friendship.status = :status', { status: 'accepted' })
+      .orWhere('friendship.sender = :id', { id: currentUser })
+      .andWhere('friendship.receiver NOT IN (:...ids)', { ids: idsMembers })
+      .andWhere('friendship.blocked = :blocked', { blocked: false })
+      .andWhere('friendship.status = :status', { status: 'accepted' })
+      .getMany();
+
+    if (!findList?.length) return [];
+    let friends: Array<User> = [];
+    findList.forEach((element) => {
+      if (element.user1.id == currentUser) friends.push(element.user2);
+      else friends.push(element.user1);
+    });
+    return friends;
   }
 
   async getInvites(id: number) {

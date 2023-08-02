@@ -102,6 +102,8 @@
     display: flex;
     flex-direction: column-reverse;
     gap: 20px;
+    height: 650px;
+    overflow-y: auto;
 }
 
 .conversation img {
