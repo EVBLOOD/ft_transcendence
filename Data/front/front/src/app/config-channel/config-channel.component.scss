@@ -37,7 +37,6 @@
     outline: none;
     padding-left: 17px;
     font-weight: 600;
-    // width: 100%;
 }
 
 .textbox::placeholder {
@@ -52,18 +51,10 @@
     color: #3176AB;
 }
 
-// .textboxChannel {
-//     position: relative;
-// }
-
-
 .rowToggle {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    // margin-top: 17px;
-    // margin-bottom: 17px;
-
 }
 
 .rowToggle .title {

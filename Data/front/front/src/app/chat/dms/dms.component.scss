@@ -60,3 +60,21 @@
 .InGame {
     background-color: #FFA45E;
 }
+
+
+@media only screen and (max-width: 600px) {
+
+    .nb-messages {
+        display: none;
+    }
+
+    .name-friend {
+        font-size: small;
+    }
+
+    .friend {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

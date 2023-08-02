@@ -3,10 +3,10 @@
     display: grid;
     grid-template-rows: min-content auto min-content;
     height: 100%;
-    // width: 100%; // changed
 }
 
 .header-chat {
+    position: relative;
     display: flex;
     border-bottom: 1px solid #184E77;
     padding: 25px;
@@ -98,15 +98,10 @@
 }
 
 .conversation {
-    // max-width: 40%;
     padding: 25px;
     display: flex;
     flex-direction: column-reverse;
     gap: 20px;
-    // overflow-y: auto;
-    // overflow-x: none;
-    // height: 650px;
-    // width: 100%;
 }
 
 .conversation img {

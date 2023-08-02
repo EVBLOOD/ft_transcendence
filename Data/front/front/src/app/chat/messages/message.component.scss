@@ -1,6 +1,4 @@
 .receiver {
-    // max-width: 40%;
-    // overflow-wrap: break-word;
     display: flex;
     gap: 8px;
 }
@@ -21,12 +19,11 @@
 }
 
 .receiver .msg {
+    overflow-wrap: anywhere;
     font-size: 13px;
     background-color: #1A759F;
     padding: 16px 13px;
     border-radius: 0px 20px 20px 20px;
-    // max-width: 40%;
-    // overflow-wrap: break-word;
 }
 
 img {
@@ -36,9 +33,7 @@ img {
 }
 
 .sender {
-    // overflow-wrap: break-word;
     display: flex;
-    // max-width: 45%;
     flex-direction: row-reverse;
     gap: 8px;
 }
@@ -60,12 +55,11 @@ img {
 }
 
 .sender .msg {
+    overflow-wrap: anywhere;
     font-size: 13px;
     background-color: #1A759F;
     padding: 16px 13px;
     border-radius: 20px 0px 20px 20px;
-    // max-width: 40%;
-    // overflow-wrap: break-word;
 }
 
 img {

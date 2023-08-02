@@ -30,3 +30,9 @@
     align-items: center;
     padding: 2px;
 }
+
+@media only screen and (max-width: 600px) {
+    .nb-messages {
+        display: none;
+    }
+}

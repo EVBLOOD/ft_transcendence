@@ -32,8 +32,6 @@
     color: #D9ED92;
 }
 
-// .logo {}
-
 .profile {
     position: relative;
 }
@@ -78,10 +76,6 @@
     background-color: #103959;
     color: #D9ED92;
 }
-
-// .title {
-//     font-size: 25px;
-// }
 
 .body::-webkit-scrollbar {
     width: 7px;
@@ -129,77 +123,6 @@
     color: #F2F6FA;
 }
 
-// .title {
-//     font-style: normal;
-//     font-weight: 700;
-//     font-size: 24px;
-//     text-transform: uppercase;
-//     color: #D9ED92;
-// }
-
-// .button {
-//     transition: 0.5s;
-//     color: #103959;
-//     background: #7FABCC;
-//     border-radius: 8px;
-//     padding: 10px 60px 10px 60px;
-//     cursor: pointer;
-//     font-weight: 600;
-//     font-size: 13px;
-// }
-
-// .button:hover {
-//     background-color: #D9ED92;
-// }
-
-// .row {
-//     display: flex;
-//     align-items: center;
-//     justify-content: space-between;
-// }
-
-// .section {
-//     margin-top: 20px;
-//     margin-bottom: 40px;
-// }
-
-// .user {
-//     display: flex;
-//     align-items: center;
-// }
-
-// .user .rank-user {
-//     z-index: 1;
-// }
-
-// .user .rank-img {
-//     display: flex;
-// }
-
-// .user .img-user {
-//     position: relative;
-//     height: 82px;
-//     width: 82px;
-//     object-fit: cover;
-//     border-radius: 50%;
-//     right: 10px;
-// }
-
-// .name-user {
-//     position: relative;
-//     color: #7FABCC;
-//     font-weight: 600;
-//     font-size: 16px;
-//     right: 4px;
-// }
-
-// .leaderboard {
-//     display: grid;
-//     grid-template-columns: repeat(5, 1fr);
-//     padding-top: 20px;
-//     padding-bottom: 20px;
-// }
-
 @media only screen and (max-width: 800px) {
     .body {
         border-radius: 30px;
@@ -234,9 +157,5 @@
         height: 38px;
         width: 38px;
     }
-
-    // .leaderboard {
-    //     grid-template-columns: repeat(1, 1fr);
-    // }
 
 }
