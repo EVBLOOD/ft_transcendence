@@ -21,3 +21,5 @@ npm install;
 # npm install;
 echo "--------------------- Starting --------------------------------";
 exec ng serve --host 0.0.0.0;
+# ng build --configuration production
+# ng serve --configuration production // --host 0.0.0.0; or --skip-check-host

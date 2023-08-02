@@ -23,3 +23,7 @@ echo "--------------------- Init --------------------------------";
 npm install;
 echo "--------------------- Starting --------------------------------";
 exec npm run start:nodemon;
+# tail -f /dev/null
+# ß"start:prod": "node dist/src/main.js",
+# npm run build
+# npm run start:prod
