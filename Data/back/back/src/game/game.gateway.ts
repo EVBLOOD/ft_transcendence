@@ -3,7 +3,8 @@ import { Socket } from 'socket.io';
 import { GameService } from './game.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthenticatorService } from 'src/authenticator/authenticator.service';
-import { hostSocket } from 'src/app.service';
+import hostSocket from 'src/envirenment';
+// import { hostSocket } from 'src/app.service';
 
 @WebSocketGateway({
   namespace: "game",

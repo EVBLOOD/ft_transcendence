@@ -43,3 +43,10 @@ remove comments css when you sure it functions [√]
 good filtering for invite [√]
 backUps for 2FA []
 pingPong Logo []
+settings [√]
+decorators variables []
+
+// before pushing
+database user and password []
+back .env and config.js []
+front  config.js []

@@ -129,7 +129,6 @@ export class UserController {
       if (file && file.filename && file.filename != '') {
         await this.userService.UpdateAvatar(req.new_user.sub, file.filename);
         throw new HttpException('ACCEPTABLE', HttpStatus.ACCEPTED);
-        return;
       }
     } catch (error) {
       if (error.status == 202)

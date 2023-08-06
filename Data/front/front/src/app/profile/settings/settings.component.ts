@@ -49,11 +49,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
           this.router.navigateByUrl('');
         this.fullName = new FormControl(data.name, [Validators.required, Validators.minLength(5)]);
         this.userName = new FormControl(data.username, [Validators.required, Validators.minLength(5), Validators.pattern(/^[a-z]+(-[a-z]+)?$/)]);
-        this.twoFactor = data.TwoFAenabled;
+        this.twoFactor = data.TwoFAenabled || false;
         this.PlayTheme = data.theme;
         this.PlayThemeInit = data.theme;
         this.submet_this.avatar = data.avatar;
-        this.twoFactorInit = data.TwoFAenabled;
+        this.twoFactorInit = this.twoFactor;
       },
     });
     this.SubArray.push(this.removesubsc)
@@ -84,6 +84,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   handleResponse(data: any) {
+    console.log(data)
     if (data.statusCode)
       this.Myerror = true;
     else {
@@ -121,7 +122,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         username: this.userName.value,
         name: this.fullName.value,
         avatar: this.submet_this.avatar,
-        twofactor: this.twoFactor,
+        twofactor: this.twoFactorInit,
         theme: this.PlayTheme
       }).subscribe(
         { next: (data) => { this.handleResponse(data) }, }

@@ -3,8 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Socket, io } from 'socket.io-client';
 import { AuthService } from '../login/auth.service';
-
-const URL = "http://10.13.4.8:3000";
+import hostIp from 'src/config';
 
 export type createChatroom = {
   type: string;
@@ -58,7 +57,7 @@ export class ChatService {
   public updateSeen: BehaviorSubject<any> = new BehaviorSubject<any>({});
   constructor(private httpClient: HttpClient, private mySelf: AuthService
   ) {
-    this.sock = io('http://10.13.4.8:3000/chat', {
+    this.sock = io(`${hostIp}:3000/chat`, {
       withCredentials: true,
     });
 
@@ -98,18 +97,18 @@ export class ChatService {
   }
 
   inviteList(id: string) {
-    return this.httpClient.get(URL + '/chat/Toinvite/' + id, { withCredentials: true });
+    return this.httpClient.get(hostIp + ':3000/chat/Toinvite/' + id, { withCredentials: true });
   }
 
   hasAccessToChannel(id: string) {
-    return this.httpClient.get(URL + '/chat/accessToChat/' + id, { withCredentials: true }); // here we are
+    return this.httpClient.get(hostIp + ':3000/chat/accessToChat/' + id, { withCredentials: true }); // here we are
   }
 
   hasAccessToDM(id: string) {
-    return this.httpClient.get(URL + '/chat/accessToDM/' + id, { withCredentials: true });
+    return this.httpClient.get(hostIp + ':3000/chat/accessToDM/' + id, { withCredentials: true });
   }
   getChatroomByID(channelId: string) {
-    return this.httpClient.get(URL + '/chat/findbyId/' + channelId, { withCredentials: true });
+    return this.httpClient.get(hostIp + ':3000/chat/findbyId/' + channelId, { withCredentials: true });
   }
   getCloseOrNot(): Observable<any> {
     return this.closeIt.asObservable();
@@ -127,94 +126,94 @@ export class ChatService {
     return this.update;
   }
   getGroupMembers(id: number) {
-    return this.httpClient.get(`http://10.13.4.8:3000/chat/membersFor/` + id, { withCredentials: true, })
+    return this.httpClient.get(`${hostIp}:3000/chat/membersFor/` + id, { withCredentials: true, })
   }
 
   getThisChat(id: number) {
-    return this.httpClient.get(`http://10.13.4.8:3000/chat/find/` + id, { withCredentials: true, })
+    return this.httpClient.get(`${hostIp}:3000/chat/find/` + id, { withCredentials: true, })
   }
   // invites
   Sendinvite(channelID: string, UserId: number) {
-    return this.httpClient.post(`http://10.13.4.8:3000/chat/invites`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+    return this.httpClient.post(`${hostIp}:3000/chat/invites`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
   }
 
   Acceptinvite(channelID: string, UserId: number) {
     this.sock.emit("updateMembersTime", { chatID: channelID, UserId: UserId });
-    return this.httpClient.post(`http://10.13.4.8:3000/chat/AcceptInvite`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+    return this.httpClient.post(`${hostIp}:3000/chat/AcceptInvite`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
   }
 
   Listinvites() {
-    return this.httpClient.get(`http://10.13.4.8:3000/chat/invites`, { withCredentials: true })
+    return this.httpClient.get(`${hostIp}:3000/chat/invites`, { withCredentials: true })
   }
 
   Cancelinvite(channelID: string, UserId: number) {
-    return this.httpClient.post(`http://10.13.4.8:3000/chat/RemoveInvite`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+    return this.httpClient.post(`${hostIp}:3000/chat/RemoveInvite`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
   }
 
   removeInvite(channelID: string, UserId: number) {
-    return this.httpClient.post(`http://10.13.4.8:3000/chat/CancelInvite`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+    return this.httpClient.post(`${hostIp}:3000/chat/CancelInvite`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
   }
   // done
   // kick
   KickThisOne(channelID: string, UserId: number) {
     this.sock.emit("updateMembersTime", { chatID: channelID, UserId: UserId });
     this.sock.emit('ping-leave', { chatID: channelID, UserId: UserId })
-    return this.httpClient.post(`http://10.13.4.8:3000/chat/kickUser`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+    return this.httpClient.post(`${hostIp}:3000/chat/kickUser`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
   }
   // done
   // remove OPER
   RemoveRole(channelID: string, UserId: number) {
     this.sock.emit("updateMembersTime", { chatID: channelID, UserId: UserId });
-    return this.httpClient.post(`http://10.13.4.8:3000/chat/RemoveRole`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+    return this.httpClient.post(`${hostIp}:3000/chat/RemoveRole`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
   }
 
   CreateRole(channelID: string, UserId: number) {
     this.sock.emit("updateMembersTime", { chatID: channelID, UserId: UserId });
-    return this.httpClient.post(`http://10.13.4.8:3000/chat/CreateRole`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+    return this.httpClient.post(`${hostIp}:3000/chat/CreateRole`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
   }
   // done
   // Ban User:
   banUser(channelID: string, UserId: number) {
     this.sock.emit("updateMembersTime", { chatID: channelID, UserId: UserId });
     this.sock.emit('ping-leave', { chatID: channelID, UserId: UserId })
-    return this.httpClient.post(`http://10.13.4.8:3000/chat/banUser`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+    return this.httpClient.post(`${hostIp}:3000/chat/banUser`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
   }
 
   banUserRemoval(channelID: string, UserId: number) {
     this.sock.emit("updateMembersTime", { chatID: channelID, UserId: UserId });
-    return this.httpClient.post(`http://10.13.4.8:3000/chat/banUserRemoval`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+    return this.httpClient.post(`${hostIp}:3000/chat/banUserRemoval`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
   }
   // Done
   getDmMessages(id: number) {
-    return this.httpClient.get<any>(URL + `/chat/DM/${id}`, { withCredentials: true, });
+    return this.httpClient.get<any>(hostIp + `:3000/chat/DM/${id}`, { withCredentials: true, });
   }
 
   LetsSilenceHim(user: number, Chausertid: number) {
     this.sock.emit("updateMembersTime", { chatID: Chausertid, UserId: user });
-    return this.httpClient.post(URL + '/chat/Mute', { UserId: user, chatID: Chausertid }, { withCredentials: true });
+    return this.httpClient.post(hostIp + ':3000/chat/Mute', { UserId: user, chatID: Chausertid }, { withCredentials: true });
   }
 
   leaveChatroom(id: string) {
-    return this.httpClient.delete(URL + `/chat/leave/${id}`, { withCredentials: true, })
+    return this.httpClient.delete(hostIp + `:3000/chat/leave/${id}`, { withCredentials: true, })
   }
   getThisChatMsgs(id: number) {
-    return this.httpClient.get(`http://10.13.4.8:3000/message/for` + id, { withCredentials: true, })
+    return this.httpClient.get(`${hostIp}:3000/message/for` + id, { withCredentials: true, })
   }
 
   getChatrooms() {
-    return this.httpClient.get(`http://10.13.4.8:3000/chat/user`, { withCredentials: true, })
+    return this.httpClient.get(`${hostIp}:3000/chat/user`, { withCredentials: true, })
   }
 
   getChatDM() {
-    return this.httpClient.get(`http://10.13.4.8:3000/chat/DM`, { withCredentials: true, })
+    return this.httpClient.get(`${hostIp}:3000/chat/DM`, { withCredentials: true, })
   }
 
   joinChatroom(chat: createChatroom) {
-    return this.httpClient.post(`http://10.13.4.8:3000/chat/create`, chat, { withCredentials: true, });
+    return this.httpClient.post(`${hostIp}:3000/chat/create`, chat, { withCredentials: true, });
   }
 
   JoiningChatRoom(chat: createChatroom) {
-    return this.httpClient.post(`http://10.13.4.8:3000/chat/JoinRoom`, chat, { withCredentials: true, });
+    return this.httpClient.post(`${hostIp}:3000/chat/JoinRoom`, chat, { withCredentials: true, });
   }
   sendMessage(message: sendMessageDTO, type: boolean) {
     if (type)
@@ -223,13 +222,13 @@ export class ChatService {
       this.sock.emit("privateMessage", { type: type, message: message });
   }
   getChatroomMessages(id: number) {
-    return this.httpClient.get<number>(URL + `/chat/${id}/messages`, { withCredentials: true, });
+    return this.httpClient.get<number>(hostIp + `/chat/${id}/messages`, { withCredentials: true, });
   }
   addUser(user: addUserDTO) {
-    return this.httpClient.post<addUserDTO>(`http://10.13.4.8:3000/user`, user, { withCredentials: true, });
+    return this.httpClient.post<addUserDTO>(`${hostIp}:3000/user`, user, { withCredentials: true, });
   }
   getUser() {
-    return this.httpClient.get("http://10.13.4.8:3000/user", { withCredentials: true, })
+    return this.httpClient.get(`${hostIp}:3000/user`, { withCredentials: true, })
   }
   addUserToChatRoom(id: string, user: string, password: string) {
     this.sock.emit("updateMembersTime", { chatID: id, UserId: user });
@@ -237,7 +236,7 @@ export class ChatService {
       member: user,
       password: password,
     }
-    return this.httpClient.put<string>(`http://10.13.4.8:3000/chat/${id}/add/member`, dto, { withCredentials: true, });
+    return this.httpClient.put<string>(`${hostIp}:3000/chat/${id}/add/member`, dto, { withCredentials: true, });
   }
   addAdminToChatRoom(id: string, admin: string, user: string) {
     this.sock.emit("updateMembersTime", { chatID: id, UserId: user });
@@ -245,46 +244,46 @@ export class ChatService {
       roleGiver: admin,
       roleReceiver: user,
     }
-    return this.httpClient.put<string>(`http://10.13.4.8:3000/chat/${id}/add/admin`, dto, { withCredentials: true, });
+    return this.httpClient.put<string>(`${hostIp}:3000/chat/${id}/add/admin`, dto, { withCredentials: true, });
   }
   getUserMessages(user: string) {
-    return this.httpClient.get<string>(URL + `/message/user/${user}`);
+    return this.httpClient.get<string>(hostIp + `:3000/message/user/${user}`);
   }
   kickuser(chatID: number, admin: string, user: string) {
-    return this.httpClient.delete(URL + `/chat/delete/${chatID}/admin/${admin}/user/${user}`, { withCredentials: true, });
+    return this.httpClient.delete(hostIp + `:3000/chat/delete/${chatID}/admin/${admin}/user/${user}`, { withCredentials: true, });
   }
   // update/:chatID/admin
   updateChatroom_(id: number, user: string, dto: UpdateChatroomDTO) {
-    return this.httpClient.put<UpdateChatroomDTO>(URL + `/chat/update/${id}/admin/${user}`, dto, { withCredentials: true, });
+    return this.httpClient.put<UpdateChatroomDTO>(hostIp + `:3000/chat/update/${id}/admin/${user}`, dto, { withCredentials: true, });
   }
 
   updateChatroom(id: number, dto: UpdateChatroomDTO) {
-    return this.httpClient.put<UpdateChatroomDTO>(URL + `/chat/update/${id}/admin`, dto, { withCredentials: true, });
+    return this.httpClient.put<UpdateChatroomDTO>(hostIp + `:3000/chat/update/${id}/admin`, dto, { withCredentials: true, });
   }
   checkPunishment(id: number, user: string, type: string) {
-    return this.httpClient.get(URL + `/punishment/chat/${id}/user/${user}/${type}`, { withCredentials: true, })
+    return this.httpClient.get(hostIp + `:3000/punishment/chat/${id}/user/${user}/${type}`, { withCredentials: true, })
   }
 
   getChatroomMessagesnyName(chatname: string) {
-    return this.httpClient.get(URL + `/punishment/chat/all/${chatname}`, { withCredentials: true, })
+    return this.httpClient.get(hostIp + `:3000/punishment/chat/all/${chatname}`, { withCredentials: true, })
   }
 
   getInvitesForMe() {
-    return this.httpClient.get(URL + `/chat/invites`, { withCredentials: true, })
+    return this.httpClient.get(hostIp + `:3000/chat/invites`, { withCredentials: true, })
   }
   myRole(id: number) {
-    return this.httpClient.get(URL + `/chat/myRole/${id}`, { withCredentials: true, })
+    return this.httpClient.get(hostIp + `:3000/chat/myRole/${id}`, { withCredentials: true, })
   }
 
   getSeenCount(id: number) {
-    return this.httpClient.get(URL + `/chat/MyCount/${id}`, { withCredentials: true, })
+    return this.httpClient.get(hostIp + `:3000/chat/MyCount/${id}`, { withCredentials: true, })
   }
   getChatroomsByname(ChannelName: string) {
-    return this.httpClient.get(URL + `/chat/findbyName/${ChannelName}`, { withCredentials: true, })
+    return this.httpClient.get(hostIp + `:3000/chat/findbyName/${ChannelName}`, { withCredentials: true, })
   }
 
   getInvitedFriends(id: number, userid: number) {
-    return this.httpClient.get(URL + `/chat/findingInvitedonce/${id}/${userid}`, { withCredentials: true });
+    return this.httpClient.get(hostIp + `:3000/chat/findingInvitedonce/${id}/${userid}`, { withCredentials: true });
   }
   GoForSeen(someId: number, isChat: boolean) {
     this.sock.emit('Seen', { chatID: someId, isRoom: isChat });

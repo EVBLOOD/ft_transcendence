@@ -3,7 +3,8 @@ import { OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } fr
 import { Server, Socket } from 'socket.io';
 import { AuthenticatorService } from 'src/authenticator/authenticator.service';
 import { FriendshipService } from '../friendship.service';
-import { hostSocket } from 'src/app.service';
+import hostSocket from 'src/envirenment';
+// import { hostSocket } from 'src/app.service';
 
 @WebSocketGateway({
   namespace: 'friendshipSock',

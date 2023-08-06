@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { EMPTY, Observable, catchError } from 'rxjs';
+import hostIp from 'src/config';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class AuthService {
   constructor(private http: HttpClient) {
   }
   public getCurrentUser(): Observable<any> {
-    return this.http.get('http://10.13.4.8:3000/isItLogged', { withCredentials: true })
+    return this.http.get(`${hostIp}:3000/isItLogged`, { withCredentials: true })
   }
   public getTwoFactorSatat(): boolean {
     return this.twofactor;
@@ -31,9 +32,9 @@ export class AuthService {
   }
   // public callFortyTwo()
   public gowild(token: string): Observable<any> {
-    return this.http.post('http://10.13.4.8:3000/validate', { token: token }, { withCredentials: true }).pipe(catchError((err, caught) => EMPTY));
+    return this.http.post(`${hostIp}:3000/validate`, { token: token }, { withCredentials: true }).pipe(catchError((err, caught) => EMPTY));
   }
   logout() {
-    return this.http.get('http://10.13.4.8:3000/logout', { withCredentials: true }).pipe(catchError((err, caught) => EMPTY));
+    return this.http.get(`${hostIp}:3000/logout`, { withCredentials: true }).pipe(catchError((err, caught) => EMPTY));
   }
 }

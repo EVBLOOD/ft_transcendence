@@ -14,12 +14,17 @@ else
     npm install --save-dev @angular-devkit/build-angular;
 fi
 
+# as Dev
+# echo "--------------------- Init --------------------------------";
+# npm install;
+# echo "--------------------- Starting --------------------------------";
+# exec ng serve --host 0.0.0.0;
+
+
+# as production
 echo "--------------------- Init --------------------------------";
 npm install;
-# npm audit fix --legacy-peer-deps;
-# npm audit fix --legacy-peer-deps;
-# npm install;
+echo "--------------------- Building --------------------------------";
+ng build --configuration production
 echo "--------------------- Starting --------------------------------";
-exec ng serve --host 0.0.0.0;
-# ng build --configuration production
-# ng serve --configuration production // --host 0.0.0.0; or --skip-check-host
+exec ng serve --configuration production --host 0.0.0.0; #  or --skip-check-host

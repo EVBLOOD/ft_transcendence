@@ -1,29 +1,27 @@
 #!bin/bash
-if test -d /var/www/html/back;
+if test -d /var/www/html/back; # run back
 then
     echo "folder already exists";
     cd /var/www/html/back;
     rm -rf /var/www/html/back/node_modules;
     npm cache clean --force;
-else
+else # - build for dev mode -
     echo "folder doesn't exists! start setting up..";
     mkdir -p /var/www/html;
     cd /var/www/html;
     nest new back  --package-manager npm;
     cd /var/www/html/back;
-    # npm install --save @nestjs/cli @nestjs/typeorm typeorm pg @nestjs/mapped-types;
-    # npm install --save @nestjs/passport passport passport-42;
-    # npm install --save dotenv;
-    # npm install --save-dev nodemon;
-    # npm i -D @types/passport-42;
-    # nest g resource user; -> generate stuff
 fi
 
-echo "--------------------- Init --------------------------------";
+# as dev
+# echo "--------------------- Starting --------------------------------";
+# npm install;
+# exec npm run start:nodemon;
+
+# as production
+echo "--------------------- Initing --------------------------------";
 npm install;
+echo "--------------------- Building --------------------------------";
+npm run build;
 echo "--------------------- Starting --------------------------------";
-exec npm run start:nodemon;
-# tail -f /dev/null
-# ß"start:prod": "node dist/src/main.js",
-# npm run build
-# npm run start:prod
+exec npm run start:prod;

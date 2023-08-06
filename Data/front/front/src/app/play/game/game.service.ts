@@ -5,6 +5,7 @@ import { PositionState } from './position.state';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { StatusService } from 'src/app/status.service';
+import hostIp from 'src/config';
 
 // needs 3 packages
 // socket io : npm i --save ngx-socket-io
@@ -35,7 +36,7 @@ export class GameService {
   gameIsCreated$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   // Players$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   public Players: any = undefined;
-  public ip = 'http://10.13.4.8';
+  public ip = hostIp;
   // public url_base_user = `http://${this.ip}:3000/user`;
   public url_base_match = `http://${this.ip}:3000/match`;
   public socket = new Socket({ url: `${this.ip}:3000/game`, options: { withCredentials: true } });

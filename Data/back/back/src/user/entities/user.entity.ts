@@ -1,8 +1,6 @@
 import { Exclude } from 'class-transformer';
-import { IsBoolean, IsEmail, Matches, isNumber } from 'class-validator';
+import { IsBoolean, Matches } from 'class-validator';
 import { Messages } from 'src/chat/entities/Messages.entity';
-import { Chat } from 'src/chat/entities/chat.entity';
-// import { Punishment } from 'src/chat/punishment/punishment.entity';
 import { Match } from 'src/match/entities/match.entity';
 import { Column, Entity, OneToMany, PrimaryColumn, } from 'typeorm';
 
@@ -21,6 +19,7 @@ export class User {
   @Column()
   avatar: string;
 
+  @Exclude()
   @Column()
   @IsBoolean()
   TwoFAenabled: boolean;
@@ -46,6 +45,7 @@ export class User {
   @OneToMany(() => Match, match => match.winner)
   wonMatches: Match[];
 
+  @OneToMany(() => Messages, (messages) => messages.chat_id)
   messages: Messages;
 
   constructor(partial: Partial<User>) {

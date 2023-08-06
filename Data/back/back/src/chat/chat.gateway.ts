@@ -7,12 +7,13 @@ import {
 import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
 import { Inject } from '@nestjs/common';
-import { hostSocket } from 'src/app.service';
+// import { hostSocket } from 'src/app.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthenticatorService } from 'src/authenticator/authenticator.service';
 import { UserService } from 'src/user/user.service';
 import { CreateBanDTO, SeenDTO } from './dto/createAdmin.dto';
 import { FriendshipService } from 'src/friendship/friendship.service';
+import hostSocket from 'src/envirenment';
 
 @WebSocketGateway({
   namespace: 'chat',
