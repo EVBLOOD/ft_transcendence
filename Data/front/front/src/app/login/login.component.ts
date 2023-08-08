@@ -10,6 +10,6 @@ import hostIp from 'src/config';
 })
 export class LoginComponent {
   public ip: string = hostIp;
-  private user$: Observable<any> = this.authService.getCurrentUser();
+  // private user$: Observable<any> = this.authService.getCurrentUser();
   constructor(private authService: AuthService) { }
 }

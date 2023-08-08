@@ -14,14 +14,19 @@ else # - build for dev mode -
 fi
 
 # as dev
-npm install;
+# npm install;
 # echo "--------------------- Starting --------------------------------";
-exec npm run start:nodemon;
+# exec npm run start:nodemon;
 
 # as production
 echo "--------------------- Initing --------------------------------";
 npm install;
-echo "--------------------- Building --------------------------------";
-npm run build;
+if test -d /var/www/html/back/dist; 
+then
+    echo "Just run it, already build"
+else
+    echo "--------------------- Building --------------------------------";
+    npm run build;
+fi
 echo "--------------------- Starting --------------------------------";
 exec npm run start:prod;

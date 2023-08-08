@@ -8,14 +8,14 @@
                         <div class="nameAndAdd">
                             <p>{{(Fplayer$|async)?.username}}</p>
 
-                            <div *ngIf="(auth$| async)?.sub != (Fplayer$|async)?.id && !(test_$|async)?.length"
+                            <div *ngIf="Myid != (Fplayer$|async)?.id && !(test_$|async)?.length"
                                 [style.display]="!hideInv ? 'flex' : 'none'" class="addhimgame" (click)="addfriend()">
                                 <img src="/assets/icons/addfriend.svg" alt="add">
                             </div>
                         </div>
-                        <p *ngIf="(auth$| async)?.sub == (Fplayer$|async)?.id" class="score">
+                        <p *ngIf="Myid == (Fplayer$|async)?.id" class="score">
                             {{(WinnerNumber1$|async)?.number}}</p>
-                        <p *ngIf="(auth$| async)?.sub != (Fplayer$|async)?.id" class="score">
+                        <p *ngIf="Myid != (Fplayer$|async)?.id" class="score">
                             {{(LostNumber1$|async)?.number}}</p>
                     </div>
                 </div>
@@ -23,15 +23,15 @@
             <div class="player">
                 <div class="playerndScore">
                     <div class="nameAndAdd">
-                        <div *ngIf="(auth$|async)?.sub != (Splayer$|async)?.id && !(test$|async)?.length"
+                        <div *ngIf="Myid != (Splayer$|async)?.id && !(test$|async)?.length"
                             [style.display]="!hideInv ? 'flex' : 'none'" class="addhimgame" (click)="addfriend_()"><img
                                 src="/assets/icons/addfriend.svg" alt="add">
                         </div>
                         <p>{{(Splayer$|async)?.username}}</p>
                     </div>
-                    <p *ngIf="(auth$| async)?.sub == (Splayer$|async)?.id" class="score P2">
+                    <p *ngIf="Myid == (Splayer$|async)?.id" class="score P2">
                         {{(WinnerNumber2$|async)?.number}}</p>
-                    <p *ngIf="(auth$| async)?.sub != (Splayer$|async)?.id" class="score P2">
+                    <p *ngIf="Myid != (Splayer$|async)?.id" class="score P2">
                         {{(LostNumber2$|async)?.number}}</p>
 
                 </div>

@@ -2,7 +2,7 @@
 
 <div class="body" *ngIf="!((profile$| async)?.statusCode) && type != 2 && type != 1">
     <div class="body" style="display: flex; justify-content: center; align-content: center;"
-        *ngIf="!(profile$| async) || !(auth$| async) || !(sameDataEveryDayHelpMe$|async)">waiting ..</div>
+        *ngIf="!(profile$| async) || this.myID == -1 || !(sameDataEveryDayHelpMe$|async)">waiting ..</div>
     <img class="coverProfile" src="/assets/cover.svg" alt="cover img" />
     <div class="insideProfile">
         <div class="infoProfileUser">
@@ -18,7 +18,7 @@
                         class="userStatus"> {{ status }}</p>
                 </div>
             </div>
-            <div *ngIf="(profile$| async)?.id != (auth$| async)?.sub" class="userAction">
+            <div *ngIf="(profile$| async)?.id != myID" class="userAction">
                 <button *ngIf="type != 1" (click)="blockUser()">Block <img src="/assets/block.svg" alt="1"></button>
                 <button *ngIf="type == 1" (click)="unBlock()">Unblock <img src="/assets/block.svg" alt="1"></button>
                 <button (click)="GoChat()">Message <img src="/assets/MessageProfile.svg" alt="2"></button>
@@ -38,7 +38,7 @@
                     </ul>
                 </div>
             </div>
-            <div *ngIf="(profile$| async)?.id == (auth$| async)?.sub" class="YourAction">
+            <div *ngIf="(profile$| async)?.id == myID" class="YourAction">
                 <button [class]="YourBodyChoosen ? 'YourFirstChoice' : 'YourSecondChoice'"
                     (click)="changeMode()">Statistics & History</button>
                 <button [class]="!YourBodyChoosen ? 'YourFirstChoice' : 'YourSecondChoice'"

@@ -18,8 +18,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
   profile = "/assets/img/profile.jpg";
   logo = "LOGO is loading";
   // private correntUser : any;
+  public myID = -1;
   public profileSubject$ !: Observable<any>;
-  public auth$ !: Observable<any>;
+  // public auth$ !: Observable<any>;
   public username: any;
   public status !: string;
   displayRespondingWay: boolean = false;
@@ -45,6 +46,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.username = this.route.snapshot.params["username"];
   }
   ngOnInit(): void {
+    this.myID = this.authService.getId();
     if (!this.username || this.username == '') {
       this.sameDataEveryDayHelpMe$ = this.gameStats.Ilead();
       this.History$ = this.gameStats.getPlayersHistory();
@@ -99,7 +101,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       });
       this.SubArray.push(this.removesubsc)
     }
-    this.auth$ = this.authService.getCurrentUser();
+    // this.auth$ = this.authService.getCurrentUser();
   }
 
   ngOnDestroy(): void {

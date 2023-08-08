@@ -64,6 +64,7 @@ const CONFIG: Phaser.Types.Core.GameConfig = {
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameComponent implements OnDestroy, OnInit {
+  public Myid = -1;
   public Fplayer$ !: Observable<any>;
   public test$ !: Observable<any>;
   public test_$ !: Observable<any>;
@@ -72,7 +73,7 @@ export class GameComponent implements OnDestroy, OnInit {
   public LostNumber1$ !: Observable<any>;
   public LostNumber2$ !: Observable<any>;
   public Splayer$ !: Observable<any>;
-  public auth$ !: Observable<any>;
+  // public auth$ !: Observable<any>;
   public players: any = undefined;
   private game!: Phaser.Game;
   private gameScene!: GameScene;
@@ -91,7 +92,8 @@ export class GameComponent implements OnDestroy, OnInit {
   constructor(private gameService: GameService, public profile: ProfileService, private switchRoute: Router,
     private auth: AuthService, public friends: FriendshipService, private status: StatusService, public statistics: AboutGamesService) {
 
-    this.auth$ = this.auth.getCurrentUser();
+    // this.auth$ = this.auth.getCurrentUser();
+    this.Myid = this.auth.getId();
     this.players = this.gameService.Players;
     this.Fplayer$ = this.profile.getUserData(this.players.Fplayer)
     this.Splayer$ = this.profile.getUserData(this.players.Splayer)
