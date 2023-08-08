@@ -33,7 +33,7 @@ export class ActivatetwoComponent implements OnInit, OnDestroy {
     if (data.statusCode)
       this.isDisplay = true;
     else
-      this.router.navigateByUrl('settings');
+      this.router.navigateByUrl('');
   }
 
   validateInput() {

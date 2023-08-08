@@ -49,7 +49,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
           this.router.navigateByUrl('');
         this.fullName = new FormControl(data.name, [Validators.required, Validators.minLength(5)]);
         this.userName = new FormControl(data.username, [Validators.required, Validators.minLength(5), Validators.pattern(/^[a-z]+(-[a-z]+)?$/)]);
-        this.twoFactor = data.TwoFAenabled || false;
+        this.twoFactor = data.TwoFAenabled;
         this.PlayTheme = data.theme;
         this.PlayThemeInit = data.theme;
         this.submet_this.avatar = data.avatar;
@@ -70,7 +70,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.twoFactor = false;
   }
   activetwofactor() {
-    this.router.navigateByUrl('/acticatetwo');
+    if (this.twoFactorInit == false)
+      this.router.navigateByUrl('/acticatetwo');
   }
 
   getname(index: number) {
@@ -88,6 +89,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
     if (data.statusCode)
       this.Myerror = true;
     else {
+      if (this.file) {
+        this.removesubsc = this.serviceUser.setUserAvatar(this.file).subscribe({ next: (data) => { this.handleResponseone(data) } })
+        this.SubArray.push(this.removesubsc)
+      }
       this.serviceUser.update();
       this.router.navigateByUrl('');
     }
@@ -112,17 +117,17 @@ export class SettingsComponent implements OnInit, OnDestroy {
     if (this.userName.errors || this.fullName.errors)
       return;
 
-    if (this.file) {
+    if (this.file && !(!this.fullName.pristine && this.fullName.value?.trim().length) || !this.userName.pristine || this.PlayTheme != this.PlayThemeInit || this.twoFactor != this.twoFactorInit) {
       this.removesubsc = this.serviceUser.setUserAvatar(this.file).subscribe({ next: (data) => { this.handleResponseone(data) } })
       this.SubArray.push(this.removesubsc)
     }
 
-    if (!this.fullName.pristine || !this.userName.pristine || this.PlayTheme != this.PlayThemeInit || this.twoFactor != this.twoFactorInit) {
+    if ((!this.fullName.pristine && this.fullName.value?.trim().length) || !this.userName.pristine || this.PlayTheme != this.PlayThemeInit || this.twoFactor != this.twoFactorInit) {
       this.removesubsc = this.serviceUser.updateUserInfos({
         username: this.userName.value,
         name: this.fullName.value,
         avatar: this.submet_this.avatar,
-        twofactor: this.twoFactorInit,
+        twofactor: this.twoFactor,
         theme: this.PlayTheme
       }).subscribe(
         { next: (data) => { this.handleResponse(data) }, }

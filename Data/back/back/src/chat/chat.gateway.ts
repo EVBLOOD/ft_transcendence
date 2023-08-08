@@ -18,8 +18,8 @@ import hostSocket from 'src/envirenment';
 @WebSocketGateway({
   namespace: 'chat',
   cors: {
-    origin: hostSocket,
     credentials: true,
+    origin: hostSocket,
   },
 })
 export class ChatGateway {

@@ -222,7 +222,7 @@ export class ChatService {
       this.sock.emit("privateMessage", { type: type, message: message });
   }
   getChatroomMessages(id: number) {
-    return this.httpClient.get<number>(hostIp + `/chat/${id}/messages`, { withCredentials: true, });
+    return this.httpClient.get<number>(hostIp + `:3000/chat/${id}/messages`, { withCredentials: true, });
   }
   addUser(user: addUserDTO) {
     return this.httpClient.post<addUserDTO>(`${hostIp}:3000/user`, user, { withCredentials: true, });

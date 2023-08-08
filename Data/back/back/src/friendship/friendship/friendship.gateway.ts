@@ -11,7 +11,6 @@ import hostSocket from 'src/envirenment';
   cors: {
     credentials: true,
     origin: hostSocket,
-
   },
 })
 export class FriendshipGateway implements OnGatewayInit {
