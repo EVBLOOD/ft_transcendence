@@ -48,17 +48,6 @@ export class UserController {
     throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
   }
 
-  // @Get('/avatar/:path')
-  // async SendAvatar(@Res() res, @Param('path') path: string) {
-  //   if (existsSync('./upload/avatars/' + path)) {
-  //     console.log('Ewa?');
-  //     res.sendFile(path, { root: './upload/avatars' });
-  //     return {};
-  //   }
-  //   console.log('Ewa?');
-  //   throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
-  // }
-
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {

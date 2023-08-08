@@ -85,7 +85,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   handleResponse(data: any) {
-    console.log(data)
     if (data.statusCode)
       this.Myerror = true;
     else {

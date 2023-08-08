@@ -5,7 +5,6 @@ import { AuthService } from '../login/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StatusService } from '../status.service';
 import { FriendshipService } from './friendship.service';
-import { GameService } from '../play/game/game.service';
 import { AboutGamesService } from '../play/about-games.service';
 
 @Component({
@@ -157,9 +156,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.YourBodyChoosen = !this.YourBodyChoosen;
   }
 
-  isObject(value: any): boolean {
-    return Array.isArray(value)
-  }
+  // isObject(value: any): boolean {
+  //   return Array.isArray(value)
+  // }
 
   updating(type: number) {
     if (type == 1)

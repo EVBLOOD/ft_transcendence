@@ -21,7 +21,6 @@ export class AuthStrategy extends PassportStrategy(Strategy, '42') {
     profile: any,
     done: Function,
   ): Promise<any> {
-    // console.log(profile);
     try {
       return await done(
         null,

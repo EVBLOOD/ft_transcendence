@@ -24,14 +24,14 @@ export class GameInstance {
 
 
   constructor(public player1: Socket, public player2: Socket) {
-    console.log("game is created (start)");
+    // console.log("game is created (start)");
     this.engine = Engine.create();
     let engine2 = Engine.create();
 
     if (this.engine == engine2) {
-      console.log("[DEBUG] the same ref");
+      // console.log("[DEBUG] the same ref");
     } else {
-      console.log("[DEBUG] not the same ref");
+      // console.log("[DEBUG] not the same ref");
     }
     this.world = this.engine.world;
 
@@ -120,7 +120,7 @@ export class GameInstance {
 
 
     player1.on('playerIsReady', () => {
-      console.log('player1 is ready');
+      // console.log('player1 is ready');
       this.player1Ready = true;
 
       if (this.player2Ready) {
@@ -131,7 +131,7 @@ export class GameInstance {
     });
 
     player2.on('playerIsReady', () => {
-      console.log('player2 is ready');
+      // console.log('player2 is ready');
       this.player2Ready = true;
 
       if (this.player1Ready) {
@@ -141,7 +141,7 @@ export class GameInstance {
       }
     });
 
-    console.log("game is created (finish)");
+    // console.log("game is created (finish)");
   }
 
   private setPlayerWon(player: PlayerNumber) {
@@ -233,7 +233,7 @@ export class GameInstance {
   }
 
   private startGame() {
-    console.log("Starting The Engine");
+    // console.log("Starting The Engine");
     const runner = Runner.create({
       isFixed: true,
       delta: 1000 / 60
@@ -311,7 +311,7 @@ export class GameInstance {
   // readonly PADDLEWIDTHHALF = PADDLEWIDTH / 2;
   private handleBallPaddleCollision(paddle: Matter.Body) {
     const angle = this.clamp((this.ball.position.y - paddle.position.y), -50, 50);
-    console.log("angle", this.ball.position.y - paddle.position.y, angle);
+    // console.log("angle", this.ball.position.y - paddle.position.y, angle);
     const sign = (this.ball.position.x - paddle.position.x) < 0 ? -1 : 1;
     const velocity = {
       x: sign * this.speed * Math.cos(this.degreesToRadians(angle)),

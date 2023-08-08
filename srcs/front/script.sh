@@ -16,15 +16,15 @@ fi
 
 # as Dev
 # echo "--------------------- Init --------------------------------";
-npm install;
+# npm install;
 # echo "--------------------- Starting --------------------------------";
-exec ng serve --host 0.0.0.0;
+# exec ng serve --host 0.0.0.0;
 
 
 # as production
-# echo "--------------------- Initing --------------------------------";
-# npm install;
-# echo "--------------------- Building --------------------------------";
-# ng build --configuration production
-# echo "--------------------- Starting --------------------------------";
-# exec ng serve --configuration production --host 0.0.0.0; #  or --skip-check-host
+echo "--------------------- Initing --------------------------------";
+npm install;
+echo "--------------------- Building --------------------------------";
+ng build --configuration production
+echo "--------------------- Starting --------------------------------";
+exec ng serve --configuration production --host 0.0.0.0; #  or --skip-check-host

@@ -21,7 +21,6 @@ export class MatchController {
 
   @Get('player/:id')
   findThem(@Req() req: any, @Param('id', ParseIntPipe) id: number) {
-    console.log(id)
     return this.matchService.getMatchHistory(id);
   }
 

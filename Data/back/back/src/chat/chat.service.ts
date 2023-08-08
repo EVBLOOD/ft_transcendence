@@ -50,7 +50,6 @@ export class ChatService {
       if (users.map((user) => { return user.sender != room.user.id && user.receiver != room.user.id }))
         return room;
     })
-    console.log(z)
     return z;
     // return rooms;
   }
@@ -78,7 +77,6 @@ export class ChatService {
       .leftJoinAndSelect("Members.chat", "chatID")
       .leftJoinAndSelect("Members.user", "Userid")
       .where("Userid.id = :user1 AND chatID.id IN (:...ids)", { user1: user2, ids: ret }).getOne();
-    console.log('found chat', rooms);
     if (rooms)
       return rooms.chat.id;
     return -1;
@@ -212,7 +210,6 @@ export class ChatService {
         return undefined;
     }
     if (chatroomDTO.type === 'protected') {
-      console.log("welcome!")
       const passwordHash = await bcrypt.hash(chatroomDTO.password, 10);
       chatroomDTO.password = passwordHash;
     }
@@ -226,8 +223,6 @@ export class ChatService {
     else
       await this.MembersRepo.save({ chatID: room.id, Userid: userId, role: 'owner', state: 1, notSeen: 0 })
 
-    console.log("--room---")
-    console.log(room)
     if (chatroomDTO.type == 'direct' && userId != parseInt(chatroomDTO.chatroomName))
       await this.MembersRepo.save({ chatID: room.id, Userid: parseInt(chatroomDTO.chatroomName), role: 'none', state: 1, notSeen: 0 })
     return room;
@@ -267,7 +262,6 @@ export class ChatService {
       .leftJoinAndSelect("Members.chat", "chatID")
       .leftJoinAndSelect("Members.user", "Userid")
       .where("chatID.id = :id", { id }).getOne();
-    console.log('GetChatRoomByID', rooms);
     return rooms;
   }
 
@@ -322,7 +316,6 @@ export class ChatService {
   }
 
   async MuteHim(current: number, id: number, chatID: number) {
-    console.log(current, id, chatID)
     if (!(await this.checkforRole(chatID, current, ['admin', 'owner'])) || await this.checkforRole(chatID, id, ['owner']))
       return {};
     const x = await this.MembersRepo.findOne({ where: { chatID: chatID, Userid: id, state: 1 } });
@@ -388,7 +381,6 @@ export class ChatService {
       .leftJoinAndSelect("Members.user", "Userid").select(["Userid", "Members"])
       .where("chatID.type != :type AND chatID.id = :channelId AND Userid.id = :id", { type: 'direct', channelId: channelId, id: userId })
       .getOne();
-    // console.log('1312', rooms)
     return rooms;
   }
   async getChatRoomMembers(userId: number, channelId: number) {
@@ -399,7 +391,6 @@ export class ChatService {
       .leftJoinAndSelect("Members.user", "Userid").select(["Userid", "Members"])
       .where("chatID.type != :type AND chatID.id = :channelId", { type: 'direct', channelId: channelId, })
       .getMany();
-    console.log("Room's Memebers", rooms)
     return rooms;
   }
   async getMessagesByChatID(userId: number, channelId: number) {
@@ -445,7 +436,6 @@ export class ChatService {
   async postToChatroom(messageDTO: CreateMessage, id: number) { // TODO: throw's exeptions -
     if (!(await this.isMember(id, messageDTO.charRoomId)))
       return {}
-    console.log(messageDTO)
     return await this.MessagesRepo.save({ content: messageDTO.value, sender: id, time: (new Date()).toISOString(), chat_id: messageDTO.charRoomId })
   }
 
@@ -468,7 +458,6 @@ export class ChatService {
     const x = await this.checkInviteExists(channelId, currentUser);
     if (x) {
       x.state = 1;
-      console.log(x)
       return await this.MembersRepo.save(x);
     }
     return {};
@@ -476,7 +465,6 @@ export class ChatService {
 
   async DeleteAnInvite(channelId: number, currentUser: number) {
     const x = await this.checkInviteExists(channelId, currentUser);
-    console.log(x)
     if (x) {
       return await this.MembersRepo.delete({ chatID: channelId, Userid: currentUser, });
     }

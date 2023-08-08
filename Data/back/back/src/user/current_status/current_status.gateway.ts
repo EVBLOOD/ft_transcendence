@@ -32,12 +32,6 @@ export class CurrentStatusGateway {
   myserver: Server;
 
   async handleConnection(client: Socket, ...args: any[]) {
-    console.log(
-      client.handshake.headers?.cookie
-        ?.split('; ')
-        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
-        ?.split('=')[1],
-    );
     if (
       !client.handshake.headers?.cookie
         ?.split('; ')

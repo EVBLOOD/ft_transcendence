@@ -159,8 +159,6 @@ export class FriendshipService {
     });
     if (friendship.length > 1 || friendship.length == 0) {
       if (friendship.length != 0) return undefined;
-      console.log(` id : ${id}`)
-      console.log(` UserReceiving.id : ${UserReceiving.id}`)
       return await this.FriendShipRepo.save({
         sender: id,
         receiver: UserReceiving.id,
@@ -234,7 +232,6 @@ export class FriendshipService {
         .andWhere('friendship.status = :status', { status: 'accepted' })
         .getMany();
     } else {
-      console.log("findList is on progress");
       findList = await this.FriendShipRepo.createQueryBuilder('friendship')
         .leftJoinAndSelect('friendship.user1', 'user1')
         .leftJoinAndSelect('friendship.user2', 'user2')
@@ -254,9 +251,6 @@ export class FriendshipService {
       if (element.user1.id == user.id) friends.push(element.user2);
       else friends.push(element.user1);
     });
-    // console.log("this is the end that shouldn't be ")
-    // console.log(friends);
-    // console.log(findList);
     return friends;
   }
 

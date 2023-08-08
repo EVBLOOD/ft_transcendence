@@ -49,7 +49,7 @@ export class GameService {
       this.gameIsCreated$.next(true);
     });
     this.socket.on('invite', (inviterId: string) => {
-      console.log("HELLO")
+      // console.log("HELLO")
       const id = parseInt(inviterId);
       // const response = confirm(`You have been invited by player id ${id}. Do you accept?`);
       // this.socket.emit('inviteResponse', response);

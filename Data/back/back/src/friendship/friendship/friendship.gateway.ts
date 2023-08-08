@@ -13,17 +13,13 @@ import hostSocket from 'src/envirenment';
     origin: hostSocket,
   },
 })
-export class FriendshipGateway implements OnGatewayInit {
+export class FriendshipGateway {
 
 
-  afterInit() {
-    console.log(process.env.HOST)
-  }
   private connections: Map<number, Set<Socket>> = new Map<number, Set<Socket>>();
 
   constructor(private readonly serviceJWt: JwtService, private readonly serviceToken: AuthenticatorService,
     private readonly friendshipService: FriendshipService) {
-    console.log('HOST:', process.env.HOST);
   }
   @WebSocketServer()
   myserver: Server;

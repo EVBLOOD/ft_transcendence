@@ -137,7 +137,6 @@ export class ChatGateway {
     if (isBanned.length)
       return; // will be removed and added in an other place
     const message: any = await this.chatService.postToChatroom(payload?.message, xyz.sub);
-    console.log(message)
     const sender = await this.User.findOne(xyz.sub);
     this.chatService.seenForChannel(xyz.sub, message.chat_id, 1)
     this.chatService.seenForChannel(xyz.sub, message.chat_id, 0)

@@ -57,8 +57,8 @@
         </div>
         <div *ngIf="YourBodyChoosen">
             <!-- friend requests -->
-            <div *ngIf="!isObject((friendRequest$ | async));"> {{down(friendRequestSkip, 2)}}</div>
-            <div *ngIf="isObject((friendRequest$ | async))">
+            <div *ngIf="!(friendRequest$ | async)?.length;"> {{down(friendRequestSkip, 2)}}</div>
+            <div *ngIf="(friendRequest$ | async)?.length">
                 <div class="titleNavBtn">
                     <h1>friend requests</h1>
                     <div class="navGroup">
@@ -76,8 +76,8 @@
                 </div>
             </div>
             <!-- friends -->
-            <div *ngIf="!isObject((friendList$ | async));"> {{down(friendListSkip, 1)}}</div>
-            <div style="margin-top: 20px;" *ngIf="isObject((friendList$ | async))">
+            <div *ngIf="!(friendList$ | async)?.length;"> {{down(friendListSkip, 1)}}</div>
+            <div style="margin-top: 20px;" *ngIf="(friendList$ | async)?.length">
                 <div class="titleNavBtn">
                     <h1>friends</h1>
                     <div class="navGroup">
@@ -93,8 +93,8 @@
             </div>
 
             <!-- block list -->
-            <div *ngIf="!isObject((blockedList$ | async));"> {{down(blockListSkip, 3)}}</div>
-            <div *ngIf="isObject((blockedList$ | async));" style="margin-top: 20px;">
+            <div *ngIf="!(blockedList$ | async)?.length;"> {{down(blockListSkip, 3)}}</div>
+            <div *ngIf="(blockedList$ | async)?.length;" style="margin-top: 20px;">
                 <div class="titleNavBtn">
                     <h1>block list</h1>
                     <div class="navGroup">

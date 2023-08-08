@@ -18,13 +18,9 @@ import {
 } from '@nestjs/common';
 import { FriendshipService } from './friendship.service';
 import {
-  DealingWithRequestDto,
   UserIdValidatingDto,
-  UserValidatingDto,
 } from './dto/create-friendship.dto';
 import { UservalidatingPipe } from './uservalidating/uservalidating.pipe';
-import { Matches } from 'class-validator';
-// import { IsauthGuard } from 'src/auth/isauth.guard';
 import { JwtAuthGuard } from 'src/authenticator/jwtauth.guard';
 
 @UseGuards(JwtAuthGuard)
@@ -41,27 +37,9 @@ export class FriendshipController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('find/:id')
   async findOne(@Req() req, @Param('id', ParseIntPipe) id: number) {
-    console.log(id)
     const replay = await this.friendshipService.findOne(req.new_user.sub, id);
     return replay;
-    // throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
   }
-
-  // @UseInterceptors(ClassSerializerInterceptor)
-  // @Get('suggestions')
-  // async suggestions(
-  //   @Request() req: any,
-  //   @Query('skip', ParseIntPipe) skip: number,
-  //   @Query('take', ParseIntPipe) take: number,
-  // ) {
-  //   const replay = await this.friendshipService.suggested(
-  //     req.new_user.sub,
-  //     skip,
-  //     take,
-  //   );
-  //   if (replay) return replay;
-  //   throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
-  // }
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('friendList')
@@ -75,81 +53,8 @@ export class FriendshipController {
       skip,
       take,
     );
-    console.log("ALO oui");
-    if (replay && replay.length != 0) return replay;
-    console.log(replay)
-    throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
+    return replay;
   }
-
-  // @UseInterceptors(ClassSerializerInterceptor)
-  // @Post('unblock')
-  // @UsePipes(new UservalidatingPipe())
-  // async unblock(@Request() req: any, @Body() body: UserValidatingDto) {
-  //   try {
-  //     const replay = await this.friendshipService.unblock(
-  //       req.new_user.sub,
-  //       body.Userone,
-  //     );
-  //     // console.log(replay);
-  //     if (replay) return replay;
-  //   } catch (err) {
-  //     throw new HttpException(
-  //       {
-  //         status: HttpStatus.BAD_GATEWAY,
-  //         error: 'BAD_GATEWAY',
-  //       },
-  //       HttpStatus.BAD_GATEWAY,
-  //       { cause: err },
-  //     );
-  //   }
-  //   throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
-  // }
-
-  // @UseInterceptors(ClassSerializerInterceptor)
-  // @Post('unfriend')
-  // @UsePipes(new UservalidatingPipe())
-  // async unfriend(@Request() req: any, @Body() body: UserValidatingDto) {
-  //   try {
-  //     const replay = await this.friendshipService.remove(
-  //       req.new_user.sub,
-  //       body.Userone,
-  //     );
-  //     if (replay) return replay;
-  //   } catch (err) {
-  //     throw new HttpException(
-  //       {
-  //         status: HttpStatus.BAD_GATEWAY,
-  //         error: 'BAD_GATEWAY',
-  //       },
-  //       HttpStatus.BAD_GATEWAY,
-  //       { cause: err },
-  //     );
-  //   }
-  //   throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
-  // }
-
-  // @UseInterceptors(ClassSerializerInterceptor)
-  // @Post('blocking')
-  // @UsePipes(new UservalidatingPipe())
-  // async blocking(@Request() req: any, @Body() body: UserValidatingDto) {
-  //   try {
-  //     const replay = await this.friendshipService.blocking(
-  //       req.new_user.sub,
-  //       body.Userone,
-  //     );
-  //     if (replay) return replay;
-  //   } catch (err) {
-  //     throw new HttpException(
-  //       {
-  //         status: HttpStatus.BAD_GATEWAY,
-  //         error: 'BAD_GATEWAY',
-  //       },
-  //       HttpStatus.BAD_GATEWAY,
-  //       { cause: err },
-  //     );
-  //   }
-  //   throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
-  // }
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('blocklist')
@@ -163,9 +68,7 @@ export class FriendshipController {
       skip,
       take,
     );
-    console.log(replay)
-    if (replay && replay.length) return replay;
-    throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
+    return replay;
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
@@ -173,7 +76,6 @@ export class FriendshipController {
   @UsePipes(new UservalidatingPipe())
   async FriendshipStatus(@Request() req: any, @Body() body: UserIdValidatingDto) {
     try {
-      console.log(body);
       const replay = await this.friendshipService.FriendshipStatus(
         req.new_user.sub,
         body.id,
@@ -203,60 +105,6 @@ export class FriendshipController {
       skip,
       take,
     );
-    if (replay && replay.length) return replay;
-    throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
+    return replay;
   }
-  // @UseInterceptors(ClassSerializerInterceptor)
-  // @Get('isfriend')
-  // async isfriend(
-  //   @Request() req: any,
-  //   @Query('id', ParseIntPipe) id: number,)
-  //   {
-  //     const replay = await this.friendshipService.findOne
-  //   }
-  // @UseInterceptors(ClassSerializerInterceptor)
-  // @Post('accept')
-  // @UsePipes(new UservalidatingPipe())
-  // async accepting(@Request() req: any, @Body() body: UserValidatingDto) {
-  //   try {
-  //     const replay = await this.friendshipService.accepting(
-  //       req.new_user.sub,
-  //       body.Userone,
-  //     );
-  //     if (replay) return replay;
-  //   } catch (err) {
-  //     throw new HttpException(
-  //       {
-  //         status: HttpStatus.BAD_GATEWAY,
-  //         error: 'BAD_GATEWAY',
-  //       },
-  //       HttpStatus.BAD_GATEWAY,
-  //       { cause: err },
-  //     );
-  //   }
-  //   throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
-  // }
-
-  // @UseInterceptors(ClassSerializerInterceptor)
-  // @Post('send')
-  // @UsePipes(new UservalidatingPipe())
-  // async send(@Request() req: any, @Body() body: UserValidatingDto) {
-  //   try {
-  //     const replay = await this.friendshipService.create(
-  //       req.new_user.sub,
-  //       body.Userone,
-  //     );
-  //     if (replay) return replay;
-  //   } catch (err) {
-  //     throw new HttpException(
-  //       {
-  //         status: HttpStatus.BAD_GATEWAY,
-  //         error: 'BAD_GATEWAY',
-  //       },
-  //       HttpStatus.BAD_GATEWAY,
-  //       { cause: err },
-  //     );
-  //   }
-  //   throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
-  // }
 }

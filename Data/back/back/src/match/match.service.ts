@@ -122,7 +122,7 @@ export class MatchService {
     return (await this.StatasticsRepo.createQueryBuilder('stats')
       .leftJoinAndSelect('stats.User', 'User').orderBy('stats.score', 'DESC').getMany()).map((info) => {
         return {
-          user: { username: info.User.username, avatar: info.User.avatar }, matchPlayed: info.total, win: info.win, ratio: info.score
+          user: { username: info.User.username, avatar: info.User.avatar, id: info.User.id }, matchPlayed: info.total, win: info.win, ratio: info.score
         }
       })
   }

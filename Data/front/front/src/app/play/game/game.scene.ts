@@ -38,11 +38,11 @@ export class GameScene extends Phaser.Scene {
 
   constructor(private gameService: GameService, private playerNumber: Player, private color: Color) {
     super({ key: 'GameScene' });
-    console.log("create GameScene");
+    // console.log("create GameScene");
   }
 
   preload() {
-    console.log('start')
+    // console.log('start')
     this.sound.stopAll();
     if (this.color == Color.White) {
       this.load.image('background', '/assets/asset/white/background.png');
@@ -60,11 +60,11 @@ export class GameScene extends Phaser.Scene {
       this.load.image('line', '/assets/asset/line.png');
     }
     this.load.image('win', '/assets/asset/win.png');
-    console.log('end')
+    // console.log('end')
   }
 
   setupGameObject() {
-    console.log('start 1')
+    // console.log('start 1')
     switch (this.playerNumber) {
       case Player.One:
         {
@@ -79,12 +79,12 @@ export class GameScene extends Phaser.Scene {
           break;
         }
       default:
-        console.log("default")
+      // console.log("default")
     }
 
     this.ball = this.add.image(this.gameWidth / 2, this.gameHeight / 2, 'ball');
     this.win = this.add.image(this.gameWidth / 2, this.gameHeight / 2, 'win').setVisible(false);
-    console.log('end 1')
+    // console.log('end 1')
   }
 
   initText() {
@@ -99,7 +99,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   create() {
-    console.log("create GameScene start")
+    // console.log("create GameScene start")
     this.gameHeight = this.sys.canvas.height;
     this.gameWidth = this.sys.canvas.width;
     this.cursors = this.input?.keyboard?.createCursorKeys()!;
@@ -144,11 +144,11 @@ export class GameScene extends Phaser.Scene {
 
 
 
-    console.log("create GameScene end")
+    // console.log("create GameScene end")
   }
 
   destroy() {
-    console.log("scene destroyed");
+    // console.log("scene destroyed");
     this.updateBallStateEventSub?.unsubscribe();
     this.updateOpponentPaddleSub?.unsubscribe();
     this.updatePlayerScoreEventSub?.unsubscribe();
