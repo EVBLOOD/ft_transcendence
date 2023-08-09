@@ -2,7 +2,9 @@
 <div class="page" *ngIf="getcurrentPath() != '/login' && getcurrentPath() != '/twoFactor'">
     <div class="container">
         <div class="header">
-            <div class="logo">PING-PONG</div>
+            <div class="logo">
+                <img src="/assets/asset/logo.svg" routerLink="">
+            </div>
             <ul class="menu">
                 <li [style.background]="getcurrentPath() == '/play' ? '#103959' : '#184E77'" routerLink="play">
                     <img src="/assets/icons/play.svg"> Play

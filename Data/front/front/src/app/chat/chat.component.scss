@@ -28,7 +28,7 @@
     transition: 0.3s;
     cursor: pointer;
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 700;
     flex-basis: 50%;
     border-radius: 10px;
     display: flex;
@@ -148,8 +148,8 @@
         grid-template-columns: min-content auto;
     }
 
-    .button p {
-        display: none;
-    }
+    // .button p {
+    //     display: none;
+    // }
 
 }

@@ -16,10 +16,15 @@
     overflow-y: auto;
 }
 
+.logo img{
+    width: 160px;
+    cursor: pointer;
+}
+
 .header {
     display: grid;
     justify-content: space-between;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: 20% auto 20%;
     color: #fff;
     align-items: center;
     width: 100%;
@@ -34,6 +39,8 @@
 
 .profile {
     position: relative;
+    display: flex;
+    justify-content: end;
 }
 
 .profile img {

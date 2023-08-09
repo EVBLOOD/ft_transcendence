@@ -80,17 +80,17 @@
 }
 
 .circle {
-    background-color: #D9E8D6;
     margin: 1px;
     width: 18px;
     height: 18px;
     border-radius: 50%;
     -webkit-transition: .4s;
+    background: #184E77;
     transition: .4s;
 }
 
 .circleChecked {
-    background: #184E77;
+    background-color: #bfecb6;
     transform: translateX(100%);
 }
 
