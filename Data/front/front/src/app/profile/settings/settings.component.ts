@@ -11,8 +11,8 @@ import { Router } from '@angular/router';
 })
 export class SettingsComponent implements OnInit, OnDestroy {
   private replay: any;
-  fullName = new FormControl('', [Validators.required, Validators.minLength(5), Validators.pattern(/^[a-z]+(-[a-z]+)?$/)]);
-  userName = new FormControl('', [Validators.required, Validators.minLength(5)]);
+  fullName = new FormControl('', [Validators.required, Validators.minLength(3), Validators.pattern(/^[a-z]+(-[a-z]+)?$/)]);
+  userName = new FormControl('', [Validators.required, Validators.minLength(3)]);
   Myerror: boolean = false;
   MyerrorAvatar: boolean = false;
   twoFactor: boolean = false;
