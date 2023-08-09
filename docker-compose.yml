@@ -1,0 +1,71 @@
+# Notice : if you working with linux you should change the ${PWD} with a Valide PATH.
+version: '3.7'
+
+services:
+  # Features
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - ft_transcendence
+
+  # Main Services
+  back:
+    build: ./srcs/back
+    image: back
+    container_name: back
+    networks:
+      - ft_transcendence
+    ports:
+      - 3000:3000
+    restart: on-failure
+    volumes:
+      - vol_back:/var/www/html/
+
+  front:
+    build: ./srcs/front
+    image: front
+    container_name: front
+    networks:
+      - ft_transcendence
+    ports:
+      - 4200:4200
+    restart: always
+    volumes:
+      - vol_front:/var/www/html/
+
+  database:
+    image: postgres
+    container_name: database
+    networks:
+      - ft_transcendence
+    restart: on-failure
+    # volumes:
+    #   - vol_database:/var/lib/postgresql/data # this should be enabled before pushing, same as vol_database
+    environment:
+      - POSTGRES_PASSWORD=evblood123
+      - POSTGRES_DB=ft_transcendence
+
+networks:
+  ft_transcendence:
+    driver: bridge
+
+volumes:
+  vol_back:
+    driver_opts:
+      o: bind
+      type: 'none'
+      device: ${PWD}/Data/back
+  vol_front:
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: ${PWD}/Data/front
+  # vol_database:
+  #   driver_opts:
+  #     type: 'none'
+  #     o: bind
+  #     device: ${PWD}/Data/base

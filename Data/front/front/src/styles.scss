@@ -1,0 +1,136 @@
+/* You can add global styles to this file, and also import other style files */
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+}
+
+body {
+  background-color: #184E77;
+  color: #fff;
+  // overflow-y: hidden;
+}
+
+.swal2-actions {
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  grid-area: actions !important;
+
+}
+
+
+.swal2-icon-show {
+  display: block !important;
+}
+
+.accept_notif-container {
+  padding: 7px !important;
+  align-items: center !important;
+  justify-items: center !important;
+  justify-content: center !important;
+  align-content: center !important;
+  display: grid !important;
+  grid-template:
+    "icon title title"
+    "icon content content"
+    "icon .  actions" !important;
+  row-gap: 0px !important;
+  width: 313px !important;
+  height: 102px !important;
+  border-radius: 10px !important;
+  border: 1px solid #D8E9FA !important;
+  background: #F2F6FA;
+  box-shadow: 0px 0px 4px 1px #7FABCC !important;
+}
+
+.swal2-image {
+  grid-area: icon !important;
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: 50% !important;
+  border-color: #F2F6FA !important;
+  margin: 0 !important;
+}
+
+.swal2-icon {
+  border: 0px;
+}
+
+.accept_notif-title {
+  grid-area: title !important;
+  color: #103959 !important;
+  font-size: 13px !important;
+  font-style: normal !important;
+  font-weight: 700 !important;
+  line-height: normal !important;
+  text-transform: uppercase !important;
+}
+
+
+.swal2-html-container {
+  grid-area: content !important;
+  color: #103959 !important;
+
+}
+
+.accept_notif-text {
+
+  color: #103959 !important;
+  font-size: 8px !important;
+  // font-family: Montserrat !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  line-height: normal !important;
+}
+
+.accept_notif-content {
+  font-size: 18px !important;
+  margin-bottom: 16px !important;
+}
+
+.accept_notif-cancel-button {
+  border-radius: 6px !important;
+  ;
+  background: #F2F6FA !important;
+
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.25) !important;
+  ;
+  color: #103959 !important;
+
+  text-align: center;
+  font-size: 9px !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  line-height: normal !important;
+  cursor: pointer !important;
+}
+
+.accept_notif-confirm-button {
+  border-radius: 6px !important;
+  ;
+  background: #103959 !important;
+  ;
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.25) !important;
+  ;
+  color: #F5F5F5 !important;
+  text-align: center;
+  font-size: 9px !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  line-height: normal !important;
+  cursor: pointer !important;
+}
+
+.accept_notif-confirm-button:hover {
+  background-color: #0069d9 !important;
+}
+
+.accept_notif-cancel-button:hover {
+  background-color: #c82333 !important;
+}
+
+
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');

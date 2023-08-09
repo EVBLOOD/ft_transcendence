@@ -1,0 +1,5 @@
+<div class="griding">
+    <app-messages-mdl *ngIf="chatInfos$" [chatInfos]="(chatInfos$|async)" [isRoom]="isRoom" [id]="id"
+        [messages]="messages" />
+    <app-chat-info class="grid3" *ngIf="chatInfos$" [chatInfos]="(chatInfos$|async)" [isRoom]="isRoom" [id]="id" />
+</div>

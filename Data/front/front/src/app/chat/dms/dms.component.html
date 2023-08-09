@@ -1,0 +1,11 @@
+<div class="friend" (click)="onClickFriend()">
+    {{statusLoading(user.id)}}
+    <div class="friend-profile">
+        <img [src]="avataring(user.avatar)">
+        <div
+            [ngClass]="status == 'Online' ? 'statusCircle Online' : status == 'Offline' ? 'statusCircle Offline' : 'statusCircle InGame'">
+        </div>
+    </div>
+    <p class="name-friend">{{user.name}}</p>
+    <div *ngIf="count" class="nb-messages">{{count}}</div>
+</div>

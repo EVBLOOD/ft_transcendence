@@ -1,0 +1,161 @@
+.CloseBtnPop button {
+    border-style: none;
+    background-color: #184E77;
+    background-image: url('/assets/closeImg.svg');
+    height: 24.11px;
+    width: 22px;
+    background-size: 22px 24.11px;
+}
+
+
+.cancelBtn {
+    box-shadow: 0px 0px 9px rgba(0, 0, 0, 0.25);
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    color: #103959;
+    border-radius: 8px;
+    border: none;
+    height: 36px;
+    width: 92px;
+    background-color: #7FABCC;
+
+}
+
+.popUpBtn {
+    margin-top: 35px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    color: #103959;
+    border-radius: 8px;
+    display: flex;
+    gap: 5px;
+    justify-content: flex-end;
+}
+
+
+.popTitle {
+    color: #99D98C;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 39px;
+    text-transform: capitalize;
+}
+
+
+.popTitleProfile {
+    color: #7FABCC;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    text-transform: capitalize;
+}
+
+
+.cancelBtn {
+    box-shadow: 0px 0px 9px rgba(0, 0, 0, 0.25);
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    color: #103959;
+    border-radius: 8px;
+    border: none;
+    height: 36px;
+    width: 92px;
+    background-color: #7FABCC;
+
+}
+
+.validationBtn {
+    box-shadow: 0px 0px 9px rgba(0, 0, 0, 0.25);
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    color: #103959;
+    border: none;
+    height: 36px;
+    width: 92px;
+    border-radius: 8px;
+    background-color: #99D98C;
+}
+
+.popUpBtn {
+    margin-top: 35px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    color: #103959;
+    border-radius: 8px;
+    display: flex;
+    gap: 5px;
+    justify-content: flex-end;
+}
+
+.popUpBtn button:hover {
+    cursor: pointer;
+}
+
+.profileImageSettingCentring {
+    display: flex;
+    justify-content: center;
+}
+
+.profileImageSettingCentring div {
+    border-radius: 16px;
+    background: #7FABCC;
+    width: 198px;
+    height: 198px;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profileImageSetting {
+    width: 184px;
+    height: 184px;
+    border-radius: 13px;
+}
+
+
+.profileUserInfoSetting {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.profileUserInfoSetting input {
+    padding-left: 10px;
+    background-color: #7FABCC;
+    color: #184E77;
+    border-radius: 8px;
+    height: 38px;
+    width: 197px;
+    border: none;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.profileUserInfoSetting input::placeholder {
+    color: #3176AB;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.CloseBtnPop {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.CloseBtnPop button {
+    border-style: none;
+    background-color: #184E77;
+    background-image: url('/assets/closeImg.svg');
+    height: 24.11px;
+    width: 22px;
+    background-size: 22px 24.11px;
+}

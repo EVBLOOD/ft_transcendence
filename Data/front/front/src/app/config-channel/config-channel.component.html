@@ -1,0 +1,27 @@
+<app-popup>
+    <div (click)="close()" class="CloseBtnPop">
+        <button></button>
+    </div>
+    <div class="contentPopup">
+        <h2 class="popTitle">Parameter channel</h2>
+        <input [formControl]="channelName" class="textbox" type="text" placeholder="Channel name" />
+        <div class="rowToggle">
+            <p class="title">Private Channel</p>
+            <div class="toggle" [ngClass]="{'toggleChecked' : !privateToggle.value}" (click)="clickPrivateChannel()">
+                <div class="circle" [ngClass]="{'circleChecked' : !privateToggle.value}"></div>
+            </div>
+        </div>
+        <div class="rowToggle" *ngIf="privateToggle.value">
+            <p class="title">Secret Channel</p>
+            <div class="toggle" [ngClass]="{'toggleChecked' : !secretToggle.value}" (click)="clickSecretChannel()">
+                <div class="circle" [ngClass]="{'circleChecked' : !secretToggle.value}"></div>
+            </div>
+        </div>
+        <input [formControl]="password" class="textbox" type="text" placeholder="Password"
+            *ngIf="secretToggle.value && privateToggle.value" />
+        <div class="buttons">
+            <a class="cancel" (click)="close()">Cancel</a>
+            <a class="createChannel" (click)="submiting()">Update</a>
+        </div>
+    </div>
+</app-popup>

@@ -1,0 +1,331 @@
+.page {
+    max-width: 100em;
+    margin: 0 auto;
+}
+
+.body {
+    position: relative;
+    background-color: #103959;
+    border-radius: 40px;
+    height: 900px;
+    overflow-y: auto;
+}
+
+.body::-webkit-scrollbar {
+    width: 7px;
+}
+
+.body::-webkit-scrollbar-track {
+    border-radius: 50px;
+}
+
+.body::-webkit-scrollbar-thumb {
+    border-radius: 50px;
+    background: #D9ED92;
+}
+
+::selection {
+    color: #103959;
+    background: #D9ED92;
+}
+
+.infoProfileUser {
+    display: flex;
+    align-items: safe;
+    justify-content: space-between;
+}
+
+.coverProfile {
+    height: 198px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.insideProfile {
+    overflow-x: clip;
+    padding: 10px 66px 36px 56px;
+}
+
+.profilePicDiv {
+    margin-top: -100px;
+    background-color: #103959;
+    border-radius: 50%;
+    padding: 10px;
+}
+
+.profilePicDiv img {
+    width: 202px;
+    height: 202px;
+    border-radius: 50%;
+}
+
+.statusNameDiv {
+    justify-content: center;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-content: center;
+}
+
+.statusNameDiv p {
+    font-style: normal;
+    font-weight: 600;
+}
+
+.userName {
+    color: #EEEEEE;
+    font-size: 26px;
+}
+
+.userStatus {
+    font-size: 18px;
+    color: #FFA45E;
+}
+
+.userAction {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+    flex-wrap: nowrap;
+}
+
+.userAction button {
+    display: flex;
+    justify-content: space-between;
+    gap: 17px;
+    align-items: center;
+    padding: 15px;
+    border-radius: 8px;
+    border: none;
+    height: 36px;
+    background-color: #7FABCC;
+    box-shadow: 0px 0px 9px rgba(0, 0, 0, 0.25);
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    color: #103959;
+    cursor: pointer;
+}
+
+
+.userStatisticsProfile {
+    margin-top: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.userProfileTitleHistory {
+    margin-top: 20px;
+
+}
+
+h1 {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 30px;
+    align-items: center;
+    text-transform: uppercase;
+    color: #7FABCC;
+    margin-bottom: 15px;
+}
+
+.userAction div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex-wrap: nowrap;
+}
+
+.friendshipResponding {
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    background-color: #F2F6FA;
+    color: #184E77;
+    font-size: 12px;
+    font-weight: 500;
+    justify-items: center;
+    padding: 7px 0px;
+}
+
+.friendshipResponding li {
+    cursor: pointer;
+    justify-items: center;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: 151px;
+    height: 32px
+}
+
+
+#friendshipAdding {
+    background: #99D98C;
+}
+
+
+.YourAction {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 282px;
+    height: 44px;
+    border-radius: 10px;
+    background: #184E77;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.YourAction button {
+    border: 0;
+    height: 38px;
+    width: 135px;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.YourFirstChoice {
+    background: #184E77;
+    color: #7FABCC;
+}
+
+.YourSecondChoice {
+    background: #99D98C;
+    color: #1E6091;
+}
+
+.friendRequestsRow {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.titleNavBtn {
+    display: flex;
+    justify-content: space-between;
+}
+
+.navPrev {
+    display: inline-flex;
+    padding: 8px 11px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    width: 16px;
+    height: 16px;
+    transform: rotate(180deg);
+    border-radius: 8px;
+    background: #7FABCC;
+    box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.25);
+}
+
+.navNext {
+    display: inline-flex;
+    padding: 8px 11px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    background: #7FABCC;
+    box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.25);
+
+}
+
+.navGroup {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+}
+
+@media only screen and (max-width: 985px) {
+    .userAction button {
+        font-size: 0;
+        gap: 0px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .infoProfileUser {
+        justify-content: flex-start;
+        gap: 30px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .YourAction {
+        flex-direction: column;
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+    }
+
+    .YourAction button {
+        border: 0;
+        height: 100%;
+        width: 100%;
+        font-size: 5px;
+    }
+
+    .userAction {
+        gap: 5px;
+    }
+
+    .userAction button {
+        border-radius: 8px;
+    }
+
+    .userAction {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        flex-wrap: nowrap;
+    }
+
+    .userStatus {
+        font-size: small;
+    }
+
+    .userName {
+        font-size: medium;
+    }
+
+    .profilePicDiv {
+        margin-top: -50px;
+        background-color: #103959;
+        border-radius: 50%;
+        padding: 5px;
+    }
+
+    .profilePicDiv img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+    }
+
+    .infoProfileUser {
+        gap: 4px;
+        justify-content: space-between;
+    }
+}
+
+@media only screen and (max-width: 250px) {
+    .profilePicDiv img {
+        display: none;
+    }
+
+    .YourAction {
+        display: none;
+    }
+}

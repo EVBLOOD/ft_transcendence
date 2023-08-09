@@ -1,0 +1,114 @@
+<app-page-not-found *ngIf="(profile$| async)?.statusCode || type == 2 || type == 1" />
+
+<div class="body" *ngIf="!((profile$| async)?.statusCode) && type != 2 && type != 1">
+    <div class="body" style="display: flex; justify-content: center; align-content: center;"
+        *ngIf="!(profile$| async) || this.myID == -1 || !(sameDataEveryDayHelpMe$|async)">waiting ..</div>
+    <img class="coverProfile" src="/assets/cover.svg" alt="cover img" />
+    <div class="insideProfile">
+        <div class="infoProfileUser">
+            <div class="statusNameDiv">
+                <div *ngIf="(profile$ | async)?.avatar" class="profilePicDiv">
+                    <img [src]="profileService.getUserAvatarPath((profile$ | async)?.avatar)" alt="Profile img" />
+                </div>
+                <div *ngIf="profile$| async">
+                    <p class="userName">{{ (profile$| async)?.username }}</p>
+                    {{ statusLoading((profile$| async)?.id) }}
+                    <p *ngIf="status"
+                        [ngStyle]="{'color': status == 'Offline' ? '#A5A5A5' : status == 'Online' ? '#6EDB3F' : '#FFA45E'}"
+                        class="userStatus"> {{ status }}</p>
+                </div>
+            </div>
+            <div *ngIf="(profile$| async)?.id != myID" class="userAction">
+                <button *ngIf="type != 1" (click)="blockUser()">Block <img src="/assets/block.svg" alt="1"></button>
+                <button *ngIf="type == 1" (click)="unBlock()">Unblock <img src="/assets/block.svg" alt="1"></button>
+                <button (click)="GoChat()">Message <img src="/assets/MessageProfile.svg" alt="2"></button>
+                <button *ngIf="type == 0" id="friendshipAdding" (click)="addFriend()">Add Friend<img
+                        src="/assets/AddFriend.svg" alt="3"></button>
+                <button *ngIf="type == 5" class="friendshipCanceling" (click)="cancelFriend()">Cancel Request<img
+                        src="/assets/icons/checkfriend.svg" alt="3"></button>
+                <button *ngIf="type == 3" class="friendshipCanceling" (click)="cancelFriend()">Unfriend<img
+                        src="/assets/icons/checkfriend.svg" alt="3"></button>
+                <div *ngIf="type == 4">
+                    <button class="friendshipToRespond" (click)="hideIt()">Respond<img
+                            src="/assets/icons/checkfriend.svg" alt="3">
+                    </button>
+                    <ul *ngIf="displayRespondingWay" class="friendshipResponding">
+                        <li (click)="respondAcceptFriend()">Confirm Request</li>
+                        <li (click)="cancelFriend()">Delete Request</li>
+                    </ul>
+                </div>
+            </div>
+            <div *ngIf="(profile$| async)?.id == myID" class="YourAction">
+                <button [class]="YourBodyChoosen ? 'YourFirstChoice' : 'YourSecondChoice'"
+                    (click)="changeMode()">Statistics & History</button>
+                <button [class]="!YourBodyChoosen ? 'YourFirstChoice' : 'YourSecondChoice'"
+                    (click)="changeMode()">Friends</button>
+            </div>
+        </div>
+        <div *ngIf="!YourBodyChoosen">
+            <div class="userStatisticsProfile">
+                <app-card-user-statistics *ngFor="let item of sameDataEveryDay;" [data]=item
+                    [helps]="(sameDataEveryDayHelpMe$|async)" />
+            </div>
+            <div class="userProfileTitleHistory">
+                <h1>History</h1>
+                <app-user-history-raw *ngFor="let item of (History$|async)" [item]="item" />
+            </div>
+        </div>
+        <div *ngIf="YourBodyChoosen">
+            <!-- friend requests -->
+            <div *ngIf="!(friendRequest$ | async)?.length;"> {{down(friendRequestSkip, 2)}}</div>
+            <div *ngIf="(friendRequest$ | async)?.length">
+                <div class="titleNavBtn">
+                    <h1>friend requests</h1>
+                    <div class="navGroup">
+                        <img *ngIf="friendRequestSkip" class="navPrev" style="cursor: pointer;"
+                            (click)="down(friendRequestSkip, 2)" src="/assets/icons/Dribbble-Light-Preview.svg"
+                            alt="nope">
+                        <img *ngIf="(friendRequest$ | async)?.length == 10" class="navNext" style="cursor: pointer;"
+                            (click)="up(friendRequestSkip, 2)" src="/assets/icons/Dribbble-Light-Preview.svg"
+                            alt="nope">
+                    </div>
+                </div>
+
+                <div class="friendRequestsRow">
+                    <app-card-request *ngFor="let item of (friendRequest$ | async);" [data]=item />
+                </div>
+            </div>
+            <!-- friends -->
+            <div *ngIf="!(friendList$ | async)?.length;"> {{down(friendListSkip, 1)}}</div>
+            <div style="margin-top: 20px;" *ngIf="(friendList$ | async)?.length">
+                <div class="titleNavBtn">
+                    <h1>friends</h1>
+                    <div class="navGroup">
+                        <img *ngIf="friendListSkip" class="navPrev" style="cursor: pointer;"
+                            (click)="down(friendListSkip, 1)" src="/assets/icons/Dribbble-Light-Preview.svg" alt="nope">
+                        <img *ngIf="(friendList$ | async)?.length == 10" class="navNext" style="cursor: pointer;"
+                            (click)="up(friendListSkip, 1)" src="/assets/icons/Dribbble-Light-Preview.svg" alt="nope">
+                    </div>
+                </div>
+                <div class="friendRequestsRow">
+                    <app-card-friends *ngFor="let item of (friendList$ | async);" [data]=item />
+                </div>
+            </div>
+
+            <!-- block list -->
+            <div *ngIf="!(blockedList$ | async)?.length;"> {{down(blockListSkip, 3)}}</div>
+            <div *ngIf="(blockedList$ | async)?.length;" style="margin-top: 20px;">
+                <div class="titleNavBtn">
+                    <h1>block list</h1>
+                    <div class="navGroup">
+                        <img *ngIf="blockListSkip" style="cursor: pointer;" (click)="down(blockListSkip, 3)"
+                            class="navPrev" src="/assets/icons/Dribbble-Light-Preview.svg" alt="nope">
+                        <img style="cursor: pointer;" *ngIf="(blockedList$ | async)?.length == 10"
+                            (click)="up(blockListSkip, 3)" class="navNext"
+                            src="/assets/icons/Dribbble-Light-Preview.svg" alt="nope">
+                    </div>
+                </div>
+                <div class="friendRequestsRow">
+                    <app-card-blocked *ngFor="let item of (blockedList$ | async);" [data]=item />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

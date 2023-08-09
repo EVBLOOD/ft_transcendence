@@ -1,0 +1,13 @@
+<div class="body">
+    <h1 class="title">Leaderboard</h1>
+    <div class="row headRow" style="margin-bottom: 30px; margin-top: 30px;">
+        <div class="column">Rank</div>
+        <div class="column">Players</div>
+        <div class="column">Matches played</div>
+        <div class="column">Wins</div>
+        <div class="column">Score</div>
+    </div>
+    <app-leader-bord-row class="row"
+        style="height: 60px; border-bottom-style: solid; border-color: #184E77; padding-bottom: 5px; margin-bottom: 10px; border-width: thin;"
+        *ngFor="let item of (Leaders$|async); index as i" [index]='i + 1' [data]="item" />
+</div>

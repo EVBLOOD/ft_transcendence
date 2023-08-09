@@ -1,0 +1,70 @@
+.blockCard {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    gap: 2px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    background: #30495D;
+    width: 135px;
+    height: 118px;
+    align-items: center;
+    color: #7FABCC;
+    position: relative;
+}
+
+.lololo {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+
+.avatarFriendships {
+    margin-top: -10px;
+    width: 90px;
+    height: 90px;
+    border-radius: 75px;
+}
+
+.friendName {
+    margin-top: 2px;
+}
+
+
+
+.Displaylist {
+    background: whitesmoke;
+    list-style: none;
+    width: 107px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 6px;
+    color: #184E77;
+    font-size: 9px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    padding: 3px;
+    position: absolute;
+    top: 30%;
+}
+
+.Displaylist li {
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    height: 18px;
+}
+
+.moreFriendships:hover {
+    cursor: pointer;
+}
+
+.Displaylist li:hover {
+    cursor: pointer;
+}

@@ -1,0 +1,73 @@
+<div [ngClass]="user.state == 0 ? 'ban' : ''"
+    *ngIf="(filter == 'banned' && user.state == 0 && user.role == 'none') || (user.role == filter && (user.state == 1 || user.state == 3))">
+    <div (click)="onclickDropDownClick()" #dropDownUserRef class="friend"
+        [ngClass]="{'friend-selected' : dropDownUser}">
+        {{statusLoading(user.user.id)}}
+        <div class="friend-profile">
+            <img [src]="avataring(user.user.avatar)">
+            <div
+                [ngClass]="status == 'Online' ? 'statusCircle Online' : status == 'Offline' ? 'statusCircle Offline' : 'statusCircle InGame'">
+            </div>
+        </div>
+        <p class="name-friend">{{user.user.name}}</p>
+        <img class="listbox-member" src="/assets/icons/3points.svg">
+    </div>
+    <ul *ngIf="dropDownUser && filter == 'banned'" @inOut class="dropdown-user">
+        <li (click)="unBanUser()" *ngIf="(myrole == 'admin' || myrole == 'owner')">
+            Unban</li>
+    </ul>
+    <ul *ngIf="dropDownUser && filter != 'banned'" @inOut class="dropdown-user">
+        <li [routerLink]="'/profile/' + user.user.id">View Profile</li>
+        <li (click)="kickUser()"
+            *ngIf="user.user.id != id && (myrole == 'admin' || myrole == 'owner') && filter != 'owner'">
+            Kick</li>
+        <li (click)="BanUser()"
+            *ngIf="user.user.id != id && (myrole == 'admin' || myrole == 'owner') && filter != 'owner'">
+            Ban</li>
+        <li (click)="AddRole()"
+            *ngIf="user.user.id != id && (myrole == 'admin' || myrole == 'owner') && filter != 'owner' && filter != 'admin'">
+            Set admin</li>
+        <li (click)="RemoveRole()" *ngIf="(filter == 'admin') && (myrole == 'admin' || myrole == 'owner')">
+            remove role</li>
+        <li (click)="mute()"
+            *ngIf="user.user.id != id && (myrole == 'admin' || myrole == 'owner') && filter != 'owner'">
+            Mute</li>
+    </ul>
+</div>
+
+<!-- 
+
+
+    @Get('/:id/:chatID')
+    mute(@Param('id', ParseIntPipe) id: number, @Param('chatID', ParseIntPipe) chatId: number, @Req() req: any)
+    {
+        this.serviceChat.mute(id, chatID, req.new_user.sub);
+    }
+
+    mute(current: number,id: number, chatID: number)
+    {
+        / /check if current user is admin or owner first 
+        const x = this.MembersRepo.createQuery('Members').where('Userid = :id AND chatId = :chatID AND state = 1', {id, chatID}).getOne(); 
+        if (x && x.role == 'none')
+        {
+            x.state = 3;
+            x.dateMute = new Date();
+            this.MembersRepo.save(x);
+        }
+    }
+    isMute(id: number, chatID: number)
+    {
+        const x = this.MembersRepo.createQuery('Members').where('Userid = :id AND chatId = :chatID AND state = 3', {id, chatID}).getOne();
+        if (!x)
+            return false;
+        if (x.timeMute > (new  Date())
+            return true;
+        x.state = 1;
+        this.MembersRepo.save(x);
+        return false;
+    }
+
+    // add dateMute to entity() => can be null
+    if (isMuted ) // no sending messages brother. else if time of sending is small than the time in mute => remove the mute!
+
+ -->

@@ -1,0 +1,11 @@
+<div [ngClass]="myId() != value?.sender?.id ? 'receiver' : 'sender' ">
+    <img [src]="imageLink(value?.sender?.avatar)">
+    <div>
+        <div class="infos">
+            <p class="name">{{myId() != value?.sender?.id ? value?.sender?.name : 'You'}}</p>
+            <p class="time">{{ (today|date:'longDate') == (value?.time|date:'longDate') ? (value?.time|date:'shortTime')
+                : (value?.time|date:'longDate') + ', ' +(value?.time|date:'shortTime')}}</p>
+        </div>
+        <div class="msg">{{value?.content}}</div>
+    </div>
+</div>

@@ -1,0 +1,9 @@
+<div class="channel" *ngIf="!cancel"
+    [ngStyle]="{'grid-template-columns': invited ? 'auto min-content' : 'auto min-content min-content'}">
+    <div class="channelName">
+        <p>{{'#' + invite.chat.name}}</p>
+        <p>{{' ' + invite.chat.type + ' channel'}}</p>
+    </div>
+    <a class="buttonInvite" *ngIf="!invited" (click)="onClickInvite()">Accept</a>
+    <img class="cancelInvite" (click)="onClickCancel()" src="/assets/icons/closeImg.svg" />
+</div>

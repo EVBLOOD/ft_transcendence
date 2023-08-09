@@ -1,0 +1,113 @@
+.grid2 {
+    border-right: 1px solid #184E77;
+    display: grid;
+    grid-template-rows: min-content auto min-content;
+    height: 100%;
+}
+
+.header-chat {
+    position: relative;
+    display: flex;
+    border-bottom: 1px solid #184E77;
+    padding: 25px;
+    gap: 7px;
+}
+
+.header-chat-channel {
+    display: grid;
+    grid-template-columns: 1fr min-content;
+    border-bottom: 1px solid #184E77;
+    padding: 25px;
+    align-items: center;
+}
+
+.name-status {
+    font-size: 19px;
+    align-content: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.header-chat .status {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.Online {
+    color: #6EDB3F;
+}
+
+.Offline {
+    color: #8F8D8D;
+}
+
+.InGame {
+    color: #FFA45E;
+}
+
+.header-chat img {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+}
+
+.header-chat-channel {
+    display: grid;
+    grid-template-columns: 1fr min-content;
+    border-bottom: 1px solid #184E77;
+    padding: 25px;
+    align-items: center;
+}
+
+.icon-name-channel {
+    display: flex;
+    gap: 7px;
+}
+
+.threedotschannel {
+    cursor: pointer;
+    position: relative;
+}
+
+.dropdown-profile {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    width: 150px;
+    right: 0px;
+    padding: 3px;
+    font-size: 12px;
+    border-radius: 5px;
+    background-color: #F2F6FA;
+    color: #103959;
+    list-style-type: none;
+    box-shadow: 0px 0px 1px #181818;
+}
+
+.dropdown-profile li {
+    transition: 0.3;
+    padding: 10px 15px 10px 15px;
+    border-radius: 2px;
+}
+
+.dropdown-profile li:hover {
+    cursor: pointer;
+    background-color: #103959;
+    color: #F2F6FA;
+}
+
+.conversation {
+    padding: 25px;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 20px;
+    height: 650px;
+    overflow-y: auto;
+}
+
+.conversation img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}

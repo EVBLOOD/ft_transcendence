@@ -1,0 +1,49 @@
+.channel {
+    display: grid;
+    grid-template-columns: auto min-content min-content;
+    gap: 7px;
+    align-items: center;
+    margin: 11px 14px;
+    padding-bottom: 9px;
+    border-bottom: 0.1px solid #1b547f30;
+}
+
+.buttonInvite {
+    cursor: pointer;
+    padding: 6px 14px;
+    background: #184E77;
+    border-radius: 8px;
+    box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.25);
+    font-size: 13px;
+    color: #7FABCC;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.buttonInvite:hover {
+    opacity: 70%;
+    transition: 0.3s;
+}
+
+.cancelInvite {
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    object-fit: cover;
+    padding: 1px;
+    border-radius: 50%;
+    background-color: #184E77;
+}
+
+.channelName {
+    color: #184E77;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+}
+
+.channelName p:nth-of-type(2) {
+    font-size: 11px;
+}

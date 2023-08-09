@@ -1,0 +1,95 @@
+.onlinePlayer {
+    transition: transform .2s;
+    background-image: url('/assets/img/pingpongimg.svg');
+    background-position: center;
+    background-size: cover;
+    border-radius: 10px;
+    object-fit: contain;
+    text-align: center;
+    width: 100%;
+    font-weight: 600;
+    box-shadow: 0px 0px 4px #6699BF;
+}
+
+.onlinePlayer .colorgradient {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background: linear-gradient(180deg, rgba(25, 80, 121, 0.9) 0%, rgba(39, 103, 151, 0.8) 50.52%, rgba(24, 78, 119, 0.9) 100%);
+}
+
+.onlinePlayer:hover {
+    transform: scale(1.05);
+}
+
+.onlinePlayer .namePlayer {
+    font-size: 14px;
+}
+
+.onlinePlayer .statusOnline {
+    font-size: 10px;
+    color: #6EDB3F;
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    align-items: center;
+}
+
+.onlinePlayer .statusOnline .circle {
+    width: 7px;
+    height: 7px;
+    background-color: #6EDB3F;
+    border-radius: 50%;
+}
+
+.onlinePlayer .statusOffline {
+    font-size: 10px;
+    color: #cdcdcd;
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    align-items: center;
+}
+
+.onlinePlayer .statusInGame {
+    font-size: 10px;
+    color: #FFA45E;
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    align-items: center;
+}
+
+.onlinePlayer .statusInGame .circle {
+    width: 7px;
+    height: 7px;
+    background-color: #FFA45E;
+    border-radius: 50%;
+}
+
+.onlinePlayer .statusOffline .circle {
+    width: 7px;
+    height: 7px;
+    background-color: #cdcdcd;
+    border-radius: 50%;
+}
+
+.onlinePlayer .buttonChallenge {
+    cursor: pointer;
+    transition: 0.5s;
+    color: #184E77;
+    font-size: 9px;
+    background-color: #D9ED92;
+    padding: 4px 14px;
+    border-radius: 5px;
+}
+
+.onlinePlayer .buttonChallenge:hover {
+    background-color: #7FABCC;
+}
+
+.onlinePlayer img {
+    height: 66px;
+    width: 66px;
+    border-radius: 50%;
+    object-fit: cover;
+}

@@ -1,0 +1,283 @@
+.body {
+    position: relative;
+    background-color: #103959;
+    border-radius: 40px;
+    padding: 36px;
+    height: 900px;
+}
+
+.profile {
+    position: relative;
+}
+
+.profile img {
+    background-color: #103959;
+    height: 52px;
+    width: 52px;
+    object-fit: cover;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.title {
+    font-size: 25px;
+}
+
+.body::-webkit-scrollbar {
+    width: 7px;
+}
+
+.body::-webkit-scrollbar-track {
+    border-radius: 50px;
+}
+
+.body::-webkit-scrollbar-thumb {
+    border-radius: 50px;
+    background: #D9ED92;
+}
+
+::selection {
+    color: #103959;
+    background: #D9ED92;
+}
+
+.title {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    text-transform: uppercase;
+    color: #D9ED92;
+}
+
+.button {
+    transition: 0.5s;
+    color: #103959;
+    background: #7FABCC;
+    border-radius: 8px;
+    padding: 10px 60px 10px 60px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.button:hover {
+    background-color: #D9ED92;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.onlinePlayers {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    margin-top: 15px;
+    margin-bottom: 15px;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.onlinePlayer {
+    transition: transform .2s;
+    background-image: url('/assets/img/pingpongimg.svg');
+    background-position: center;
+    background-size: cover;
+    border-radius: 10px;
+    object-fit: contain;
+    text-align: center;
+    width: 100%;
+    font-weight: 600;
+    box-shadow: 0px 0px 4px #6699BF;
+}
+
+.onlinePlayer .colorgradient {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background: linear-gradient(180deg, rgba(25, 80, 121, 0.9) 0%, rgba(39, 103, 151, 0.8) 50.52%, rgba(24, 78, 119, 0.9) 100%);
+}
+
+.onlinePlayer:hover {
+    transform: scale(1.05);
+}
+
+.onlinePlayer .namePlayer {
+    font-size: 14px;
+}
+
+.onlinePlayer .statusOnline {
+    font-size: 10px;
+    color: #6EDB3F;
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    align-items: center;
+}
+
+.onlinePlayer .statusOnline .circle {
+    width: 7px;
+    height: 7px;
+    background-color: #6EDB3F;
+    border-radius: 50%;
+}
+
+.onlinePlayer .statusOffline {
+    font-size: 10px;
+    color: #cdcdcd;
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    align-items: center;
+}
+
+.onlinePlayer .statusOffline .circle {
+    width: 7px;
+    height: 7px;
+    background-color: #cdcdcd;
+    border-radius: 50%;
+}
+
+.onlinePlayer .buttonChallenge {
+    cursor: pointer;
+    transition: 0.5s;
+    color: #184E77;
+    font-size: 9px;
+    background-color: #D9ED92;
+    padding: 4px 14px;
+    border-radius: 5px;
+}
+
+.onlinePlayer .buttonChallenge:hover {
+    background-color: #7FABCC;
+}
+
+.onlinePlayer img {
+    height: 66px;
+    width: 66px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.section {
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.user {
+    display: flex;
+    align-items: center;
+}
+
+.user .rank-user {
+    z-index: 1;
+}
+
+.user .rank-img {
+    display: flex;
+}
+
+.user .img-user {
+    position: relative;
+    height: 82px;
+    width: 82px;
+    object-fit: cover;
+    border-radius: 50%;
+    right: 10px;
+}
+
+.name-user {
+    position: relative;
+    color: #7FABCC;
+    font-weight: 600;
+    font-size: 16px;
+    right: 4px;
+}
+
+.leaderboard {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.userProfileHistoryRaw {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 60% 20% 20%;
+    align-items: center;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #184E77;
+    height: 70px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #7FABCC;
+}
+
+.userProfileHistoryPlayers {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+}
+
+.userProfileHistoryPlayers p {
+    display: block;
+}
+
+.userProfileHistoryPlayers img {
+    height: 52px;
+    width: 52px;
+    border-radius: 50%;
+}
+
+.userProfileHistoryPlayers :nth-child(2) {
+    border-radius: 50%;
+    margin-left: -10px;
+}
+
+.userProfileHistoryStatus {
+    color: #99D98C;
+    font-style: normal;
+}
+
+.userProfileHistoryDate {
+    font-style: normal;
+    display: flex;
+    justify-content: flex-end;
+}
+
+@media only screen and (max-width: 1200px) {
+    .leaderboard {
+        grid-template-columns: repeat(3, 1fr);
+        row-gap: 12px;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .body {
+        border-radius: 30px;
+    }
+
+    .leaderboard {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .leaderboard .user {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .onlinePlayers {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .userProfileHistoryRaw {
+        grid-template-columns: 45% 30% 25%;
+        font-size: 14px;
+    }
+
+    .userProfileHistoryPlayers p {
+        display: none;
+    }
+}

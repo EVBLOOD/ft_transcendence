@@ -1,0 +1,29 @@
+<app-popup>
+    <div (click)="close()" class="CloseBtnPop">
+        <button></button>
+    </div>
+    <div class="allContent">
+        <h2 class="popTitle">Join to secret/public channel</h2>
+        <div class="joinToChannel">
+            <div class="rowToggle">
+                <p class="title">Secret Channel</p>
+                <div class="toggle" [ngClass]="{'toggleChecked' : secretToggle}" (click)="clickSecretChannel()">
+                    <div class="circle" [ngClass]="{'circleChecked' : secretToggle}"></div>
+                </div>
+            </div>
+            <div class="formJoiningChannel">
+                <input [formControl]="ChannelName" class="textbox" type="text" placeholder="Channel name" />
+                <input [formControl]="ChannelPassword" *ngIf="secretToggle" class="textbox" type="text"
+                    placeholder="Password" />
+                <a (click)="JoinIt()" class="buttonJoin">Join</a>
+            </div>
+            <div *ngIf="error" style="color: red; ">Error while joining</div>
+        </div>
+        <div class="inviteChannels">
+            <h2 class="popTitle">Join to channels who invite you</h2>
+            <div class="boxInvites">
+                <app-invited-friend *ngFor="let invite of invites$|async" [invite]="invite" />
+            </div>
+        </div>
+    </div>
+</app-popup>
