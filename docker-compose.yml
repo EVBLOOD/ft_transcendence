@@ -43,8 +43,6 @@ services:
     networks:
       - ft_transcendence
     restart: on-failure
-    # volumes:
-    #   - vol_database:/var/lib/postgresql/data # this should be enabled before pushing, same as vol_database
     environment:
       - POSTGRES_PASSWORD=evblood123
       - POSTGRES_DB=ft_transcendence
