@@ -1,5 +1,4 @@
 #!bin/bash
-
 if test -d /var/www/html/front;
 then
     echo "folder already exists";
@@ -17,5 +16,8 @@ fi
 
 echo "--------------------- Init --------------------------------";
 npm install;
+# npm audit fix --legacy-peer-deps;
+# npm audit fix --legacy-peer-deps;
+# npm install;
 echo "--------------------- Starting --------------------------------";
-exec ng serve --open;
+exec ng serve --host 0.0.0.0;

@@ -1,4 +1,4 @@
-import { User } from 'src/user/user.entity';
+// import { Use÷
 import {
   Column,
   CreateDateColumn,
@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Chat } from '../chat.entity';
+import { User } from 'src/user/entities/user.entity';
 
 @Entity()
 export class Punishment {

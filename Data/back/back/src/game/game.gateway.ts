@@ -1,26 +1,102 @@
-import { WebSocketGateway, SubscribeMessage, OnGatewayDisconnect } from '@nestjs/websockets';
+import {
+  WebSocketGateway,
+  SubscribeMessage,
+  OnGatewayDisconnect,
+  OnGatewayInit,
+} from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 import { GameService } from './game.service';
+import { JwtService } from '@nestjs/jwt';
+import { AuthenticatorService } from 'src/authenticator/authenticator.service';
+import { hostSocket } from 'src/app.service';
 
-@WebSocketGateway(3001, {
+@WebSocketGateway({
+  namespace: 'game',
   cors: {
-    origin: '*',
     credentials: true,
-  }
+    origin: hostSocket,
+  },
 })
-export class GameGateway
-  implements OnGatewayDisconnect {
+export class GameGateway implements OnGatewayDisconnect {
+  constructor(
+    private gameService: GameService,
+    private readonly serviceJWt: JwtService,
+    private readonly serviceToken: AuthenticatorService,
+  ) {}
 
-  constructor(private gameService: GameService) { }
-
-  handleDisconnect(socket: any) {
-    this.gameService.handleDisconnect(socket);
+  async handleConnection(client: Socket, ...args: any[]) {
+    console.log('Hello world');
+    const cookie = client.handshake.headers?.cookie
+      ?.split('; ')
+      ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
+      ?.split('=')[1];
+    if (!cookie) {
+      client.disconnect();
+      return false;
+    }
+    const xyz: any = this.serviceJWt.decode(cookie);
+    if (
+      !xyz ||
+      (await this.serviceToken.IsSame(xyz.sub || '', cookie)) == false
+    ) {
+      client.disconnect();
+      return false;
+    }
+    let userSockets = this.gameService.onlineUsers.get(xyz.sub);
+    if (!userSockets) userSockets = new Set<Socket>();
+    userSockets.add(client);
+    this.gameService.onlineUsers.set(xyz.sub, userSockets);
+    // this.gameService.onlineUsers.push({ id: xyz.sub, socket: client })
+    return true;
+  }
+  @SubscribeMessage('createGame')
+  async create(client: Socket, payload?: number) {
+    console.log('ONLY ONCE');
+    const cookie = client.handshake.headers?.cookie
+      ?.split('; ')
+      ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
+      ?.split('=')[1];
+    if (!cookie) {
+      client.disconnect();
+      return false;
+    }
+    const xyz: any = this.serviceJWt.decode(cookie);
+    if (
+      !xyz ||
+      (await this.serviceToken.IsSame(xyz.sub || '', cookie)) == false
+    ) {
+      client.disconnect();
+      return false;
+    }
+    console.log('auth end');
+    if (!payload) this.gameService.createGame(client, { id1: xyz.sub });
+    else this.gameService.createGame(client, { id1: xyz.sub, id2: payload });
   }
 
-  @SubscribeMessage('createGame')
-  create(socket: Socket, payload: string) {
-    this.gameService.createGame(socket, payload);
+  async handleDisconnect(client: any) {
+    const cookie = client.handshake.headers?.cookie
+      ?.split('; ')
+      ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
+      ?.split('=')[1];
+    if (!cookie) {
+      client.disconnect();
+      return false;
+    }
+    const xyz: any = this.serviceJWt.decode(cookie);
+    if (
+      !xyz ||
+      (await this.serviceToken.IsSame(xyz.sub || '', cookie)) == false
+    ) {
+      client.disconnect();
+      return false;
+    }
+    let userSockets = this.gameService.onlineUsers.get(xyz.sub);
+    // if (!userSockets)
+    //   userSockets = new Set<Socket>();
+    userSockets.delete(client);
+    if (userSockets.size)
+      this.gameService.onlineUsers.set(xyz.sub, userSockets);
+    else this.gameService.onlineUsers.delete(xyz.sub);
+    // this.gameService.handleDisconnect(socket);
   }
 }
-
-

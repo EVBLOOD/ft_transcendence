@@ -17,6 +17,10 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "sweetalert2",
+              "phaser"
+            ],
             "outputPath": "dist/front",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -65,7 +69,8 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "front:build:production"
+              "browserTarget": "front:build:production",
+              "host": "0.0.0.0"
             },
             "development": {
               "browserTarget": "front:build:development"

@@ -1,6 +1,8 @@
 import { IsNotEmpty } from 'class-validator';
-import { User } from 'src/user/user.entity';
+// import { User } from 'src/user/user.entity';
+
 import { Chat } from 'src/chat/chat.entity';
+import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   Entity,

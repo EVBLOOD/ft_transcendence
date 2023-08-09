@@ -3,9 +3,10 @@ import { UserService } from 'src/user/user.service';
 import { Admin, Repository, ReturnDocument } from 'typeorm';
 import { Chat } from './chat.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/user/user.entity';
+// import { User } from 'src/user/user.entity';
 import { createPunishmentDTO } from './punishment/dto/createPunishment.dto';
 import { throws } from 'assert';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class ChatUtils {
@@ -15,14 +16,15 @@ export class ChatUtils {
     private readonly userService: UserService,
   ) {}
 
-  async getUser(userName: string): Promise<User | undefined> {
-    if (userName) {
-      const user = await this.userService.findUserByUserName(userName);
+  async getUser(id: number): Promise<User | undefined> {
+    if (id) {
+      const user = await this.userService.findOne(id);
       if (user) return user;
     }
-    throw new HttpException(`User ${userName} Not Found`, HttpStatus.NOT_FOUND);
+    throw new HttpException(`User ${id} Not Found`, HttpStatus.NOT_FOUND);
   }
-  async checkForAdminRoll(chatID: number, Name: string): Promise<boolean> {
+  async checkForAdminRoll(chatID: number, id: number): Promise<boolean> {
+    console.log(id);
     const admin = await this.chatRoomRepo.findOne({
       relations: {
         admin: true,
@@ -30,15 +32,25 @@ export class ChatUtils {
       where: {
         id: chatID,
         admin: {
-          userName: Name,
+          id: id,
         },
       },
     });
+    console.log(
+      await this.chatRoomRepo.findOne({
+        relations: {
+          admin: true,
+        },
+        where: {
+          id: chatID,
+        },
+      }),
+    );
     if (admin) return true;
     return false;
   }
 
-  async checkForMemberRoll(chatID: number, Name: string): Promise<boolean> {
+  async checkForMemberRoll(chatID: number, id: number): Promise<boolean> {
     const chatroom = await this.chatRoomRepo.findOne({
       relations: {
         member: true,
@@ -46,7 +58,7 @@ export class ChatUtils {
       where: {
         id: chatID,
         member: {
-          userName: Name,
+          id: id,
         },
       },
     });
@@ -62,7 +74,7 @@ export class ChatUtils {
     return false;
   }
 
-  async checkForOwnerRoll(chatID: number, Name: string): Promise<boolean> {
+  async checkForOwnerRoll(chatID: number, id: number): Promise<boolean> {
     const owner = await this.chatRoomRepo.findOne({
       relations: {
         owner: true,
@@ -70,7 +82,7 @@ export class ChatUtils {
       where: {
         id: chatID,
         owner: {
-          userName: Name,
+          id: id,
         },
       },
     });
@@ -121,18 +133,18 @@ export class ChatUtils {
   }
   async canBePunished(
     chatID: number,
-    userName: string,
+    id: number,
     punishmentDTO: createPunishmentDTO,
   ): Promise<boolean> {
-    if ((await this.checkForAdminRoll(chatID, userName)) == false) {
-      console.log('admin', userName);
+    if ((await this.checkForAdminRoll(chatID, id)) == false) {
+      console.log('admin', id);
       console.log('chatid', chatID);
       throw new HttpException(
         'Not allowed to Punishe users',
         HttpStatus.FORBIDDEN,
       );
     }
-    if ((await this.checkForOwnerRoll(chatID, punishmentDTO.user)) == true) {
+    if ((await this.checkForOwnerRoll(chatID, id)) == true) {
       throw new HttpException(
         'Cannot Punishment the chatroom owner',
         HttpStatus.FORBIDDEN,

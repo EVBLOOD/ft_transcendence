@@ -8,8 +8,9 @@ import { Message } from './message.entity';
 import { Repository } from 'typeorm';
 import { CreateMessage } from './dto/message.dto';
 import { Chat } from 'src/chat/chat.entity';
-import { User } from 'src/user/user.entity';
+// import { User } from 'src/user/user.entity';
 import { createNewMessage, validateMessage } from './message.utils';
+import { User } from 'src/user/entities/user.entity';
 
 //https://typeorm.io/find-options
 
@@ -20,7 +21,7 @@ export class MessageService {
     private readonly messageRepo: Repository<Message>,
   ) {}
 
-  async getMessageByUserId(userName: string) {
+  async getMessageByUserId(userName: number) {
     const message = await this.messageRepo.find({
       order: {
         // get messages in ascending order
@@ -34,14 +35,14 @@ export class MessageService {
       where: {
         // only care bout the with the passed ID
         userId: {
-          userName: userName,
+          id: userName,
         },
       },
       select: {
         // we only care about these values
         userId: {
           // id: true,
-          userName: true,
+          username: true,
         },
         chatRoomId: {
           id: true,
@@ -68,7 +69,7 @@ export class MessageService {
       select: {
         userId: {
           // id: true,
-          userName: true,
+          username: true,
         },
         chatRoomId: {
           type: true,
@@ -99,7 +100,8 @@ export class MessageService {
     const message = createNewMessage(messageDTO.value, chatRoom, user);
     return this.messageRepo.save(message);
   }
-  async getMessagesByChatID(chatID: number): Promise<Message[]> {
+  async getMessagesByChatID(chatID: number, id?: number): Promise<Message[]> {
+    // check if this Id is allowed to see. TODO: ALI
     const messages = await this.messageRepo.find({
       where: {
         chatRoomId: {
@@ -112,7 +114,9 @@ export class MessageService {
       },
       select: {
         userId: {
-          userName: true,
+          id: true,
+          username: true,
+          avatar: true,
         },
         chatRoomId: {
           id: true,

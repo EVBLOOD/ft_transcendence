@@ -2,8 +2,8 @@ import { IsNotEmpty } from 'class-validator';
 
 export class createAdminDTO {
   @IsNotEmpty()
-  roleGiver!: string;
+  roleGiver!: number;
 
   @IsNotEmpty()
-  roleReceiver!: string;
+  roleReceiver!: number;
 }

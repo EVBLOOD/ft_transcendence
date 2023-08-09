@@ -2,7 +2,7 @@
 version: '3.7'
 
 services:
-# Features
+  # Features
 
   adminer:
     image: adminer
@@ -12,16 +12,16 @@ services:
     networks:
       - ft_transcendence
 
-# Main Services
+  # Main Services
   back:
     build: ./srcs/back
     image: back
     container_name: back
     networks:
       - ft_transcendence
+    ports:
+      - 3000:3000
     restart: on-failure
-    # ports:
-    #   - 3000:3000
     volumes:
       - /home/idkart/ft_transcendence/Data/back:/var/www/html/
 
@@ -31,9 +31,9 @@ services:
     container_name: front
     networks:
       - ft_transcendence
-    restart: on-failure
-    # ports:
-    #   - 4200:4200
+    ports:
+      - 4200:4200
+    restart: always
     volumes:
       - /home/idkart/ft_transcendence/Data/front:/var/www/html/
 
@@ -48,7 +48,6 @@ services:
     environment:
       - POSTGRES_PASSWORD=evblood123
       - POSTGRES_DB=ft_transcendence
-
 
 networks:
   ft_transcendence:

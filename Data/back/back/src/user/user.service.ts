@@ -1,49 +1,123 @@
-import {
-  BadRequestException,
-  HttpException,
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { UpdateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
-import { User } from './user.entity';
-import { createUserDTO } from './dto/user.dto';
+import { Socket } from 'socket.io';
+import { escape } from 'querystring';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepo: Repository<User>,
+    @InjectRepository(User) private readonly UserRepo: Repository<User>,
   ) {}
 
-  async findUserByUserName(Name: string): Promise<User | null> {
-    const user = await this.userRepo.findOneBy({
-      userName: Name,
-    });
-    return user;
+  private currentstate = new Map<
+    number,
+    { client: string; status: string; lastupdate: string }[]
+  >();
+
+  async findAll(skip: number, take: number) {
+    return await this.UserRepo.find({ skip: skip, take: take });
   }
-  async getListOfUsers(): Promise<User[] | undefined> {
-    const users = await this.userRepo.find({});
-    if (users.length === 0) {
-      throw new HttpException(
-        'no users in the database',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-    return users;
+
+  getAllCurrentStates() {
+    this.currentstate;
   }
-  async addUser(userdto: createUserDTO): Promise<User | undefined> {
-    console.log('userdto: ', userdto);
-    const user = await this.userRepo.find({
-      where: {
-        userName: userdto.userName,
-      },
+  async findOne(id: number) {
+    return await this.UserRepo.findOneBy({ id: id });
+  }
+
+  async findUserByUserName(id: string) {
+    return await this.UserRepo.findOneBy({ username: id });
+  }
+  // async findMe(id: number) {
+  //   return await this.UserRepo.findOneBy({ id: id });
+  // }
+  async UpdateAvatar(id: number, path: string) {
+    return await this.UserRepo.save({ id: id, avatar: path });
+  }
+
+  async updateSimpleInfo(id: number, updateUserDto: UpdateUserDto) {
+    return await this.UserRepo.save({
+      id: id,
+      username: updateUserDto.username,
+      name: updateUserDto.name,
+      avatar: updateUserDto.avatar,
+      TwoFAenabled: updateUserDto.twofactor,
+      theme: updateUserDto.theme,
     });
-    if (user.length !== 0) {
-      throw new BadRequestException('user already exist');
+  }
+
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    return await this.UserRepo.save({
+      id: id,
+      name: updateUserDto.name,
+    });
+  }
+
+  AddState(id: number, socket: Socket, type: string) {
+    let colect: { client: string; status: string; lastupdate: string }[];
+    if (this.currentstate.has(id)) colect = this.currentstate.get(id);
+    else colect = [];
+    let i: number = 0;
+    for (i; i < colect.length; i++) {
+      if (colect[i]['client'] == socket.id) {
+        colect[i].status = type;
+        colect[i].lastupdate = Date().toString();
+        break;
+      }
     }
-    const newUser = new User();
-    newUser.userName = userdto.userName;
-    return this.userRepo.save(newUser);
+    if (i != colect.length) return;
+    colect.push({
+      client: socket.id,
+      status: type,
+      lastupdate: Date().toString(),
+    });
+    this.currentstate.set(id, colect);
+  }
+
+  GetAllUsersCurrentState() {
+    let n: { id: number; status: string }[] = [];
+    this.currentstate.forEach((value: any, key: number) => {
+      n.push({ id: key, status: this.GetCurrentState(key).status });
+    });
+    return n;
+  }
+
+  GetAllCurrentStates(id: number) {
+    if (!this.currentstate.has(id)) return null;
+    return this.currentstate.get(id);
+  }
+
+  GetCurrentState(id: number) {
+    if (!this.currentstate.has(id)) return null;
+    let colect: { client: string; status: string; lastupdate: string }[] =
+      this.currentstate.get(id);
+    let col: { client: string; status: string; lastupdate: string } =
+      colect[colect.length - 1];
+    for (let i: number = 0; i < colect.length - 1; i++) {
+      if (new Date(colect[i].lastupdate) > new Date(col.lastupdate))
+        col = colect[i];
+    }
+    return col;
+  }
+
+  RemoveState(Socket: Socket, id: number) {
+    if (!this.currentstate.has(id)) return null;
+    let colect: { client: string; status: string; lastupdate: string }[] =
+      this.currentstate.get(id);
+    let newholder: { client: string; status: string; lastupdate: string }[] =
+      [];
+    colect.map((col) => {
+      if (col.client != Socket.id) newholder.push(col);
+    });
+    if (newholder.length == 0) this.currentstate.delete(id);
+    else this.currentstate.set(id, newholder);
+  }
+
+  PruneUserState(id: number) {
+    if (!this.currentstate.has(id)) return null;
+    this.currentstate.delete(id);
   }
 }

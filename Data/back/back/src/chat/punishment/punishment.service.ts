@@ -7,10 +7,12 @@ import {
   validatePunishmentDto,
 } from './punishment.utils';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/user/user.entity';
+// import { User } from 'src/user/user.entity';
+
 import { createPunishmentDTO } from './dto/createPunishment.dto';
 import { Chat } from '../chat.entity';
-import { Cron } from '@nestjs/schedule';
+// import { Cron } from '@nestjs/schedule';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class PunishmentService {
@@ -19,8 +21,8 @@ export class PunishmentService {
     private readonly PunishmentRepo: Repository<Punishment>,
   ) {}
 
-  async isMutedInChatroom(chatID: number, user: string): Promise<boolean> {
-    const mutedUsers = await this.getMutedUsers(chatID, user);
+  async isMutedInChatroom(chatID: number, id: number): Promise<boolean> {
+    const mutedUsers = await this.getMutedUsers(chatID, id);
     if (mutedUsers) {
       for (const i of mutedUsers) {
         const muteTime = i.time;
@@ -39,7 +41,7 @@ export class PunishmentService {
 
   async getMutedUsers(
     chatID: number,
-    user: string,
+    id: number,
   ): Promise<Punishment[] | null> {
     const users = await this.PunishmentRepo.find({
       relations: {
@@ -49,7 +51,7 @@ export class PunishmentService {
       where: {
         PunishmentType: 'mute',
         user: {
-          userName: user,
+          id: id,
         },
         chat: {
           id: chatID,
@@ -62,7 +64,7 @@ export class PunishmentService {
 
   async getBannedUsers(
     chatID: number,
-    user: string,
+    user: number,
   ): Promise<Punishment[] | null> {
     const users = await this.PunishmentRepo.find({
       relations: {
@@ -72,7 +74,7 @@ export class PunishmentService {
       where: {
         PunishmentType: 'ban',
         user: {
-          userName: user,
+          id: user,
         },
         chat: {
           id: chatID,
@@ -80,7 +82,7 @@ export class PunishmentService {
       },
       select: {
         user: {
-          userName: true,
+          username: true,
         },
         chat: {
           id: true,
@@ -94,7 +96,7 @@ export class PunishmentService {
     return users;
   }
 
-  async isBannedInChatroom(chatID: number, user: string): Promise<boolean> {
+  async isBannedInChatroom(chatID: number, user: number): Promise<boolean> {
     const bannedUsers = await this.getBannedUsers(chatID, user);
     if (bannedUsers) {
       for (const i of bannedUsers) {
@@ -124,7 +126,7 @@ export class PunishmentService {
       },
       select: {
         user: {
-          userName: true,
+          username: true,
         },
         chat: {
           id: true,
@@ -152,7 +154,7 @@ export class PunishmentService {
       HttpStatus.BAD_REQUEST,
     );
   }
-  async checkIfUserBanned(chatID: number, userName: string): Promise<boolean> {
+  async checkIfUserBanned(chatID: number, userName: number): Promise<boolean> {
     const users = await this.getBannedUsers(chatID, userName);
     if (users.length !== 0) {
       for (const i of users) {
@@ -167,7 +169,7 @@ export class PunishmentService {
     }
     return false;
   }
-  async checkIfUserMuted(chatID: number, userName: string): Promise<boolean> {
+  async checkIfUserMuted(chatID: number, userName: number): Promise<boolean> {
     const users = await this.getMutedUsers(chatID, userName);
     if (users.length !== 0) {
       for (const i of users) {
@@ -212,17 +214,17 @@ export class PunishmentService {
     }
   }
 
-  @Cron('0 * * * *') // runs every hour
-  async scheduledPunishmentEraser() {
-    console.log('*\n*\n*\n*\n*\n*\nPunishments cleared\n*\n*\n*\n*\n*\n*\n');
-    await this.clearOldPunishments();
-  }
+  // @Cron('0 * * * *') // runs every hour
+  // async scheduledPunishmentEraser() {
+  //   console.log('*\n*\n*\n*\n*\n*\nPunishments cleared\n*\n*\n*\n*\n*\n*\n');
+  //   await this.clearOldPunishments();
+  // }
 
-  async clearUserPunishment(id: number, user: string, type: string) {
+  async clearUserPunishment(id: number, user: number, type: string) {
     const userPunishment = await this.PunishmentRepo.findOne({
       where: {
         user: {
-          userName: user,
+          id: user,
         },
         PunishmentType: type,
       },

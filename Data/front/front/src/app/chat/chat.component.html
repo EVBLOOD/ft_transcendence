@@ -1,99 +1,30 @@
-<p>chat works!</p>
-<!-- <form>
-	<label for="username">Username:</label>
-	<input type="text" #name>
-	<br>
-	<button (click)="getUserChatrooms(name.value)">get user chat rooms</button>
-</form> -->
-<div>
-	<label >getUserChatrooms:</label>
-	<input type="text" #username name="username" placeholder="get chat user rooms">
-	<button (click)="getUserChatrooms(username.value)">Submit</button>
-</div>
+<div class="chat">
+    <div class="grid1">
+        <div class="toggle">
+            <a (click)="!toggle && SwitchChat()" class="button" [ngClass]="{'activeButton' : toggle}">
+                <img src="/assets/icons/direct.svg">
+                <p>Direct</p>
+            </a>
+            <a (click)="toggle && SwitchChat()" class="button" [ngClass]="{'activeButton' : !toggle}">
+                <img src="/assets/icons/channels.svg">
+                <p>Channels</p>
+            </a>
+        </div>
+        <input class="textbox search" type="text" placeholder="Search" *ngIf="toggle" />
+        <input class="textbox search" type="text" placeholder="Search" *ngIf="!toggle" />
+        <div class="friendsonline" *ngIf="toggle">
+            <!-- friendList -->
+            <app-dms *ngFor="let item of (ChatDMs$|async)" />
+        </div>
+        <div class="channels" *ngIf="!toggle">
+            <!-- channels -->
+            <app-channels *ngFor="let item of (ChatRooms$|async)" [channel]="item" />
+        </div>
+        <a routerLink="/channelCreating" class="button-create-channel" *ngIf="!toggle">Create channel</a>
 
-<div>
-	<label >add user:</label>
-	<input type="text" #userInput>
-	<button (click)="addUser(userInput.value)">submit</button>
+    </div>
+    <div>
+        <router-outlet *ngIf="getStarterPath('/chat')"></router-outlet>
+        <app-chat-content *ngIf="!getStarterPath('/chat')" />
+    </div>
 </div>
-<div>
-	<label >create chatroom:</label>
-	<input type="text" #username_ name="username_" placeholder="chatroom name">
-	<input type="text" #type name="type" placeholder="chatroom type">
-	<input type="text" #password name="password" placeholder="password">
-	<input type="text" #user name="user" placeholder="user">
-	<input type="text" #otherUser name="other user" placeholder="other user">
-	<button (click)="createChatroom(username_.value, type.value, password.value, user.value, otherUser.value)">Submit</button>
-</div>
-<div>
-	<label >addUserToChatroom:</label>
-	<input type="text" #chatID name="chatID" placeholder="chatID">
-	<input type="text" #mp name="mp" placeholder="password">
-	<input type="text" #name_ name="name_" placeholder="user to add">
-	<button (click)="addUserToChatRoom(chatID.value, name_.value, mp.value)">Submit</button>
-</div>
-<div>
-	<label >addAdminTOChatrom:</label>
-	<input type="text" #nb name="nb" placeholder="nb">
-	<input type="text" #admin name="admin" placeholder="admin">
-	<input type="text" #newAdmin name="newAdmin" placeholder="user to add">
-	<button (click)="addAdminToChatRoom(nb.value, admin.value, newAdmin.value)">Submit</button>
-</div>
-<div>
-	<label >sendMessage:</label>
-	<input type="text" #chat_nb name="chat_nb" placeholder="nb">
-	<input type="text" #sender name="sender" placeholder="sender">
-	<input type="text" #message name="message" placeholder="message">
-	<button (click)="sendMessage(chat_nb.value, sender.value, message.value)">Submit</button>
-</div>
-<div>
-	<label >getUserMessages:</label>
-	<input type="text" #_userName name="_userName" placeholder="_userName">
-	<button (click)="getUserMessages(_userName.value)">Submit</button>
-</div>
-<div>
-	<label >getChatroomMessages:</label>
-	<input type="text" #__chatID name="__chatID" placeholder="__chatID">
-	<button (click)="getChatroomMessages(__chatID.value)">Submit</button>
-</div>
-
-<div>
-	<label >kick user from chatroom:</label>
-	<input type="text" #__ID name="__ID" placeholder="__ID">
-	<input type="text" #__admin name="__admin" placeholder="__admin">
-	<input type="text" #__user name="__user" placeholder="__user">
-	<button (click)="kickuser(__ID.value, __admin.value, __user.value)">Submit</button>
-</div>
-<div>
-	<label >leave chatroom:</label>
-	<input type="text" #ID name="ID-" placeholder="ID">
-	<input type="text" #_user_ name="_user_" placeholder="_user_">
-	<button (click)="leaveChatroom(ID.value, _user_.value)">Submit</button>
-</div>
-<div>
-	<label >update chatroom:</label>
-	<input type="text" #chatID__ name="chatID__" placeholder="chatID__">
-	<input type="text" #USER__ name="USER__" placeholder="USER__">
-	<input type="text" #ChatName name="ChatName" placeholder="ChatName">
-	<input type="text" #newPass name="newPass" placeholder="newPass">
-	<input type="text" #newChatType name="newChatType" placeholder="newChatType">
-	<button (click)="updateChatroom(chatID__.value, USER__.value, newChatType.value, newPass.value, ChatName.value)">Submit</button>
-</div>
-<div>
-	<label >punish user:</label>
-	<input type="text" #chatID__2 name="chatID__2" placeholder="chatID__2">
-	<input type="text" #Admin__ name="Admin__" placeholder="Admin__">
-	<input type="text" #penaltyType name="penaltyType" placeholder="penaltyType">
-	<input type="text" #user11 name="user11" placeholder="user11">
-	<button (click)="PunishUser(chatID__2.value, Admin__.value, penaltyType.value, user11.value)">Submit</button>
-</div>
-
-<div>
-	<label >check Punishment</label>
-	<input type="text" #user$$ name="user$$" placeholder="user">
-	<input type="text" #chat$ID name="chat$ID" placeholder="chat$ID">
-	<input type="text" #type__ name="type__" placeholder="type__">
-	<button (click)="checkPunishment(chat$ID.value, user$$.value, type__.value)">Submit</button>
-</div>
-
-<button (click)="getUser()">getUsers</button><br />

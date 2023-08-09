@@ -1,5 +1,4 @@
-import { IsNumber } from "class-validator";
-import { User } from "src/user/entities/user.entity";
+import { IsNumber } from 'class-validator';
 
 export class CreateMatchDto {
   @IsNumber()

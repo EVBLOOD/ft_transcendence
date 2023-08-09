@@ -2,9 +2,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    /* i need this for the Game */
     "allowSyntheticDefaultImports": true,
-    /****************************/
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
@@ -24,7 +22,8 @@
     "useDefineForClassFields": false,
     "lib": [
       "ES2022",
-      "dom"
+      "dom", 
+      "scripthost"
     ]
   },
   "angularCompilerOptions": {

@@ -21,8 +21,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       exception instanceof HttpException
         ? exception.getResponse()
         : HttpStatus.INTERNAL_SERVER_ERROR;
-    console.log(message);
-    response.status(status).json({
+    response.status(200).json({
       statusCode: status,
       message: message,
       timestamp: new Date().toISOString(),

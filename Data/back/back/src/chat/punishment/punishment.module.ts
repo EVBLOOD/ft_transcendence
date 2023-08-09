@@ -5,13 +5,13 @@ import { Punishment } from './punishment.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PunishmentGateway } from './punishment.gateway';
 import { ChatModule } from '../chat.module';
-import { ScheduleModule } from '@nestjs/schedule';
+// import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Punishment]),
     ChatModule,
-    ScheduleModule.forRoot(),
+    // ScheduleModule.forRoot(),
   ],
   controllers: [PunishmentController],
   providers: [PunishmentService, PunishmentGateway],
