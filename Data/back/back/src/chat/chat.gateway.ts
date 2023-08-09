@@ -7,7 +7,6 @@ import {
 import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
 import { Inject } from '@nestjs/common';
-// import { hostSocket } from 'src/app.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthenticatorService } from 'src/authenticator/authenticator.service';
 import { UserService } from 'src/user/user.service';
@@ -23,8 +22,6 @@ import hostSocket from 'src/envirenment';
   },
 })
 export class ChatGateway {
-  whatItcosts: Map<string, number> = new Map<string, number>();
-  everything: Map<number, Set<string>> = new Map<number, Set<string>>();
 
   @WebSocketServer()
   server: Server;
@@ -59,11 +56,6 @@ export class ChatGateway {
       client.disconnect();
       return false;
     }
-    let themOut = this.everything.get(xyz.sub);
-    if (!themOut)
-      themOut = new Set<string>();
-    themOut.add(client.id)
-    this.everything.set(xyz.sub, themOut);
     client.join(xyz.sub);
     return true;
   }
@@ -135,7 +127,7 @@ export class ChatGateway {
       return {}
     const isBanned = await this.chatService.isBanned(xyz.sub, parseInt(payload?.message?.charRoomId));
     if (isBanned.length)
-      return; // will be removed and added in an other place
+      return;
     const message: any = await this.chatService.postToChatroom(payload?.message, xyz.sub);
     const sender = await this.User.findOne(xyz.sub);
     this.chatService.seenForChannel(xyz.sub, message.chat_id, 1)
@@ -231,24 +223,24 @@ export class ChatGateway {
     return {}
   }
 
-  // async handleDisconnect(client: Socket) {
-  //   const cookie = client.handshake.headers?.cookie
-  //     ?.split('; ')
-  //     ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
-  //     ?.split('=')[1];
-  //   const xyz: any = this.serviceJWt.decode(
-  //     cookie,
-  //   );
-  //   if (
-  //     !xyz ||
-  //     (await this.serviceToken.IsSame(
-  //       xyz.sub || '',
-  //       cookie,
-  //     )) == false
-  //   ) {
-  //     client.disconnect();
-  //     return false;
-  //   }
-  //   this.everything.delete(xyz.sub);
-  // }
+  async handleDisconnect(client: Socket) {
+    const cookie = client.handshake.headers?.cookie
+      ?.split('; ')
+      ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
+      ?.split('=')[1];
+    const xyz: any = this.serviceJWt.decode(
+      cookie,
+    );
+    if (
+      !xyz ||
+      (await this.serviceToken.IsSame(
+        xyz.sub || '',
+        cookie,
+      )) == false
+    ) {
+      client.disconnect();
+      return false;
+    }
+    client.leave(xyz.sub)
+  }
 }

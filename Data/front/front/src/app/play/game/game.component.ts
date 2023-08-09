@@ -28,7 +28,7 @@ export type Score = { player1: number, player2: number };
 const RESOLUTION = { width: 1428, height: 700 };
 const TARGET_FPS = 60;
 const CONFIG: Phaser.Types.Core.GameConfig = {
-  type: Phaser.AUTO,
+  type: Phaser.CANVAS,
   width: RESOLUTION.width,
   height: RESOLUTION.height,
   backgroundColor: '#103960',
@@ -55,6 +55,8 @@ const CONFIG: Phaser.Types.Core.GameConfig = {
     noAudio: true,
     disableWebAudio: true,
   },
+  banner: false,
+  disableContextMenu: true
 };
 
 @Component({
@@ -145,11 +147,11 @@ export class GameComponent implements OnDestroy, OnInit {
         if (state.gameState == GameStateType.Playing) {
           if (!this.gameScene) {
             this.gameScene = new GameScene(this.gameService, state.playerNumber, this.color[this.themeIndx - 1] ?? Color.White);
-            setTimeout(() => {
-              this.game.scene.add('GameScene', this.gameScene);
-              this.gameScene.scene.start();
-              this.gameService.playerIsReady();
-            }, 0);
+            // setTimeout(() => {
+            this.game.scene.add('GameScene', this.gameScene);
+            this.gameScene.scene.start();
+            this.gameService.playerIsReady();
+            // }, 0);
           }
         } else if (state.gameState == GameStateType.Finished) {
           if (this.gameScene) {

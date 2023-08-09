@@ -4,7 +4,6 @@ import { GameService } from './game.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthenticatorService } from 'src/authenticator/authenticator.service';
 import hostSocket from 'src/envirenment';
-// import { hostSocket } from 'src/app.service';
 
 @WebSocketGateway({
   namespace: "game",
@@ -47,7 +46,6 @@ export class GameGateway
       userSockets = new Set<Socket>();
     userSockets.add(client);
     this.gameService.onlineUsers.set(xyz.sub, userSockets)
-    // this.gameService.onlineUsers.push({ id: xyz.sub, socket: client })
     return true;
   }
   @SubscribeMessage('createGame')
@@ -105,7 +103,6 @@ export class GameGateway
       client.disconnect();
       return false;
     }
-    // this.gameService.handleDisconnect(client);
     let userSockets = this.gameService.onlineUsers.get(xyz.sub);
     if (userSockets)
       userSockets.delete(client);

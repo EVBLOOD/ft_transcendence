@@ -4,7 +4,6 @@ import { Server, Socket } from 'socket.io';
 import { AuthenticatorService } from 'src/authenticator/authenticator.service';
 import { FriendshipService } from '../friendship.service';
 import hostSocket from 'src/envirenment';
-// import { hostSocket } from 'src/app.service';
 
 @WebSocketGateway({
   namespace: 'friendshipSock',
@@ -58,6 +57,44 @@ export class FriendshipGateway {
       userSockets = new Set<Socket>();
     userSockets.add(client);
     this.connections.set(xyz.sub, userSockets)
+  }
+
+  async handleDisconnect(client: Socket) {
+    if (
+      !client.handshake.headers?.cookie
+        ?.split('; ')
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
+        ?.split('=')[1]
+    ) {
+      client.disconnect();
+      return false;
+    }
+    const xyz: any = this.serviceJWt.decode(
+      client.handshake.headers?.cookie
+        ?.split('; ')
+        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
+        ?.split('=')[1],
+    );
+    if (
+      !xyz ||
+      (await this.serviceToken.IsSame(
+        xyz.sub || '',
+        client.handshake.headers?.cookie
+          ?.split('; ')
+          ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
+          ?.split('=')[1],
+      )) == false
+    ) {
+      client.disconnect();
+      return false;
+    }
+    let userSockets = this.connections.get(xyz.sub);
+    if (userSockets)
+      userSockets.delete(client);
+    if (!(userSockets.size))
+      this.connections.delete(xyz.sub)
+    else
+      this.connections.set(xyz.sub, userSockets);
   }
 
   @SubscribeMessage('friendRequest')

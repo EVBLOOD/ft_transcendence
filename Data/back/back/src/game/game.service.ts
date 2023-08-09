@@ -104,7 +104,7 @@ export class GameService {
 
   createGame(socket: Socket, payload: any) {
     const { id1, id2 } = payload;
-    console.log({ id1, id2 });
+    // console.log({ id1, id2 });
     if (this.currentPlayers.find(player => player.id == id1)) {
       // socket.emit("in_game")
       return;
@@ -155,7 +155,7 @@ export class GameService {
           })
         })
       } else {
-        console.log('user is offline', id2);
+        // console.log('user is offline', id2);
       }
     }
   }

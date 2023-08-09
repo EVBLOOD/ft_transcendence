@@ -22,14 +22,14 @@ exec ng serve --host 0.0.0.0;
 
 
 # as production
-# echo "--------------------- Initing --------------------------------";
-# npm install;
-# if test -d /var/www/html/front/dist;
-# then
-#     echo "already build - just run it !";
-# else
-#     echo "--------------------- Building --------------------------------";
-#     ng build --configuration production
-# fi
-# echo "--------------------- Starting --------------------------------";
-# exec ng serve --configuration production --host 0.0.0.0; #  or --skip-check-host
+echo "--------------------- Initing --------------------------------";
+npm install;
+if test -d /var/www/html/front/dist;
+then
+    echo "already build - just run it !";
+else
+    echo "--------------------- Building --------------------------------";
+    ng build --configuration production
+fi
+echo "--------------------- Starting --------------------------------";
+exec ng serve --configuration production --host 0.0.0.0; #  or --skip-check-host

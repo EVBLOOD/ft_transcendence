@@ -4,16 +4,11 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-// import { SocketAuthGuard } from 'src/authenticator/socket.guard';
 import { UserService } from '../user.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthenticatorService } from 'src/authenticator/authenticator.service';
 import hostSocket from 'src/envirenment';
-// import { ConfigService } from '@nestjs/config';
-// import { hostSocket } from 'src/app.service';
 
-
-// const host = process.env.HOST;
 @WebSocketGateway({
   namespace: 'current_status',
   cors: {

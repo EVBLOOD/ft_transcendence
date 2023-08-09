@@ -43,6 +43,7 @@ export class GameScene extends Phaser.Scene {
 
   preload() {
     // console.log('start')
+    this.load.maxParallelDownloads = 1;
     this.sound.stopAll();
     if (this.color == Color.White) {
       this.load.image('background', '/assets/asset/white/background.png');
