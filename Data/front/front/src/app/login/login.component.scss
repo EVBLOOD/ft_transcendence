@@ -1,0 +1,213 @@
+.page {
+    max-width: 100em;
+    margin: 0 auto;
+}
+
+.container {
+    margin: 50px;
+    margin-top: 8%;
+    height: 839px;
+}
+
+.body {
+    position: relative;
+    background-color: #103959;
+    height: 839px;
+    border-radius: 40px;
+    padding: 90px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.footer {
+    text-align: center;
+    margin: 25px 0 25px 0;
+    font-size: 14px;
+    color: #D9ED92;
+}
+
+
+.body::-webkit-scrollbar {
+    width: 7px;
+}
+
+.body::-webkit-scrollbar-track {
+    border-radius: 50px;
+}
+
+.body::-webkit-scrollbar-thumb {
+    border-radius: 50px;
+    background: #D9ED92;
+}
+
+.btnLogin:hover {
+    color: #103959;
+    background: #D9ED92;
+
+}
+
+.titleLog {
+    font-size: 65px;
+    color: #D9ED92;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    line-height: 79px;
+}
+
+.discreptionPro {
+    margin-top: 15px;
+    color: #7FABCC;
+    width: 598px;
+    height: 93px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+}
+
+
+.btnLogin {
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+    background-color: #FAFAFA;
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    padding: 7px 44px;
+    width: 170px;
+    height: 30px;
+    line-height: 16px;
+    margin-top: 20px;
+}
+
+
+.lblLogin {
+    color: black;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.loginImg {
+    position: absolute;
+    right: 10%;
+}
+
+// .pop {
+//     padding: 25px;
+//     position: absolute;
+//     width: 467px;
+//     height: 200px;
+//     left: calc(50% - 467px/2 - 5px);
+//     top: calc(50% - 200px/2);
+//     background: #184E77;
+//     border-radius: 30px;
+// }
+
+
+
+// .up {
+//     position: absolute;
+//     width: 100%;
+//     height: 100%;
+//     left: calc(50% - 100%/2);
+//     top: calc(50% - 100%/2);
+//     background: rgba(17, 34, 47, 0.87);
+// }
+
+
+// .popTitle {
+//     color: #D9ED92;
+//     font-style: normal;
+//     font-weight: 700;
+//     font-size: 32px;
+//     line-height: 39px;
+//     text-transform: capitalize;
+// }
+
+
+// .groupingLI {
+//     margin-top: 20px;
+//     display: flex;
+//     flex-direction: column;
+//     gap: 20px;
+// }
+
+// .twofactLbl {
+//     color: #7FABCC;
+//     font-style: normal;
+//     font-weight: 700;
+//     font-size: 20px;
+//     line-height: 24px;
+//     display: flex;
+//     align-items: center;
+//     text-transform: capitalize;
+// }
+
+// #twoFaInput {
+//     background-color: #7FABCC;
+//     color: #184E77;
+//     border: none;
+//     border-radius: 8px;
+//     height: 38px;
+//     width: 300px;
+// }
+
+// .cancelBtn {
+//     border-radius: 8px;
+//     border: none;
+//     height: 36px;
+//     width: 92px;
+//     background-color: #7FABCC;
+
+// }
+
+// .validationBtn {
+//     border: none;
+//     height: 36px;
+//     width: 92px;
+//     border-radius: 8px;
+//     background-color: #99D98C;
+// }
+
+// .popUpBtn button {
+//     box-shadow: 0px 0px 9px rgba(0, 0, 0, 0.25);
+//     font-style: normal;
+//     font-weight: 600;
+//     font-size: 13px;
+//     color: #103959;
+// }
+
+// .popUpBtn {
+//     font-style: normal;
+//     font-weight: 600;
+//     font-size: 13px;
+//     color: #103959;
+//     border-radius: 8px;
+//     position: absolute;
+//     right: 5%;
+//     bottom: 10%;
+//     display: flex;
+//     gap: 5px;
+// }
+
+// .errorMsg {
+//     color: #EE7979;
+//     font-size: 13px;
+//     font-style: normal;
+//     font-weight: 500;
+//     display: none;
+// }
+
+// .errorMsgGroup {
+//     align-self: center;
+
+// }
+
+// .popUpBtn button:hover {
+//     cursor: pointer;
+// }

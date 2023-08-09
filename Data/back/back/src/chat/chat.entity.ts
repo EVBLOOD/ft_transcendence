@@ -1,5 +1,5 @@
 import { Message } from 'src/message/message.entity';
-import { User } from 'src/user/user.entity';
+// import { User } from 'src/user/user.entity';
 import { Punishment } from 'src/chat/punishment/punishment.entity';
 import {
   Column,
@@ -10,6 +10,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { User } from 'src/user/entities/user.entity';
+import { ReadUserMessages } from './readMessages.entity';
 
 @Entity()
 export class Chat {
@@ -60,4 +62,7 @@ export class Chat {
   @OneToMany(() => Punishment, (punishment: Punishment) => punishment.user)
   @JoinColumn()
   punishment!: Punishment[];
+
+  @OneToMany(() => ReadUserMessages, (status) => status.chatroom)
+  MessageStatuses: ReadUserMessages[];
 }

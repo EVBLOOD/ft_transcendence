@@ -1,4 +1,5 @@
-import { User } from 'src/user/user.entity';
+// import { User } from 'src/user/user.entity';
+import { User } from 'src/user/entities/user.entity';
 import { Chat } from '../chat.entity';
 import { createPunishmentDTO } from './dto/createPunishment.dto';
 import { Punishment } from './punishment.entity';

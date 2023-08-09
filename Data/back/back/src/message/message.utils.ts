@@ -1,10 +1,11 @@
 import { Chat } from 'src/chat/chat.entity';
-import { User } from 'src/user/user.entity';
+// import { User } from 'src/user/user.entity';
 import { Message } from './message.entity';
+import { User } from 'src/user/entities/user.entity';
 
 /*
-	// check if the sent message in not null.
-	// and also chekes if the messages is full of white spaces only!!
+  // check if the sent message in not null.
+  // and also chekes if the messages is full of white spaces only!!
 */
 export function validateMessage(message: string): boolean {
   if (message != null || message.match(/^\s*$/) !== null) return true;

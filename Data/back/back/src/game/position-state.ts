@@ -2,8 +2,6 @@
 
 import * as flatbuffers from 'flatbuffers';
 
-
-
 export class PositionState {
   bb: flatbuffers.ByteBuffer | null = null;
   bb_pos = 0;
@@ -13,13 +11,25 @@ export class PositionState {
     return this;
   }
 
-  static getRootAsPositionState(bb: flatbuffers.ByteBuffer, obj?: PositionState): PositionState {
-    return (obj || new PositionState()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  static getRootAsPositionState(
+    bb: flatbuffers.ByteBuffer,
+    obj?: PositionState,
+  ): PositionState {
+    return (obj || new PositionState()).__init(
+      bb.readInt32(bb.position()) + bb.position(),
+      bb,
+    );
   }
 
-  static getSizePrefixedRootAsPositionState(bb: flatbuffers.ByteBuffer, obj?: PositionState): PositionState {
+  static getSizePrefixedRootAsPositionState(
+    bb: flatbuffers.ByteBuffer,
+    obj?: PositionState,
+  ): PositionState {
     bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
-    return (obj || new PositionState()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+    return (obj || new PositionState()).__init(
+      bb.readInt32(bb.position()) + bb.position(),
+      bb,
+    );
   }
 
   x(): number {
@@ -49,15 +59,25 @@ export class PositionState {
     return offset;
   }
 
-  static finishPositionStateBuffer(builder: flatbuffers.Builder, offset: flatbuffers.Offset) {
+  static finishPositionStateBuffer(
+    builder: flatbuffers.Builder,
+    offset: flatbuffers.Offset,
+  ) {
     builder.finish(offset);
   }
 
-  static finishSizePrefixedPositionStateBuffer(builder: flatbuffers.Builder, offset: flatbuffers.Offset) {
+  static finishSizePrefixedPositionStateBuffer(
+    builder: flatbuffers.Builder,
+    offset: flatbuffers.Offset,
+  ) {
     builder.finish(offset, undefined, true);
   }
 
-  static createPositionState(builder: flatbuffers.Builder, x: number, y: number): flatbuffers.Offset {
+  static createPositionState(
+    builder: flatbuffers.Builder,
+    x: number,
+    y: number,
+  ): flatbuffers.Offset {
     PositionState.startPositionState(builder);
     PositionState.addX(builder, x);
     PositionState.addY(builder, y);

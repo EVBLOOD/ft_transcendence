@@ -9,11 +9,12 @@ import { createPunishmentDTO } from './dto/createPunishment.dto';
 import { KickUserDto } from './dto/kickUser.dto';
 import { ChatService } from '../chat.service';
 import { Inject, forwardRef } from '@nestjs/common';
+import { hostSocket } from 'src/app.service';
 
 @WebSocketGateway({
   cors: {
     credentials: true,
-    origin: ['http://localhost:4200', 'http://localhost:3000'],
+    origin: hostSocket,
   },
   namespace: 'punishment',
 })

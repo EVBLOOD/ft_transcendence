@@ -11,11 +11,12 @@ import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
 import { Inject } from '@nestjs/common';
 import { CreateMessage } from 'src/message/dto/message.dto';
+import { hostSocket } from 'src/app.service';
 
 @WebSocketGateway({
   namespace: 'chat',
   cors: {
-    origin: ['http://localhost:4200', 'http://localhost:3000'],
+    origin: hostSocket,
     credentials: true,
   },
 })
@@ -34,6 +35,7 @@ export class ChatGateway
     console.log('message: ', payload);
     try {
       const message = await this.chatService.postToChatroom(payload);
+      await this.chatService.incrementUnreadMessageCounter(payload.userName);
       this.server.emit('recMessage', message);
     } catch (err) {
       console.log(err);

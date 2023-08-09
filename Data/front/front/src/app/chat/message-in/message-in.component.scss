@@ -1,0 +1,32 @@
+.receiver {
+    display: flex;
+    gap: 8px;
+}
+
+.receiver .infos {
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.receiver .time {
+    color: #A5A5A5;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.receiver .msg {
+    font-size: 13px;
+    background-color: #1A759F;
+    padding: 16px 13px;
+    border-radius: 0px 20px 20px 20px;
+}
+
+img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}

@@ -2,7 +2,7 @@ import { IsNotEmpty } from 'class-validator';
 
 export class SwapOwnerDTO {
   @IsNotEmpty()
-  roleGiver!: string;
+  roleGiver!: number;
   @IsNotEmpty()
-  roleReciver!: string;
+  roleReciver!: number;
 }

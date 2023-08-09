@@ -1,4 +1,4 @@
 export class KickUserDto {
   chatroomId!: number;
-  userName!: string;
+  id!: number;
 }

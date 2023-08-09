@@ -1,0 +1,79 @@
+.userProfileHistoryPlayers {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.userProfileHistoryPlayers p {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 17px;
+    color: #7FABCC;
+}
+
+.userProfileHistoryPlayers img {
+    height: 52px;
+    width: 52px;
+    border-radius: 50%;
+}
+
+.userProfileHistoryPlayers :nth-child(2) {
+    border-radius: 50%;
+    margin-left: -10px;
+}
+
+.userProfileHistoryRaw {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #184E77;
+    height: 70px;
+}
+
+h1 {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 30px;
+    align-items: center;
+    text-transform: uppercase;
+    color: #7FABCC;
+    margin-bottom: 15px;
+}
+
+
+
+.userProfileHistoryStatus {
+    color: #99D98C;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 17px;
+}
+
+.userProfileHistoryDate {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 17px;
+    color: #7FABCC;
+}
+
+@media only screen and (max-width: 600px) {
+    .userProfileHistoryPlayers p {
+        display: none;
+    }
+
+    .userProfileHistoryDate {
+        display: none;
+    }
+
+    .userProfileHistoryRaw {
+        flex-direction: row;
+    }
+
+    .userProfileHistoryPlayers {
+        flex-direction: column;
+    }
+}

@@ -7,5 +7,5 @@ export class createPunishmentDTO {
   chatID!: number;
 
   @IsNotEmpty()
-  user!: string;
+  id!: number;
 }

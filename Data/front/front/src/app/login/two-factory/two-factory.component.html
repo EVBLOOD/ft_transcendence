@@ -1,0 +1,18 @@
+<div class="up">
+    <div class="pop">
+        <h2 class="popTitle">2F authentication</h2>
+        <div class="groupingLI">
+            <p class="twofactLbl">write down your token</p>
+            <div class="errorMsgGroup">
+                <input id="twoFaInput" autocomplete="none" type="text" [formControl]="token" />
+                <p *ngIf="token.errors" style="color: rgb(232, 237, 230);">Token should be six numbers
+                </p>
+                <p class="errorMsg" [style.display]="getError()">Incorrect code</p>
+            </div>
+        </div>
+        <div class="popUpBtn">
+            <button class="cancelBtn" type="submit" (click)="justCancel()">Cancel</button>
+            <button class="validationBtn" type="submit" (click)="letsgo()">Confirm</button>
+        </div>
+    </div>
+</div>

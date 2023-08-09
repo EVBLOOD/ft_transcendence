@@ -1,8 +1,9 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { createChatroomDTO } from './dto/createChatroom.dto';
-import { User } from 'src/user/user.entity';
+// import { User } from 'src/user/user.entity';
 import { Chat } from './chat.entity';
 import { UpdateChatroomDTO } from './dto/updateChatroom.dto';
+import { User } from 'src/user/entities/user.entity';
 
 export function validateChatName(chatRoomName: string): boolean {
   if (chatRoomName == null || !(chatRoomName && chatRoomName.trim())) {
@@ -62,22 +63,22 @@ export function createChatroomEntity(
   return chatroom;
 }
 
-export function deleteUser(chatRoom: Chat, user: string): Chat {
+export function deleteUser(chatRoom: Chat, user: number): Chat {
   chatRoom.member = chatRoom.member.filter((u: User) => {
-    return u.userName !== user;
+    return u.id !== user;
   });
   chatRoom.admin = chatRoom.admin.filter((u: User) => {
-    return u.userName !== user;
+    return u.id !== user;
   });
   return chatRoom;
 }
 
-export function removeAdminStatus(chat: Chat, user: string): Chat {
+export function removeAdminStatus(chat: Chat, user: number): Chat {
   chat.admin = chat.admin.filter((u: User) => {
-    return u.userName !== user;
+    return u.id !== user;
   });
   chat.member = chat.member.filter((u: User) => {
-    return u.userName !== user;
+    return u.id !== user;
   });
   return chat;
 }

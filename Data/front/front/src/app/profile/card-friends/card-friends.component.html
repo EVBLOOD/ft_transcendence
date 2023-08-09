@@ -1,0 +1,11 @@
+<div class="friendsCard">
+    <div class="lololo" (click)="showMore()"><img class="moreFriendships" src="/assets//icons/moreone.svg" alt="nope">
+    </div>
+    <ul *ngIf="more" class="Displaylist">
+        <li (click)="viewProfile()">View Profile</li>
+        <li (click)="deleteRequest()">Delete</li>
+        <li (click)="Block()">Block</li>
+    </ul>
+    <img class="avatarFriendships" [src]="this.profile.getUserAvatarPath(data.avatar)" alt="nope" />
+    <div class="friendName">{{data.username}}</div>
+</div>
