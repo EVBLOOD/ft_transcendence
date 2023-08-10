@@ -131,6 +131,7 @@ export class GameService {
       if (invitedUser) {
         invitedUser.forEach((socket_) => {
           socket_.emit('invite', id1);
+          socket_.removeAllListeners("inviteResponse"); // NEW ADDED
           socket_.once('inviteResponse', (response) => {
             invitedUser.forEach((socket__) => {
               if (socket__.id == socket_.id && response == true &&
