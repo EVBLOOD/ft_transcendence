@@ -138,8 +138,7 @@ export class AuthenticatorController {
   @Get('logout')
   async logout(@Req() req, @Res() response) {
     if (req?.new_user?.sub) {
-      const c = await this.service.removeToken(req.new_user.sub);
-      console.info(c);
+      await this.service.removeToken(req.new_user.sub);
     }
     response.clearCookie(process.env.TOKEN_NAME);
     response.send({});

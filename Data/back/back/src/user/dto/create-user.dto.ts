@@ -1,11 +1,16 @@
+import { MinLength } from 'class-validator';
+import { MaxLength } from 'class-validator';
 import { IsBoolean, IsEmail, IsNotEmpty, IsNumber, Matches } from 'class-validator';
 
 export class CreateUserDto {
   @IsNotEmpty()
-  // @Matches(/^[a-z]+(-[a-z]+)?$/)
-  // @Matches(/^[a-zA-Z]+(-[a-zA-Z]+)?$/)
+  @Matches(/^[a-z]+(-[a-z]+)?$/)
+  @MinLength(2)
+  @MaxLength(10)
   username: string;
 
+  @MinLength(2)
+  @MaxLength(20)
   @IsNotEmpty()
   name: string;
 
@@ -24,8 +29,12 @@ export class CreateUserDto {
 export class UpdateUserDto {
   @IsNotEmpty()
   @Matches(/^[a-z]+(-[a-z]+)?$/)
+  @MinLength(2)
+  @MaxLength(10)
   username: string;
 
+  @MinLength(2)
+  @MaxLength(20)
   @IsNotEmpty()
   name: string;
 

@@ -11,8 +11,8 @@ import { Router } from '@angular/router';
 })
 export class SettingsComponent implements OnInit, OnDestroy {
   private replay: any;
-  fullName = new FormControl('', [Validators.required, Validators.minLength(3), Validators.pattern(/^[a-z]+(-[a-z]+)?$/)]);
-  userName = new FormControl('', [Validators.required, Validators.minLength(3)]);
+  fullName = new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]);
+  userName = new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(10)]);
   Myerror: boolean = false;
   MyerrorAvatar: boolean = false;
   twoFactor: boolean = false;
@@ -47,8 +47,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
       next: (data) => {
         if (data.statusCode)
           this.router.navigateByUrl('');
-        this.fullName = new FormControl(data.name, [Validators.required, Validators.minLength(5)]);
-        this.userName = new FormControl(data.username, [Validators.required, Validators.minLength(5), Validators.pattern(/^[a-z]+(-[a-z]+)?$/)]);
+        this.fullName = new FormControl(data.name, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]);
+        this.userName = new FormControl(data.username, [Validators.required, Validators.minLength(3), Validators.maxLength(10), Validators.pattern(/^[a-z]+(-[a-z]+)?$/)]);
         this.twoFactor = data.TwoFAenabled;
         this.PlayTheme = data.theme;
         this.PlayThemeInit = data.theme;
@@ -102,7 +102,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   handleResponseone(data: any) {
-    console.log(data)
+    // console.log(data)
     if (data.statusCode && data.statusCode != 202)
       this.MyerrorAvatar = true;
     else {

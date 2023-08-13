@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./create-channel.component.scss']
 })
 export class CreateChannelComponent implements OnDestroy {
-
+  public errorCreating = 0;
   constructor(private readonly chatService: ChatService, private readonly switchRouter: Router) { }
 
   ngOnDestroy(): void {
@@ -44,8 +44,10 @@ export class CreateChannelComponent implements OnDestroy {
       this.removesubsc = this.chatService.joinChatroom({
         type, chatroomName: this.channelName.value,
         password: this.password.value, user: 'admin', otherUser: ''
-      }).subscribe({ next: () => { } });
-      this.close()
+      }).subscribe({ next: (data: any) => { if (data?.statusCode) this.errorCreating = 1; else this.errorCreating = 0; } });
+      this.SubArray.push(this.removesubsc);
+      if (this.errorCreating)
+        this.close()
     }
   }
 

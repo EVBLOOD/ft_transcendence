@@ -396,7 +396,7 @@ export class ChatService {
   async getMessagesByChatID(userId: number, channelId: number) {
     if (await this.isMember(userId, channelId)) {
       const listblocked = await this.Friendship.blockOneEach(userId);
-      console.log(listblocked);
+      // console.log(listblocked);
       const idsBlockedMembers = listblocked.map((it) => {
         if (it.sender != userId)
           return it.sender

@@ -1,2 +1,2 @@
-const hostIp = 'http://10.12.8.1';
+const hostIp = 'http://10.13.4.6';
 export default hostIp;

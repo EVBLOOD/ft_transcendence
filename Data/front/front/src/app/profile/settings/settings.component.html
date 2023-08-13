@@ -19,7 +19,10 @@
             <div *ngIf="fullName.errors?.['required']">
                 Name is required.
             </div>
-            <div *ngIf="fullName.errors?.['minlength'] || userName.errors?.['minlength']">
+            <div
+                *ngIf="fullName.errors?.['minlength'] || userName.errors?.['minlength'] || userName.errors?.['maxlength'] || fullName.errors?.['maxlength']">
+                <p *ngIf="userName.errors?.['maxlength']">Max is 10.</p>
+                <p *ngIf="fullName.errors?.['maxlength']">Max is 20.</p>
                 Minlength is 2.
             </div>
             <div *ngIf="userName.errors?.['required']">

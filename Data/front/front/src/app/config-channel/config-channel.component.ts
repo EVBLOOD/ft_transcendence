@@ -50,6 +50,7 @@ export class ConfigChannelComponent implements OnDestroy {
           newType: type,
           newPassword: this.password.value || '', newChatroomName: this.channelName.value
         }).subscribe({ next: () => { } });
+      this.SubArray.push(this.removesubsc)
       this.close()
     }
   }
