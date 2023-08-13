@@ -16,7 +16,7 @@
     overflow-y: auto;
 }
 
-.logo img{
+.logo img {
     width: 160px;
     cursor: pointer;
 }
@@ -40,7 +40,7 @@
 .profile {
     position: relative;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
 }
 
 .profile img {

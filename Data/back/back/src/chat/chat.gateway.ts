@@ -132,8 +132,19 @@ export class ChatGateway {
     const sender = await this.User.findOne(xyz.sub);
     this.chatService.seenForChannel(xyz.sub, message.chat_id, 1)
     this.chatService.seenForChannel(xyz.sub, message.chat_id, 0)
-    if (message)
-      this.server.in(message.chat_id.toString()).emit("ChannelMessages", { sender: xyz.sub, mgs: message, type: 'none', profile: sender });
+    if (message) {
+      const listblocked = await this.serviceFriendShip.blockOneEach(xyz.sub);
+      const idsBlockedMembers: any = listblocked.map((it) => {
+        if (it.sender != xyz.sub)
+          return it.sender
+        return it.receiver
+      });
+      if (idsBlockedMembers?.length) {
+        this.server.to(message.chat_id.toString()).except(idsBlockedMembers).emit("ChannelMessages", { sender: xyz.sub, mgs: message, type: 'none', profile: sender });
+      }
+      else
+        this.server.in(message.chat_id.toString()).emit("ChannelMessages", { sender: xyz.sub, mgs: message, type: 'none', profile: sender });
+    }
   }
 
   @SubscribeMessage('Seen')

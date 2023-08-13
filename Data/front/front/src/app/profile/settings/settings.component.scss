@@ -122,6 +122,16 @@
     align-self: flex-end;
 }
 
+.profileImageStatus {
+    background-image: url('/assets/icons/camerawow.svg');
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: center;
+    // height: 36px;÷
+    // width: 34px;
+}
+
 .profileUserInfoSetting {
     display: flex;
     justify-content: center;

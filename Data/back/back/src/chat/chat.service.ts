@@ -395,10 +395,20 @@ export class ChatService {
   }
   async getMessagesByChatID(userId: number, channelId: number) {
     if (await this.isMember(userId, channelId)) {
+      const listblocked = await this.Friendship.blockOneEach(userId);
+      console.log(listblocked);
+      const idsBlockedMembers = listblocked.map((it) => {
+        if (it.sender != userId)
+          return it.sender
+        return it.receiver
+      });
+      if (idsBlockedMembers.length)
+        return await this.MessagesRepo.createQueryBuilder("messages").leftJoinAndSelect('messages.chat_id', 'chat')
+          .leftJoinAndSelect('messages.sender', 'user').where("chat.id = :channelId AND user.id NOT IN (:...ids)", { channelId, ids: idsBlockedMembers }).orderBy('messages.time', 'DESC').getMany();
       return await this.MessagesRepo.createQueryBuilder("messages").leftJoinAndSelect('messages.chat_id', 'chat')
         .leftJoinAndSelect('messages.sender', 'user').where("chat.id = :channelId", { channelId }).orderBy('messages.time', 'DESC').getMany();
     }
-    return {};
+    return [];
   }
 
   async isMod(userId: number, channelId: number) {

@@ -17,6 +17,14 @@ export class AuthenticatorService {
     @InjectRepository(Statastics) private readonly StatisticsRepo: Repository<Statastics>
   ) { }
 
+  async removeToken(userId: number) {
+    const user = await this.UserRepo.findOne({ where: { id: userId } });
+    const token = await this.TokenRepo.findOne({
+      where: [{ User: user }],
+      relations: { User: true },
+    });
+    return await this.TokenRepo.delete(token);
+  }
   async TwoFA_Disable(id: number) {
     const user = await this.UserRepo.findOne({ where: { id: id } });
     if (!user || !user.TwoFAenabled) return null;

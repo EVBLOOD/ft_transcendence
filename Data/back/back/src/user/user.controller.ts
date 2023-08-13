@@ -22,6 +22,7 @@ import { JwtAuthGuard } from 'src/authenticator/jwtauth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { UpdateUserDto } from './dto/create-user.dto';
+import * as sharp from 'sharp';
 
 
 @UseGuards(JwtAuthGuard)
@@ -92,13 +93,12 @@ export class UserController {
     FileInterceptor('file', {
       storage: diskStorage({
         destination: './upload/avatars',
-        filename: (req, file, callback) => {
+        filename: (req: any, file: any, callback: any) => {
           if (
             (!file || file.mimetype != 'image/jpeg' && file.mimetype != 'image/png') ||
             file.size > 1 * 1024 * 1024
           )
             callback(null, '');
-
           const newname =
             Math.floor(10 + (99999 - 10) * Math.random()) +
             Date.now().toString() +
@@ -115,7 +115,9 @@ export class UserController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     try {
-      if (file && file.filename && file.filename != '') {
+      if (file && file.filename && file.filename != '' && (await sharp("./upload/avatars/" + file.filename).metadata())) {
+
+        ;
         await this.userService.UpdateAvatar(req.new_user.sub, file.filename);
         throw new HttpException('ACCEPTABLE', HttpStatus.ACCEPTED);
       }

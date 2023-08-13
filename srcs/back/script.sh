@@ -14,9 +14,9 @@ else # - build for dev mode -
 fi
 
 # as dev
-# npm install;
-# echo "--------------------- Starting --------------------------------";
-# exec npm run start:nodemon;
+npm install;
+echo "--------------------- Starting --------------------------------";
+exec npm run start:nodemon;
 
 # as production
 echo "--------------------- Initing --------------------------------";

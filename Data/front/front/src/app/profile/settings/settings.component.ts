@@ -102,6 +102,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   handleResponseone(data: any) {
+    console.log(data)
     if (data.statusCode && data.statusCode != 202)
       this.MyerrorAvatar = true;
     else {
