@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
-import hostIp from 'src/config';
+import { hostIp } from 'src/config';
 
 @Component({
   selector: 'app-login',

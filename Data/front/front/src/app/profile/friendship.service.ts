@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ɵafterNextNavigation } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { Socket, io } from 'socket.io-client';
-import hostIp from 'src/config';
+import { hostIp } from 'src/config';
 
 
 @Injectable({

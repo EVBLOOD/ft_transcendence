@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { io } from 'socket.io-client';
-import hostIp from 'src/config';
+import { hostIp } from 'src/config';
 
 
 @Injectable({

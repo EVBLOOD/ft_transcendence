@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import hostIp from 'src/config';
+import { hostIp } from 'src/config';
 
 @Injectable({
   providedIn: 'root'

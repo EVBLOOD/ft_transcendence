@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { EMPTY, Observable, catchError } from 'rxjs';
-import hostIp from 'src/config';
+import { hostIp } from 'src/config';
 
 @Injectable({
   providedIn: 'root'

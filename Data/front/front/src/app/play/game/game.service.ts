@@ -5,7 +5,7 @@ import { PositionState } from './position.state';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { StatusService } from 'src/app/status.service';
-import hostIp from 'src/config';
+import { hostIp } from 'src/config';
 
 // needs 3 packages
 // socket io : npm i --save ngx-socket-io

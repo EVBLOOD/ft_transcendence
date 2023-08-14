@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Socket, io } from 'socket.io-client';
 import { AuthService } from '../login/auth.service';
-import hostIp from 'src/config';
-
+import { CookieService } from 'ngx-cookie-service';
+import { hostIp, tokenName } from 'src/config';
+import { Router } from '@angular/router';
 export type createChatroom = {
   type: string;
   chatroomName: string;
@@ -48,6 +49,7 @@ type createMemberDTO = {
   providedIn: 'root'
 })
 export class ChatService {
+  private toctoc = '';
   private sock: Socket;
   private update: BehaviorSubject<any> = new BehaviorSubject<any>({});
   private closeIt: BehaviorSubject<any> = new BehaviorSubject<any>({});
@@ -55,8 +57,10 @@ export class ChatService {
   public updatePrivates: BehaviorSubject<any> = new BehaviorSubject<any>({});
   public updateMembership: BehaviorSubject<any> = new BehaviorSubject<any>({});
   public updateSeen: BehaviorSubject<any> = new BehaviorSubject<any>({});
-  constructor(private httpClient: HttpClient, private mySelf: AuthService
+  constructor(private httpClient: HttpClient, private mySelf: AuthService,
+    private cookieService: CookieService, private switchRouter: Router
   ) {
+    this.toctoc = cookieService.get(tokenName);
     this.sock = io(`${hostIp}:3000/chat`, {
       withCredentials: true,
     });
@@ -79,7 +83,7 @@ export class ChatService {
     );
 
     this.sock.on("force-leave", (data: any) => {
-      if (mySelf.getId() == data?.UserId) {
+      if (this.mySelf.getId() == data?.UserId) {
         this.closeIt.next(data);
         this.closeIt.next({});
         this.sock.emit('force-leave', data.chatID)
@@ -138,6 +142,10 @@ export class ChatService {
   }
 
   Acceptinvite(channelID: string, UserId: number) {
+    if (this.toctoc != this.cookieService.get(tokenName)) {
+      this.switchRouter.navigateByUrl('');
+      return this.httpClient.post(`${hostIp}:3000/chat/AcceptInvite`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+    }
     this.sock.emit("updateMembersTime", { chatID: channelID, UserId: UserId });
     return this.httpClient.post(`${hostIp}:3000/chat/AcceptInvite`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
   }
@@ -156,6 +164,10 @@ export class ChatService {
   // done
   // kick
   KickThisOne(channelID: string, UserId: number) {
+    if (this.toctoc != this.cookieService.get(tokenName)) {
+      this.switchRouter.navigateByUrl('');
+      return this.httpClient.post(`${hostIp}:3000/chat/kickUser`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+    }
     this.sock.emit("updateMembersTime", { chatID: channelID, UserId: UserId });
     this.sock.emit('ping-leave', { chatID: channelID, UserId: UserId })
     return this.httpClient.post(`${hostIp}:3000/chat/kickUser`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
@@ -163,23 +175,39 @@ export class ChatService {
   // done
   // remove OPER
   RemoveRole(channelID: string, UserId: number) {
+    if (this.toctoc != this.cookieService.get(tokenName)) {
+      this.switchRouter.navigateByUrl('');
+      return this.httpClient.post(`${hostIp}:3000/chat/RemoveRole`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+    }
     this.sock.emit("updateMembersTime", { chatID: channelID, UserId: UserId });
     return this.httpClient.post(`${hostIp}:3000/chat/RemoveRole`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
   }
 
   CreateRole(channelID: string, UserId: number) {
+    if (this.toctoc != this.cookieService.get(tokenName)) {
+      this.switchRouter.navigateByUrl('');
+      return this.httpClient.post(`${hostIp}:3000/chat/CreateRole`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+    }
     this.sock.emit("updateMembersTime", { chatID: channelID, UserId: UserId });
     return this.httpClient.post(`${hostIp}:3000/chat/CreateRole`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
   }
   // done
   // Ban User:
   banUser(channelID: string, UserId: number) {
+    if (this.toctoc != this.cookieService.get(tokenName)) {
+      this.switchRouter.navigateByUrl('');
+      return this.httpClient.post(`${hostIp}:3000/chat/banUser`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+    }
     this.sock.emit("updateMembersTime", { chatID: channelID, UserId: UserId });
     this.sock.emit('ping-leave', { chatID: channelID, UserId: UserId })
     return this.httpClient.post(`${hostIp}:3000/chat/banUser`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
   }
 
   banUserRemoval(channelID: string, UserId: number) {
+    if (this.toctoc != this.cookieService.get(tokenName)) {
+      this.switchRouter.navigateByUrl('');
+      return this.httpClient.post(`${hostIp}:3000/chat/banUserRemoval`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
+    }
     this.sock.emit("updateMembersTime", { chatID: channelID, UserId: UserId });
     return this.httpClient.post(`${hostIp}:3000/chat/banUserRemoval`, { chatID: channelID, UserId: UserId }, { withCredentials: true })
   }
@@ -189,6 +217,10 @@ export class ChatService {
   }
 
   LetsSilenceHim(user: number, Chausertid: number) {
+    if (this.toctoc != this.cookieService.get(tokenName)) {
+      this.switchRouter.navigateByUrl('');
+      return this.httpClient.post(hostIp + ':3000/chat/Mute', { UserId: user, chatID: Chausertid }, { withCredentials: true });
+    }
     this.sock.emit("updateMembersTime", { chatID: Chausertid, UserId: user });
     return this.httpClient.post(hostIp + ':3000/chat/Mute', { UserId: user, chatID: Chausertid }, { withCredentials: true });
   }
@@ -216,6 +248,10 @@ export class ChatService {
     return this.httpClient.post(`${hostIp}:3000/chat/JoinRoom`, chat, { withCredentials: true, });
   }
   sendMessage(message: sendMessageDTO, type: boolean) {
+    if (this.toctoc != this.cookieService.get(tokenName)) {
+      this.switchRouter.navigateByUrl('');
+      return;
+    }
     if (type)
       this.sock.emit("ChannelMessages", { type: type, message: message });
     else
@@ -231,6 +267,10 @@ export class ChatService {
     return this.httpClient.get(`${hostIp}:3000/user`, { withCredentials: true, })
   }
   addUserToChatRoom(id: string, user: string, password: string) {
+    if (this.toctoc != this.cookieService.get(tokenName)) {
+      this.switchRouter.navigateByUrl('');
+      return this.httpClient.put<string>(`${hostIp}:3000/chat/${id}/add/member`, {}, { withCredentials: true, });
+    }
     this.sock.emit("updateMembersTime", { chatID: id, UserId: user });
     const dto: createMemberDTO = {
       member: user,
@@ -239,6 +279,10 @@ export class ChatService {
     return this.httpClient.put<string>(`${hostIp}:3000/chat/${id}/add/member`, dto, { withCredentials: true, });
   }
   addAdminToChatRoom(id: string, admin: string, user: string) {
+    if (this.toctoc != this.cookieService.get(tokenName)) {
+      this.switchRouter.navigateByUrl('');
+      return this.httpClient.put<string>(`${hostIp}:3000/chat/${id}/add/admin`, {}, { withCredentials: true, });
+    }
     this.sock.emit("updateMembersTime", { chatID: id, UserId: user });
     const dto: createAdminDTO = {
       roleGiver: admin,
@@ -286,9 +330,17 @@ export class ChatService {
     return this.httpClient.get(hostIp + `:3000/chat/findingInvitedonce/${id}/${userid}`, { withCredentials: true });
   }
   GoForSeen(someId: number, isChat: boolean) {
+    if (this.toctoc != this.cookieService.get(tokenName)) {
+      this.switchRouter.navigateByUrl('');
+      return;
+    }
     this.sock.emit('Seen', { chatID: someId, isRoom: isChat });
   }
   updateMsh(id: number) {
+    if (this.toctoc != this.cookieService.get(tokenName)) {
+      this.switchRouter.navigateByUrl('');
+      return;
+    }
     this.sock.emit("updateMembersTime", { chatID: id });
   }
 }
