@@ -34,6 +34,13 @@ export class CreateChannelComponent implements OnDestroy {
   close() {
     this.switchRouter.navigateByUrl("/chat");
   }
+
+  handler(data: any) {
+    data.statusCode ? this.errorCreating = 1 : this.errorCreating = 0;
+    if (this.errorCreating == 0)
+      this.close()
+  }
+
   submiting() {
     let type = 'public';
     if (this.privateToggle.value && this.secretToggle.value)
@@ -44,10 +51,8 @@ export class CreateChannelComponent implements OnDestroy {
       this.removesubsc = this.chatService.joinChatroom({
         type, chatroomName: this.channelName.value,
         password: this.password.value, user: 'admin', otherUser: ''
-      }).subscribe({ next: (data: any) => { if (data?.statusCode) this.errorCreating = 1; else this.errorCreating = 0; } });
+      }).subscribe(data => this.handler(data));
       this.SubArray.push(this.removesubsc);
-      if (this.errorCreating)
-        this.close()
     }
   }
 
