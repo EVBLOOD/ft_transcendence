@@ -319,7 +319,6 @@ export class ChatService {
     if (!(await this.checkforRole(chatID, current, ['admin', 'owner'])) || await this.checkforRole(chatID, id, ['owner']))
       return {};
     const x = await this.MembersRepo.findOne({ where: { chatID: chatID, Userid: id, state: 1 } });
-    // const x = await this.MembersRepo.createQueryBuilder('Members').where('Members.Userid = :id AND Members.chatId = :chatID AND Members.state = 1', { id: id, chatID: chatID }).getOne();
     if (x && x.role == 'none') {
       const now = new Date();
       x.state = 3;

@@ -84,25 +84,12 @@ export class GameGateway
       ?.split('; ')
       ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
       ?.split('=')[1];
-    if (
-      !cookie
-    ) {
-      client.disconnect();
+    if (!cookie) {
       return false;
     }
-    const xyz: any = this.serviceJWt.decode(
-      cookie,
-    );
-    if (
-      !xyz ||
-      (await this.serviceToken.IsSame(
-        xyz.sub || '',
-        cookie,
-      )) == false
-    ) {
-      client.disconnect();
-      return false;
-    }
+    const xyz: any = this.serviceJWt.decode(cookie);
+    if (!xyz)
+      return;
     let userSockets = this.gameService.onlineUsers.get(xyz.sub);
     if (userSockets)
       userSockets.delete(client);

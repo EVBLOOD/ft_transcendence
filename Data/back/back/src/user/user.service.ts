@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { Socket } from 'socket.io';
-import { escape } from 'querystring';
 
 @Injectable()
 export class UserService {
@@ -105,6 +104,7 @@ export class UserService {
   }
 
   RemoveState(Socket: Socket, id: number) {
+    console.info(this.currentstate);
     if (!this.currentstate.has(id)) return null;
     let colect: { client: string; status: string; lastupdate: string }[] =
       this.currentstate.get(id);

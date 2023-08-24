@@ -242,16 +242,6 @@ export class ChatGateway {
     const xyz: any = this.serviceJWt.decode(
       cookie,
     );
-    if (
-      !xyz ||
-      (await this.serviceToken.IsSame(
-        xyz.sub || '',
-        cookie,
-      )) == false
-    ) {
-      client.disconnect();
-      return false;
-    }
     client.leave(xyz.sub)
   }
 }

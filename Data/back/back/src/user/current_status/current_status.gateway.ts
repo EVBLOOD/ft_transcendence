@@ -234,34 +234,14 @@ export class CurrentStatusGateway {
   }
 
   async handleDisconnect(client: Socket) {
-    if (
-      !client.handshake.headers?.cookie
-        ?.split('; ')
-        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
-        ?.split('=')[1]
-    ) {
-      client.disconnect();
+    const cookie = client.handshake.headers?.cookie
+      ?.split('; ')
+      ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
+      ?.split('=')[1];
+    if (!cookie) {
       return false;
     }
-    const xyz: any = this.serviceJWt.decode(
-      client.handshake.headers?.cookie
-        ?.split('; ')
-        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
-        ?.split('=')[1],
-    );
-    if (
-      !xyz ||
-      (await this.serviceToken.IsSame(
-        xyz.sub || '',
-        client.handshake.headers?.cookie
-          ?.split('; ')
-          ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
-          ?.split('=')[1],
-      )) == false
-    ) {
-      client.disconnect();
-      return false;
-    }
+    const xyz: any = this.serviceJWt.decode(cookie);
     this.SaveStatus.RemoveState(client, xyz.sub);
     this.myserver.emit('status', this.SaveStatus.GetAllUsersCurrentState());
     return 'Tab Disconnect';

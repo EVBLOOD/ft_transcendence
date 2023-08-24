@@ -60,34 +60,16 @@ export class FriendshipGateway {
   }
 
   async handleDisconnect(client: Socket) {
-    if (
-      !client.handshake.headers?.cookie
-        ?.split('; ')
-        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
-        ?.split('=')[1]
-    ) {
-      client.disconnect();
+    const cookie = client.handshake.headers?.cookie
+      ?.split('; ')
+      ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
+      ?.split('=')[1];
+    if (!cookie) {
       return false;
     }
-    const xyz: any = this.serviceJWt.decode(
-      client.handshake.headers?.cookie
-        ?.split('; ')
-        ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
-        ?.split('=')[1],
-    );
-    if (
-      !xyz ||
-      (await this.serviceToken.IsSame(
-        xyz.sub || '',
-        client.handshake.headers?.cookie
-          ?.split('; ')
-          ?.find((row) => row.startsWith(process.env.TOKEN_NAME + '='))
-          ?.split('=')[1],
-      )) == false
-    ) {
-      client.disconnect();
-      return false;
-    }
+    const xyz: any = this.serviceJWt.decode(cookie);
+    if (!xyz)
+      return;
     let userSockets = this.connections.get(xyz.sub);
     if (userSockets)
       userSockets.delete(client);

@@ -9,6 +9,8 @@ import {
   Delete,
   UseGuards,
   Req,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { createChatroomDTO } from './dto/createChatroom.dto';
@@ -136,6 +138,8 @@ export class ChatController {
 
   @Post('create')
   async createChatRoom(@Req() req: any, @Body() chatroom: createChatroomDTO) {
+    if (!chatroom.chatroomName.trim().length)
+      throw new HttpException("Name not valide!", HttpStatus.BAD_REQUEST);
     return await this.chatRoomSevice.createChatroom(req.new_user.sub, chatroom);
   }
 

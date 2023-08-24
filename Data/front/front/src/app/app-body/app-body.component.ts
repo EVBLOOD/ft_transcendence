@@ -101,7 +101,10 @@ export class AppBodyComponent implements OnInit, OnDestroy {
       showCancelButton: true,
       confirmButtonText: 'Accept',
       cancelButtonText: 'Decline',
+      toast: true,
+      timer: 15000,
       imageUrl: this.profileService.getUserAvatarPath(user.avatar),
+
       customClass: {
         popup: 'accept_notif-container',
         title: 'accept_notif-title',
@@ -109,14 +112,11 @@ export class AppBodyComponent implements OnInit, OnDestroy {
         cancelButton: 'accept_notif-cancel-button'
       },
       position: 'top-end',
-      timer: 5000
     }).then((result) => {
       if (result.isConfirmed) {
         this.gameService.acceptGame(true)
-        // this.gameService.ac(user.id);
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         this.gameService.acceptGame(false)
-        // this.friendship.cancelFriendRequest(user.id);
       }
     });
   }
@@ -157,8 +157,9 @@ export class AppBodyComponent implements OnInit, OnDestroy {
         confirmButton: 'accept_notif-confirm-button',
         cancelButton: 'accept_notif-cancel-button'
       },
+      toast: true,
       position: 'top-end',
-      timer: 5000
+      timer: 15000
     }).then((result) => {
       if (result.isConfirmed) {
         this.friendship.acceptRequest(user.id);

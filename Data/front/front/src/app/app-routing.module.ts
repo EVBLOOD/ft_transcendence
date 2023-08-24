@@ -45,7 +45,7 @@ const routes: Routes =
         },
         { path: 'leaderboard', component: LeaderbordComponent, canActivate: [authGuard] },
         { path: 'profile/:username', component: ProfileComponent, canActivate: [authGuard] },
-        { path: 'channelSetting/:id', component: ConfigChannelComponent, canActivate: [authGuard] },
+        { path: 'channelSetting/:id', component: ConfigChannelComponent, canActivate: [authGuard, noACCESSGuard] },
         { path: 'confirm/:id', component: PopupToBeSureComponent, canActivate: [authGuard] },
         { path: 'invite/:id', component: InviteComponent, canActivate: [authGuard] },
         { path: 'channelCreating', component: CreateChannelComponent, canActivate: [authGuard] },
