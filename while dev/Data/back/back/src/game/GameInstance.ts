@@ -310,12 +310,12 @@ export class GameInstance {
   // readonly PADDLEHEIGHTHALF = PADDLEHEIGHT / 2;
   // readonly PADDLEWIDTHHALF = PADDLEWIDTH / 2;
   private handleBallPaddleCollision(paddle: Matter.Body) {
-    const angle = this.clamp((this.ball.position.y - paddle.position.y), -50, 50);
+    const angle = this.clamp((this.ball.position.y - paddle.position.y), -70, 70);
     // console.log("angle", this.ball.position.y - paddle.position.y, angle);
     const sign = (this.ball.position.x - paddle.position.x) < 0 ? -1 : 1;
     const velocity = {
       x: sign * this.speed * Math.cos(this.degreesToRadians(angle)),
-      y: this.speed * Math.sign(this.degreesToRadians(angle)),
+      y: this.speed * Math.sin(this.degreesToRadians(angle)),
     }
     Body.setVelocity(this.ball, velocity);
     if (this.speed < 17)

@@ -16,6 +16,6 @@ const DataConf: PostgresConnectionOptions = {
     password: process.env.POSTGRES_PASSWORD,
     database: process.env.POSTGRES_DB,
     entities: [User, Friendship, Token, Match, Statastics, Chat, Messages, Members], // you can integrate the Entity you're working on here
-    synchronize: true,
+    synchronize: flase,
 }
 export default DataConf;
