@@ -5,9 +5,10 @@ Welcome to the Pong Contest website! This project is all about bringing the clas
 ## Table of Contents
 
 - [Introduction](#introduction)
-- [Screen shoots](#screen)
+- [Screenshots](#screenshots)
 - [Features](#features)
 - [Technologies Used](#technologies-used)
+- [Getting Started](#getting-started)
 
 ## Introduction
 
