@@ -27,6 +27,11 @@ Current user profile
 ![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Profile%20(3).png)
 
 ```
+Current user profile (friendships side)
+```
+![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Profile%20(2).png)
+
+```
 User's Settings Interface
 ```
 ![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Settings.png)
@@ -37,9 +42,29 @@ Activate the 2FA
 ![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/2FA.png)
 
 ```
+Another user profile
+```
+![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Profile.png)
+
+```
+Another user profile (this case a user that sent a friend request)
+```
+![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Profile%20(1).png)
+
+```
 404 page (case user blocked or doesn't exist!)
 ```
 ![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/404%20page.png)
+
+```
+Chat : DM Interface
+```
+![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Chat%20-%20DM.png)
+
+```
+Create Channels
+```
+![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Chat%20-%20Channels%20(2).png)
 
 ```
 Join Channels
@@ -52,43 +77,19 @@ Chat: Channels Interface
 ![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Chat%20-%20Channels.png)
 
 ```
-Chat : DM Interface
-```
-![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Chat%20-%20DM.png)
-
-```
-Game play Interface
-```
-![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Game.png)
-
-```
 Invite To Channel Interface
 ```
 ![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Invite%20-%20Channels.png)
-
-```
-Another user profile (this case a user that sent a friend request)
-```
-![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Profile%20(1).png)
-
-```
-Create Channel Interface
-```
-![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Profile%20(2).png)
-
-```
-Another user profile
-```
-![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Profile.png)
-
 
 ```
 Join Games Interface
 ```
 ![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/box%20list%20profile.png)
 
-
-
+```
+Game play Interface
+```
+![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Game.png)
 
 ## Features
 
