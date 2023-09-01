@@ -19,9 +19,19 @@ The Pong Contest website allows users to play Pong with others in real-time. It 
 
 ![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/2FA.png)
 ![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/404%20page.png)
-![alt text](https://github.com/EVBLOOD/ft_transcendence/tree/main/imgs/2FA.png?raw=true)
-![alt text](https://github.com/EVBLOOD/ft_transcendence/tree/main/imgs/2FA.png?raw=true)
-![alt text](https://github.com/EVBLOOD/ft_transcendence/tree/main/imgs/2FA.png?raw=true)
+![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Chat%20-%20Channels%20(1).png)
+![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Chat%20-%20Channels.png)
+![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Chat%20-%20DM.png)
+![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Game.png)
+![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Invite%20-%20Channels.png)
+![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Profile%20(1).png)
+![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Profile%20(2).png)
+![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Profile%20(3).png)
+![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Profile.png)
+![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/Settings.png)
+![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/box%20list%20profile.png)
+![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/load%20page.png)
+
 
 
 
