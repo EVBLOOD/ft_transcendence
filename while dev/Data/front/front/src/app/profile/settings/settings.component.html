@@ -1,0 +1,65 @@
+<app-popup>
+    <div (click)="close()" class="CloseBtnPop">
+        <button></button>
+    </div>
+    <h2 class="popTitle">{{data.title}}</h2>
+    <p *ngIf="data.subtitle" class="popTitleProfile">{{data.subtitle}}</p>
+    <div class="groupingLI">
+        <div class="profileImageSettingCentring">
+            <img class="profileImageSetting" [src]="serviceUser.getUserAvatarPath((profile$ | async)?.avatar)" alt="" />
+            <div class="profileImageStatus"><input accept="image/*" class="profileImageChange" type="file"
+                    (change)="funct($event)"></div>
+        </div>
+        <div class="profileUserInfoSetting">
+            <input id="userName" autocomplete="nickname" type="text" [formControl]="userName" />
+            <input id="fullName" autocomplete="name" type="text" [formControl]="fullName" />
+        </div>
+        <div *ngIf="userName.errors || fullName.errors || Myerror || MyerrorAvatar"
+            style="color: red;margin-top: 2px; display: flex; gap: 2px; flex-direction: column;">
+            <div *ngIf="fullName.errors?.['required']">
+                Name is required.
+            </div>
+            <div
+                *ngIf="fullName.errors?.['minlength'] || userName.errors?.['minlength'] || userName.errors?.['maxlength'] || fullName.errors?.['maxlength']">
+                <p *ngIf="userName.errors?.['maxlength']">Max is 10.</p>
+                <p *ngIf="fullName.errors?.['maxlength']">Max is 20.</p>
+                Minlength is 2.
+            </div>
+            <div *ngIf="userName.errors?.['required']">
+                User name is required.
+            </div>
+            <div *ngIf="userName.errors?.['pattern']">
+                User name containe only characters and one '-' in the midele
+            </div>
+            <div *ngIf="Myerror">
+                Use a Unique Username
+            </div>
+            <div *ngIf="MyerrorAvatar">
+                Use a valid format && max size is 1 mega
+            </div>
+        </div>
+        <div class="profileTwoFactorSetting">
+            <h2 class="popTitleProfile">Two-factor authentication</h2>
+            <button *ngIf="!this.twoFactor" class="validationBtn" (click)="activetwofactor()">Enable</button>
+            <button *ngIf="this.twoFactor" class="cancelBtn" (click)="canceltwofactor()">Disable</button>
+        </div>
+        <div class="profilePlaySettings">
+            <h2 class="popTitleProfile">Play theme</h2>
+            <div class="radioSettings">
+                <div [ngClass]="this.getname(1)" class="radioSettingsChoice" (click)="choosePlay(1)">
+                    <img src="/assets/whiteThemeSet.svg" alt="">
+                </div>
+                <div [ngClass]="this.getname(2)" class="radioSettingsChoice" (click)="choosePlay(2)">
+                    <img src="/assets/greenThemeSet.svg" alt="">
+                </div>
+                <div [ngClass]="this.getname(3)" class="radioSettingsChoice" (click)="choosePlay(3)">
+                    <img src="/assets/blueThemeSet.svg" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="popUpBtn">
+        <button class="cancelBtn" type="submit" (click)="close()">Cancel</button>
+        <button class="validationBtn" type="submit" (click)="validateInput()">{{data.action}}</button>
+    </div>
+</app-popup>

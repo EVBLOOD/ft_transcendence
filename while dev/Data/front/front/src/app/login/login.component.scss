@@ -1,0 +1,123 @@
+.page {
+    max-width: 100em;
+    margin: 0 auto;
+}
+
+.container {
+    margin: 50px;
+    margin-top: 8%;
+    height: 839px;
+}
+
+.body {
+    padding: 90px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    position: relative;
+    background-color: #103959;
+    border-radius: 40px;
+    height: 900px;
+}
+
+.footer {
+    text-align: center;
+    margin: 25px 0 25px 0;
+    font-size: 14px;
+    color: #D9ED92;
+}
+
+
+.body::-webkit-scrollbar {
+    width: 7px;
+}
+
+.body::-webkit-scrollbar-track {
+    border-radius: 50px;
+}
+
+.body::-webkit-scrollbar-thumb {
+    border-radius: 50px;
+    background: #D9ED92;
+}
+
+.btnLogin:hover {
+    color: #103959;
+    background: #D9ED92;
+
+}
+
+.titleLog {
+    height: 150px;
+    width: 250px;
+}
+
+.discreptionPro {
+    overflow-wrap: normal;
+    margin-top: 15px;
+    color: #7FABCC;
+    width: 50%;
+    height: 10%;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+}
+
+
+.btnLogin {
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+    background-color: #FAFAFA;
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    padding: 7px 44px;
+    width: 170px;
+    height: 30px;
+    line-height: 16px;
+    margin-top: 20px;
+}
+
+
+.lblLogin {
+    color: black;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.loginImg {
+    position: absolute;
+    right: 50px;
+    width: 60%;
+}
+
+
+@media only screen and (max-width: 900px) {
+
+    .discreptionPro {
+        width: 100%;
+    }
+
+    .body {
+        border-radius: 30px;
+        padding: 30px;
+
+    }
+
+    .container {
+        margin: 10px;
+        margin-top: 15%;
+
+    }
+
+    .loginImg {
+        right: 15%;
+        bottom: 10%;
+        width: 80%;
+    }
+
+}

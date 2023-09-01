@@ -1,0 +1,33 @@
+<div class="chat">
+    <div class="grid1">
+        <div class="toggle">
+            <a (click)="!toggle && SwitchChat()" class="button" [ngClass]="{'activeButton' : toggle}">
+                <!-- <img src="/assets/icons/direct.svg"> -->
+                <p>Direct</p>
+            </a>
+            <a (click)="toggle && SwitchChat()" class="button" [ngClass]="{'activeButton' : !toggle}">
+                <!-- <img src="/assets/icons/channels.svg"> -->
+                <p>Channels</p>
+            </a>
+        </div>
+        <input [formControl]="newText" class="textbox search" type="text" placeholder="Search"
+            (keypress)="FindextraUsers($event)" />
+        <div class="friendsonline" *ngIf="toggle">
+            <!-- friendList -->
+            <app-dms *ngFor="let item of (ChatDMs$|async)" [user]="item?.user ? item?.user : item" />
+        </div>
+        <div class="channels" *ngIf="!toggle">
+            <app-channels *ngFor="let item of (ChatRooms$|async)" [channel]="item" />
+        </div>
+        <div class="create-join-channel">
+            <div routerLink="/channelCreating" class="button-create-channel" *ngIf="!toggle">Create channel</div>
+            <div routerLink="/joinChannel" class="button-create-channel join-channel" *ngIf="!toggle">Join to channel
+            </div>
+        </div>
+
+    </div>
+    <div>
+        <router-outlet *ngIf="getStarterPath('/chat')"></router-outlet>
+        <app-chat-content *ngIf="!getStarterPath('/chat')" />
+    </div>
+</div>

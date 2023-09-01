@@ -1,0 +1,15 @@
+<!-- <div *ngIf="index <= 3"> -->
+<div *ngIf="index == 1" class="column"><img src="/assets/firstRank.svg" alt="1" /></div>
+<div *ngIf="index == 2" class="column"><img src="/assets/secondRank.svg" alt="2" /></div>
+<div *ngIf="index == 3" class="column"><img src="/assets/thirdRank.svg" alt="3" /></div>
+<!-- </div> -->
+<div *ngIf="index > 3" class="column rankNumber">{{index}}</div>
+<div class="imgAndName column">
+    <img [routerLink]="'/profile/' + data.user.id"
+        style="border-radius: 50%; height: 44px; width: 44px; cursor: pointer;" [src]="avataring(data.user.avatar)"
+        alt="user" />
+    <p class="usernameHiding">{{data.user.username}}</p>
+</div>
+<div class="column col">{{data.matchPlayed}}</div>
+<div class="column col1">{{data.win}}</div>
+<div class="column col2">{{data.ratio}}</div>

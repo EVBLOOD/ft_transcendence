@@ -1,0 +1,8 @@
+<div class="friend">
+    <img class="friendImg" [src]="avataring(user.avatar)" />
+    <p class="friendName">{{user.name}}</p>
+    <a class="buttonInvite" *ngIf="invited == 2 || (!(areyouHere$|async)?.length && !invited)"
+        (click)="onClickInvite(user.id)">Invite</a>
+    <a class="buttonInvited" *ngIf="invited == 1 || ((areyouHere$|async)?.length && !invited)"
+        (click)="onClickInviteCancel(user.id)">Invited</a>
+</div>

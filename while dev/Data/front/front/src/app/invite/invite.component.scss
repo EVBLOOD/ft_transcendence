@@ -1,0 +1,52 @@
+.CloseBtnPop {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.CloseBtnPop button {
+    border-style: none;
+    background-color: #184E77;
+    background-image: url('/assets/icons/closeImg.svg');
+    height: 24.11px;
+    width: 22px;
+    background-size: 22px 24.11px;
+}
+
+.popTitle {
+    color: #99D98C;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 39px;
+    text-transform: capitalize;
+    margin-bottom: 17px;
+}
+
+.boxInviteFriends {
+    width: 100%;
+    border-radius: 8px;
+    background: #7FABCC;
+    height: 244px;
+    overflow-y: auto;
+}
+
+.friend {
+    display: grid;
+    grid-template-columns: min-content 1fr min-content;
+    gap: 7px;
+    align-items: center;
+    margin: 11px 14px;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 50px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 50px;
+    background: #D9ED92;
+}

@@ -1,0 +1,237 @@
+.profilePlaySettings {
+    margin-top: 9px;
+}
+
+.CloseBtnPop button {
+    border-style: none;
+    background-color: #184E77;
+    background-image: url('/assets/closeImg.svg');
+    height: 24.11px;
+    width: 22px;
+    background-size: 22px 24.11px;
+}
+
+
+.cancelBtn {
+    box-shadow: 0px 0px 9px rgba(0, 0, 0, 0.25);
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    color: #103959;
+    border-radius: 8px;
+    border: none;
+    height: 36px;
+    width: 92px;
+    background-color: #7FABCC;
+
+}
+
+.popUpBtn {
+    margin-top: 35px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    color: #103959;
+    border-radius: 8px;
+    display: flex;
+    gap: 5px;
+    justify-content: flex-end;
+}
+
+
+.popTitle {
+    color: #99D98C;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 39px;
+    text-transform: capitalize;
+}
+
+
+.popTitleProfile {
+    color: #7FABCC;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    text-transform: capitalize;
+}
+
+
+.cancelBtn {
+    box-shadow: 0px 0px 9px rgba(0, 0, 0, 0.25);
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    color: #103959;
+    border-radius: 8px;
+    border: none;
+    height: 36px;
+    width: 92px;
+    background-color: #7FABCC;
+
+}
+
+.validationBtn {
+    box-shadow: 0px 0px 9px rgba(0, 0, 0, 0.25);
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    color: #103959;
+    border: none;
+    height: 36px;
+    width: 92px;
+    border-radius: 8px;
+    background-color: #99D98C;
+    cursor: pointer;
+}
+
+.popUpBtn {
+    margin-top: 35px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    color: #103959;
+    border-radius: 8px;
+    display: flex;
+    gap: 5px;
+    justify-content: flex-end;
+}
+
+.popUpBtn button:hover {
+    cursor: pointer;
+}
+
+.profileImageSettingCentring {
+    display: flex;
+    justify-content: center;
+}
+
+.profileImageSettingCentring img {
+    height: 98.82px;
+    width: 97.88px;
+    border-radius: 50%;
+}
+
+.profileImageSettingCentring div {
+    background-color: #7FABCC;
+    border-radius: 50%;
+    height: 36px;
+    width: 34px;
+    margin-left: -30px;
+    align-self: flex-end;
+}
+
+.profileImageStatus {
+    background-image: url('/assets/icons/camerawow.svg');
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: center;
+    // height: 36px;÷
+    // width: 34px;
+}
+
+.profileUserInfoSetting {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 25px;
+}
+
+.profileUserInfoSetting input {
+    padding-left: 10px;
+    background-color: #7FABCC;
+    color: #184E77;
+    border-radius: 8px;
+    height: 38px;
+    width: 197px;
+    border: none;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.profileTwoFactorSetting {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.radioSettings {
+    margin-left: 5px;
+    margin-top: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.radioSettingsChoice {
+    width: 119px;
+    height: 65px;
+    background-size: 119px 65px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.profilePlaySettings {
+    margin-top: 9px;
+}
+
+.CloseBtnPop {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.CloseBtnPop button {
+    border-style: none;
+    background-color: #184E77;
+    background-image: url('/assets/closeImg.svg');
+    height: 24.11px;
+    width: 22px;
+    background-size: 22px 24.11px;
+}
+
+.activeRadio {
+    border: 2px solid #7FABCC;
+    border-radius: 11px;
+    padding: 3px;
+}
+
+.profileImageChange {
+    opacity: 0%;
+    cursor: pointer;
+    background-color: #7FABCC;
+    border-radius: 50%;
+    height: 36px;
+    width: 34px;
+    display: inline-block;
+
+}
+
+@media only screen and (max-width: 800px) {
+    .profileUserInfoSetting {
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+    }
+
+    .profileUserInfoSetting input {
+        width: 100%;
+    }
+
+    .radioSettings {
+        flex-wrap: wrap;
+        gap: 5px;
+        justify-content: space-around;
+    }
+
+    .popTitleProfile {
+        font-size: 17px;
+    }
+}

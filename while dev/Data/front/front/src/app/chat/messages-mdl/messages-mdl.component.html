@@ -1,0 +1,38 @@
+<div class="grid2">
+    <div class="header-chat" *ngIf="!isRoom">
+        <img [src]="avatring((user$|async)?.avatar)">
+        <div class="name-status">
+            <div class="name">{{(user$|async)?.name}}</div>
+            {{statusLoading((user$|async)?.id)}}
+            <div
+                [ngClass]="status == 'Online' ? 'status Online' : status == 'Offline' ? 'status Offline': 'status InGame'">
+                {{status}}</div>
+        </div>
+    </div>
+    <div class="header-chat-channel" *ngIf="isRoom">
+        <div class="icon-name-channel">
+            <img src="/assets/icons/hashtag.svg">
+            <div class="name-status">
+                <div class="name">{{this.chatInfos?.rooms?.chat?.name}}</div>
+                <div class="nb-members-channel">{{this.chatInfos?.count ? this.chatInfos?.count +
+                    ' Members' : ''}} </div>
+            </div>
+        </div>
+        <div #dropDownChannelRef__ class="threedotschannel">
+            <img (click)="onclickThreePointChannel()" #dropDownChannelRef_ src="/assets/icons/3points.svg">
+            <ul *ngIf="dropDownChannel" @inOut #dropDownChannelRef class="dropdown-profile">
+                <li [routerLink]="'/confirm/'+this.chatInfos?.rooms?.chat?.id">Leave</li>
+                <li [routerLink]="'/invite/'+this.chatInfos?.rooms?.chat?.id">Invite</li>
+                <li [routerLink]="'/channelSetting/' + this.chatInfos?.rooms?.chat?.id">Settings</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="conversation">
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+            <app-message *ngFor="let msg of messages " [value]="msg" />
+        </div>
+        <app-message *ngFor="let msg of (msgs$|async) " [value]="msg" />
+    </div>
+    <app-send-msg [isRoom]="isRoom" [chatId]="this.chatInfos?.rooms?.chat?.id" [userId]="id" />
+</div>

@@ -1,0 +1,66 @@
+div {
+    text-transform: capitalize;
+    color: #7FABCC;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.column {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.imgAndName {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.rankNumber {
+    font-size: 30px;
+    padding-left: 17px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+
+@media only screen and (max-width: 990px) {
+    .usernameHiding {
+        display: none;
+    }
+
+}
+
+@media only screen and (max-width: 650px) {
+    div {
+        font-size: 12px;
+    }
+
+    .usernameHiding {
+        display: none;
+    }
+
+    img {
+        height: 30px;
+        width: 30px;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .col {
+        display: none;
+    }
+
+    .col1 {
+        display: none;
+
+    }
+
+    .col2 {
+        display: none;
+    }
+}

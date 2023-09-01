@@ -1,0 +1,77 @@
+# Notice : if you working with linux you should change the ${PWD} with a Valide PATH.
+version: '3.7'
+
+services:
+  # Features
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - ft_transcendence
+
+  # Main Services
+  back:
+    build:
+      context: ./srcs/back
+      args:
+        - ACCESS_TOKEN_SECRET=$ACCESS_TOKEN_SECRET
+        - HOST=$HOST
+        - TOKEN_NAME=$TOKEN_NAME
+        - FORTY_TWO_APP_UID=$FORTY_TWO_APP_UID
+        - FORTY_TWO_CALLBACK_URL=$FORTY_TWO_CALLBACK_URL
+        - FORTY_TWO_APP_SECRET=$FORTY_TWO_APP_SECRET
+        - POSTGRES_USER=$POSTGRES_USER
+        - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+        - POSTGRES_DB=$POSTGRES_DB
+    image: back
+    container_name: back
+    env_file: .env
+    networks:
+      - ft_transcendence
+    ports:
+      - 3000:3000
+    restart: on-failure
+    volumes:
+      - vol_back:/var/www/html
+
+  front:
+    build:
+      context: ./srcs/front
+      args:
+        - HOST=$HOST
+        - TOKEN_NAME=$TOKEN_NAME
+    image: front
+    container_name: front
+    networks:
+      - ft_transcendence
+    ports:
+      - 4200:4200
+    restart: always
+    env_file: .env
+    volumes:
+      - vol_front:/var/www/html
+
+  database:
+    image: postgres
+    container_name: database
+    networks:
+      - ft_transcendence
+    restart: on-failure
+    env_file: .env
+    environment:
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB
+    volumes:
+      - vol_database:/var/lib/pgsql/data
+
+networks:
+  ft_transcendence:
+    driver: bridge
+
+volumes:
+  vol_back:
+  vol_front:
+  vol_database:

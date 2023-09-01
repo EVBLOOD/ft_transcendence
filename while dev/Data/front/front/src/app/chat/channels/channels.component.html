@@ -1,0 +1,5 @@
+<div class="channel" (click)="openChat(channel?.chat?.id)">
+    <img class="hashtag" src="/assets/icons/hashtag.svg">
+    <p class="name-friend">{{channel?.chat?.name}}</p>
+    <div *ngIf="channel.notSeen" class="nb-messages">{{channel.notSeen}}</div>
+</div>

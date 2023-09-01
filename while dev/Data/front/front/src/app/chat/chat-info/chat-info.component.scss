@@ -1,0 +1,80 @@
+.grid3 {
+    display: block;
+    height: 100%;
+}
+
+.profile {
+    display: flex;
+    flex-direction: column;
+    padding: 40px 20px;
+    align-items: center;
+    gap: 20px;
+}
+
+.img-profile {
+    width: 166px;
+    height: 166px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+
+.buttonsProfile {
+    display: flex;
+    gap: 12px;
+}
+
+.buttonsProfile .btn {
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 11px;
+    display: flex;
+    gap: 4px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.buttonsProfile .btn:hover {
+    opacity: 70%;
+}
+
+.buttonsProfile .btn div {
+    background-color: #1E6091;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+.buttonsProfile img {
+    width: 22px;
+    height: 22px;
+}
+
+.MembersChannel {
+    padding: 20px 13px;
+    overflow-y: auto;
+    position: relative;
+    height: 100%;
+}
+
+.NameRole {
+    color: #7FABCC;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+@media only screen and (max-width: 900px) {
+    .grid3 {
+        display: none;
+    }
+}
+
+
+@media only screen and (max-width: 600px) {
+    .grid3 {
+        display: none;
+    }
+}

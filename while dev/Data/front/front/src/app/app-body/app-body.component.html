@@ -1,0 +1,42 @@
+<router-outlet *ngIf="getcurrentPath() == '/login' || getcurrentPath() == '/twoFactor'"></router-outlet>
+<div class="page" *ngIf="getcurrentPath() != '/login' && getcurrentPath() != '/twoFactor'">
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="/assets/asset/logo.svg" routerLink="">
+            </div>
+            <ul class="menu">
+                <li [style.background]="getcurrentPath() == '/play' ? '#103959' : '#184E77'" routerLink="play">
+                    <img src="/assets/icons/play.svg"> Play
+                </li>
+                <li [style.background]="getcurrentPath() == '/chat' ?  '#103959' : '#184E77'" routerLink="chat">
+                    <img src="/assets/icons/message.svg" />Message
+                </li>
+                <li [style.background]="getcurrentPath() == '/leaderboard'? '#103959' : '#184E77'"
+                    routerLink="leaderboard"><img src="/assets/icons/leaderboard.svg" />Leaderboard</li>
+            </ul>
+            <div #dropDownContent_ class="profile">
+                <a (click)="onclick()" class="dropdown-btn"><img #dropDownContent__ [src]="profilepic"
+                        alt="Profile"></a>
+                <ul #dropDownContent *ngIf="dropDown" @inOut class="dropdown-profile">
+                    <li routerLink="">View my profile</li>
+                    <li routerLink="settings">Settings</li>
+                    <li (click)="logout()">Logout</li>
+                </ul>
+            </div>
+        </div>
+        <div class="body">
+            <router-outlet
+                *ngIf="getcurrentPath() != '/settings' && getcurrentPath() != '/acticatetwo' &&  getcurrentPath() != '/channelCreating' && !getStarterPath('/channelSetting/') && !getStarterPath('/confirm/') && !getStarterPath('/invite/') && getcurrentPath() != '/joinChannel'"></router-outlet>
+            <app-profile *ngIf="getcurrentPath() == '/settings' || getcurrentPath() == '/acticatetwo'" />
+            <app-chat
+                *ngIf="getcurrentPath() == '/channelCreating' || getStarterPath('/channelSetting/') || getStarterPath('/confirm/') || getStarterPath('/invite/')  || getcurrentPath() == '/joinChannel'" />
+        </div>
+        <div class="footer">
+            <p>Copyright © 2023 ft_transcendence. All Rights Reserved</p>
+        </div>
+    </div>
+    <router-outlet
+        *ngIf="getcurrentPath() == '/settings' || getcurrentPath() == '/acticatetwo' || getcurrentPath() == '/channelCreating' || getStarterPath('/channelSetting/') || getStarterPath('/invite/') || getStarterPath('/confirm/') || getcurrentPath() == '/joinChannel'"
+        (AvatarChanged)="updateAvatar($event)"></router-outlet>
+</div>

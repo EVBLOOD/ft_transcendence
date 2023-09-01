@@ -1,0 +1,17 @@
+.griding {
+    display: grid;
+    grid-template-columns: 70% 30%;
+    height: 100%;
+}
+
+@media only screen and (max-width: 900px) {
+    .grid3 {
+        display: none;
+    }
+
+    .griding {
+        display: grid;
+        grid-template-columns: 100%;
+        height: 100%;
+    }
+}

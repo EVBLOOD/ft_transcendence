@@ -1,0 +1,132 @@
+.CloseBtnPop {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.CloseBtnPop button {
+    border-style: none;
+    background-color: #184E77;
+    background-image: url('/assets/icons/closeImg.svg');
+    height: 24.11px;
+    width: 22px;
+    background-size: 22px 24.11px;
+}
+
+.contentPopup {
+    display: grid;
+    gap: 15px;
+}
+
+.popTitle {
+    color: #99D98C;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 39px;
+    text-transform: capitalize;
+    margin-bottom: 5px;
+}
+
+.textbox {
+    color: #184E77;
+    height: 32px;
+    background: #7FABCC;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    padding-left: 17px;
+    font-weight: 600;
+}
+
+.textbox::placeholder {
+    color: #3176AB;
+}
+
+:-ms-input-placeholder {
+    color: #3176AB;
+}
+
+::-ms-input-placeholder {
+    color: #3176AB;
+}
+
+.textboxChannel {
+    position: relative;
+}
+
+
+.rowToggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.rowToggle .title {
+    color: #7FABCC;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+}
+
+.toggle {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    width: 38px;
+    border-radius: 10px;
+    background: #99D98C;
+    align-items: center;
+}
+
+.circle {
+    margin: 1px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    -webkit-transition: .4s;
+    background: #184E77;
+    transition: .4s;
+}
+
+.circleChecked {
+    background-color: #bfecb6;
+    transform: translateX(100%);
+}
+
+.buttons {
+    display: flex;
+    gap: 7px;
+    justify-content: flex-end;
+    margin-top: 17px;
+
+}
+
+.cancel {
+    cursor: pointer;
+    background: #7FABCC;
+    border-radius: 8px;
+    padding: 10px 21px;
+    color: #103959;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.createChannel {
+    cursor: pointer;
+    background: #99D98C;
+    border-radius: 8px;
+    padding: 10px 21px;
+    color: #103959;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.createChannel:hover,
+.cancel:hover {
+    opacity: 80%;
+    transition: 0.3s;
+}

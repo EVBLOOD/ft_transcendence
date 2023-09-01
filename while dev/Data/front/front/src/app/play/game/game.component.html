@@ -1,0 +1,44 @@
+<div class="body">
+    <div>
+        <div class="player-container">
+            <div class="player">
+                <div class="player">
+                    <img [src]="profile.getUserAvatarPath((Fplayer$|async)?.avatar)" alt="add">
+                    <div class="playerndScore">
+                        <div class="nameAndAdd">
+                            <p>{{(Fplayer$|async)?.username}}</p>
+
+                            <div *ngIf="Myid != (Fplayer$|async)?.id && !(test_$|async)?.length"
+                                [style.display]="!hideInv ? 'flex' : 'none'" class="addhimgame" (click)="addfriend()">
+                                <img src="/assets/icons/addfriend.svg" alt="add">
+                            </div>
+                        </div>
+                        <p *ngIf="Myid == (Fplayer$|async)?.id" class="score">
+                            {{(WinnerNumber1$|async)?.number}}</p>
+                        <p *ngIf="Myid != (Fplayer$|async)?.id" class="score">
+                            {{(LostNumber1$|async)?.number}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="player">
+                <div class="playerndScore">
+                    <div class="nameAndAdd">
+                        <div *ngIf="Myid != (Splayer$|async)?.id && !(test$|async)?.length"
+                            [style.display]="!hideInv ? 'flex' : 'none'" class="addhimgame" (click)="addfriend_()"><img
+                                src="/assets/icons/addfriend.svg" alt="add">
+                        </div>
+                        <p>{{(Splayer$|async)?.username}}</p>
+                    </div>
+                    <p *ngIf="Myid == (Splayer$|async)?.id" class="score P2">
+                        {{(WinnerNumber2$|async)?.number}}</p>
+                    <p *ngIf="Myid != (Splayer$|async)?.id" class="score P2">
+                        {{(LostNumber2$|async)?.number}}</p>
+
+                </div>
+                <div class="player"><img [src]="profile.getUserAvatarPath((Splayer$|async)?.avatar)" alt="add">
+                </div>
+            </div>
+        </div>
+        <div id="game-container"></div>
+    </div>
+</div>

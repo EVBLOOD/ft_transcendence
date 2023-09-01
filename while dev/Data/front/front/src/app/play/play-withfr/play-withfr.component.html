@@ -1,0 +1,21 @@
+<div class="onlinePlayer">
+    {{statusLoading(item.id)}}
+    <div class="colorgradient">
+        <img [src]="profile.getUserAvatarPath(item.avatar)" />
+        <p class="namePlayer">{{item.username}}</p>
+        <div *ngIf="status == 'Online'" class="statusOnline">
+            <div class="circle"></div>
+            <p>{{status}}</p>
+            <!-- Online -->
+        </div>
+        <div *ngIf="status == 'Offline'" class="statusOffline">
+            <div class="circle"></div>
+            <p>Offline</p>
+        </div>
+        <div *ngIf="status == 'InGame'" class="statusInGame">
+            <div class="circle"></div>
+            <p>InGame</p>
+        </div>
+        <a class="buttonChallenge" (click)="playwith(item.id)">Challenge</a>
+    </div>
+</div>

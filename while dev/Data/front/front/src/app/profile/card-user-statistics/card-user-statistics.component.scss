@@ -1,0 +1,62 @@
+.cardUserStatistics {
+    background-color: #184E77;
+    display: flex;
+    width: 268px;
+    height: 130px;
+    border-radius: 20px;
+    gap: 15px;
+}
+
+.cardUserStatisticsInfos {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.cardUserStatisticsTitle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.cardUserStatisticsValue {
+    display: flex;
+    justify-content: center;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 40px;
+    color: #99D98C;
+}
+
+.cardUserStatistics img {
+    border-radius: 20px;
+
+}
+
+
+
+@media only screen and (max-width: 800px) {
+
+    .cardUserStatistics {
+        width: 134px;
+        height: 70px;
+    }
+
+    .cardUserStatisticsTitle {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 10px;
+    }
+
+    .cardUserStatisticsValue {
+        font-style: normal;
+        font-weight: 700;
+        font-size: 20px;
+        color: #99D98C;
+    }
+}

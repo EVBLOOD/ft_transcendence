@@ -1,0 +1,11 @@
+<div class="cardUserStatistics">
+    <img [src]=data.path alt="">
+    <div class="cardUserStatisticsInfos">
+        <div class="cardUserStatisticsTitle">{{ data.name }}</div>
+        <div *ngIf="data.name == 'Rank'" class="cardUserStatisticsValue">{{ helps?.rank }}</div>
+        <div *ngIf="data.name == 'Played'" class="cardUserStatisticsValue">{{ helps?.matchPlayed }}
+        </div>
+        <div *ngIf="data.name == 'Wins'" class="cardUserStatisticsValue">{{ helps?.win }}</div>
+        <div *ngIf="data.name == 'Score'" class="cardUserStatisticsValue">{{ helps?.score }}</div>
+    </div>
+</div>

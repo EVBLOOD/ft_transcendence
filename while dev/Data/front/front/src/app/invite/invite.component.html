@@ -1,0 +1,18 @@
+<app-popup>
+    <div (click)="close()" class="CloseBtnPop">
+        <button></button>
+    </div>
+    <h2 class="popTitle"> {{'Invite friends to #' + (channelInfos$|async)?.name}}</h2>
+    <div *ngIf="profiles$|async as users">
+        <div *ngIf="!users.length; else listall" class="popTitle"
+            style="font-size: medium; display: flex; justify-content: center; width: 100%;"> You
+            have No friends to
+            invite </div>
+        <ng-template #listall>
+            <div class="boxInviteFriends">
+                <app-invite-lines *ngFor="let user of users" [user]="user" />
+            </div>
+        </ng-template>
+    </div>
+
+</app-popup>

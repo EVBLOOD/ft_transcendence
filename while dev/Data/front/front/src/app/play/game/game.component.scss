@@ -1,0 +1,84 @@
+#game-container {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    max-height: 700px;
+}
+
+.body {
+    position: relative;
+    background-color: #103959;
+    border-radius: 40px;
+    padding: 36px;
+    padding-top: 45px;
+    justify-self: center;
+}
+
+.player-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 19px;
+}
+
+.player {
+    gap: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nameAndAdd p {
+    color: #FFF;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.score {
+    color: #99D98C;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.player img {
+    justify-content: flex-start;
+    width: 78px;
+    height: 78px;
+    border-radius: 50%;
+}
+
+.addhimgame img {
+    width: 15px;
+    height: 13px;
+}
+
+.playerndScore {
+    display: flex;
+    flex-direction: column;
+}
+
+.P2 {
+    align-self: flex-end;
+}
+
+.nameAndAdd {
+    display: flex;
+    gap: 10px;
+}
+
+.addhimgame {
+    display: inline-flex;
+    padding: 6px 10px 6px 11px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 29px;
+    background: #99D98C;
+    box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+}

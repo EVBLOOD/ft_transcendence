@@ -1,0 +1,38 @@
+.channel {
+    transition: 0.3s;
+    display: grid;
+    grid-template-columns: min-content auto min-content;
+    gap: 6px;
+    align-items: center;
+    font-size: 15px;
+    padding: 7px;
+    cursor: pointer;
+}
+
+.channel:hover {
+    background-color: #184E77;
+    border-radius: 10px;
+}
+
+.hashtag {
+    position: relative;
+    width: 33px;
+}
+
+.nb-messages {
+    height: 16px;
+    width: 16px;
+    font-size: 11px;
+    background-color: #FF5E5E;
+    display: flex;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    padding: 2px;
+}
+
+@media only screen and (max-width: 600px) {
+    .nb-messages {
+        display: none;
+    }
+}

@@ -1,0 +1,12 @@
+<div class="userProfileHistoryRaw">
+    <div class="userProfileHistoryPlayers">
+        <div>
+            <img [src]="profile.getUserAvatarPath(item.player1.avatar)" alt="" />
+            <img [src]="profile.getUserAvatarPath(item.player2.avatar)" alt="" />
+        </div>
+        <p>{{item.player1.username + ' vs ' + item.player2.username}}</p>
+    </div>
+    <div *ngIf="item.winner.id == item.player1.id" class="userProfileHistoryStatus">win 🏆</div>
+    <div *ngIf="item.winner.id == item.player2.id" class="userProfileHistoryStatus">Lost 😥</div>
+    <div class="userProfileHistoryDate">{{item.date}}</div>
+</div>

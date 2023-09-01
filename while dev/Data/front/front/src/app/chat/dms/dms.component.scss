@@ -1,0 +1,80 @@
+.friend {
+    position: relative;
+    transition: 0.3s;
+    display: grid;
+    grid-template-columns: min-content auto min-content;
+    gap: 6px;
+    align-items: center;
+    font-size: 15px;
+    padding: 7px;
+    cursor: pointer;
+}
+
+.friend:hover {
+    background-color: #184E77;
+    border-radius: 10px;
+}
+
+.friend-profile {
+    position: relative;
+    width: 50px;
+    height: 50px;
+}
+
+.friend-profile img {
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+}
+
+.nb-messages {
+    height: 16px;
+    width: 16px;
+    font-size: 11px;
+    background-color: #FF5E5E;
+    display: flex;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    padding: 2px;
+}
+
+.statusCircle {
+    position: absolute;
+    border: 3px solid #103959;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    bottom: 0;
+    right: 0;
+}
+
+.Online {
+    background-color: #6EDB3F;
+}
+
+.Offline {
+    background-color: #8F8D8D;
+}
+
+.InGame {
+    background-color: #FFA45E;
+}
+
+
+@media only screen and (max-width: 600px) {
+
+    .nb-messages {
+        display: none;
+    }
+
+    .name-friend {
+        font-size: small;
+    }
+
+    .friend {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

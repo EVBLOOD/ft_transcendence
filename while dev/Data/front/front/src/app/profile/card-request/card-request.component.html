@@ -1,0 +1,11 @@
+<div *ngIf="(otherUser$ | async)" class="friendRequestsCard">
+    <div class="lololo" (click)="showMore()"><img class="moreFriendships" src="/assets//icons/more.svg" alt="nope"></div>
+    <ul *ngIf="more" class="Displaylist">
+        <li (click)="confirmRequest()">Confirm request</li>
+        <li (click)="deleteRequest()">Delete request</li>
+        <li (click)="viewProfile()">View Profile</li>
+        <li (click)="Block()">Block</li>
+    </ul>
+    <img class="avatarFriendships" [src]="this.profile.getUserAvatarPath((otherUser$ | async)?.avatar)" alt="nope" />
+    <div class="friendName">{{(otherUser$ | async)?.username}}</div>
+</div>

@@ -1,0 +1,45 @@
+<div *ngIf="!(History$|async)">waiting</div>
+<div *ngIf="(History$|async)" class="body">
+    <div class="section">
+        <div class="row">
+            <p *ngIf="(friendList| async)?.length" class="title">Play with friends</p>
+            <a class="button" (click)="quickPairing()">Quick Pairing</a>
+        </div>
+        <div *ngIf="(friendList| async)?.length" class="onlinePlayers">
+            <app-play-withfr *ngFor="let item of (friendList | async)" [item]="item" />
+        </div>
+    </div>
+    <div class="section">
+        <div class="row">
+            <p class="title">Leaderboard</p>
+            <a class="button" (click)="goLeaderBoard()">Read more</a>
+        </div>
+        <div class="leaderboard">
+            <div *ngFor="let item of (Leaders$|async) index as i" class="user">
+                <div class="rank-img">
+                    <img class="rank-user" src="{{leaderboard[i]}}" />
+                    <img class="img-user" [src]="profile.getUserAvatarPath(item.user.avatar)" />
+                </div>
+                <p class="name-user">{{item.user.username}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="row">
+            <p class="title">History Last Matches</p>
+            <a *ngIf="(History$|async)?.length >= 5" class="button" (click)="goProfile()">Read more</a>
+        </div>
+        <div *ngFor="let item of (History$|async)" class="userProfileHistoryRaw">
+            <div class="userProfileHistoryPlayers">
+                <div>
+                    <img [src]="profile.getUserAvatarPath(item.player1.avatar)" alt="" />
+                    <img [src]="profile.getUserAvatarPath(item.player2.avatar)" alt="" />
+                </div>
+                <p>{{item.player1.username + ' vs ' + item.player2.username}}</p>
+            </div>
+            <div *ngIf="item.winner.id == item.player1.id" class="userProfileHistoryStatus">win 🏆</div>
+            <div *ngIf="item.winner.id == item.player2.id" class="userProfileHistoryStatus">Lost 😥</div>
+            <div class="userProfileHistoryDate">{{item.date}}</div>
+        </div>
+    </div>
+</div>
