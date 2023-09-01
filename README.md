@@ -17,8 +17,8 @@ The Pong Contest website allows users to play Pong with others in real-time. It 
 
 ## Screenshots
 
-![alt text](https://github.com/EVBLOOD/ft_transcendence/tree/main/imgs/2FA.png?raw=true)
-![alt text](https://github.com/EVBLOOD/ft_transcendence/tree/main/imgs/404%page.png?raw=true)
+![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/2FA.png)
+![alt text](https://github.com/EVBLOOD/ft_transcendence/blob/main/imgs/404%20page.png)
 ![alt text](https://github.com/EVBLOOD/ft_transcendence/tree/main/imgs/2FA.png?raw=true)
 ![alt text](https://github.com/EVBLOOD/ft_transcendence/tree/main/imgs/2FA.png?raw=true)
 ![alt text](https://github.com/EVBLOOD/ft_transcendence/tree/main/imgs/2FA.png?raw=true)
