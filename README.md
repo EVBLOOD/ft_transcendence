@@ -123,17 +123,24 @@ To run the Pong Contest website locally, follow these steps:
 
 ### first : to run the project you'll need to add a .env File with this values : 
 ```
-ACCESS_TOKEN_SECRET=
-HOST=
-TOKEN_NAME=
-FORTY_TWO_APP_UID=
-FORTY_TWO_CALLBACK_URL=
-FORTY_TWO_APP_SECRET=
-DATABASE_USER=
-DATABASE_PASS=
-DATABASE_NAME=
+ACCESS_TOKEN_SECRET=```as the key says```
+HOST=```http://{your_IP}```
+TOKEN_NAME=```as the key says```
+FORTY_TWO_APP_UID=```as the key says```
+FORTY_TWO_CALLBACK_URL=```as the key says```
+FORTY_TWO_APP_SECRET=```as the key says```
+POSTGRES_USER=```POSTGRES default user```
+POSTGRES_PASSWORD=```as the key says```
+POSTGRES_DB=```as the key says```
 ```
 ### second  : 
 ```
 docker-compose up --build || docker compose up --build
+```
+
+### third  : 
+
+```
+launch browser: http://{your_IP}:4200
+and Enjoy your ride with US
 ```
