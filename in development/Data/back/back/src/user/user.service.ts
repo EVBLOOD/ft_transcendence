@@ -104,7 +104,7 @@ export class UserService {
   }
 
   RemoveState(Socket: Socket, id: number) {
-    console.info(this.currentstate);
+    // console.info(this.currentstate);
     if (!this.currentstate.has(id)) return null;
     let colect: { client: string; status: string; lastupdate: string }[] =
       this.currentstate.get(id);
